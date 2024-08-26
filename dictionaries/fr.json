@@ -1,0 +1,21 @@
+{
+  "navigation": {
+    "home": "Accueil"
+  },
+  "page": {
+    "home": {
+      "test": "Page d'accueil"
+    }
+  }, 
+  "footer": {
+    "copyright": "Droits d'auteur ©",
+    "allRight": "Tous droits réservés",
+    "terms": "Conditions générales",
+    "privacy": "Politique de confidentialité",
+    "socialMedia": "Réseaux sociaux",
+    "contactUs": "Contactez-nous",
+    "links": "Liens",
+    "home": "Page d'accueil",
+    "contact": "Contactez-nous"
+  }
+}
