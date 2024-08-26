@@ -1,13 +1,29 @@
-import { getDictionary } from "@/lib/dictionary";
-import Image from "next/image";
+'use client';
 
-export default async function Home() {
+import { Button } from "@/components/ui/button";
+import Footer from "../commonComponents/footer";
+import Navbar from "../Layout/Header/Navbar/navbar";
 
-  const { page } = await getDictionary("fr");
+export default function Home() {
+
+  const func = function(e: any) {
+    alert('Some');
+  }
 
   return (
     <div>
-      <h1>{page.home.whyChoose}</h1>
+      <Navbar />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <Footer />
     </div>
   );
 }
