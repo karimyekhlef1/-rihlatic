@@ -1,0 +1,21 @@
+{
+  "navigation": {
+    "home": "Home"
+  },
+  "page": {
+    "home": {
+      "test": "Home Page"
+    }
+  }, 
+  "footer": {
+    "copyright": "Copyright ©",
+    "allRight": "All rights reserved",
+    "terms": "Terms and Conditions",
+    "privacy": "Privacy Policy",
+    "socialMedia": "Social Media",
+    "contactUs": "Contact Us",
+    "links": "Links",
+    "home": "Home Page",
+    "contact": "Contact Us"
+  }
+}
