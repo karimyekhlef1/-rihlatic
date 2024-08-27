@@ -3,7 +3,8 @@
 import { Button } from '@/components/ui/button';
 import Footer from '../commonComponents/footer';
 import Navbar from '../Layout/Header/Navbar/navbar';
-import MainNavbar from '../Layout/Main/main-navbar';
+import MainNavbar from '../Layout/Main/mainNavbar';
+import MainPage from '../Layout/Main/mainPage';
 
 export default function Home() {
   const func = function (e: any) {
@@ -15,6 +16,7 @@ export default function Home() {
       <Navbar />
 
       <MainNavbar />
+      <MainPage />
 
       <Footer />
     </div>
