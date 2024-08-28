@@ -13,13 +13,10 @@ import { Badge } from '@/components/ui/badge';
 
 export default function FlightsTable() {
   return (
-    // Table is full with static data
-    // It can be changed to dynamic data using map function
-    //  It's easy to be changed, will work on it later
-    <div>
+    <div className="overflow-x-auto">
       <Card>
         <CardContent>
-          <Table>
+          <Table className="min-w-full">
             <TableCaption>A list of your recent flights.</TableCaption>
             <TableHeader>
               <TableRow>
@@ -28,17 +25,23 @@ export default function FlightsTable() {
                   PNR/eTicket
                 </TableHead>
                 <TableHead className="text-black font-bold">
-                  Passangers
+                  Passengers
                 </TableHead>
-                <TableHead className="text-black font-bold">
+                <TableHead className="text-black font-bold hidden md:table-cell">
                   Companies
                 </TableHead>
-                <TableHead className="text-black font-bold">
+                <TableHead className="text-black font-bold hidden md:table-cell">
                   Itinerary
                 </TableHead>
-                <TableHead className="text-black font-bold">Depart</TableHead>
-                <TableHead className="text-black font-bold">Return</TableHead>
-                <TableHead className="text-black font-bold">Payed</TableHead>
+                <TableHead className="text-black font-bold hidden sm:table-cell">
+                  Depart
+                </TableHead>
+                <TableHead className="text-black font-bold hidden sm:table-cell">
+                  Return
+                </TableHead>
+                <TableHead className="text-black font-bold hidden md:table-cell">
+                  Payed
+                </TableHead>
                 <TableHead className="text-black font-bold">Status</TableHead>
               </TableRow>
             </TableHeader>
@@ -51,18 +54,22 @@ export default function FlightsTable() {
                 <TableCell className="font-medium text-wrap text-xs">
                   Taki Eddine Benhammadi
                 </TableCell>
-                <TableCell className="font-medium text-xs">Ryanair</TableCell>
-                <TableCell className="font-medium text-xs">ALG-CZL</TableCell>
-                <TableCell className="font-medium text-xs">
+                <TableCell className="font-medium text-xs hidden md:table-cell">
+                  Ryanair
+                </TableCell>
+                <TableCell className="font-medium text-xs hidden md:table-cell">
+                  ALG-CZL
+                </TableCell>
+                <TableCell className="font-medium text-xs hidden sm:table-cell">
                   01/02/2024
                 </TableCell>
-                <TableCell className="font-medium text-xs">
+                <TableCell className="font-medium text-xs hidden sm:table-cell">
                   16/02/2024
                 </TableCell>
-                <TableCell className="font-medium text-xs">
+                <TableCell className="font-medium text-xs hidden md:table-cell">
                   8 5900 DZD
                 </TableCell>
-                <TableCell className="font-medium text-xs">
+                <TableCell className="flex items-center  font-medium text-xs">
                   <Badge variant="confirmed">Confirmed</Badge>
                 </TableCell>
               </TableRow>
@@ -74,18 +81,22 @@ export default function FlightsTable() {
                 <TableCell className="font-medium text-wrap text-xs">
                   Taki Eddine Benhammadi
                 </TableCell>
-                <TableCell className="font-medium text-xs">Ryanair</TableCell>
-                <TableCell className="font-medium text-xs">ALG-CZL</TableCell>
-                <TableCell className="font-medium text-xs">
+                <TableCell className="font-medium text-xs hidden md:table-cell">
+                  Ryanair
+                </TableCell>
+                <TableCell className="font-medium text-xs hidden md:table-cell">
+                  ALG-CZL
+                </TableCell>
+                <TableCell className="font-medium text-xs hidden sm:table-cell">
                   01/02/2024
                 </TableCell>
-                <TableCell className="font-medium text-xs">
+                <TableCell className="font-medium text-xs hidden sm:table-cell">
                   16/02/2024
                 </TableCell>
-                <TableCell className="font-medium text-xs">
+                <TableCell className="font-medium text-xs hidden md:table-cell">
                   8 5900 DZD
                 </TableCell>
-                <TableCell className="font-medium text-xs">
+                <TableCell className="flex items-center font-medium text-xs">
                   <Badge variant="reserved">Reserved</Badge>
                 </TableCell>
               </TableRow>
@@ -97,18 +108,22 @@ export default function FlightsTable() {
                 <TableCell className="font-medium text-wrap text-xs">
                   Taki Eddine Benhammadi
                 </TableCell>
-                <TableCell className="font-medium text-xs">Ryanair</TableCell>
-                <TableCell className="font-medium text-xs">ALG-CZL</TableCell>
-                <TableCell className="font-medium text-xs">
+                <TableCell className="font-medium text-xs hidden md:table-cell">
+                  Ryanair
+                </TableCell>
+                <TableCell className="font-medium text-xs hidden md:table-cell">
+                  ALG-CZL
+                </TableCell>
+                <TableCell className="font-medium text-xs hidden sm:table-cell">
                   01/02/2024
                 </TableCell>
-                <TableCell className="font-medium text-xs">
+                <TableCell className="font-medium text-xs hidden sm:table-cell">
                   16/02/2024
                 </TableCell>
-                <TableCell className="font-medium text-xs">
+                <TableCell className="font-medium text-xs hidden md:table-cell">
                   8 5900 DZD
                 </TableCell>
-                <TableCell className="font-medium text-xs">
+                <TableCell className="flex items-center font-medium text-xs">
                   <Badge variant="canceled">Canceled</Badge>
                 </TableCell>
               </TableRow>
