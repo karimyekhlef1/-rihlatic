@@ -9,17 +9,17 @@ export default function MainPage() {
   return (
     <div className="h-full flex-col items-center flex pt-8 pb-20 bg-[#f8f8f8]">
       {/* Buttons */}
-      <div className="flex flex-row gap-x-4">
-        <Button className="w-full px-10 h-10" variant={'rihlatic'}>
+      <div className="flex flex-col gap-y-3 md:flex-row gap-x-4">
+        <Button className="w-full px-32 md:px-10 h-10" variant={'rihlatic'}>
           Flights
         </Button>
-        <Button className="w-full px-10 h-10" variant={'rihlatic2'}>
+        <Button className="w-full px-32 md:px-10 h-10" variant={'rihlatic2'}>
           Packages
         </Button>
-        <Button className="w-full px-10 h-10" variant={'rihlatic2'}>
+        <Button className="w-full px-32 md:px-10 h-10" variant={'rihlatic2'}>
           Hotels
         </Button>
-        <Button className="w-full px-10 h-10" variant={'rihlatic2'}>
+        <Button className="w-full px-32 md:px-10 h-10" variant={'rihlatic2'}>
           Omra
         </Button>
       </div>
