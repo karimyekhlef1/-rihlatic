@@ -1,14 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import mockup from '@/public/images/rhtlk.png';
 import codeQR from '@/public/images/code_qr.svg';
 
