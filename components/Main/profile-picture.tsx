@@ -4,17 +4,17 @@ import { Card, CardContent } from '@/components/ui/card';
 
 export default function ProfilePicture() {
   return (
-    <div>
-      <Card>
+    <div className="px-10">
+      <Card className="w-[300px] sm:w-full">
         <CardContent className="flex flex-col">
           <div className="flex">
             <h1 className="font-semibold pt-3 justify-start">
               Profile picture
             </h1>
           </div>
-          <div className="flex flex-row pt-6">
+          <div className="flex items-center justify-center sm:items-start sm:justify-start flex-row pt-6">
             <div>
-              <Avatar className="w-20 h-20">
+              <Avatar className="hidden sm:block w-20 h-20">
                 <AvatarImage />
                 <AvatarFallback>Y</AvatarFallback>
               </Avatar>
