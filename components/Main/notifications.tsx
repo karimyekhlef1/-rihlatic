@@ -4,8 +4,8 @@ import { Switch } from '@/components/ui/switch';
 
 export default function Notifications() {
   return (
-    <div className="pt-4">
-      <Card>
+    <div className="pt-4 px-10">
+      <Card className="w-[300px] sm:w-full">
         <CardContent className="flex flex-col">
           <div className="flex">
             <h1 className="font-semibold pt-3 pb-3 justify-start">
