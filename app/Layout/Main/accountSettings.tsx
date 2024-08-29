@@ -7,7 +7,7 @@ import Notifications from '@/components/Main/notifications';
 
 export default function AccountSettings() {
   return (
-    <div className="h-full flex flex-col items-center md:flex-row md:justify-center pt-8 pb-20 bg-[#f8f8f8]">
+    <div className="max-w-full flex flex-wrap flex-col items-center md:items-start md:flex-row md:justify-center pt-8 pb-20 bg-[#f8f8f8]">
       <div className="flex flex-col md:px-20">
         <h1 className="font-semibold">Account Settings</h1>
         <p className="box-content font-medium text-[14px] w-[315px] h-[63px] text-gray-500">
@@ -16,7 +16,7 @@ export default function AccountSettings() {
         </p>
       </div>
 
-      <div className="flex flex-col px-20">
+      <div className="flex flex-wrap flex-col md:px-20">
         <ProfilePicture />
         <PersonalDetails />
         <LanguageAndCurrency />
