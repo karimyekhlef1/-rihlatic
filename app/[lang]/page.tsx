@@ -5,6 +5,7 @@ import Navbar from '@/app/Layout/Header/Navbar/navbar';
 import MainNavbar from '@/app/Layout/Main/mainNavbar';
 import MainPage from '@/app/Layout/Main/mainPage';
 import MainTable from '@/app/Layout/Main/mainTable';
+import AccountSettings from '@/app/Layout/Main/accountSettings';
 
 export default function Home() {
   const func = function (e: any) {
@@ -16,9 +17,12 @@ export default function Home() {
       <Navbar />
 
       <MainNavbar />
+
       {/* <MainPage /> */}
 
-      <MainTable />
+      {/* <MainTable /> */}
+
+      <AccountSettings />
 
       <Footer />
     </div>
