@@ -16,18 +16,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { CalendarIcon } from 'lucide-react';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
 
-import { cn } from '@/lib/utils';
-import { Calendar } from '@/components/ui/calendar';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 
-import { format } from 'date-fns';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateField, resetForm } from '@/lib/store/mainSlices/accountSlice';
 import { setDialogOpen } from '@/lib/store/mainSlices/dialogSlice';
@@ -114,41 +105,14 @@ export default function EditAccountOwnerDetails() {
                 <Label htmlFor="birthdate" className="text-gray-700">
                   Date of birth
                 </Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant={'outline'}
-                      className={cn(
-                        'w-full justify-start text-left font-normal',
-                        !account.birthdate && 'text-muted-foreground'
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {account.birthdate ? (
-                        format(new Date(account.birthdate), 'PPP')
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar
-                      mode="single"
-                      selected={
-                        account.birthdate
-                          ? new Date(account.birthdate)
-                          : undefined
-                      }
-                      onSelect={(date) =>
-                        handleInputChange(
-                          'birthdate',
-                          date ? date.toISOString() : ''
-                        )
-                      }
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
+                <Input
+                  id="dateofbirth"
+                  type="date"
+                  value={account.birthdate}
+                  onChange={(e) =>
+                    handleInputChange('birthdate', e.target.value)
+                  }
+                />
               </div>
             </div>
             <div className="grid gap-2">
