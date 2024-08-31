@@ -1,3 +1,4 @@
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 import SearchInput from '@/components/Main/search-input';
@@ -6,20 +7,29 @@ import Notrips from '@/public/images/notrips.svg';
 import TipsCard from '@/components/Main/tips-card';
 
 export default function MainPage() {
+  const router = useRouter();
+
+  const handleNavigation = (route: string) => {
+    router.push(route);
+  };
   return (
     <div className="h-full flex-col items-center flex pt-8 pb-20 bg-[#f8f8f8]">
       {/* Buttons */}
-      <div className="flex flex-row gap-x-4">
-        <Button className="w-full px-10 h-10" variant={'rihlatic'}>
+      <div className="flex flex-col gap-y-3 md:flex-row gap-x-4">
+        <Button
+          className="w-full px-32 md:px-10 h-10"
+          variant={'rihlatic'}
+          onClick={() => handleNavigation('/profile/table')}
+        >
           Flights
         </Button>
-        <Button className="w-full px-10 h-10" variant={'rihlatic2'}>
+        <Button className="w-full px-32 md:px-10 h-10" variant={'rihlatic2'}>
           Packages
         </Button>
-        <Button className="w-full px-10 h-10" variant={'rihlatic2'}>
+        <Button className="w-full px-32 md:px-10 h-10" variant={'rihlatic2'}>
           Hotels
         </Button>
-        <Button className="w-full px-10 h-10" variant={'rihlatic2'}>
+        <Button className="w-full px-32 md:px-10 h-10" variant={'rihlatic2'}>
           Omra
         </Button>
       </div>
