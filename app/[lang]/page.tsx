@@ -7,6 +7,9 @@ import MainPage from '@/app/Layout/Main/mainPage';
 import MainTable from '@/app/Layout/Main/mainTable';
 import AccountSettings from '@/app/Layout/Main/accountSettings';
 
+import { Provider } from 'react-redux';
+import { store } from '@/lib/store/store';
+
 export default function Home() {
   const func = function (e: any) {
     alert('Some');
@@ -21,8 +24,9 @@ export default function Home() {
       {/* <MainPage /> */}
 
       {/* <MainTable /> */}
-
-      <AccountSettings />
+      <Provider store={store}>
+        <AccountSettings />
+      </Provider>
 
       <Footer />
     </div>
