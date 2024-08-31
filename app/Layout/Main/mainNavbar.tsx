@@ -1,9 +1,21 @@
+'use client';
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import mainNavbarItems from '@/app/Data/main-navbar';
 import { NavbarItem } from '@/app/Types/Common/navLink';
 import LinkNav from '@/app/Layout/Header/Navbar/linkNav';
 import InfoCard from '@/components/Main/info-card';
 
 export default function MainNavbar() {
+  const router = useRouter();
+  const [selectedItem, setSelectedItem] = useState<string>('My reservations');
+
+  const handleItemClick = (item: NavbarItem) => {
+    setSelectedItem(item.name);
+    router.push(item.route);
+  };
+
   return (
     <div className="h-full overflow-x-auto flex flex-col items-center justify-between bg-white drop-shadow-xl">
       <div className="flex py-6">
@@ -15,8 +27,13 @@ export default function MainNavbar() {
         <div className="block md:hidden w-24"></div> {/* Spacer element */}
         {mainNavbarItems.map((item: NavbarItem, index: number) => {
           return (
-            // eslint-disable-next-line react/jsx-key
-            <LinkNav name={item.name} isSelected={item.isSelected} route="" />
+            <LinkNav
+              key={index}
+              name={item.name}
+              isSelected={item.name === selectedItem && true}
+              route={item.route}
+              onClick={() => handleItemClick(item)}
+            />
           );
         })}
       </div>
