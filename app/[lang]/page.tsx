@@ -9,24 +9,14 @@ import AccountSettings from '@/app/Layout/Main/accountSettings';
 
 import { Provider } from 'react-redux';
 import { store } from '@/lib/store/store';
+import Profile from './profile/page';
 
 export default function Home() {
-  const func = function (e: any) {
-    alert('Some');
-  };
-
   return (
     <div>
       <Navbar />
 
-      <MainNavbar />
-
-      {/* <MainPage /> */}
-
-      {/* <MainTable /> */}
-      <Provider store={store}>
-        <AccountSettings />
-      </Provider>
+      {/* <Profile /> */}
 
       <Footer />
     </div>
