@@ -12,8 +12,10 @@ export default function MainNavbar() {
   const [selectedItem, setSelectedItem] = useState<string>('My reservations');
 
   const handleItemClick = (item: NavbarItem) => {
-    setSelectedItem(item.name);
     router.push(item.route);
+    setSelectedItem(item.name);
+    console.log('Item clicked:', item);
+    console.log('selectedItem:', selectedItem);
   };
 
   return (
@@ -30,7 +32,7 @@ export default function MainNavbar() {
             <LinkNav
               key={index}
               name={item.name}
-              isSelected={item.name === selectedItem && true}
+              isSelected={item.name === selectedItem}
               route={item.route}
               onClick={() => handleItemClick(item)}
             />
