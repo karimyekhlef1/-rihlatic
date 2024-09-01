@@ -2,7 +2,7 @@ import { NavbarItem } from '@/app/Types/Common/navLink';
 import React from 'react';
 
 interface LinkNavProps extends NavbarItem {
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const LinkNav: React.FC<LinkNavProps> = ({
