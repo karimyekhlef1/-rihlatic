@@ -1,0 +1,21 @@
+#home-page {
+    .flights {
+        background-color: $backgroundColor;
+    }
+    .swiper-navigation-btns {
+        button {
+            border-radius: 5px;
+            background-color: $secondaryColor;
+            color: white;
+            height: 40px;
+            width: 40px;
+            &:hover {
+                background-color: black;
+                color: white;
+            }
+        }
+        button.active {
+            background-color: $primaryColor;
+        }
+    }
+}
