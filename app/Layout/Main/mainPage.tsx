@@ -1,10 +1,10 @@
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
-import SearchInput from '@/components/Main/search-input';
+import SearchInput from '@/app/Components/profile/search-input';
 import { Button } from '@/components/ui/button';
 import Notrips from '@/public/images/notrips.svg';
-import TipsCard from '@/components/Main/tips-card';
+import TipsCard from '@/app/Components/profile/tips-card';
 
 export default function MainPage() {
   const router = useRouter();

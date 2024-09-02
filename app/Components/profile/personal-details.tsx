@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { useDispatch } from 'react-redux';
 import { setDialogOpen } from '@/lib/store/mainSlices/dialogSlice';
 
-import EditAccountDetails from '@/components/Main/edit-account-details';
+import EditAccountDetails from '@/app/Components/profile/edit-account-details';
 
 export default function PersonalDetails() {
   const dispatch = useDispatch();

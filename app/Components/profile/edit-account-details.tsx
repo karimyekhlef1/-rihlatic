@@ -20,7 +20,11 @@ import {
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { updateField, resetForm } from '@/lib/store/mainSlices/accountSlice';
+import {
+  updateField,
+  resetForm,
+  AccountState,
+} from '@/lib/store/mainSlices/accountSlice';
 import { setDialogOpen } from '@/lib/store/mainSlices/dialogSlice';
 import type { RootState } from '@/lib/store/store';
 
@@ -29,7 +33,7 @@ export default function EditAccountOwnerDetails() {
   const account = useSelector((state: RootState) => state.account);
   const { isOpen } = useSelector((state: RootState) => state.dialog);
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = (field: keyof AccountState, value: string) => {
     dispatch(updateField({ field, value }));
   };
 

@@ -105,6 +105,7 @@ export default function Navbar() {
           {navbarItems.map((item: NavbarItem, index: number) => {
             return (
               <DisclosureButton
+                key={index}
                 as="a"
                 href="#"
                 className={`block py-2 pl-3 pr-4 text-base font-medium ${item.isSelected ? 'border-l-4 bg-indigo-50  border-indigo-500 text-indigo-700' : ''}`}
