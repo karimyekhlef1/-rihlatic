@@ -10,6 +10,8 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
+  PaginationFirst,
+  PaginationLast,
 } from '@/components/ui/pagination';
 
 import TripComponent from '@/app/commonComponents/tripComponent';
@@ -61,6 +63,13 @@ export default function PackagesComponent() {
         <Pagination>
           <PaginationContent>
             <PaginationItem>
+              <PaginationFirst
+                className="hover:text-orange-500 transition-colors duration-200"
+                href="#"
+                onClick={() => handlePageChange(1)}
+              />
+            </PaginationItem>{' '}
+            <PaginationItem>
               <PaginationPrevious
                 className="hover:text-orange-500 transition-colors duration-200"
                 href="#"
@@ -89,6 +98,13 @@ export default function PackagesComponent() {
                 onClick={() =>
                   handlePageChange(Math.min(totalPages, currentPage + 1))
                 }
+                href="#"
+              />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLast
+                className="hover:text-orange-500 transition-colors duration-200"
+                onClick={() => handlePageChange(totalPages)}
                 href="#"
               />
             </PaginationItem>
