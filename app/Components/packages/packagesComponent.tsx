@@ -1,7 +1,7 @@
 import TripComponent from '@/app/commonComponents/tripComponent';
 
 export default function PackagesComponent() {
-  const fakeList = [1, 2, 3, 5];
+  const fakeList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   return (
     <div>

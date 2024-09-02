@@ -9,8 +9,8 @@ import { Separator } from '@/components/ui/separator';
 
 export default function FilterComponent() {
   return (
-    <div className="w-64 bg-background p-4">
-      <Accordion type="multiple" className="w-full">
+    <div className="bg-background p-4">
+      <Accordion type="multiple" className="w-[300px]">
         <AccordionItem value="pays">
           <AccordionTrigger>Pays</AccordionTrigger>
           <AccordionContent>
@@ -24,7 +24,7 @@ export default function FilterComponent() {
         </AccordionItem>
       </Accordion>
 
-      <Accordion type="multiple" className="w-full">
+      <Accordion type="multiple" className="w-[300px]">
         <AccordionItem value="categorie">
           <AccordionTrigger>Catégorie</AccordionTrigger>
           <AccordionContent>

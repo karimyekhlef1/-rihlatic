@@ -1,7 +1,6 @@
 'use client';
 
 import AdComponent from '@/app/commonComponents/adComponent';
-import TripComponent from '@/app/commonComponents/tripComponent';
 import FilterComponent from '@/app/Components/packages/filtersComponent';
 import PackagesComponent from '@/app/Components/packages/packagesComponent';
 
