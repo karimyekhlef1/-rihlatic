@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import mainNavbarItems from '@/app/Data/main-navbar';
 import { NavbarItem } from '@/app/Types/Common/navLink';
 import LinkNav from '@/app/Layout/Header/Navbar/linkNav';
-import InfoCard from '@/components/Main/info-card';
+import InfoCard from '@/app/Components/profile/info-card';
 
 export default function MainNavbar() {
   const router = useRouter();

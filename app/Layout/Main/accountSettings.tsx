@@ -1,9 +1,9 @@
 'use client';
 
-import ProfilePicture from '@/components/Main/profile-picture';
-import PersonalDetails from '@/components/Main/personal-details';
-import LanguageAndCurrency from '@/components/Main/lang-and-currency';
-import Notifications from '@/components/Main/notifications';
+import ProfilePicture from '@/app/Components/profile/profile-picture';
+import PersonalDetails from '@/app/Components/profile/personal-details';
+import LanguageAndCurrency from '@/app/Components/profile/lang-and-currency';
+import Notifications from '@/app/Components/profile/notifications';
 
 export default function AccountSettings() {
   return (

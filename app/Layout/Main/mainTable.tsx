@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
-import SearchInput from '@/components/Main/search-input';
-import FlightsTable from '@/components/Main/flights-table';
+import SearchInput from '@/app/Components/profile/search-input';
+import FlightsTable from '@/app/Components/profile/flights-table';
 
 export default function MainTable() {
   return (
