@@ -1,7 +1,29 @@
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '@/lib/store/store';
+import { setPage } from '@/lib/store/commonSlices/paginationSlice';
+
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
+
 import TripComponent from '@/app/commonComponents/tripComponent';
 
 export default function PackagesComponent() {
   const fakeList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+  const dispatch = useDispatch<AppDispatch>();
+  const currentPage = useSelector(
+    (state: RootState) => state.pagination.currentPage
+  );
+  const handlePageChange = (page: number) => {
+    dispatch(setPage(page));
+  };
 
   return (
     <div>
