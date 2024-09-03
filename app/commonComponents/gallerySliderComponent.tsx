@@ -75,7 +75,7 @@ export default function ImageSlider() {
           height={600}
           className="w-full h-auto rounded-lg shadow-md"
         />
-        <div className="absolute bottom-4 left-4 right-4">
+        <div className="absolute bottom-[-20px] left-12">
           <Carousel ref={emblaRef} className="w-full max-w-xs">
             <CarouselContent>
               {images.map((image, index) => (
