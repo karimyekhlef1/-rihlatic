@@ -1,5 +1,5 @@
 interface IconButtonProps {
   title: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   label: string;
 }
