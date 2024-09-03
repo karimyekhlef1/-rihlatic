@@ -59,11 +59,9 @@ export default function Details() {
             />
             <ContentComponent content={content} />{' '}
           </div>
-          <div>
-            <ExploreSection />
-          </div>
+          <div>{/* <ExploreSection /> */}</div>
         </div>
-        <div className="flex flex-col gap-y-8 mx-6">
+        <div className="md:flex flex-col hidden gap-y-8 mx-6">
           <BookingPackageComponent />
           <AdComponent />
         </div>
