@@ -9,7 +9,7 @@ import { Separator } from '@/components/ui/separator';
 
 export default function FilterComponent() {
   return (
-    <div className="bg-background p-4">
+    <div className="p-4">
       <Accordion type="multiple" className="w-[300px]">
         <AccordionItem value="pays">
           <AccordionTrigger>Pays</AccordionTrigger>
