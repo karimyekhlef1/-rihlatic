@@ -1,3 +1,4 @@
 interface ContentProps {
-  content: string;
+  content?: string;
+  dynamicContent?: React.ReactNode;
 }
