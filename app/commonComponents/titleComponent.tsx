@@ -1,6 +1,6 @@
 const TitleComponent: React.FC<IconButtonProps> = ({ title, icon, label }) => {
   return (
-    <div className="flex flex-row pl-10">
+    <div className="flex flex-row pl-10 pt-8">
       {icon}
       <h1 className="font-semibold pl-1 align-middle leading-[18px]">
         {title}
