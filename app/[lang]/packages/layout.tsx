@@ -5,7 +5,7 @@ const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Navbar />
-      {children}
+      <div className="bg-[#F8F8F8] h-full">{children}</div>
     </>
   );
 };
