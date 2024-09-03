@@ -90,7 +90,7 @@ export default function ImageSlider() {
                       width={100}
                       height={100}
                       className={`w-full h-full object-cover rounded-md cursor-pointer ${
-                        index === currentIndex ? 'ring-1 ring-[#ffffff]' : ''
+                        index === currentIndex ? 'ring-2 ring-[#ff7300]' : ''
                       }`}
                       onClick={() => scrollTo(index)}
                     />
