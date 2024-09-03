@@ -45,7 +45,6 @@ export default function Details() {
             <ContentComponent content={content} />{' '}
             <TitleComponent title={'Hôtel Details'} label={''} />
             <ContentComponent content={content} />
-            <ContentComponent content={content} />{' '}
             <TitleComponent
               title={'Travel program'}
               icon={<Luggage size={20} />}
