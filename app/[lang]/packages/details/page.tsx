@@ -11,9 +11,11 @@ import {
   Luggage,
   CircleAlert,
 } from 'lucide-react';
+
 import AdComponent from '@/app/commonComponents/adComponent';
-import BookingPackageComponent from '@/app/Components/packages/bookingPackageComponent';
+import TravelProgram from '@/app/Components/packages/travelProgram';
 import ExploreSection from '@/app/Components/packages/exploreSection';
+import BookingPackageComponent from '@/app/Components/packages/bookingPackageComponent';
 
 const content =
   'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Asperiores voluptate tempora reprehenderit natus in debitis voluptatibus non dolor itaque repellat? Rem dicta corrupti facere id eum nihil magni excepturi officia.';
@@ -50,7 +52,7 @@ export default function Details() {
               icon={<Luggage size={20} />}
               label={''}
             />
-            <ContentComponent content={content} />{' '}
+            <ContentComponent dynamicContent={<TravelProgram />} />{' '}
             <TitleComponent
               title={'important note'}
               icon={<CircleAlert size={20} color="orange" />}
