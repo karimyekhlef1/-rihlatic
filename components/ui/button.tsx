@@ -22,6 +22,7 @@ const buttonVariants = cva(
           'text-orange-500 w-full h-12 px-6 rounded-lg drop-shadow bg-white border-solid border-2 border-orange-500 font-semibold hover:bg-orange-500 hover:text-white',
         rihlatic2:
           'bg-[#f4f4f4] font-normal rounded-md text-secondary-foreground hover:bg-[#f6f6f6]/20',
+        normal: 'bg-white text-black rounded-md border-gray-100 border-2',
       },
       size: {
         default: 'h-10 px-4 py-2',
