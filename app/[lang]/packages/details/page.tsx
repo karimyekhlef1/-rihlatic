@@ -60,6 +60,7 @@ export default function Details() {
             />
             <ContentComponent content={content} />{' '}
           </div>
+          {/* This element causes problems on mobile */}
           <div>{/* <ExploreSection /> */}</div>
         </div>
         <div className="md:flex flex-col items-center hidden gap-y-8">
