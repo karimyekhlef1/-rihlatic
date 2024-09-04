@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 
 import AdComponent from '@/app/commonComponents/adComponent';
+import HotelDetails from '@/app/Components/packages/hotelDetails';
 import TravelProgram from '@/app/Components/packages/travelProgram';
 import ExploreSection from '@/app/Components/packages/exploreSection';
 import HotelsComponent from '@/app/Components/packages/hotelsComponent';
@@ -34,33 +35,38 @@ export default function Details() {
               icon={<AlignLeft size={20} />}
               label={''}
             />
-            <ContentComponent content={content} />{' '}
+            <ContentComponent content={content} />
+
             <TitleComponent
               title={'Trip summary'}
               icon={<PlaneTakeoff size={20} />}
               label={''}
             />
-            <ContentComponent dynamicContent={<TripSummaryComponent />} />{' '}
+            <ContentComponent dynamicContent={<TripSummaryComponent />} />
+
             <TitleComponent
               title={'Hôtel(s)'}
               icon={<Bed size={20} />}
               label={''}
             />
-            <ContentComponent dynamicContent={<HotelsComponent />} />{' '}
+            <ContentComponent dynamicContent={<HotelsComponent />} />
+
             <TitleComponent title={'Hôtel Details'} label={''} />
-            <ContentComponent content={content} />
+            <ContentComponent dynamicContent={<HotelDetails />} />
+
             <TitleComponent
               title={'Travel program'}
               icon={<Luggage size={20} />}
               label={''}
             />
-            <ContentComponent dynamicContent={<TravelProgram />} />{' '}
+            <ContentComponent dynamicContent={<TravelProgram />} />
+
             <TitleComponent
               title={'important note'}
               icon={<CircleAlert size={20} color="orange" />}
               label={''}
             />
-            <ContentComponent content={content} />{' '}
+            <ContentComponent content={content} />
           </div>
           {/* This element causes problems on mobile */}
           <div>{/* <ExploreSection /> */}</div>
