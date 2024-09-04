@@ -9,7 +9,7 @@ export default function BookingPackageComponent() {
       <Card className="w-[300px]">
         <CardContent className="px-0 py-8 shadow-xl">
           <div className="flex flex-col items-center">
-            <div className="flex flex-col pb-4">
+            <div className="flex flex-col items-center justify-center pb-4">
               <p className="text-xs">Starting from</p>
               <p className="font-semibold text-lg">149000 DZD</p>
             </div>

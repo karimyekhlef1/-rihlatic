@@ -14,7 +14,7 @@ export default function Packages() {
         <FilterComponent />
         <AdComponent />
       </div>
-      <div className="px-14 pt-10 gap-y-8 pb-10">
+      <div className="px-10 pt-10 gap-y-8 pb-10">
         <Provider store={store}>
           <PackagesComponent />
         </Provider>

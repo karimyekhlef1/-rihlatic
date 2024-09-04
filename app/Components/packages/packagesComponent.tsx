@@ -20,11 +20,11 @@ export default function PackagesComponent() {
   // Sample data
   const fakeList = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7,
-    8, 9, 10,
+    8, 9, 10, 11,
   ];
 
   // Constants for pagination
-  const itemsPerPage = 3;
+  const itemsPerPage = 9;
   const totalItems = fakeList.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -42,6 +42,7 @@ export default function PackagesComponent() {
   // Handle page changes
   const handlePageChange = (page: number) => {
     dispatch(setPage(page));
+    event?.preventDefault();
   };
 
   return (
