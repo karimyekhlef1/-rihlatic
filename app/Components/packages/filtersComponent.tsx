@@ -15,6 +15,7 @@ export default function FilterComponent() {
           <AccordionTrigger>Pays</AccordionTrigger>
           <AccordionContent>
             <div className="flex flex-col space-y-2">
+              <CheckboxItem id="all" label="All" />
               <CheckboxItem id="egypt" label="Egypt" />
               <CheckboxItem id="turkey" label="Turkey" />
               <CheckboxItem id="dubai" label="Dubai" />
@@ -46,7 +47,7 @@ function CheckboxItem({ id, label }: { id: string; label: string }) {
       <Checkbox id={id} />
       <label
         htmlFor={id}
-        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        className="text-xs font-semibold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
       >
         {label}
       </label>
