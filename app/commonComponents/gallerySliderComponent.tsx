@@ -50,7 +50,10 @@ export default function ImageSlider() {
     if (!emblaApi) return;
     onSelect();
     emblaApi.on('select', onSelect);
-    return () => emblaApi.off('select', onSelect);
+    return () => {
+      emblaApi.off('select', onSelect);
+      return undefined;
+    };
   }, [emblaApi, onSelect]);
 
   const scrollTo = useCallback(
@@ -63,7 +66,7 @@ export default function ImageSlider() {
   );
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 py-8">
+    <div className="px-4 py-12">
       <h2 className="text-xl text-nowrap font-bold text-orange-500 pb-3">
         {images[0].title}
       </h2>
@@ -73,23 +76,20 @@ export default function ImageSlider() {
           alt={images[currentIndex].name}
           width={800}
           height={600}
-          className="w-full h-auto rounded-lg shadow-md"
+          className="w-[1500px] h-[600px] rounded-lg shadow-md"
         />
-        <div className="absolute bottom-[-20px] left-12">
+        <div className="absolute bottom-[-50px] left-12">
           <Carousel ref={emblaRef} className="w-full max-w-md">
             <CarouselContent>
               {images.map((image, index) => (
-                <CarouselItem
-                  key={index}
-                  className="basis-1/3 pl-2 md:basis-1/4 lg:basis-1/5"
-                >
+                <CarouselItem key={index} className="basis-1/3 pl-2">
                   <div className="p-1">
                     <Image
                       src={image.image}
                       alt={image.name}
                       width={100}
                       height={100}
-                      className={`w-full h-full object-cover rounded-md cursor-pointer ${
+                      className={`w-[120px] h-[110px] object-cover rounded-md cursor-pointer ${
                         index === currentIndex ? 'ring-2 ring-[#ff7300]' : ''
                       }`}
                       onClick={() => scrollTo(index)}
