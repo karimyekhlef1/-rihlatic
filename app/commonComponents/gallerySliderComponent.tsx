@@ -63,7 +63,7 @@ export default function ImageSlider() {
   );
 
   return (
-    <div className="w-full max-w-3xl mx-auto px-4 py-8">
+    <div className="w-full max-w-6xl mx-auto px-4 py-8">
       <h2 className="text-xl text-nowrap font-bold text-orange-500 pb-3">
         {images[0].title}
       </h2>
@@ -76,7 +76,7 @@ export default function ImageSlider() {
           className="w-full h-auto rounded-lg shadow-md"
         />
         <div className="absolute bottom-[-20px] left-12">
-          <Carousel ref={emblaRef} className="w-full max-w-xs">
+          <Carousel ref={emblaRef} className="w-full max-w-md">
             <CarouselContent>
               {images.map((image, index) => (
                 <CarouselItem
