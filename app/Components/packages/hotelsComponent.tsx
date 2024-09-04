@@ -1,6 +1,7 @@
 import Image from 'next/image';
 
 import image1 from '@/public/images/packages/image_1.jpg';
+import StarRating from '@/app/commonComponents/starRating';
 
 export default function HotelsComponent() {
   return (
@@ -22,9 +23,7 @@ export default function HotelsComponent() {
         <p className="text-sm text-gray-600">Dates</p>
       </div>
 
-      <div className="flex items-center">
-        <span className="text-yellow-400 text-xl">★★★★☆</span>
-      </div>
+      <StarRating rating={3} />
     </div>
   );
 }
