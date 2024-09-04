@@ -22,7 +22,7 @@ const content =
 
 export default function Details() {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col items-center">
       <GallerySlider />
       <div className="flex flex-row">
         <div className="flex flex-col">
@@ -60,9 +60,10 @@ export default function Details() {
             />
             <ContentComponent content={content} />{' '}
           </div>
+          {/* This element causes problems on mobile */}
           <div>{/* <ExploreSection /> */}</div>
         </div>
-        <div className="md:flex flex-col hidden gap-y-8 mx-6">
+        <div className="md:flex flex-col items-center hidden gap-y-8">
           <BookingPackageComponent />
           <AdComponent />
         </div>
