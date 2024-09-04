@@ -10,9 +10,14 @@ export default function TripSummaryComponent() {
           <p className="font-semibold text-sm flex flex-row justify-center items-center gap-x-2">
             Algiers {<MoveRight size={20} />} Paris
           </p>
-          <p className="font-semibold text-xs text-blue-400 flex flex-row justify-center items-center pl-2">
-            {<CircleArrowRight size={15} />} Direct flight
-          </p>
+          <div className="flex flex-row justify-center items-center px-2 gap-x-1">
+            <CircleArrowRight
+              size={15}
+              className="font-semibold text-xs text-[#3279f4]"
+              fill="#cddfff"
+            />
+            <p className="font-semibold text-xs text-blue-400">Direct flight</p>
+          </div>
         </div>{' '}
         <div className="flex flex-row justify-center items-center gap-x-1">
           <Clock size={15} color="gray" />
@@ -23,15 +28,22 @@ export default function TripSummaryComponent() {
       <Card className="shadow-md pt-4">
         <CardContent></CardContent>
       </Card>
+
       <Separator />
+
       <div className="flex flex-row justify-between">
         <div className="flex flex-row justify-center items-center gap-x-1">
           <p className="font-semibold text-sm flex flex-row justify-center items-center gap-x-2">
             Algiers {<MoveRight size={20} />} Paris
           </p>
-          <p className="font-semibold text-xs text-blue-400 flex flex-row justify-center items-center pl-2">
-            {<CircleArrowRight size={15} />} Direct flight
-          </p>
+          <div className="flex flex-row justify-center items-center px-2 gap-x-1">
+            <CircleArrowRight
+              size={15}
+              className="font-semibold text-xs text-[#3279f4]"
+              fill="#cddfff"
+            />
+            <p className="font-semibold text-xs text-blue-400">Direct flight</p>
+          </div>
         </div>{' '}
         <div className="flex flex-row justify-center items-center gap-x-1">
           <Clock size={15} color="gray" />
