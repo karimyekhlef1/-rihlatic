@@ -15,6 +15,7 @@ import {
 import AdComponent from '@/app/commonComponents/adComponent';
 import TravelProgram from '@/app/Components/packages/travelProgram';
 import ExploreSection from '@/app/Components/packages/exploreSection';
+import HotelsComponent from '@/app/Components/packages/hotelsComponent';
 import TripSummaryComponent from '@/app/Components/packages/tripSummary';
 import BookingPackageComponent from '@/app/Components/packages/bookingPackageComponent';
 
@@ -45,7 +46,7 @@ export default function Details() {
               icon={<Bed size={20} />}
               label={''}
             />
-            <ContentComponent content={content} />{' '}
+            <ContentComponent dynamicContent={<HotelsComponent />} />{' '}
             <TitleComponent title={'Hôtel Details'} label={''} />
             <ContentComponent content={content} />
             <TitleComponent

@@ -12,7 +12,7 @@ export default function TripSummaryComponent() {
           </p>
           <div className="flex flex-row justify-center items-center px-2 gap-x-1">
             <CircleArrowRight
-              size={15}
+              size={20}
               className="font-semibold text-xs text-[#3279f4]"
               fill="#cddfff"
             />
@@ -21,12 +21,16 @@ export default function TripSummaryComponent() {
         </div>{' '}
         <div className="flex flex-row justify-center items-center gap-x-1">
           <Clock size={15} color="gray" />
-          <p className="text-sm text-gray-500">Duration:</p>
-          <p className="text-sm text-black font-semibold">2h 20m</p>
+          <p className="text-xs text-gray-500">Duration:</p>
+          <p className="text-xs text-black font-semibold">2h 20m</p>
         </div>
       </div>
       <Card className="shadow-md pt-4">
-        <CardContent></CardContent>
+        <CardContent>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel non nobis
+          omnis sunt nisi! Eaque asperiores sapiente at nam, fugit explicabo,
+          error vitae cum, libero dolorum impedit consequatur ullam architecto.
+        </CardContent>
       </Card>
 
       <Separator />
@@ -38,7 +42,7 @@ export default function TripSummaryComponent() {
           </p>
           <div className="flex flex-row justify-center items-center px-2 gap-x-1">
             <CircleArrowRight
-              size={15}
+              size={20}
               className="font-semibold text-xs text-[#3279f4]"
               fill="#cddfff"
             />
@@ -47,12 +51,17 @@ export default function TripSummaryComponent() {
         </div>{' '}
         <div className="flex flex-row justify-center items-center gap-x-1">
           <Clock size={15} color="gray" />
-          <p className="text-sm text-gray-500">Duration:</p>
-          <p className="text-sm text-black font-semibold">2h 20m</p>
+          <p className="text-xs text-gray-500">Duration:</p>
+          <p className="text-xs text-black font-semibold">2h 20m</p>
         </div>
       </div>
       <Card className="shadow-md pt-4">
-        <CardContent></CardContent>
+        <CardContent>
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iste nostrum
+          enim voluptate, voluptatibus quibusdam sint veniam illum labore
+          voluptatem magni, incidunt veritatis fuga aspernatur praesentium natus
+          ad, minus earum eius!
+        </CardContent>
       </Card>
     </div>
   );
