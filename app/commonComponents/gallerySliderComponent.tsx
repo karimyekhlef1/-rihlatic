@@ -74,9 +74,9 @@ export default function ImageSlider() {
         <Image
           src={images[currentIndex].image}
           alt={images[currentIndex].name}
-          width={800}
+          width={1200}
           height={600}
-          className="w-[1500px] h-[600px] rounded-lg shadow-md"
+          className="w-[1200px] h-[600px] rounded-lg shadow-md"
         />
         <div className="absolute bottom-[-50px] left-12">
           <Carousel ref={emblaRef} className="w-full max-w-md">
@@ -87,8 +87,8 @@ export default function ImageSlider() {
                     <Image
                       src={image.image}
                       alt={image.name}
-                      width={100}
-                      height={100}
+                      width={200}
+                      height={200}
                       className={`w-[120px] h-[110px] object-cover rounded-md cursor-pointer ${
                         index === currentIndex ? 'ring-2 ring-[#ff7300]' : ''
                       }`}
