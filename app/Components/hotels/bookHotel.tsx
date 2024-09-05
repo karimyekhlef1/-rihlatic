@@ -18,10 +18,61 @@ export default function BookingHotelComponent() {
               </div>
             </div>
             <Separator />
-            <div></div>
+            <div className="flex flex-col w-full px-4 py-4">
+              <div className="text-sm font-semibold mb-2 text-gray-500">
+                ROOM 1
+              </div>
+              <div className="flex flex-row justify-between items-center mb-2">
+                <span className="text-sm">Adult</span>
+                <div className="flex items-center border border-gray-300 rounded-xl p-1">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 w-8 rounded-full"
+                  >
+                    -
+                  </Button>
+                  <span className="mx-2 text-sm">1</span>
+                  <Button
+                    variant="unactive"
+                    size="sm"
+                    className="h-8 w-8 rounded-full"
+                  >
+                    +
+                  </Button>
+                </div>
+              </div>
+              <div className="flex flex-row justify-between items-center">
+                <span className="text-sm">Children</span>
+                <div className="flex items-center border border-gray-300 rounded-xl p-1">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 w-8 rounded-full"
+                  >
+                    -
+                  </Button>
+                  <span className="mx-2 text-sm">0</span>
+                  <Button
+                    variant="unactive"
+                    size="sm"
+                    className="h-8 w-8 rounded-full"
+                  >
+                    +
+                  </Button>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col gap-y-2 pt-4 pb-4">
+              <Button className="px-14" variant={'unactive'}>
+                Add room
+              </Button>
+            </div>
             <Separator />
-            <div className="pt-4">
-              <Button className="px-14" variant={'rihlatic'} disabled>
+            <div className="flex flex-col items-center gap-y-2 pt-4">
+              <p className="text-xs text-gray-500">8 nuits / 9 jours</p>
+              <Button variant={'unactive'}>12-août-2024/20-août-2024</Button>
+              <Button size={'sm'} variant={'active'} disabled>
                 Book Now
               </Button>
             </div>

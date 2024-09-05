@@ -24,6 +24,7 @@ const buttonVariants = cva(
           'bg-[#f4f4f4] font-normal rounded-md text-secondary-foreground hover:bg-[#f6f6f6]/20',
         normal: 'bg-white text-black rounded-md border-gray-100 border-2',
         active: 'bg-orange-500 text-white font-semibold',
+        unactive: 'bg-[#f6ddc3] text-orange-500 font-semibold',
       },
       size: {
         default: 'h-10 px-4 py-2',
