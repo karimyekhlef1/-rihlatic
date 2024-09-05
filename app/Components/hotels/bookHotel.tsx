@@ -25,7 +25,10 @@ export default function BookingHotelComponent() {
               <p className="font-semibold text-lg">19000 DZD</p>
               <div className="flex flex-row">
                 <User size={15} className="text-gray-500" />
-                <p className="text-xs text-gray-500">01 persone</p>
+                <p className="text-xs text-gray-500">
+                  {adults + children}{' '}
+                  {adults + children === 1 ? 'person' : 'persons'}
+                </p>
               </div>
             </div>
             <Separator />
