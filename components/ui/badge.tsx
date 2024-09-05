@@ -21,6 +21,7 @@ const badgeVariants = cva(
           'text-primary-foreground border-transparent bg-gradient-to-r from-orange-300 to-orange-600',
         canceled:
           'text-primary-foreground border-transparent bg-gradient-to-r from-red-500 to-red-900',
+        rihlatic: 'text-[#27d765] border-[#27d765] bg-[#eafbf0]',
       },
     },
     defaultVariants: {

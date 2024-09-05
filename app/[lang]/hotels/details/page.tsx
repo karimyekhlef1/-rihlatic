@@ -4,24 +4,18 @@ import ContentComponent from '@/app/commonComponents/contentComponent';
 import TitleComponent from '@/app/commonComponents/titleComponent';
 import GallerySlider from '@/app/commonComponents/gallerySliderComponent';
 
-import {
-  AlignLeft,
-  PlaneTakeoff,
-  Bed,
-  Luggage,
-  CircleAlert,
-} from 'lucide-react';
+import { Hotel, Sparkles, Bed, Luggage, CircleAlert } from 'lucide-react';
 
 import AdComponent from '@/app/commonComponents/adComponent';
 import HotelDetails from '@/app/Components/packages/hotelDetails';
 import TravelProgram from '@/app/Components/packages/travelProgram';
 import ExploreSection from '@/app/Components/packages/exploreSection';
+import PopularFacilities from '@/app/Components/hotels/popularFacilities';
 import HotelsComponent from '@/app/Components/packages/hotelsComponent';
-import TripSummaryComponent from '@/app/Components/packages/tripSummary';
 import BookingPackageComponent from '@/app/Components/packages/bookingPackageComponent';
 
 const content =
-  'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Asperiores voluptate tempora reprehenderit natus in debitis voluptatibus non dolor itaque repellat? Rem dicta corrupti facere id eum nihil magni excepturi officia.';
+  'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Asperiores voluptate tempora reprehenderit natus in debitis voluptatibus non dolor itaque repellat? Rem dicta corrupti facere id eum nihil magni excepturi officia. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Asperiores voluptate tempora reprehenderit natus in debitis voluptatibus non dolor itaque repellat? Rem dicta corrupti facere id eum nihil magni excepturi officia.';
 
 export default function Details() {
   return (
@@ -31,18 +25,18 @@ export default function Details() {
         <div className="flex flex-col">
           <div className="flex flex-col">
             <TitleComponent
-              title={'Description'}
-              icon={<AlignLeft size={20} />}
+              title={'Hotel Description'}
+              icon={<Hotel size={20} />}
               label={''}
             />
             <ContentComponent content={content} />
 
             <TitleComponent
-              title={'Trip summary'}
-              icon={<PlaneTakeoff size={20} />}
+              title={'Most popular facilities'}
+              icon={<Sparkles size={20} />}
               label={''}
             />
-            <ContentComponent dynamicContent={<TripSummaryComponent />} />
+            <ContentComponent dynamicContent={<PopularFacilities />} />
 
             <TitleComponent
               title={'Hôtel(s)'}
@@ -72,8 +66,8 @@ export default function Details() {
           <div>{/* <ExploreSection /> */}</div>
         </div>
         <div className="hidden lg:flex lg:flex-col items-center gap-y-8">
-          <BookingPackageComponent />
           <AdComponent />
+          <BookingPackageComponent />
         </div>
       </div>
     </div>
