@@ -42,7 +42,7 @@ export default function BookingPackageComponent() {
             </div>
             <Separator />
             <div className="pt-4">
-              <Button className="px-14" variant={'rihlatic'}>
+              <Button className="px-14" variant={'rihlatic'} disabled>
                 Book Now
               </Button>
             </div>

@@ -6,7 +6,7 @@ const ContentComponent: React.FC<ContentProps> = ({
 }) => {
   return (
     <div className="px-8 pt-4">
-      <Card className="border-none pt-4 w-[900px]">
+      <Card className="border-none pt-4 w-[350px] md:w-[750px] sm:w-[900px]">
         <CardContent>
           <p>{content}</p>
           {dynamicContent}

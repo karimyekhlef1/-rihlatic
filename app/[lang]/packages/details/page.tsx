@@ -25,7 +25,7 @@ const content =
 
 export default function Details() {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center overflow-x-clip">
       <GallerySlider />
       <div className="flex flex-row">
         <div className="flex flex-col">
@@ -71,7 +71,7 @@ export default function Details() {
           {/* This element causes problems on mobile */}
           <div>{/* <ExploreSection /> */}</div>
         </div>
-        <div className="md:flex flex-col items-center hidden gap-y-8">
+        <div className="hidden lg:flex lg:flex-col items-center gap-y-8">
           <BookingPackageComponent />
           <AdComponent />
         </div>
