@@ -26,7 +26,8 @@ export default function BookingHotelComponent() {
               <div className="flex flex-row">
                 <User size={15} className="text-gray-500" />
                 <p className="text-xs text-gray-500">
-                  {adults + children} persone
+                  {adults + children}{' '}
+                  {adults + children === 1 ? 'person' : 'persons'}
                 </p>
               </div>
             </div>
