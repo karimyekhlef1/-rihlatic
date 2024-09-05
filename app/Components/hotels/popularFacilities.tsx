@@ -8,7 +8,7 @@ export default function PopularFacilities() {
   return (
     <div className="flex flex-col space-y-4">
       {/* Row of badges */}
-      <div className="flex space-x-2">
+      <div className="flex flex-col md:flex-row gap-y-2 items-start space-x-2">
         <FacilitiesOptions
           name="Climatisation"
           logo={
