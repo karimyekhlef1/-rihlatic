@@ -25,7 +25,7 @@ const content =
 
 export default function Details() {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center overflow-x-clip">
       <GallerySlider />
       <div className="flex flex-row">
         <div className="flex flex-col">

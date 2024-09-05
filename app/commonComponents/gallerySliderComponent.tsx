@@ -76,7 +76,7 @@ export default function ImageSlider() {
           alt={images[currentIndex].name}
           width={1200}
           height={600}
-          className="w-[1200px] h-[600px] rounded-lg shadow-md"
+          className="w-[1200px] h-[600px] object-cover rounded-lg shadow-md"
         />
         <div className="absolute bottom-[-50px] left-12">
           <Carousel ref={emblaRef} className="w-full max-w-md">
