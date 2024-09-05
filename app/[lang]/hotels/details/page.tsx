@@ -1,5 +1,8 @@
 'use client';
 
+import { Provider } from 'react-redux';
+import { store } from '@/lib/store/store';
+
 import TitleComponent from '@/app/commonComponents/titleComponent';
 import ContentComponent from '@/app/commonComponents/contentComponent';
 import GallerySlider from '@/app/commonComponents/gallerySliderComponent';
@@ -50,7 +53,9 @@ export default function Details() {
         </div>
         <div className="hidden lg:flex lg:flex-col items-center gap-y-8 pt-16">
           <MapComponent />
-          <BookingHotelComponent />
+          <Provider store={store}>
+            <BookingHotelComponent />
+          </Provider>
         </div>
       </div>
     </div>
