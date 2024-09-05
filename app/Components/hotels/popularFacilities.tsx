@@ -1,4 +1,4 @@
-import { Snowflake, Wifi, Utensils } from 'lucide-react';
+import { Snowflake, Wifi, Utensils, Plus } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -33,6 +33,16 @@ export default function PopularFacilities() {
           name="Restaurant"
           logo={
             <Utensils
+              size={15}
+              className="font-semibold text-xs text-[#27d765]"
+              fill="#eafbf0"
+            />
+          }
+        />{' '}
+        <FacilitiesOptions
+          name="Add more"
+          logo={
+            <Plus
               size={15}
               className="font-semibold text-xs text-[#27d765]"
               fill="#eafbf0"
