@@ -1,9 +1,20 @@
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { CircleCheck, User } from 'lucide-react';
+import {
+  incrementAdults,
+  decrementAdults,
+  incrementChildren,
+  decrementChildren,
+} from '@/lib/store/hotelSlices/bookingSlice';
+import { RootState } from '@/lib/store/store';
 
 export default function BookingHotelComponent() {
+  const dispatch = useDispatch();
+  const { adults, children } = useSelector((state: RootState) => state.booking);
+
   return (
     <div>
       <Card className="w-[300px]">
@@ -29,14 +40,16 @@ export default function BookingHotelComponent() {
                     variant="outline"
                     size="sm"
                     className="h-8 w-8 rounded-full"
+                    onClick={() => dispatch(decrementAdults())}
                   >
                     -
                   </Button>
-                  <span className="mx-2 text-sm">1</span>
+                  <span className="mx-2 text-sm">{adults}</span>
                   <Button
                     variant="unactive"
                     size="sm"
                     className="h-8 w-8 rounded-full"
+                    onClick={() => dispatch(incrementAdults())}
                   >
                     +
                   </Button>
@@ -49,14 +62,16 @@ export default function BookingHotelComponent() {
                     variant="outline"
                     size="sm"
                     className="h-8 w-8 rounded-full"
+                    onClick={() => dispatch(decrementChildren())}
                   >
                     -
                   </Button>
-                  <span className="mx-2 text-sm">0</span>
+                  <span className="mx-2 text-sm">{children}</span>
                   <Button
                     variant="unactive"
                     size="sm"
                     className="h-8 w-8 rounded-full"
+                    onClick={() => dispatch(incrementChildren())}
                   >
                     +
                   </Button>
