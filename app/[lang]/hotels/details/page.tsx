@@ -1,18 +1,16 @@
 'use client';
 
-import ContentComponent from '@/app/commonComponents/contentComponent';
 import TitleComponent from '@/app/commonComponents/titleComponent';
+import ContentComponent from '@/app/commonComponents/contentComponent';
 import GallerySlider from '@/app/commonComponents/gallerySliderComponent';
 
-import { Hotel, Sparkles, Bed, Luggage, CircleAlert } from 'lucide-react';
+import { Hotel, Sparkles, Bed } from 'lucide-react';
 
-import AdComponent from '@/app/commonComponents/adComponent';
-import HotelDetails from '@/app/Components/packages/hotelDetails';
-import TravelProgram from '@/app/Components/packages/travelProgram';
+import RoomsCard from '@/app/Components/hotels/roomsCard';
+import MapComponent from '@/app/Components/hotels/mapComponent';
 import ExploreSection from '@/app/Components/packages/exploreSection';
+import BookingHotelComponent from '@/app/Components/hotels/bookHotel';
 import PopularFacilities from '@/app/Components/hotels/popularFacilities';
-import HotelsComponent from '@/app/Components/packages/hotelsComponent';
-import BookingPackageComponent from '@/app/Components/packages/bookingPackageComponent';
 
 const content =
   'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Asperiores voluptate tempora reprehenderit natus in debitis voluptatibus non dolor itaque repellat? Rem dicta corrupti facere id eum nihil magni excepturi officia. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Asperiores voluptate tempora reprehenderit natus in debitis voluptatibus non dolor itaque repellat? Rem dicta corrupti facere id eum nihil magni excepturi officia.';
@@ -39,35 +37,20 @@ export default function Details() {
             <ContentComponent dynamicContent={<PopularFacilities />} />
 
             <TitleComponent
-              title={'Hôtel(s)'}
+              title={'Rooms Availability'}
               icon={<Bed size={20} />}
               label={''}
             />
-            <ContentComponent dynamicContent={<HotelsComponent />} />
-
-            <TitleComponent title={'Hôtel Details'} label={''} />
-            <ContentComponent dynamicContent={<HotelDetails />} />
-
-            <TitleComponent
-              title={'Travel program'}
-              icon={<Luggage size={20} />}
-              label={''}
-            />
-            <ContentComponent dynamicContent={<TravelProgram />} />
-
-            <TitleComponent
-              title={'important note'}
-              icon={<CircleAlert size={20} color="orange" />}
-              label={''}
-            />
-            <ContentComponent content={content} />
+            <RoomsCard />
+            <RoomsCard />
+            <RoomsCard />
           </div>
           {/* This element causes problems on mobile */}
           <div>{/* <ExploreSection /> */}</div>
         </div>
-        <div className="hidden lg:flex lg:flex-col items-center gap-y-8">
-          <AdComponent />
-          <BookingPackageComponent />
+        <div className="hidden lg:flex lg:flex-col items-center gap-y-8 pt-16">
+          <MapComponent />
+          <BookingHotelComponent />
         </div>
       </div>
     </div>

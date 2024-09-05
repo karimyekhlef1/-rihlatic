@@ -1,4 +1,4 @@
-import { Snowflake, Wifi, Utensils } from 'lucide-react';
+import { Snowflake, Wifi, Utensils, Plus } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -8,7 +8,7 @@ export default function PopularFacilities() {
   return (
     <div className="flex flex-col space-y-4">
       {/* Row of badges */}
-      <div className="flex space-x-2">
+      <div className="flex flex-col md:flex-row gap-y-2 items-start space-x-2">
         <FacilitiesOptions
           name="Climatisation"
           logo={
@@ -33,6 +33,16 @@ export default function PopularFacilities() {
           name="Restaurant"
           logo={
             <Utensils
+              size={15}
+              className="font-semibold text-xs text-[#27d765]"
+              fill="#eafbf0"
+            />
+          }
+        />{' '}
+        <FacilitiesOptions
+          name="Add more"
+          logo={
+            <Plus
               size={15}
               className="font-semibold text-xs text-[#27d765]"
               fill="#eafbf0"

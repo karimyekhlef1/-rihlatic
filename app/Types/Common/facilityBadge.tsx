@@ -1,4 +1,4 @@
 interface FacilityBadgeProps {
-  name: string;
+  name?: string;
   logo?: React.ReactNode;
 }
