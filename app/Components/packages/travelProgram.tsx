@@ -20,7 +20,7 @@ export default function TravelProgram() {
                 <p>Day 1</p>
               </div>
               <div>
-                <p className="font-semibold text-xl text-gray-100">
+                <p className="font-semibold text-lg text-gray-100">
                   Libre toor on istanbul ( alone , you can have a toor walk and
                   explore the city).
                 </p>
@@ -40,7 +40,7 @@ export default function TravelProgram() {
                 <p>Day 2</p>
               </div>
               <div>
-                <p className="font-semibold text-xl text-gray-100">
+                <p className="font-semibold text-lg text-gray-100">
                   Libre toor on istanbul ( alone , you can have a toor walk and
                   explore the city).
                 </p>
@@ -60,7 +60,7 @@ export default function TravelProgram() {
                 <p>Day 3</p>
               </div>
               <div>
-                <p className="font-semibold text-xl text-gray-100">
+                <p className="font-semibold text-lg text-gray-100">
                   Libre toor on istanbul ( alone , you can have a toor walk and
                   explore the city).
                 </p>
@@ -80,7 +80,7 @@ export default function TravelProgram() {
                 <p>Day 4</p>
               </div>
               <div>
-                <p className="font-semibold text-xl text-gray-100">
+                <p className="font-semibold text-lg text-gray-100">
                   Libre toor on istanbul ( alone , you can have a toor walk and
                   explore the city).
                 </p>
@@ -100,7 +100,7 @@ export default function TravelProgram() {
                 <p>Day 5</p>
               </div>
               <div>
-                <p className="font-semibold text-xl text-gray-100">
+                <p className="font-semibold text-lg text-gray-100">
                   Libre toor on istanbul ( alone , you can have a toor walk and
                   explore the city).
                 </p>
@@ -120,7 +120,7 @@ export default function TravelProgram() {
                 <p>Day 6</p>
               </div>
               <div>
-                <p className="font-semibold text-xl text-gray-100">
+                <p className="font-semibold text-lg text-gray-100">
                   Libre toor on istanbul ( alone , you can have a toor walk and
                   explore the city).
                 </p>
