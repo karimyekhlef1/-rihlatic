@@ -3,4 +3,5 @@ export interface GalleryProps {
   image: string;
   name: string;
   description: string;
+  rating: number;
 }
