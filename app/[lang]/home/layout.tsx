@@ -1,7 +1,7 @@
 import Footer from '@/app/commonComponents/footer';
 import Navbar from '@/app/Layout/Header/Navbar/navbar';
 
-const PackagesLayout = ({ children }: { children: React.ReactNode }) => {
+const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Navbar />
@@ -11,4 +11,4 @@ const PackagesLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default PackagesLayout;
+export default HomeLayout;
