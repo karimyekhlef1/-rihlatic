@@ -83,7 +83,7 @@ export default function HotelFooter() {
       </div>
 
       {/* Right column for image */}
-      <div className="flex-1 md:w-20">
+      <div className="flex-1 md:hidden lg:block">
         <Image
           src={footer}
           alt="Hotel"
