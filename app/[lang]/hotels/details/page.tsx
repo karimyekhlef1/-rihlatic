@@ -23,8 +23,8 @@ export default function Details() {
   return (
     <div className="flex flex-col items-center overflow-x-clip">
       <GallerySlider />
-      <div className="flex flex-row">
-        <div className="flex flex-col pb-16">
+      <div className="flex flex-col lg:flex-row">
+        <div className="flex flex-col pb-8 w-full lg:w-auto">
           <div className="flex flex-col">
             <TitleComponent
               title={'Hotel Description'}
@@ -59,7 +59,13 @@ export default function Details() {
           />
           <ContentComponent content={content} />
         </div>
-        <div className="hidden lg:flex lg:flex-col items-center gap-y-8 pt-16">
+        <div className="flex flex-col lg:hidden items-center gap-y-8 pt-2 w-full">
+          <MapComponent />
+          <Provider store={store}>
+            <BookingHotelComponent />
+          </Provider>
+        </div>
+        <div className="hidden lg:flex lg:flex-col items-center gap-y-8 lg:pt-16">
           <MapComponent />
           <Provider store={store}>
             <BookingHotelComponent />
