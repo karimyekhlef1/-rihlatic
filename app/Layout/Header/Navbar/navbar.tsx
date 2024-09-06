@@ -52,7 +52,7 @@ export default function Navbar() {
                     name={item.name}
                     key={index}
                     isSelected={item.isSelected}
-                    route=""
+                    route={item.route}
                   />
                 );
               })}
