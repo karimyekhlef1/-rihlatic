@@ -28,7 +28,7 @@ const SearchSectionComponent: React.FC = () => {
                 </div>
                 <div className="main-search-box mt-14 p-5">
                     <div className="flex items-center justify-center">
-                        <SearchInputComponent placeholder="Search for flights, hotels, cars, and more" onSearch={(value) => console.log(value)} />
+                        <SearchInputComponent placeholder="City, airports or place" onSearch={(value) => console.log(value)} />
                     </div>
                     <div className="flex items-center gap-2 mt-7">
                         <input id="home-search-checkbox" type="checkbox" value="" className="w-4 h-4 accent-[#FF8000] border-gray-300 rounded focus:ring-orange-500" />
