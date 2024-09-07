@@ -9,12 +9,13 @@ import { Separator } from '@/components/ui/separator';
 
 export default function FilterComponent() {
   return (
-    <div className="bg-background p-4">
-      <Accordion type="multiple" className="w-[300px]">
+    <div className="p-4">
+      <Accordion type="multiple" className="w-[250px]">
         <AccordionItem value="pays">
           <AccordionTrigger>Pays</AccordionTrigger>
           <AccordionContent>
             <div className="flex flex-col space-y-2">
+              <CheckboxItem id="all" label="All" />
               <CheckboxItem id="egypt" label="Egypt" />
               <CheckboxItem id="turkey" label="Turkey" />
               <CheckboxItem id="dubai" label="Dubai" />
@@ -24,7 +25,7 @@ export default function FilterComponent() {
         </AccordionItem>
       </Accordion>
 
-      <Accordion type="multiple" className="w-[300px]">
+      <Accordion type="multiple" className="w-[250px]">
         <AccordionItem value="categorie">
           <AccordionTrigger>Catégorie</AccordionTrigger>
           <AccordionContent>
@@ -46,7 +47,7 @@ function CheckboxItem({ id, label }: { id: string; label: string }) {
       <Checkbox id={id} />
       <label
         htmlFor={id}
-        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        className="text-xs font-semibold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
       >
         {label}
       </label>

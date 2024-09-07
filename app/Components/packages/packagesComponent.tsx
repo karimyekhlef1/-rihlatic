@@ -1,11 +1,12 @@
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { RootState, AppDispatch } from '@/lib/store/store';
 import { setPage } from '@/lib/store/commonSlices/paginationSlice';
 
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -20,13 +21,33 @@ export default function PackagesComponent() {
   // Sample data
   const fakeList = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7,
-    8, 9, 10,
+    8, 9, 10, 11,
   ];
 
-  // Constants for pagination
-  const itemsPerPage = 3;
   const totalItems = fakeList.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  // Constants for pagination
+  const [itemsPerPage, setItemsPerPage] = useState(9);
+  const [visiblePages, setVisiblePages] = useState(5);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setItemsPerPage(9); // Desktop
+        setVisiblePages(5); // Desktop
+      } else if (window.innerWidth >= 768) {
+        setItemsPerPage(4); // Tablet
+        setVisiblePages(3); // Tablet
+      } else {
+        setItemsPerPage(2); // Mobile
+        setVisiblePages(1); // Mobile
+      }
+    };
+
+    handleResize(); // Set initial value
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Redux hooks for pagination state
   const dispatch = useDispatch<AppDispatch>();
@@ -34,7 +55,8 @@ export default function PackagesComponent() {
     (state: RootState) => state.pagination.currentPage
   );
 
-  // Calculate the items for the current page
+  // Update these calculations
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = fakeList.slice(indexOfFirstItem, indexOfLastItem);
@@ -42,6 +64,19 @@ export default function PackagesComponent() {
   // Handle page changes
   const handlePageChange = (page: number) => {
     dispatch(setPage(page));
+    event?.preventDefault();
+  };
+
+  const getPageRange = () => {
+    const halfVisible = Math.floor(visiblePages / 2);
+    let start = Math.max(currentPage - halfVisible, 1);
+    let end = Math.min(start + visiblePages - 1, totalPages);
+
+    if (end - start + 1 < visiblePages) {
+      start = Math.max(end - visiblePages + 1, 1);
+    }
+
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   };
 
   return (
@@ -76,7 +111,7 @@ export default function PackagesComponent() {
                 onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
               />
             </PaginationItem>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            {getPageRange().map((page) => (
               <PaginationItem key={page}>
                 <PaginationLink
                   className={

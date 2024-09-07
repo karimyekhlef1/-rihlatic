@@ -9,12 +9,14 @@ import PackagesComponent from '@/app/Components/packages/packagesComponent';
 
 export default function Packages() {
   return (
-    <div className="flex flex-row">
-      <div className="px-8 flex flex-col items-center pt-10 gap-y-8 pb-10">
+    <div className="flex md:flex-row flex-col">
+      <div className="px-14 flex flex-col items-center pt-10 gap-y-8 md:pb-10">
         <FilterComponent />
-        <AdComponent />
+        <div className="hidden md:block">
+          <AdComponent />
+        </div>
       </div>
-      <div className="pr-8 pt-10 gap-y-8 pb-10">
+      <div className="px-10 pt-10 gap-y-8 pb-10">
         <Provider store={store}>
           <PackagesComponent />
         </Provider>

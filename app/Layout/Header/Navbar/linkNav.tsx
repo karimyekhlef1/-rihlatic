@@ -13,7 +13,7 @@ const LinkNav: React.FC<LinkNavProps> = ({
 }) => {
   return (
     <a
-      href="#"
+      href={route}
       onClick={onClick}
       className={`inline-flex items-center ${isSelected ? 'text-[#FF8000] border-b-2 border-[#FF8000]' : 'text-gray-500'} px-1 pt-1 text-sm font-semibold`}
     >

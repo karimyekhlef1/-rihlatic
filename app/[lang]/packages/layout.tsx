@@ -1,13 +1,14 @@
+import Footer from '@/app/commonComponents/footer';
 import Navbar from '@/app/Layout/Header/Navbar/navbar';
-import MainNavbar from '@/app/Layout/Main/mainNavbar';
 
-const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
+const PackagesLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Navbar />
-      {children}
+      <div className="bg-[#F8F8F8] h-full">{children}</div>
+      <Footer />
     </>
   );
 };
 
-export default ProfileLayout;
+export default PackagesLayout;

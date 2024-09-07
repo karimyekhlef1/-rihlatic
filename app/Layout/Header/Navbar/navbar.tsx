@@ -52,7 +52,7 @@ export default function Navbar() {
                     name={item.name}
                     key={index}
                     isSelected={item.isSelected}
-                    route=""
+                    route={item.route}
                   />
                 );
               })}
@@ -81,7 +81,7 @@ export default function Navbar() {
               >
                 <MenuItem>
                   <a
-                    href="#"
+                    href="/profile"
                     className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
                   >
                     Your Profile
@@ -107,7 +107,7 @@ export default function Navbar() {
               <DisclosureButton
                 key={index}
                 as="a"
-                href="#"
+                href={item.route}
                 className={`block py-2 pl-3 pr-4 text-base font-medium ${item.isSelected ? 'border-l-4 bg-indigo-50  border-indigo-500 text-indigo-700' : ''}`}
               >
                 {item.name}

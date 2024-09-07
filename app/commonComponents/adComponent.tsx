@@ -1,18 +1,11 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import rhtlk from '@/public/images/rhtlk.png';
 
 export default function AdComponent() {
   return (
     <div>
-      <Card className="w-[300px]">
+      <Card className="w-[250px]">
         <CardContent className="p-0">
           <div className="flex flex-col items-center">
             <h1 className="text-2xl text-center font-bold pb-2 pt-8 px-4">
