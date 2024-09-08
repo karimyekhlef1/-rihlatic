@@ -20,13 +20,16 @@ import {
 import { Button } from '@/components/ui/button';
 
 export default function TripSummaryComponent() {
+  // Initialize Redux dispatch and select flight state
   const dispatch = useDispatch();
   const { flightInfo, isExpanded } = useSelector(
     (state: RootState) => state.flight
   );
 
+  // State to manage the height of expandable content
   const [contentHeight, setContentHeight] = useState(0);
 
+  // Effect to update content height when expanded state changes
   useEffect(() => {
     if (isExpanded) {
       const content = document.getElementById('expandable-content');
@@ -40,7 +43,9 @@ export default function TripSummaryComponent() {
 
   return (
     <div className="flex flex-col space-y-4 pb-8">
+      {/* Flight route summary */}
       <div className="flex flex-row justify-between">
+        {/* From and To locations */}
         <div className="flex flex-row justify-center items-center gap-x-1">
           <p className="font-semibold text-sm flex flex-row justify-center items-center gap-x-2">
             {flightInfo.from} {<MoveRight size={20} />} {flightInfo.to}
@@ -54,6 +59,7 @@ export default function TripSummaryComponent() {
             <p className="font-semibold text-xs text-blue-400">Direct flight</p>
           </div>
         </div>
+        {/* Flight duration */}
         <div className="flex flex-row justify-center items-center gap-x-1">
           <Clock size={15} color="gray" />
           <p className="text-xs text-gray-500">Duration:</p>
@@ -62,9 +68,12 @@ export default function TripSummaryComponent() {
           </p>
         </div>
       </div>
+
+      {/* Main flight information card */}
       <Card className="shadow-md pt-4">
         <CardContent>
           <div className="flex">
+            {/* Left column: Departure and arrival times */}
             <div className="w-1/3 pr-4 border-r">
               <div className="mb-4">
                 <p className="font-semibold">{flightInfo.departureTime}</p>
@@ -84,6 +93,8 @@ export default function TripSummaryComponent() {
                 </p>
               </div>
             </div>
+
+            {/* Right column: Airport details and expandable content */}
             <div className="w-2/3 pl-4">
               <div className="mb-4">
                 <p className="font-semibold">{flightInfo.departureAirport}</p>
@@ -91,6 +102,8 @@ export default function TripSummaryComponent() {
                   {flightInfo.departureAirportName}
                 </p>
               </div>
+
+              {/* Airline info and expand/collapse button */}
               <div className="mb-4 flex items-center justify-between">
                 <div className="flex items-center">
                   <Plane className="mr-2" size={20} />
@@ -109,6 +122,8 @@ export default function TripSummaryComponent() {
                   )}
                 </Button>
               </div>
+
+              {/* Expandable content section */}
               <div
                 style={{
                   maxHeight: isExpanded ? `${contentHeight}px` : '0',
@@ -117,6 +132,7 @@ export default function TripSummaryComponent() {
                 }}
               >
                 <div id="expandable-content" className="mb-4 space-y-4">
+                  {/* Connection info */}
                   <div>
                     <h4 className="font-semibold text-sm mb-2">
                       Connection info
@@ -132,6 +148,7 @@ export default function TripSummaryComponent() {
                       </p>
                     </div>
                   </div>
+                  {/* Seating info */}
                   <div>
                     <h4 className="font-semibold text-sm mb-2">Seating info</h4>
                     <div className="grid grid-cols-2 gap-2 text-sm">
@@ -158,6 +175,8 @@ export default function TripSummaryComponent() {
                   </div>
                 </div>
               </div>
+
+              {/* Arrival airport */}
               <div>
                 <p className="font-semibold">{flightInfo.arrivalAirport}</p>
                 <p className="text-sm text-gray-500">
