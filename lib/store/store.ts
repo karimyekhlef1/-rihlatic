@@ -7,6 +7,7 @@ import paymentStepReducer from '@/lib/store/paymentSlices/paymentStepSlice';
 import dobReducer from '@/lib/store/paymentSlices/dobSlice';
 import passportNumberReducer from '@/lib/store/paymentSlices/passportNumberSlice';
 import expirationDateReducer from '@/lib/store/paymentSlices/expirationDateSlice';
+import flightReducer from '@/lib/store/packagesSlices/flightSlice';
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     dob: dobReducer,
     passportNumber: passportNumberReducer,
     expirationDate: expirationDateReducer,
+    flight: flightReducer,
   },
 });
 
