@@ -3,9 +3,10 @@
 import { RootState } from '@/lib/store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleExpanded } from '@/lib/store/packagesSlices/flightSlice';
+import { useState, useEffect } from 'react';
 
 import { Card, CardContent } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
+
 import {
   MoveRight,
   CircleArrowRight,
@@ -24,6 +25,19 @@ export default function TripSummaryComponent() {
     (state: RootState) => state.flight
   );
 
+  const [contentHeight, setContentHeight] = useState(0);
+
+  useEffect(() => {
+    if (isExpanded) {
+      const content = document.getElementById('expandable-content');
+      if (content) {
+        setContentHeight(content.scrollHeight);
+      }
+    } else {
+      setContentHeight(0);
+    }
+  }, [isExpanded]);
+
   return (
     <div className="flex flex-col space-y-4 pb-8">
       <div className="flex flex-row justify-between">
@@ -39,7 +53,7 @@ export default function TripSummaryComponent() {
             />
             <p className="font-semibold text-xs text-blue-400">Direct flight</p>
           </div>
-        </div>{' '}
+        </div>
         <div className="flex flex-row justify-center items-center gap-x-1">
           <Clock size={15} color="gray" />
           <p className="text-xs text-gray-500">Duration:</p>
@@ -59,13 +73,15 @@ export default function TripSummaryComponent() {
                 </p>
               </div>
               <div className="mb-4">
+                <p className="text-xs font-semibold text-gray-500">
+                  {flightInfo.duration}
+                </p>
+              </div>
+              <div>
                 <p className="font-semibold">{flightInfo.arrivalTime}</p>
                 <p className="text-sm text-gray-500">
                   {flightInfo.arrivalDate}
                 </p>
-              </div>
-              <div>
-                <p className="text-sm">{flightInfo.duration}</p>
               </div>
             </div>
             <div className="w-2/3 pl-4">
@@ -81,7 +97,7 @@ export default function TripSummaryComponent() {
                   <p className="text-sm font-semibold">{flightInfo.airline}</p>
                 </div>
                 <Button
-                  variant="ghost"
+                  variant="ghost2"
                   size="sm"
                   onClick={() => dispatch(toggleExpanded())}
                   className="p-1"
@@ -93,35 +109,55 @@ export default function TripSummaryComponent() {
                   )}
                 </Button>
               </div>
-              {isExpanded && (
-                <div className="mb-4 space-y-4">
+              <div
+                style={{
+                  maxHeight: isExpanded ? `${contentHeight}px` : '0',
+                  overflow: 'hidden',
+                  transition: 'max-height 0.4s ease-in-out',
+                }}
+              >
+                <div id="expandable-content" className="mb-4 space-y-4">
                   <div>
-                    <h4 className="font-semibold mb-2">Connection info</h4>
+                    <h4 className="font-semibold text-sm mb-2">
+                      Connection info
+                    </h4>
                     <div className="grid grid-cols-2 gap-2 text-sm">
-                      <p>Airline</p>
-                      <p>{flightInfo.airline}</p>
-                      <p>Flight no</p>
-                      <p>{flightInfo.flightNumber}</p>
+                      <p className="font-normal text-xs">Airline</p>
+                      <p className="font-semibold text-xs">
+                        {flightInfo.airline}
+                      </p>
+                      <p className="font-normal text-xs">Flight no</p>
+                      <p className="font-semibold text-xs">
+                        {flightInfo.flightNumber}
+                      </p>
                     </div>
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-2">Seating info</h4>
+                    <h4 className="font-semibold text-sm mb-2">Seating info</h4>
                     <div className="grid grid-cols-2 gap-2 text-sm">
-                      <p>Seat pitch</p>
-                      <p>{flightInfo.seatPitch}</p>
-                      <p>Seat width</p>
-                      <p>{flightInfo.seatWidth}</p>
-                      <p>Seat recline</p>
-                      <p>{flightInfo.seatRecline}</p>
+                      <p className="font-normal text-xs">Seat pitch</p>
+                      <p className="font-semibold text-xs">
+                        {flightInfo.seatPitch}
+                      </p>
+                      <p className="font-normal text-xs">Seat width</p>
+                      <p className="font-semibold text-xs">
+                        {flightInfo.seatWidth}
+                      </p>
+                      <p className="font-normal text-xs">Seat recline</p>
+                      <p className="font-semibold text-xs">
+                        {flightInfo.seatRecline}
+                      </p>
                       <div className="flex items-center">
                         <Wifi size={16} className="mr-2" />
-                        <p>Wi-Fi on board</p>
+                        <p className="font-normal text-xs">Wi-Fi on board</p>
                       </div>
-                      <p>{flightInfo.wifiOnBoard ? 'Yes' : 'No'}</p>
+                      <p className="font-semibold text-xs">
+                        {flightInfo.wifiOnBoard ? 'Yes' : 'No'}
+                      </p>
                     </div>
                   </div>
                 </div>
-              )}
+              </div>
               <div>
                 <p className="font-semibold">{flightInfo.arrivalAirport}</p>
                 <p className="text-sm text-gray-500">
