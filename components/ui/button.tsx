@@ -17,6 +17,7 @@ const buttonVariants = cva(
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
+        ghost2: ' hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
         rihlatic:
           'text-orange-500 w-full h-12 px-6 rounded-lg drop-shadow bg-white border-solid border-2 border-orange-500 font-semibold hover:bg-orange-500 hover:text-white',
