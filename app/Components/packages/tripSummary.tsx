@@ -1,14 +1,35 @@
+'use client';
+
+import { RootState } from '@/lib/store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleExpanded } from '@/lib/store/packagesSlices/flightSlice';
+
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { MoveRight, CircleArrowRight, Clock } from 'lucide-react';
+import {
+  MoveRight,
+  CircleArrowRight,
+  Clock,
+  ChevronDown,
+  ChevronUp,
+  Plane,
+  Wifi,
+} from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 
 export default function TripSummaryComponent() {
+  const dispatch = useDispatch();
+  const { flightInfo, isExpanded } = useSelector(
+    (state: RootState) => state.flight
+  );
+
   return (
     <div className="flex flex-col space-y-4 pb-8">
       <div className="flex flex-row justify-between">
         <div className="flex flex-row justify-center items-center gap-x-1">
           <p className="font-semibold text-sm flex flex-row justify-center items-center gap-x-2">
-            Algiers {<MoveRight size={20} />} Paris
+            {flightInfo.from} {<MoveRight size={20} />} {flightInfo.to}
           </p>
           <div className="flex flex-row justify-center items-center px-2 gap-x-1">
             <CircleArrowRight
@@ -22,45 +43,89 @@ export default function TripSummaryComponent() {
         <div className="flex flex-row justify-center items-center gap-x-1">
           <Clock size={15} color="gray" />
           <p className="text-xs text-gray-500">Duration:</p>
-          <p className="text-xs text-black font-semibold">2h 20m</p>
-        </div>
-      </div>
-      <Card className="shadow-md pt-4">
-        <CardContent>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel non nobis
-          omnis sunt nisi! Eaque asperiores sapiente at nam, fugit explicabo,
-          error vitae cum, libero dolorum impedit consequatur ullam architecto.
-        </CardContent>
-      </Card>
-
-      <Separator />
-
-      <div className="flex flex-row justify-between">
-        <div className="flex flex-row justify-center items-center gap-x-1">
-          <p className="font-semibold text-sm flex flex-row justify-center items-center gap-x-2">
-            Algiers {<MoveRight size={20} />} Paris
+          <p className="text-xs text-black font-semibold">
+            {flightInfo.duration}
           </p>
-          <div className="flex flex-row justify-center items-center px-2 gap-x-1">
-            <CircleArrowRight
-              size={20}
-              className="font-semibold text-xs text-[#3279f4]"
-              fill="#cddfff"
-            />
-            <p className="font-semibold text-xs text-blue-400">Direct flight</p>
-          </div>
-        </div>{' '}
-        <div className="flex flex-row justify-center items-center gap-x-1">
-          <Clock size={15} color="gray" />
-          <p className="text-xs text-gray-500">Duration:</p>
-          <p className="text-xs text-black font-semibold">2h 20m</p>
         </div>
       </div>
       <Card className="shadow-md pt-4">
         <CardContent>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iste nostrum
-          enim voluptate, voluptatibus quibusdam sint veniam illum labore
-          voluptatem magni, incidunt veritatis fuga aspernatur praesentium natus
-          ad, minus earum eius!
+          <div className="flex justify-between items-start mb-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => dispatch(toggleExpanded())}
+              className="p-1"
+            >
+              {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+            </Button>
+          </div>
+          <div className="space-y-4">
+            <div className="flex items-start">
+              <div className="mr-4 text-right">
+                <p className="font-semibold">{flightInfo.departureTime}</p>
+                <p className="text-sm text-gray-500">
+                  {flightInfo.departureDate}
+                </p>
+              </div>
+              <div className="flex-grow">
+                <p className="font-semibold">{flightInfo.departureAirport}</p>
+                <p className="text-sm text-gray-500">
+                  Mohamed Boudiaf International
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center">
+              <div className="w-16 text-right mr-4">
+                <p className="text-sm">{flightInfo.duration}</p>
+              </div>
+              <div className="flex-grow flex items-center">
+                <Plane className="mr-2" size={20} />
+                <p className="text-sm font-semibold">{flightInfo.airline}</p>
+              </div>
+            </div>
+            <div className="flex items-start">
+              <div className="mr-4 text-right">
+                <p className="font-semibold">{flightInfo.arrivalTime}</p>
+                <p className="text-sm text-gray-500">
+                  {flightInfo.arrivalDate}
+                </p>
+              </div>
+              <div className="flex-grow">
+                <p className="font-semibold">{flightInfo.arrivalAirport}</p>
+                <p className="text-sm text-gray-500">Lyon-Saint-Exupéry</p>
+              </div>
+            </div>
+          </div>
+          {isExpanded && (
+            <div className="mt-4 space-y-4">
+              <div>
+                <h4 className="font-semibold mb-2">Connection info</h4>
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <p>Airline</p>
+                  <p>{flightInfo.airline}</p>
+                  <p>Flight no</p>
+                  <p>{flightInfo.flightNumber}</p>
+                </div>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-2">Seating info</h4>
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <p>Seat pitch</p>
+                  <p>{flightInfo.seatPitch}</p>
+                  <p>Seat width</p>
+                  <p>{flightInfo.seatWidth}</p>
+                  <p>Seat recline</p>
+                  <p>{flightInfo.seatRecline}</p>
+                  <div className="flex items-center">
+                    <Wifi size={16} className="mr-2" />
+                    <p>Wi-Fi on board</p>
+                  </div>
+                  <p>{flightInfo.wifiOnBoard ? 'Yes' : 'No'}</p>
+                </div>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
