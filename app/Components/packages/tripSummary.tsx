@@ -82,8 +82,10 @@ export default function TripSummaryComponent() {
             <div className="w-1/4 pr-4 border-r flex flex-col justify-between">
               <div>
                 <div className="mb-4">
-                  <p className="font-semibold">{flightInfo.departureTime}</p>
-                  <p className="text-sm text-gray-500">
+                  <p className="font-semibold text-sm">
+                    {flightInfo.departureTime}
+                  </p>
+                  <p className="text-xs text-gray-500">
                     {flightInfo.departureDate}
                   </p>
                 </div>
@@ -94,8 +96,10 @@ export default function TripSummaryComponent() {
                 </div>
               </div>
               <div className="mt-auto">
-                <p className="font-semibold">{flightInfo.arrivalTime}</p>
-                <p className="text-sm text-gray-500">
+                <p className="font-semibold text-sm">
+                  {flightInfo.arrivalTime}
+                </p>
+                <p className="text-xs text-gray-500">
                   {flightInfo.arrivalDate}
                 </p>
               </div>
@@ -104,8 +108,10 @@ export default function TripSummaryComponent() {
             {/* Right column: Airport details and expandable content */}
             <div className="w-2/3 pl-28 flex flex-col">
               <div className="mb-4">
-                <p className="font-semibold">{flightInfo.departureAirport}</p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm font-semibold">
+                  {flightInfo.departureAirport}
+                </p>
+                <p className="text-xs text-gray-500">
                   {flightInfo.departureAirportName}
                 </p>
               </div>
@@ -199,8 +205,10 @@ export default function TripSummaryComponent() {
 
               {/* Arrival airport (moved to bottom of right column) */}
               <div className="mt-auto">
-                <p className="font-semibold">{flightInfo.arrivalAirport}</p>
-                <p className="text-sm text-gray-500">
+                <p className="font-semibold text-sm">
+                  {flightInfo.arrivalAirport}
+                </p>
+                <p className="text-xs text-gray-500">
                   {flightInfo.arrivalAirportName}
                 </p>
               </div>
