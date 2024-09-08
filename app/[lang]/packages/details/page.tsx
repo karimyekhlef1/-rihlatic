@@ -74,7 +74,7 @@ export default function Details() {
           {/* This element causes problems on mobile */}
           <div>{/* <ExploreSection /> */}</div>
         </div>
-        <div className="hidden lg:flex lg:flex-col items-center gap-y-8">
+        <div className="hidden lg:flex lg:flex-col items-center pt-16 gap-y-8">
           <BookingPackageComponent />
           <AdComponent />
         </div>

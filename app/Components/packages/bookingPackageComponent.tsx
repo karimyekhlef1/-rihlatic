@@ -6,8 +6,8 @@ import { CircleCheck } from 'lucide-react';
 export default function BookingPackageComponent() {
   return (
     <div>
-      <Card className="w-[300px]">
-        <CardContent className="px-0 py-8 shadow-xl">
+      <Card className="w-[300px] rounded-3xl">
+        <CardContent className="px-0 py-8">
           <div className="flex flex-col items-center">
             <div className="flex flex-col items-center justify-center pb-4">
               <p className="text-xs">Starting from</p>

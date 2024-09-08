@@ -8,7 +8,7 @@ const PageTitleComponent: React.FC<PageTitleProps> = ({
 }) => {
   return (
     <div className="flex flex-col pb-3">
-      <div className="flex flex-row">
+      <div className="flex flex-row items-center">
         <h2 className="text-xl text-nowrap font-bold text-orange-500">
           {title}
         </h2>

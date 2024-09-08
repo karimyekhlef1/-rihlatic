@@ -4,6 +4,9 @@ import TripTagComponent from './tripTagComponent';
 import { FaStar } from 'react-icons/fa';
 import { BsFillPeopleFill } from 'react-icons/bs';
 
+import Image from 'next/image';
+import packageImage from '@/public/images/packages/image_2.jpg';
+
 interface TripComponentProps {
   text: string;
 }
@@ -12,8 +15,13 @@ const TripComponent: React.FC<TripComponentProps> = ({ text }) => {
   return (
     <div className="tripComponent rounded-3xl shadow-lg my-3 max-w-sm mx-auto sm:max-w-md md:max-w-lg lg:max-w-xl">
       <div className="image">
-        <img
+        {/* <img
           src="https://via.placeholder.com/400"
+          alt="trip"
+          className="h-48 sm:h-52 md:h-60 w-full object-cover rounded-t-2xl"
+        /> */}
+        <Image
+          src={packageImage}
           alt="trip"
           className="h-48 sm:h-52 md:h-60 w-full object-cover rounded-t-2xl"
         />
