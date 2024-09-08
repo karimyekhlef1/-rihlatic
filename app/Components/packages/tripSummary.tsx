@@ -13,11 +13,16 @@ import {
   Clock,
   ChevronDown,
   ChevronUp,
-  Plane,
   Wifi,
+  Info,
+  Plane,
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+
+import Image from 'next/image';
+
+import airlineLogo from '@/public/images/airalgerie.svg';
 
 export default function TripSummaryComponent() {
   // Initialize Redux dispatch and select flight state
@@ -74,40 +79,56 @@ export default function TripSummaryComponent() {
         <CardContent>
           <div className="flex">
             {/* Left column: Departure and arrival times */}
-            <div className="w-1/3 pr-4 border-r">
-              <div className="mb-4">
-                <p className="font-semibold">{flightInfo.departureTime}</p>
-                <p className="text-sm text-gray-500">
-                  {flightInfo.departureDate}
-                </p>
-              </div>
-              <div className="mb-4">
-                <p className="text-xs font-semibold text-gray-500">
-                  {flightInfo.duration}
-                </p>
-              </div>
+            <div className="w-1/4 pr-4 border-r flex flex-col justify-between">
               <div>
-                <p className="font-semibold">{flightInfo.arrivalTime}</p>
-                <p className="text-sm text-gray-500">
+                <div className="mb-4">
+                  <p className="font-semibold text-sm">
+                    {flightInfo.departureTime}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {flightInfo.departureDate}
+                  </p>
+                </div>
+                <div className="mb-4">
+                  <p className="text-xs font-semibold text-gray-500">
+                    {flightInfo.duration}
+                  </p>
+                </div>
+              </div>
+              <div className="mt-auto">
+                <p className="font-semibold text-sm">
+                  {flightInfo.arrivalTime}
+                </p>
+                <p className="text-xs text-gray-500">
                   {flightInfo.arrivalDate}
                 </p>
               </div>
             </div>
 
             {/* Right column: Airport details and expandable content */}
-            <div className="w-2/3 pl-4">
+            <div className="w-2/3 pl-28 flex flex-col">
               <div className="mb-4">
-                <p className="font-semibold">{flightInfo.departureAirport}</p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm font-semibold">
+                  {flightInfo.departureAirport}
+                </p>
+                <p className="text-xs text-gray-500">
                   {flightInfo.departureAirportName}
                 </p>
               </div>
 
               {/* Airline info and expand/collapse button */}
               <div className="mb-4 flex items-center justify-between">
-                <div className="flex items-center">
-                  <Plane className="mr-2" size={20} />
-                  <p className="text-sm font-semibold">{flightInfo.airline}</p>
+                <div className="flex items-center bg-[#f8f8f8] rounded-full px-1">
+                  <Image
+                    src={airlineLogo}
+                    alt={flightInfo.airline}
+                    width={18}
+                    height={18}
+                    className="mr-2"
+                  />
+                  <p className="text-xs font-medium text-gray-500">
+                    {flightInfo.airline}
+                  </p>
                 </div>
                 <Button
                   variant="ghost2"
@@ -138,11 +159,17 @@ export default function TripSummaryComponent() {
                       Connection info
                     </h4>
                     <div className="grid grid-cols-2 gap-2 text-sm">
-                      <p className="font-normal text-xs">Airline</p>
+                      <div className="flex items-center">
+                        <Plane size={16} className="mr-2" fill="black" />
+                        <p className="font-normal text-xs">Airline</p>
+                      </div>
                       <p className="font-semibold text-xs">
                         {flightInfo.airline}
                       </p>
-                      <p className="font-normal text-xs">Flight no</p>
+                      <div className="flex items-center">
+                        <Info size={16} className="mr-2" />
+                        <p className="font-normal text-xs">Flight no</p>
+                      </div>
                       <p className="font-semibold text-xs">
                         {flightInfo.flightNumber}
                       </p>
@@ -176,10 +203,12 @@ export default function TripSummaryComponent() {
                 </div>
               </div>
 
-              {/* Arrival airport */}
-              <div>
-                <p className="font-semibold">{flightInfo.arrivalAirport}</p>
-                <p className="text-sm text-gray-500">
+              {/* Arrival airport (moved to bottom of right column) */}
+              <div className="mt-auto">
+                <p className="font-semibold text-sm">
+                  {flightInfo.arrivalAirport}
+                </p>
+                <p className="text-xs text-gray-500">
                   {flightInfo.arrivalAirportName}
                 </p>
               </div>
