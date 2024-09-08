@@ -23,7 +23,7 @@ import {
 import { cn } from '@/lib/utils';
 import { format, parse } from 'date-fns';
 
-import { ScanLine, CalendarIcon } from 'lucide-react';
+import { ScanLine, CalendarIcon, UserIcon, AlertCircle } from 'lucide-react';
 
 export default function PaymentCardComponent() {
   const dispatch = useDispatch();
@@ -70,8 +70,23 @@ export default function PaymentCardComponent() {
           {step === 'details' ? (
             // Details form
             <form className="space-y-4">
+              <div className="flex items-center mb-4">
+                <UserIcon className="mr-2 h-5 w-5 text-gray-600" fill="black" />
+                <span className="text-lg font-semibold">Adults</span>
+              </div>
+              <Separator />
+              <div className="flex flex-col space-y-2 mt-4 mb-6">
+                <div className="text-lg font-semibold">Adultes 1</div>
+                <div className="flex items-center">
+                  <span className="text-base">Principal</span>
+                  <AlertCircle
+                    className="ml-2 h-4 w-4 text-white"
+                    fill="#ff8000"
+                  />
+                </div>
+              </div>
               {/* Email and phone input fields */}
-              <div className="flex flex-row gap-x-10 pb-4">
+              <div className="flex flex-row gap-x-4 pb-4">
                 <Input
                   id="email"
                   type="email"
@@ -79,7 +94,7 @@ export default function PaymentCardComponent() {
                 />
                 <Input id="phone" type="tel" placeholder="Phone number" />
               </div>
-              <Separator className="bg-black" />
+              <Separator />
 
               {/* Passport scan upload section */}
               <div className="relative">
@@ -110,14 +125,14 @@ export default function PaymentCardComponent() {
               </p>
 
               {/* First name and last name input fields */}
-              <div className="flex flex-row gap-x-10 pb-4">
+              <div className="flex flex-row gap-x-4 pb-2">
                 <Input id="firstName" placeholder="First name" />
                 <Input id="lastName" placeholder="Last name" />
               </div>
 
               {/* Date of birth, passport number, and expiration date inputs */}
               <div>
-                <form className="w-full max-w-md space-y-4">
+                <form className="w-full space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     {/* Date of birth popover calendar */}
                     <Popover>
@@ -207,10 +222,11 @@ export default function PaymentCardComponent() {
             </form>
           ) : (
             // Payment success message
-            <div className="text-center">
-              <p className="text-2xl font-bold text-green-600 mb-4">
+            <div className="flex flex-col justify-center items-center h-[333px] w-[559px] text-center">
+              <p className="text-2xl font-bold text-green-600">
                 Payment Successful
               </p>
+              <p className="text-gray-600">Thank you for your purchase!</p>
             </div>
           )}
         </CardContent>
@@ -218,10 +234,14 @@ export default function PaymentCardComponent() {
 
       {/* Navigation buttons outside the Card */}
       <div className="flex justify-between max-w-[840px] mx-auto">
-        <Button variant="outline" onClick={handleBack}>
+        <Button variant="outline" onClick={handleBack} className="px-16">
           {step === 'details' ? 'Back' : 'Back to Details'}
         </Button>
-        {step === 'details' && <Button onClick={handleNext}>Next</Button>}
+        {step === 'details' && (
+          <Button variant={'active'} onClick={handleNext} className="px-16">
+            Next
+          </Button>
+        )}
       </div>
     </div>
   );

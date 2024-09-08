@@ -8,7 +8,7 @@ import PaymentProgressComponent from '@/app/Components/payment/paymentProgress';
 
 export default function Packages() {
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="flex flex-col items-center justify-start min-h-screen pt-16">
       <PaymentTitleComponent
         location="Istanbul, Turkiye"
         month="August"
