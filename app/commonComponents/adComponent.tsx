@@ -5,7 +5,7 @@ import rhtlk from '@/public/images/rhtlk.png';
 export default function AdComponent() {
   return (
     <div>
-      <Card className="w-[250px]">
+      <Card className="w-[280px] rounded-xl">
         <CardContent className="p-0">
           <div className="flex flex-col items-center">
             <h1 className="text-2xl text-center font-bold pb-2 pt-8 px-4">
