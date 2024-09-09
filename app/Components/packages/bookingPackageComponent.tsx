@@ -4,6 +4,7 @@ import { Separator } from '@/components/ui/separator';
 import { CircleCheck } from 'lucide-react';
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+import { DatePickerWithRange } from '@/app/commonComponents/datePicker';
 
 export default function BookingPackageComponent() {
   const [isOpen, setIsOpen] = useState(false);
@@ -73,9 +74,7 @@ export default function BookingPackageComponent() {
                   </div>
                 )}
               </div>
-              <Button className="px-8" variant={'rihlatic'}>
-                Select a departure
-              </Button>
+              <DatePickerWithRange />
             </div>
             <Separator />
             <div className="pt-4">
