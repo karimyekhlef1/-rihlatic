@@ -132,7 +132,7 @@ export default function PaymentCardComponent() {
 
               {/* Date of birth, passport number, and expiration date inputs */}
               <div>
-                <form className="w-full space-y-4">
+                <div className="w-full space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     {/* Date of birth popover calendar */}
                     <Popover>
@@ -217,7 +217,7 @@ export default function PaymentCardComponent() {
                       />
                     </PopoverContent>
                   </Popover>
-                </form>
+                </div>
               </div>
             </form>
           ) : (
