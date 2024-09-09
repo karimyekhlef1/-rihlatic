@@ -5,7 +5,7 @@ import { store } from '@/lib/store/store';
 
 import AdComponent from '@/app/commonComponents/adComponent';
 import FilterComponent from '@/app/Components/packages/filtersComponent';
-import PackagesComponent from '@/app/Components/packages/packagesComponent';
+import HotelsCardsComponent from '@/app/Components/hotels/hotelsCardsComponent';
 
 export default function Hotels() {
   return (
@@ -18,7 +18,7 @@ export default function Hotels() {
       </div>
       <div className="px-10 pt-10 gap-y-8 pb-10">
         <Provider store={store}>
-          <PackagesComponent />
+          <HotelsCardsComponent />
         </Provider>
       </div>
     </div>

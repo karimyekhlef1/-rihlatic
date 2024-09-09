@@ -1,5 +1,8 @@
 'use client';
 
+import { Provider } from 'react-redux';
+import { store } from '@/lib/store/store';
+
 import ContentComponent from '@/app/commonComponents/contentComponent';
 import TitleComponent from '@/app/commonComponents/titleComponent';
 import GallerySlider from '@/app/commonComponents/gallerySliderComponent';
@@ -43,7 +46,13 @@ export default function Details() {
               icon={<PlaneTakeoff size={20} />}
               label={''}
             />
-            <ContentComponent dynamicContent={<TripSummaryComponent />} />
+            <ContentComponent
+              dynamicContent={
+                <Provider store={store}>
+                  <TripSummaryComponent />
+                </Provider>
+              }
+            />
 
             <TitleComponent
               title={'Hôtel(s)'}
@@ -74,7 +83,7 @@ export default function Details() {
           {/* This element causes problems on mobile */}
           <div>{/* <ExploreSection /> */}</div>
         </div>
-        <div className="hidden lg:flex lg:flex-col items-center gap-y-8">
+        <div className="hidden lg:flex lg:flex-col items-center pt-16 gap-y-8">
           <BookingPackageComponent />
           <AdComponent />
         </div>
