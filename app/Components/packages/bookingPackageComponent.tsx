@@ -6,6 +6,9 @@ import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { DatePickerWithRange } from '@/app/commonComponents/datePicker';
 
+import { Provider } from 'react-redux';
+import { store } from '@/lib/store/store';
+
 export default function BookingPackageComponent() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState('');
@@ -46,11 +49,12 @@ export default function BookingPackageComponent() {
                 <p className="text-sm font-semibold pl-2">12-August-2024</p>
               </div>
             </div>
-            <div className="flex flex-col gap-y-2 pb-4">
+            <Separator />
+            <div className="flex flex-col gap-y-2 pb-4 pt-4">
               <div className="relative">
                 <button
                   onClick={() => setIsOpen(!isOpen)}
-                  className="w-full text-sm text-center font-semibold px-8 py-2 bg-white text-[#ff8000] border-2 border-[#ff8000] rounded-xl cursor-pointer flex items-center justify-between"
+                  className="w-full text-sm text-center font-medium px-8 py-2 bg-white text-[#ff8000] border-2 border-[#ff8000] rounded-xl cursor-pointer flex items-center justify-between"
                 >
                   {selectedRoom || 'Kind of room'}
                   <ChevronDown
@@ -74,7 +78,9 @@ export default function BookingPackageComponent() {
                   </div>
                 )}
               </div>
-              <DatePickerWithRange />
+              <Provider store={store}>
+                <DatePickerWithRange />
+              </Provider>
             </div>
             <Separator />
             <div className="pt-4">

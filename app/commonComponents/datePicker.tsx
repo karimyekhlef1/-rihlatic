@@ -4,6 +4,7 @@ import * as React from 'react';
 import { addDays, format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -13,14 +14,17 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { setDate } from '@/lib/store/commonSlices/datePickerSlice';
 
 export function DatePickerWithRange({
   className,
 }: React.HTMLAttributes<HTMLDivElement>) {
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(2022, 0, 20),
-    to: addDays(new Date(2022, 0, 20), 20),
-  });
+  const dispatch = useDispatch();
+  const date = useSelector((state: any) => state.datePicker.date);
+
+  const handleSelect = (newDate: DateRange | undefined) => {
+    dispatch(setDate(newDate));
+  };
 
   return (
     <div className={cn('grid gap-2', className)}>
@@ -55,7 +59,7 @@ export function DatePickerWithRange({
             mode="range"
             defaultMonth={date?.from}
             selected={date}
-            onSelect={setDate}
+            onSelect={handleSelect} // Use handleSelect to update Redux
             numberOfMonths={2}
           />
         </PopoverContent>
