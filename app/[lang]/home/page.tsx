@@ -7,11 +7,13 @@ import FavSection from '@/app/Components/home/favSection';
 import OrganizeSection from '@/app/Components/home/organizeSection';
 import PopularSection from '@/app/Components/home/popularSection';
 import FlightsSection from '@/app/Components/home/flightsSection';
+import SearchSectionComponent from '@/app/Components/home/searchSectionComponent';
 
 const HomePage: React.FC = () => {
 
     return (
         <div id="home-page">
+            <SearchSectionComponent />
             <ServiceSection />
             <br />
             <hr style={{border: '1px solid #e5e7eb40'}} />

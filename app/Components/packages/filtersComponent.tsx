@@ -43,7 +43,7 @@ export default function FilterComponent() {
 
 function CheckboxItem({ id, label }: { id: string; label: string }) {
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center space-x-2 py-1">
       <Checkbox id={id} />
       <label
         htmlFor={id}

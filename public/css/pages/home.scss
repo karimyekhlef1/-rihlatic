@@ -1,4 +1,32 @@
 #home-page {
+    .main-search-box {
+        border: 2px solid #FFFFFF;
+        border-radius: 10px;
+        background-color: #FFFFFFDD;
+
+        #home-search-checkbox:checked {
+            color: white;
+        }
+
+        .search-add-icon {
+            background-color: $primaryColorOpacity20;
+            border-radius: 5px;
+            padding: 7px;
+            &:hover {
+                cursor: pointer;
+            }
+            svg {
+                color: $primaryColor;
+            }
+        }
+    }
+
+    .home-search-category-box {
+        width: 120px;
+        height: 45px;
+        background-color: #FFFFFFAA;
+    }
+
     .flights {
         background-color: $backgroundColor;
     }
