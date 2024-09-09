@@ -23,7 +23,7 @@ const images: GalleryProps[] = [
     name: 'Turkey',
     description:
       'Non quo aperiam repellendus quas est est. Eos aut dolore aut ut sit nesciunt. Ex tempora quia. Sit nobis consequatur dolores incidunt.',
-    rating: 4,
+    rating: 4.5,
   },
   {
     title: 'Explore the city',

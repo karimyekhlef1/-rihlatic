@@ -15,9 +15,9 @@ import {
   PaginationLast,
 } from '@/components/ui/pagination';
 
-import TripComponent from '@/app/commonComponents/tripComponent';
+import HotelInfoComponent from '@/app/commonComponents/hotelInfoComponent';
 
-export default function PackagesComponent() {
+export default function HotelsCardsComponent() {
   // Sample data
   const fakeList = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7,
@@ -88,7 +88,7 @@ export default function PackagesComponent() {
         {currentItems.map((item, index) => (
           <li key={index} className="col-span-1 divide-y">
             <div>
-              <TripComponent text={`Voyage ${item}`} />
+              <HotelInfoComponent rank={5} text={`Voyage ${item}`} />
             </div>
           </li>
         ))}

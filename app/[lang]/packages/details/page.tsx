@@ -1,5 +1,8 @@
 'use client';
 
+import { Provider } from 'react-redux';
+import { store } from '@/lib/store/store';
+
 import ContentComponent from '@/app/commonComponents/contentComponent';
 import TitleComponent from '@/app/commonComponents/titleComponent';
 import GallerySlider from '@/app/commonComponents/gallerySliderComponent';
@@ -19,6 +22,7 @@ import ExploreSection from '@/app/Components/packages/exploreSection';
 import HotelsComponent from '@/app/Components/packages/hotelsComponent';
 import TripSummaryComponent from '@/app/Components/packages/tripSummary';
 import BookingPackageComponent from '@/app/Components/packages/bookingPackageComponent';
+import ImportantNote from '@/app/Components/packages/importantNote';
 
 const content =
   'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Asperiores voluptate tempora reprehenderit natus in debitis voluptatibus non dolor itaque repellat? Rem dicta corrupti facere id eum nihil magni excepturi officia.';
@@ -42,7 +46,13 @@ export default function Details() {
               icon={<PlaneTakeoff size={20} />}
               label={''}
             />
-            <ContentComponent dynamicContent={<TripSummaryComponent />} />
+            <ContentComponent
+              dynamicContent={
+                <Provider store={store}>
+                  <TripSummaryComponent />
+                </Provider>
+              }
+            />
 
             <TitleComponent
               title={'Hôtel(s)'}
@@ -66,12 +76,14 @@ export default function Details() {
               icon={<CircleAlert size={20} color="orange" />}
               label={''}
             />
-            <ContentComponent content={content} />
+            <ContentComponent
+              dynamicContent={<ImportantNote content={content} />}
+            />
           </div>
           {/* This element causes problems on mobile */}
           <div>{/* <ExploreSection /> */}</div>
         </div>
-        <div className="hidden lg:flex lg:flex-col items-center gap-y-8">
+        <div className="hidden lg:flex lg:flex-col items-center pt-16 gap-y-8">
           <BookingPackageComponent />
           <AdComponent />
         </div>
