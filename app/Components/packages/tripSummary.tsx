@@ -20,9 +20,10 @@ import {
 
 import { Button } from '@/components/ui/button';
 
-import Image from 'next/image';
-
 import airlineLogo from '@/public/images/airalgerie.svg';
+import AirlineCompanyComponent from './airlineCompany';
+
+import { FaPlane } from 'react-icons/fa';
 
 export default function TripSummaryComponent() {
   // Initialize Redux dispatch and select flight state
@@ -77,9 +78,9 @@ export default function TripSummaryComponent() {
       {/* Main flight information card */}
       <Card className="shadow-md pt-4">
         <CardContent>
-          <div className="flex">
+          <div className="flex relative">
             {/* Left column: Departure and arrival times */}
-            <div className="w-1/4 pr-4 border-r flex flex-col justify-between">
+            <div className="w-1/4 pr-4 border-r flex flex-col justify-between relative">
               <div>
                 <div className="mb-4">
                   <p className="font-semibold text-sm">
@@ -103,6 +104,9 @@ export default function TripSummaryComponent() {
                   {flightInfo.arrivalDate}
                 </p>
               </div>
+              <div className="absolute right-0 top-1/2 transform translate-x-1/2 -translate-y-1/2 bg-white p-1 rounded-full">
+                <FaPlane className="text-gray-400 transform rotate-90" />
+              </div>
             </div>
 
             {/* Right column: Airport details and expandable content */}
@@ -118,18 +122,10 @@ export default function TripSummaryComponent() {
 
               {/* Airline info and expand/collapse button */}
               <div className="mb-4 flex items-center justify-between">
-                <div className="flex items-center bg-[#f8f8f8] rounded-full px-1">
-                  <Image
-                    src={airlineLogo}
-                    alt={flightInfo.airline}
-                    width={18}
-                    height={18}
-                    className="mr-2"
-                  />
-                  <p className="text-xs font-medium text-gray-500">
-                    {flightInfo.airline}
-                  </p>
-                </div>
+                <AirlineCompanyComponent
+                  logo={airlineLogo}
+                  name={flightInfo.airline}
+                />
                 <Button
                   variant="ghost2"
                   size="sm"
