@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import Select from 'react-dropdown-select';
+import { FaCity, FaTimes } from 'react-icons/fa';
+import { FiPlus } from 'react-icons/fi';
 
 interface SearchInputProps {
     placeholder: string;
@@ -7,6 +8,29 @@ interface SearchInputProps {
 }
 
 const SearchInputComponent: React.FC<SearchInputProps> = ({ placeholder, onSearch }) => {
+
+    const fakeLit = [
+        {
+            id: 1,
+            name: 'Constantine Algeria',
+        },
+        {
+            id: 2,
+            name: 'Algiers Algeria',
+        },
+        {
+            id: 3,
+            name: 'Oran Algeria',
+        },
+        {
+            id: 4,
+            name: 'Annaba Algeria',
+        },
+        {
+            id: 5,
+            name: 'Batna Algeria',
+        },
+    ];
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
@@ -18,31 +42,77 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({ placeholder, onSearc
         setIsOpened(!isOpened);
     }
 
+    const [searchValue, setSearchValue] = useState<string>('');
+
     const [isOpened, setIsOpened] = useState<boolean>(false);
 
+    const searchClick = (value: string) => {
+        setSearchValue(value);
+        setIsOpened(false);
+    }
+
     return (
-        <div className="border border-gray-400 rounded-lg relative" style={isOpened ? {border: '1px solid #FF8000', width: "400px"} : {border: '1px solid #E5E7EB', width: "300px"}}>
-           <div className="text-field-search flex items-center gap-3 p-2 absolute top-0 left-0 right-0 bg-white z-10">
-                <label htmlFor="InputField" className='text-[#A7A8AB] text-sm'>From</label>
-                <input
-                    type="text"
-                    className='text-base w-full text-gray-700 outline-none placeholder:text-[#64656A]'
-                    placeholder={placeholder}
-                    onChange={handleInputChange}
-                    onClick={clickHandler}
-                    id='InputField'
-                />
+        <div className="rounded-lg relative"
+            style={{
+                width: isOpened ? '400px' : '300px',
+                right: 0,
+                bottom: 0,
+                position: 'relative',
+                transition: 'width 0.2s ease-in-out',
+            }}
+        >
+           <div className={`text-field-search flex items-center gap-3 p-2 absolute top-0 left-0 bg-white z-10 rounded-lg ${isOpened ? 'border-[#FF8000] border-2' : 'border'}`}
+                onClick={clickHandler}
+                style={{
+                    width: isOpened ? 'calc(100% - 1.2rem)' : '100%',
+                    transition: 'width 0.2s ease-in-out',
+                }}
+           >
+                <div className="flex items-center gap-2">
+                    <label htmlFor="InputField" className='text-[#A7A8AB] text-sm'>From</label>
+                    {
+                        searchValue && (
+                            <div className="flex items-center gap-3 rounded text-white text-xs p-1 flex-shrink-0 min-w-fit bg-[#48c299]">
+                                <span>{searchValue}</span>
+                                <div className="cross bg-teal-500 roubded p-[2px]" onClick={() => setSearchValue('')}>
+                                    <FaTimes />
+                                </div>
+                            </div>
+                        )
+                    }
+                </div>
+                {
+                    (!searchValue) && (
+                        <input
+                            type="text"
+                            className={`text-base text-gray-700 outline-none placeholder:text-[#64656A] w-full`}
+                            placeholder={placeholder}
+                            onChange={handleInputChange}
+                            onClick={clickHandler}
+                            id='InputField'
+                        />
+                    )
+                }
             </div>
             {
                 isOpened && (
-                    <div className="absolute top-[-10px] right-[-10px] left-[-10px] p-2 bg-emerald-50 rounded-lg text-gray-900 pt-16 z-0" style={isOpened ? {display: 'block'} : {display: 'none'}}>
+                    <div className="absolute w-full top-[-10px] right-[-10px] left-[-10px] bg-white shadow-xl rounded-lg text-gray-900 pt-16 z-0" style={isOpened ? {display: 'block'} : {display: 'none'}}>
                         <ul>
-                            <li className='p-3'>
-                                <div className="flex">
-                                    <span>Lorem, ipsum.</span>    
-                                    <span className='ml-auto'>X</span>
-                                </div>   
-                            </li>
+                            {
+                                fakeLit.map((item, index) => (
+                                    <li key={index} className='hover:bg-slate-100 hover:cursor-pointer' onClick={() => searchClick(item.name)}>
+                                        <div className="w-full flex justify-between items-center p-3">
+                                            <div className="flex items-center gap-3">
+                                                <FaCity />
+                                                <span className='truncate text-sm'>{item.name}</span>
+                                            </div>
+                                            <div className="search-add-icon">
+                                                <FiPlus />
+                                            </div>
+                                        </div>
+                                    </li>
+                                ))
+                            }
                         </ul>
                     </div>
                 )

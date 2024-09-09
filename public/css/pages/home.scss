@@ -7,6 +7,18 @@
         #home-search-checkbox:checked {
             color: white;
         }
+
+        .search-add-icon {
+            background-color: $primaryColorOpacity20;
+            border-radius: 5px;
+            padding: 7px;
+            &:hover {
+                cursor: pointer;
+            }
+            svg {
+                color: $primaryColor;
+            }
+        }
     }
 
     .home-search-category-box {
