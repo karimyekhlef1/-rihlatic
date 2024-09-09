@@ -31,7 +31,7 @@ export default function Details() {
   return (
     <div className="flex flex-col items-center overflow-x-clip">
       <GallerySlider />
-      <div className="flex flex-row">
+      <div className="flex flex-row pt-8">
         <div className="flex flex-col">
           <div className="flex flex-col">
             <TitleComponent

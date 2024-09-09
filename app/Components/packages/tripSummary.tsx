@@ -23,7 +23,7 @@ import { Button } from '@/components/ui/button';
 import airlineLogo from '@/public/images/airalgerie.svg';
 import AirlineCompanyComponent from './airlineCompany';
 
-import { FaPlane } from 'react-icons/fa';
+import { FaPlane, FaCircle } from 'react-icons/fa';
 
 export default function TripSummaryComponent() {
   // Initialize Redux dispatch and select flight state
@@ -91,7 +91,7 @@ export default function TripSummaryComponent() {
                   </p>
                 </div>
                 <div className="mb-4">
-                  <p className="text-xs font-semibold text-gray-500">
+                  <p className="text-xs font-semibold text-gray-500 pt-2">
                     {flightInfo.duration}
                   </p>
                 </div>
@@ -104,8 +104,14 @@ export default function TripSummaryComponent() {
                   {flightInfo.arrivalDate}
                 </p>
               </div>
+              <div className="absolute right-0 top-0 transform translate-x-1/2 -translate-y-1/2 p-1 rounded-full">
+                <FaCircle className="text-gray-400 text-[8px]" />
+              </div>
               <div className="absolute right-0 top-1/2 transform translate-x-1/2 -translate-y-1/2 bg-white p-1 rounded-full">
                 <FaPlane className="text-gray-400 transform rotate-90" />
+              </div>
+              <div className="absolute right-0 bottom-0 transform translate-x-1/2 translate-y-1/2 p-1 rounded-full">
+                <FaCircle className="text-gray-400 text-[8px]" />
               </div>
             </div>
 
