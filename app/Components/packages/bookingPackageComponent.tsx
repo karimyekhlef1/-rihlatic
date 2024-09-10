@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -10,6 +11,7 @@ import { format, differenceInDays } from 'date-fns';
 import DropDownBookingComponent from './dropDownBooking';
 
 export default function BookingPackageComponent() {
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const { date } = useSelector((state: RootState) => state.datePicker);
   const startDate = date?.from;
   const endDate = date?.to;
@@ -59,13 +61,27 @@ export default function BookingPackageComponent() {
               </div>
             </div>
             <Separator />
+            {selectedOption && (
+              <>
+                <p className="text-sm font-semibold pt-4">
+                  Checkout Calculation
+                </p>
+                <div className="flex flex-row items-center justify-between py-4 w-full px-4">
+                  <p className="text-sm font-medium text-gray-500">
+                    {selectedOption}
+                  </p>
+                  <p className="font-semibold text-sm">149000 DZD</p>
+                </div>
+                <Separator />
+              </>
+            )}
             <div className="flex flex-col gap-y-2 pb-4 pt-4">
-              <DropDownBookingComponent />
+              <DropDownBookingComponent onSelect={setSelectedOption} />
               <DatePickerWithRange />
             </div>
             <Separator />
             <div className="pt-4">
-              <Button className="px-14" variant={'rihlatic'} disabled>
+              <Button className="px-14" variant={'rihlatic'}>
                 Book Now
               </Button>
             </div>
