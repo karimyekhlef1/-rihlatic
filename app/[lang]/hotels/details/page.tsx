@@ -53,7 +53,7 @@ export default function Details() {
           <div>{/* <ExploreSection /> */}</div>
           {/* This is just a place holder for the real "Explore Section" */}
           <TitleComponent
-            title={'Explore more options'}
+            title={'Explore more options (PLACEHOLDER)'}
             icon={<Globe size={20} />}
             label={''}
           />

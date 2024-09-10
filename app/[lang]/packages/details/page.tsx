@@ -84,7 +84,9 @@ export default function Details() {
           <div>{/* <ExploreSection /> */}</div>
         </div>
         <div className="hidden lg:flex lg:flex-col items-center pt-16 gap-y-8">
-          <BookingPackageComponent />
+          <Provider store={store}>
+            <BookingPackageComponent />
+          </Provider>
           <AdComponent />
         </div>
       </div>
