@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { CircleCheck, User } from 'lucide-react';
+import { User } from 'lucide-react';
 import {
   incrementAdults,
   decrementAdults,
@@ -10,6 +10,7 @@ import {
   decrementChildren,
 } from '@/lib/store/hotelSlices/bookingSlice';
 import { RootState } from '@/lib/store/store';
+import { DatePickerWithRange } from '@/app/commonComponents/datePicker';
 
 export default function BookingHotelComponent() {
   const dispatch = useDispatch();
@@ -89,7 +90,7 @@ export default function BookingHotelComponent() {
             <Separator />
             <div className="flex flex-col items-center gap-y-2 pt-4">
               <p className="text-xs text-gray-500">8 nuits / 9 jours</p>
-              <Button variant={'unactive'}>12-août-2024/20-août-2024</Button>
+              <DatePickerWithRange />
               <Button size={'sm'} variant={'active'} disabled>
                 Book Now
               </Button>
