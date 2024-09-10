@@ -19,12 +19,10 @@ const SearchSectionComponent: React.FC = () => {
                         ))
                     }
                 </div>
-                <div className="main-search-box mt-14 p-5 relative">
-                    <div className="flex items-center justify-center gap-2">
-                        <SearchInputComponent placeholder="City, airports or place" onSearch={(value) => console.log(value)} />
-                        <SearchInputComponent placeholder="City, airports or place" onSearch={(value) => console.log(value)} />
-                        <SearchInputComponent placeholder="City, airports or place" onSearch={(value) => console.log(value)} />
-                        <SearchInputComponent placeholder="City, airports or place" onSearch={(value) => console.log(value)} />
+                <div className="main-search-box mt-14 p-5">
+                    <div className="flex items-center justify-center gap-3 flex-wrap">
+                        <SearchInputComponent placeholder="City, airports or place" onSearch={(value) => console.log(value)} dir='From' />
+                        <SearchInputComponent placeholder="City, airports or place" onSearch={(value) => console.log(value)} dir='To' />
                     </div>
                     <br />
                     <div className="flex items-center gap-2 mt-7">
