@@ -3,12 +3,26 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { CircleCheck } from 'lucide-react';
 import { DatePickerWithRange } from '@/app/commonComponents/datePicker';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/lib/store/store'; // Adjust this import path as needed
+import { format, differenceInDays } from 'date-fns';
 
-import { Provider } from 'react-redux';
-import { store } from '@/lib/store/store';
 import DropDownBookingComponent from './dropDownBooking';
 
 export default function BookingPackageComponent() {
+  const { date } = useSelector((state: RootState) => state.datePicker);
+  const startDate = date?.from;
+  const endDate = date?.to;
+
+  const calculateDuration = () => {
+    if (startDate && endDate) {
+      const nights = differenceInDays(endDate, startDate);
+      const days = nights + 1;
+      return `${nights} nights / ${days} days`;
+    }
+    return 'Select dates';
+  };
+
   return (
     <div>
       <Card className="w-[300px] rounded-3xl">
@@ -26,7 +40,9 @@ export default function BookingPackageComponent() {
                   className="font-semibold text-xs text-[#43acff]"
                   fill="#b4deff"
                 />
-                <p className="text-sm font-semibold pl-2">8 nights / 9 days</p>
+                <p className="text-sm font-semibold pl-2">
+                  {calculateDuration()}
+                </p>
               </div>
               <div className="flex flex-row items-center mt-2">
                 <CircleCheck
@@ -34,15 +50,18 @@ export default function BookingPackageComponent() {
                   className="font-semibold text-xs text-[#ff8000]"
                   fill="#ffcc99"
                 />
-                <p className="text-sm font-semibold pl-2">12-August-2024</p>
+                <p className="text-sm font-semibold pl-2">
+                  {startDate
+                    ? format(startDate, 'dd-MMM-yyyy')
+                    : 'Select dates'}
+                  {endDate ? ` - ${format(endDate, 'dd-MMM-yyyy')}` : ''}
+                </p>
               </div>
             </div>
             <Separator />
             <div className="flex flex-col gap-y-2 pb-4 pt-4">
               <DropDownBookingComponent />
-              <Provider store={store}>
-                <DatePickerWithRange />
-              </Provider>
+              <DatePickerWithRange />
             </div>
             <Separator />
             <div className="pt-4">

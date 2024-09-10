@@ -12,10 +12,24 @@ import {
 import { RootState } from '@/lib/store/store';
 import { DatePickerWithRange } from '@/app/commonComponents/datePicker';
 
+import { format, differenceInDays } from 'date-fns';
+
 export default function BookingHotelComponent() {
   const dispatch = useDispatch();
   const { adults, children } = useSelector((state: RootState) => state.booking);
 
+  const { date } = useSelector((state: RootState) => state.datePicker);
+  const startDate = date?.from;
+  const endDate = date?.to;
+
+  const calculateDuration = () => {
+    if (startDate && endDate) {
+      const nights = differenceInDays(endDate, startDate);
+      const days = nights + 1;
+      return `${nights} nights / ${days} days`;
+    }
+    return 'Select dates';
+  };
   return (
     <div>
       <Card className="w-[300px] rounded-3xl">
@@ -89,7 +103,7 @@ export default function BookingHotelComponent() {
             </div>
             <Separator />
             <div className="flex flex-col items-center gap-y-2 pt-4">
-              <p className="text-xs text-gray-500">8 nuits / 9 jours</p>
+              <p className="text-xs text-gray-500">{calculateDuration()}</p>
               <DatePickerWithRange />
               <Button size={'sm'} variant={'active'} disabled>
                 Book Now
