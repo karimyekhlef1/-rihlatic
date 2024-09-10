@@ -1,5 +1,6 @@
 'use client';
 
+import ResultCard from '@/app/Components/search/resultCard';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -11,9 +12,9 @@ import { ChevronDown, Luggage, Plane } from 'lucide-react';
 export default function SearchResults() {
   return (
     <div className="container mx-auto p-4">
-      <div className="flex flex-col lg:flex-row gap-8">
+      {/* <div className="flex flex-col lg:flex-row gap-8">
         {/* Sidebar */}
-        <div className="w-full lg:w-1/4">
+      {/* <div className="w-full lg:w-1/4">
           <Card>
             <CardContent className="p-6">
               <div className="space-y-6">
@@ -74,13 +75,14 @@ export default function SearchResults() {
                   </div>
                 </div>
                 {/* Add more filter sections here */}
-              </div>
+      {/* </div>
             </CardContent>
           </Card>
-        </div>
+        </div> */}
 
-        {/* Main content */}
-        <div className="w-full lg:w-3/4">
+      {/* Main content */}
+      <ResultCard />
+      {/* <div className="w-full lg:w-3/4">
           <Card className="mb-6">
             <CardContent className="p-6">
               <div className="flex justify-between items-center">
@@ -153,7 +155,7 @@ export default function SearchResults() {
             </Card>
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
