@@ -62,7 +62,7 @@ export default function BookingHotelComponent() {
                   >
                     -
                   </Button>
-                  <span className="mx-2 text-sm">{adults}</span>
+                  <span className="mx-2 text-sm px-2">{adults}</span>
                   <Button
                     variant="unactive"
                     size="sm"
@@ -84,7 +84,7 @@ export default function BookingHotelComponent() {
                   >
                     -
                   </Button>
-                  <span className="mx-2 text-sm">{children}</span>
+                  <span className="mx-2 text-sm px-2">{children}</span>
                   <Button
                     variant="unactive"
                     size="sm"
@@ -105,7 +105,7 @@ export default function BookingHotelComponent() {
             <div className="flex flex-col items-center gap-y-2 pt-4">
               <p className="text-xs text-gray-500">{calculateDuration()}</p>
               <DatePickerWithRange />
-              <Button size={'sm'} variant={'active'} disabled>
+              <Button size={'sm'} variant={'active'}>
                 Book Now
               </Button>
             </div>
