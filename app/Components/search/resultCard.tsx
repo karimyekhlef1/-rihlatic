@@ -78,16 +78,14 @@ export default function ResultCard() {
 
         <div className="w-px border-r border-dashed border-gray-300 my-4"></div>
 
-        <Card className="w-60 rounded-xl border-l-0">
-          <CardContent className="p-4 flex-grow flex items-center justify-center">
-            <div className="flex flex-col h-full justify-between">
-              <div className="flex-grow flex items-center justify-center">
-                <span className="text-3xl font-bold">$584</span>
-              </div>
-              <Button className="w-full mt-4" variant={'active'}>
-                Select
-              </Button>
+        <Card className="w-60 rounded-xl border-l-0 flex flex-col">
+          <CardContent className="p-4 flex-grow flex flex-col justify-between">
+            <div className="flex-grow flex items-center justify-center">
+              <span className="text-3xl font-bold">$584</span>
             </div>
+            <Button className="w-full mt-4" variant={'active'}>
+              Select
+            </Button>
           </CardContent>
         </Card>
       </div>
