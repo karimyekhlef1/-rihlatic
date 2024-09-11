@@ -12,6 +12,7 @@ import datePickerReducer from '@/lib/store/commonSlices/datePickerSlice';
 import priceAlertsReducer from '@/lib/store/searchSlices/priceAlertsSlice';
 import baggageReducer from '@/lib/store/searchSlices/baggageSlice';
 import sidebarSectionsReducer from '@/lib/store/searchSlices/sidebarSectionsSlice';
+import travelOptionsReducer from '@/lib/store/searchSlices/travelOptionsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ export const store = configureStore({
     priceAlerts: priceAlertsReducer,
     baggage: baggageReducer,
     sidebarSections: sidebarSectionsReducer,
+    travelOptions: travelOptionsReducer,
   },
 });
 
