@@ -1,17 +1,29 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 
-export default function DropDownBookingComponent() {
+interface DropDownBookingComponentProps {
+  onSelect: (option: string) => void;
+}
+
+export default function DropDownBookingComponent({
+  onSelect,
+}: DropDownBookingComponentProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState('');
 
   const rooms = [
-    { value: '', label: 'Kind of room' },
     { value: 'single', label: 'Single room' },
     { value: 'double', label: 'Double room' },
     { value: 'triple', label: 'Triple room' },
     { value: 'suite', label: 'Suite' },
   ];
+
+  const handleSelect = (option: string) => {
+    setSelectedRoom(option);
+    setIsOpen(false);
+    onSelect(option);
+  };
+
   return (
     <div className="relative">
       <button
@@ -31,10 +43,7 @@ export default function DropDownBookingComponent() {
             <div
               key={room.value}
               className="text-sm text-center font-semibold px-8 py-2 text-[#ff8000] cursor-pointer hover:bg-[#fff0e0] transition-colors duration-200"
-              onClick={() => {
-                setSelectedRoom(room.label);
-                setIsOpen(false);
-              }}
+              onClick={() => handleSelect(room.label)}
             >
               {room.label}
             </div>
