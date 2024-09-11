@@ -10,25 +10,26 @@ import {
 
 import BaggageItem from './baggageItem';
 import SidebarSection from './sidebarSection';
-import AlertPrices from './alertPrices';
+import { Luggage, Briefcase } from 'lucide-react';
 
 export default function ResultsSidebar() {
   const dispatch = useDispatch();
-  const priceAlerts = useSelector((state: RootState) => state.priceAlerts);
   const { cabin: cabinBaggage, checked: checkedBaggage } = useSelector(
     (state: RootState) => state.baggage
   );
 
   return (
-    <div className="w-64 p-4">
+    <div className="flex flex-col pt-4">
       <SidebarSection title="Bags">
         <BaggageItem
+          icon={<Luggage size={20} className="mr-2" />}
           type="Cabin baggage"
           count={cabinBaggage}
           onIncrement={() => dispatch(incrementCabin())}
           onDecrement={() => dispatch(decrementCabin())}
         />
         <BaggageItem
+          icon={<Briefcase size={20} className="mr-2" />}
           type="Checked baggage"
           count={checkedBaggage}
           onIncrement={() => dispatch(incrementChecked())}

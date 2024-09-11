@@ -1,29 +1,37 @@
+import { Button } from '@/components/ui/button';
 import React from 'react';
-
-interface BaggageItemProps {
-  type: string;
-  count: number;
-  onIncrement: () => void;
-  onDecrement: () => void;
-}
 
 const BaggageItem: React.FC<BaggageItemProps> = ({
   type,
   count,
+  icon,
   onIncrement,
   onDecrement,
 }) => {
   return (
     <div className="flex items-center justify-between py-2">
-      <span className="text-sm font-medium">{type}</span>
       <div className="flex items-center">
-        <button onClick={onDecrement} className="px-2 py-1">
+        {icon}
+        <span className="text-sm font-medium">{type}</span>
+      </div>
+      <div className="flex items-center">
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-6 w-6 rounded-full"
+          onClick={onDecrement}
+        >
           -
-        </button>
-        <span className="px-2">{count}</span>
-        <button onClick={onIncrement} className="px-2 py-1">
+        </Button>
+        <span className="mx-2 text-sm">{count}</span>
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-6 w-6 rounded-full"
+          onClick={onIncrement}
+        >
           +
-        </button>
+        </Button>
       </div>
     </div>
   );

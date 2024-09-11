@@ -15,7 +15,7 @@ const AlertPrices: React.FC = () => {
         <h2 className="text-md font-semibold text-gray-800">
           Set up price alerts
         </h2>
-        <p className="text-xs text-gray-600 mt-1">
+        <p className="text-xs text-gray-500 mt-1">
           Receive alerts when the prices for this route change.
         </p>
       </div>
