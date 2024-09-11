@@ -71,7 +71,7 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({ placeholder, onSearc
     return (
         <div className="rounded-lg relative transition-all"
             style={{
-                width: '350px',
+                width: '300px',
                 transition: 'width 0.2s ease-in-out',
             }}
             ref={wrapperRef} 
@@ -81,7 +81,7 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({ placeholder, onSearc
                 }
                 onClick={clickHandler}
                 style={{
-                    width: isOpened ? '400px' : '350px',
+                    width: isOpened ? '350px' : '300px',
                     transition: 'width 0.2s ease-in-out',
                 }}
            >

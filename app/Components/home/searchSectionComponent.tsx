@@ -2,6 +2,7 @@ import React from 'react';
 import searchBg from '@/public/images/home/search-bg.jpeg';
 import SearchCatBox from './searchCatBox';
 import SearchInputComponent from '@/app/commonComponents/searchInputComponent';
+import SearchSelectComponent from './searchSelectComponent';
 
 const SearchSectionComponent: React.FC = () => {
 
@@ -20,14 +21,24 @@ const SearchSectionComponent: React.FC = () => {
                     }
                 </div>
                 <div className="main-search-box mt-14 p-5">
-                    <div className="flex items-center justify-center gap-3 flex-wrap">
-                        <SearchInputComponent placeholder="City, airports or place" onSearch={(value) => console.log(value)} dir='From' />
-                        <SearchInputComponent placeholder="City, airports or place" onSearch={(value) => console.log(value)} dir='To' />
-                    </div>
-                    <br />
-                    <div className="flex items-center gap-2 mt-7">
-                        <input id="home-search-checkbox" type="checkbox" value="" className="w-4 h-4 accent-[#FF8000] border-gray-300 rounded focus:ring-orange-500" />
-                        <label htmlFor='home-search-checkbox' className="text-md text-gray-400">Check accommodation with <span className='text-black font-bold'>booking.com</span></label>
+                    <div className='flex flex-col gap-2'>
+                        <div className="flex gap-3">
+                            <SearchSelectComponent data={['Return', 'One Way']} />
+                            <SearchSelectComponent data={['Economy', 'Premium Economy', 'Business', 'First Class']} />
+                        </div>
+                        <div className="flex justify-start gap-1 flex-wrap">
+                            <div className="flex items-center gap-1">
+                                <SearchInputComponent placeholder="City, airports or place" onSearch={(value) => console.log(value)} dir='From' />
+                                <SearchInputComponent placeholder="City, airports or place" onSearch={(value) => console.log(value)} dir='To' />
+                                <SearchInputComponent placeholder="Anytime" onSearch={(value) => console.log(value)} dir='Departure' />
+                                <SearchInputComponent placeholder="Anytime" onSearch={(value) => console.log(value)} dir='Return' />
+                            </div>
+                            <button type="button" className="rounded-md bg-[#FF8000] px-2 py-2.5 text-sm font-semibold text-white">Exploire</button>
+                        </div>
+                        <div className="flex items-center gap-2 mt-7">
+                            <input id="home-search-checkbox" type="checkbox" value="" className="w-4 h-4 accent-[#FF8000] border-gray-300 rounded focus:ring-orange-500" />
+                            <label htmlFor='home-search-checkbox' className="text-md text-gray-400">Check accommodation with <span className='text-black font-bold'>booking.com</span></label>
+                        </div>
                     </div>
                 </div>
             </div>
