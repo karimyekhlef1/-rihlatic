@@ -5,24 +5,27 @@ import ResultsSidebar from '@/app/Components/search/resultsSidebar';
 import { Provider } from 'react-redux';
 import { store } from '@/lib/store/store';
 import AdComponent from '@/app/commonComponents/adComponent';
+import TravelOptions from '@/app/Components/search/travelOptions';
+import AlertPrices from '@/app/Components/search/alertPrices';
 
 export default function SearchResults() {
   return (
-    <div className="container mx-auto p-4 flex flex-row">
+    // Needs styling
+    <Provider store={store}>
+      {/* Alerts */}
+      <AlertPrices />
+      {/* Options */}
+      <TravelOptions />
       {/* Sidebar */}
-      <Provider store={store}>
-        <ResultsSidebar />
-      </Provider>
-
+      <ResultsSidebar />
       {/* Main content */}
-      <div className="flex-grow">
-        {[1, 2, 3, 4].map((index) => (
-          <ResultCard key={index} />
-        ))}
-      </div>
-
+      {/* Cards */}
+      {[1, 2, 3, 4].map((index) => (
+        <ResultCard key={index} />
+      ))}
+      {/* Right side */}
       {/* Ads */}
       <AdComponent />
-    </div>
+    </Provider>
   );
 }

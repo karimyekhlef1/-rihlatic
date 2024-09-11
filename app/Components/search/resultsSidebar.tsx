@@ -1,9 +1,6 @@
+import { RootState } from '@/lib/store/store';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Switch } from '@/components/ui/switch';
-
-import { RootState } from '@/lib/store/store';
-import { togglePriceAlerts } from '@/lib/store/searchSlices/priceAlertsSlice';
 import {
   incrementCabin,
   decrementCabin,
@@ -12,8 +9,8 @@ import {
 } from '@/lib/store/searchSlices/baggageSlice';
 
 import BaggageItem from './baggageItem';
-import { Bell } from 'lucide-react';
 import SidebarSection from './sidebarSection';
+import AlertPrices from './alertPrices';
 
 export default function ResultsSidebar() {
   const dispatch = useDispatch();
@@ -24,17 +21,6 @@ export default function ResultsSidebar() {
 
   return (
     <div className="w-64 p-4">
-      <div className="flex items-center justify-between py-2">
-        <div className="flex items-center">
-          <Bell className="mr-2 h-4 w-4" />
-          <span className="text-sm font-medium">Set up price alerts</span>
-        </div>
-        <Switch
-          checked={priceAlerts}
-          onCheckedChange={() => dispatch(togglePriceAlerts())}
-        />
-      </div>
-
       <SidebarSection title="Bags">
         <BaggageItem
           type="Cabin baggage"
