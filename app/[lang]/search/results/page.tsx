@@ -15,12 +15,14 @@ export default function SearchResults() {
       <div className="flex flex-row items-start justify-center p-8 space-x-8">
         <div className="flex flex-col w-[250px]">
           {/* Alerts */}
-          <AlertPrices /> {/* Sidebar */}
+          <AlertPrices />
+          {/* Sidebar */}
           <ResultsSidebar />
         </div>
         <div className="flex flex-col w-[700px]">
           {/* Options */}
-          <TravelOptions /> {/* Main content */}
+          <TravelOptions />
+          {/* Main content */}
           {/* Cards */}
           {[1, 2, 3, 4].map((index) => (
             <ResultCard key={index} />
