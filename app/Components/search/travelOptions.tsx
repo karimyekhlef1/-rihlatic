@@ -28,10 +28,10 @@ export default function TravelOptions() {
           key={option.type}
           className={cn(
             'flex-1 px-4 py-3 rounded-md transition-all duration-200 ease-in-out',
-            'border-2 hover:shadow-md focus:outline-none',
+            'hover:shadow-md focus:outline-none',
             selectedOption === option.type
-              ? 'bg-white text-blue-600 border-blue-600'
-              : 'bg-gray-100 text-gray-600 border-gray-200 hover:border-gray-300'
+              ? 'bg-white text-blue-600 border-2 border-blue-600'
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           )}
           onClick={() => dispatch(setSelectedOption(option.type))}
         >

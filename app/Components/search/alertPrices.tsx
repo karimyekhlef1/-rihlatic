@@ -10,15 +10,21 @@ const AlertPrices: React.FC = () => {
   const dispatch = useDispatch();
   const priceAlerts = useSelector((state: RootState) => state.priceAlerts);
   return (
-    <div className="flex items-center justify-between py-2">
-      <div className="flex items-center">
-        <Bell className="mr-2 h-4 w-4" />
-        <span className="text-sm font-medium">Set up price alerts</span>
+    <div className="flex items-start justify-between py-2">
+      <div className="flex flex-col">
+        <h2 className="text-md font-semibold text-gray-800">
+          Set up price alerts
+        </h2>
+        <p className="text-xs text-gray-600 mt-1">
+          Receive alerts when the prices for this route change.
+        </p>
       </div>
-      <Switch
-        checked={priceAlerts}
-        onCheckedChange={() => dispatch(togglePriceAlerts())}
-      />
+      <div className="mt-1">
+        <Switch
+          checked={priceAlerts}
+          onCheckedChange={() => dispatch(togglePriceAlerts())}
+        />
+      </div>
     </div>
   );
 };
