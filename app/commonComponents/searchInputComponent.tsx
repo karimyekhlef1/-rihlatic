@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaCity, FaTimes } from 'react-icons/fa';
 import { FiPlus } from 'react-icons/fi';
 
 interface SearchInputProps {
+    dir: string;
     placeholder: string;
     onSearch: (value: string) => void;
 }
 
-const SearchInputComponent: React.FC<SearchInputProps> = ({ placeholder, onSearch }) => {
+const SearchInputComponent: React.FC<SearchInputProps> = ({ placeholder, onSearch, dir }) => {
 
     const fakeLit = [
         {
@@ -39,11 +40,13 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({ placeholder, onSearc
     };
 
     const clickHandler = () => {
-        setIsOpened(!isOpened);
+        if (searchValue === '') {
+            setIsOpened(!isOpened);
+        }
     }
 
     const [searchValue, setSearchValue] = useState<string>('');
-
+    const wrapperRef = useRef<HTMLDivElement>(null);
     const [isOpened, setIsOpened] = useState<boolean>(false);
 
     const searchClick = (value: string) => {
@@ -51,30 +54,44 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({ placeholder, onSearc
         setIsOpened(false);
     }
 
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+            setIsOpened(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
-        <div className="rounded-lg relative"
+        <div className="rounded-lg relative transition-all"
             style={{
-                width: isOpened ? '400px' : '300px',
-                right: 0,
-                bottom: 0,
-                position: 'relative',
+                width: '300px',
                 transition: 'width 0.2s ease-in-out',
             }}
+            ref={wrapperRef} 
         >
-           <div className={`text-field-search flex items-center gap-3 p-2 absolute top-0 left-0 bg-white z-10 rounded-lg ${isOpened ? 'border-[#FF8000] border-2' : 'border'}`}
+           <div className={`text-field-search flex items-center gap-3 p-2 bg-white rounded-lg relative
+                    ${isOpened ? 'border-[#FF8000] border-2 z-10' : 'border border-[#bac7d5]'}`
+                }
                 onClick={clickHandler}
                 style={{
-                    width: isOpened ? 'calc(100% - 1.2rem)' : '100%',
+                    width: isOpened ? '350px' : '300px',
                     transition: 'width 0.2s ease-in-out',
                 }}
            >
                 <div className="flex items-center gap-2">
-                    <label htmlFor="InputField" className='text-[#A7A8AB] text-sm'>From</label>
+                    <label htmlFor="InputField" className='text-[#A7A8AB] text-sm'>{dir}</label>
                     {
                         searchValue && (
-                            <div className="flex items-center gap-3 rounded text-white text-xs p-1 flex-shrink-0 min-w-fit bg-[#48c299]">
+                            <div className={`flex items-center gap-3 rounded text-white text-xs p-1 flex-shrink-0 min-w-fit ${dir==="From" ? "bg-[#48c299]" : "bg-[#f9971e]"} `}>
                                 <span>{searchValue}</span>
-                                <div className="cross bg-teal-500 roubded p-[2px]" onClick={() => setSearchValue('')}>
+                                <div className={`cross ${dir==='From' ? 'bg-teal-700' : 'bg-amber-700'} roubded p-[2px]`} onClick={() => setSearchValue('')}>
                                     <FaTimes />
                                 </div>
                             </div>
@@ -85,7 +102,7 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({ placeholder, onSearc
                     (!searchValue) && (
                         <input
                             type="text"
-                            className={`text-base text-gray-700 outline-none placeholder:text-[#64656A] w-full`}
+                            className={`text-base text-gray-700 outline-none placeholder:text-[#64656A]`}
                             placeholder={placeholder}
                             onChange={handleInputChange}
                             onClick={clickHandler}
@@ -96,7 +113,7 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({ placeholder, onSearc
             </div>
             {
                 isOpened && (
-                    <div className="absolute w-full top-[-10px] right-[-10px] left-[-10px] bg-white shadow-xl rounded-lg text-gray-900 pt-16 z-0" style={isOpened ? {display: 'block'} : {display: 'none'}}>
+                    <div className="absolute top-[-10px] right-[-60px] left-[-10px] bg-white shadow-xl rounded-md text-gray-900 pt-16" style={isOpened ? {display: 'block', zIndex: 1} : {display: 'none'}}>
                         <ul>
                             {
                                 fakeLit.map((item, index) => (
