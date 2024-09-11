@@ -9,6 +9,9 @@ import passportNumberReducer from '@/lib/store/paymentSlices/passportNumberSlice
 import expirationDateReducer from '@/lib/store/paymentSlices/expirationDateSlice';
 import flightReducer from '@/lib/store/packagesSlices/flightSlice';
 import datePickerReducer from '@/lib/store/commonSlices/datePickerSlice';
+import priceAlertsReducer from '@/lib/store/searchSlices/priceAlertsSlice';
+import baggageReducer from '@/lib/store/searchSlices/baggageSlice';
+import sidebarSectionsReducer from '@/lib/store/searchSlices/sidebarSectionsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +25,9 @@ export const store = configureStore({
     expirationDate: expirationDateReducer,
     flight: flightReducer,
     datePicker: datePickerReducer,
+    priceAlerts: priceAlertsReducer,
+    baggage: baggageReducer,
+    sidebarSections: sidebarSectionsReducer,
   },
 });
 
