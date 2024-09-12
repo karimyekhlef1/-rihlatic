@@ -14,6 +14,7 @@ import { Luggage, Briefcase } from 'lucide-react';
 import Stops from './stops';
 import Connections from './connections';
 import AirlineCarrierSelector from './carriers';
+import BookingOptions from './bookingOptions';
 
 export default function ResultsSidebar() {
   const dispatch = useDispatch();
@@ -49,7 +50,9 @@ export default function ResultsSidebar() {
       <SidebarSection title="Carriers">
         <AirlineCarrierSelector />
       </SidebarSection>
-      <SidebarSection title="Booking options" />
+      <SidebarSection title="Booking options">
+        <BookingOptions />
+      </SidebarSection>
       <SidebarSection title="Travel hacks" />
       <SidebarSection title="Exclude countries" />
     </div>
