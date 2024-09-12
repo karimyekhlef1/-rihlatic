@@ -1,32 +1,12 @@
 import { Checkbox } from '@/components/ui/checkbox';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-
-import { FaInfoCircle } from 'react-icons/fa';
+import TooltipComponent from './tooltip';
 
 export default function BookingOptions() {
   return (
     <div className="flex flex-col space-y-2">
       <div className="flex items-center space-x-2">
         <CheckboxItem id="show-only" label="Show only Rihlatic.com results" />
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <span>
-                <FaInfoCircle size={14} />
-              </span>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>
-                You&apos;ll only see results that are bookable on Rihlatic.com
-              </p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <TooltipComponent content="You'll only see results that are bookable on Rihlatic.com" />
       </div>
     </div>
   );
