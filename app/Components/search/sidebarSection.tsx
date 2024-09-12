@@ -29,19 +29,21 @@ const SidebarSection = ({ title, children }: SidebarSectionProps) => {
   };
 
   return (
-    <Accordion
-      type="single"
-      value={isOpen ? sectionKey : ''}
-      onValueChange={handleValueChange}
-      collapsible
-    >
-      <AccordionItem value={sectionKey}>
-        <AccordionTrigger className="py-2 text-md font-semibold">
-          {title}
-        </AccordionTrigger>
-        <AccordionContent>{children}</AccordionContent>
-      </AccordionItem>
-    </Accordion>
+    <div className="py-2">
+      <Accordion
+        type="single"
+        value={isOpen ? sectionKey : ''}
+        onValueChange={handleValueChange}
+        collapsible
+      >
+        <AccordionItem value={sectionKey}>
+          <AccordionTrigger className="py-2 text-md font-semibold">
+            {title}
+          </AccordionTrigger>
+          <AccordionContent>{children}</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </div>
   );
 };
 
