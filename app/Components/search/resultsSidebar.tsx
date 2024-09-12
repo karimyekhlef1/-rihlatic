@@ -11,6 +11,8 @@ import {
 import BaggageItem from './baggageItem';
 import SidebarSection from './sidebarSection';
 import { Luggage, Briefcase } from 'lucide-react';
+import Stops from './stops';
+import Connections from './connections';
 
 export default function ResultsSidebar() {
   const dispatch = useDispatch();
@@ -37,13 +39,16 @@ export default function ResultsSidebar() {
         />
       </SidebarSection>
 
-      <SidebarSection title="Stops" />
-      <SidebarSection title="Connections" />
+      <SidebarSection title="Stops">
+        <Stops />
+      </SidebarSection>
+      <SidebarSection title="Connections">
+        <Connections />
+      </SidebarSection>
       <SidebarSection title="Carriers" />
       <SidebarSection title="Booking options" />
       <SidebarSection title="Travel hacks" />
       <SidebarSection title="Exclude countries" />
-      <SidebarSection title="Times" />
     </div>
   );
 }
