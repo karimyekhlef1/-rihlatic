@@ -27,10 +27,11 @@ export function DatePickerHome() {
         <PopoverTrigger asChild>
           <Button
             id="date"
-            variant={'rihlatic'}
+            variant={'search'}
             className={cn(
-              'w-[300px] justify-start text-left font-normal',
-              !dateRange && 'text-muted-foreground'
+              'w-[300px] h-[43px] justify-start text-left font-normal',
+              !dateRange && 'text-muted-foreground',
+              'focus:z-[1] focus:border-orange-500 focus:text-orange-500 focus:border-2'
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
