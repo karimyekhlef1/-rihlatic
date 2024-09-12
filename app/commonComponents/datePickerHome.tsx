@@ -29,7 +29,7 @@ export function DatePickerHome() {
             id="date"
             variant={'search'}
             className={cn(
-              'w-[300px] h-[43px] justify-start text-left font-normal',
+              'w-[545px] h-[43px] justify-start text-left font-normal',
               !dateRange && 'text-muted-foreground',
               'focus:z-[1] focus:border-orange-500 focus:text-orange-500 focus:border-2'
             )}
@@ -47,6 +47,9 @@ export function DatePickerHome() {
             ) : (
               <span>Pick a date</span>
             )}
+            <div className="text-sm text-gray-400 pl-8">
+              ( Departure - Return )
+            </div>
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">

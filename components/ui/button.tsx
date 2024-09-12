@@ -27,7 +27,7 @@ const buttonVariants = cva(
         active: 'bg-orange-500 text-white font-semibold',
         unactive: 'bg-[#f6ddc3] text-orange-500 font-semibold',
         search:
-          'bg-white text-[#64656a] text-md rounded-md border-[#bac7d5] border-[1px]',
+          'bg-white text-[#64656a] text-md rounded-lg border-[#bac7d5] border-[1px]',
       },
       size: {
         default: 'h-10 px-4 py-2',
