@@ -16,6 +16,7 @@ import Connections from './connections';
 import AirlineCarrierSelector from './carriers';
 import BookingOptions from './bookingOptions';
 import TravelHacks from './travelHacks';
+import ExcludedCountriesSelector from './excludeCountries';
 
 export default function ResultsSidebar() {
   const dispatch = useDispatch();
@@ -57,7 +58,9 @@ export default function ResultsSidebar() {
       <SidebarSection title="★ Travel hacks">
         <TravelHacks />
       </SidebarSection>
-      <SidebarSection title="Exclude countries" />
+      <SidebarSection title="Exclude countries">
+        <ExcludedCountriesSelector />
+      </SidebarSection>
     </div>
   );
 }
