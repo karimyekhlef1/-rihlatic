@@ -13,9 +13,11 @@ export default function SearchResults() {
     // Needs styling
     <Provider store={store}>
       <div className="flex flex-row items-start justify-center p-2 sm:p-8 sm:space-x-8">
-        <div className="sm:flex flex-col w-[250px] hidden lg:block">
+        <div className="sm:flex flex-col w-[250px]">
           {/* Alerts */}
-          <AlertPrices />
+          <div className="hidden lg:block">
+            <AlertPrices />
+          </div>
           {/* Sidebar */}
           <ResultsSidebar />
         </div>
