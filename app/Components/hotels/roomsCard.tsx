@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import imgage1 from '@/public/images/home/four.jpeg';
 export default function RoomsCard() {
   return (
-    <div className="px-8 pt-4">
+    <div className="px-4 pt-4">
       <Card className="w-full overflow-hidden">
         <CardContent className="p-0">
           <div className="flex flex-col md:flex-row">

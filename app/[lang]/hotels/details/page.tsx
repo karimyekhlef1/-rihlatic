@@ -23,7 +23,7 @@ export default function Details() {
   return (
     <div className="flex flex-col items-center overflow-x-clip">
       <GallerySlider />
-      <div className="flex flex-col lg:flex-row">
+      <div className="flex flex-col lg:flex-row pt-8">
         <div className="flex flex-col pb-8 w-full lg:w-auto">
           <div className="flex flex-col">
             <TitleComponent
@@ -53,7 +53,7 @@ export default function Details() {
           <div>{/* <ExploreSection /> */}</div>
           {/* This is just a place holder for the real "Explore Section" */}
           <TitleComponent
-            title={'Explore more options'}
+            title={'Explore more options (PLACEHOLDER)'}
             icon={<Globe size={20} />}
             label={''}
           />

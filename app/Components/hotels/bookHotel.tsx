@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { CircleCheck, User } from 'lucide-react';
+import { User } from 'lucide-react';
 import {
   incrementAdults,
   decrementAdults,
@@ -10,11 +10,26 @@ import {
   decrementChildren,
 } from '@/lib/store/hotelSlices/bookingSlice';
 import { RootState } from '@/lib/store/store';
+import { DatePickerWithRange } from '@/app/commonComponents/datePicker';
+
+import { format, differenceInDays } from 'date-fns';
 
 export default function BookingHotelComponent() {
   const dispatch = useDispatch();
   const { adults, children } = useSelector((state: RootState) => state.booking);
 
+  const { date } = useSelector((state: RootState) => state.datePicker);
+  const startDate = date?.from;
+  const endDate = date?.to;
+
+  const calculateDuration = () => {
+    if (startDate && endDate) {
+      const nights = differenceInDays(endDate, startDate);
+      const days = nights + 1;
+      return `${nights} nights / ${days} days`;
+    }
+    return 'Select dates';
+  };
   return (
     <div>
       <Card className="w-[300px] rounded-3xl">
@@ -47,7 +62,7 @@ export default function BookingHotelComponent() {
                   >
                     -
                   </Button>
-                  <span className="mx-2 text-sm">{adults}</span>
+                  <span className="mx-2 text-sm px-2">{adults}</span>
                   <Button
                     variant="unactive"
                     size="sm"
@@ -69,7 +84,7 @@ export default function BookingHotelComponent() {
                   >
                     -
                   </Button>
-                  <span className="mx-2 text-sm">{children}</span>
+                  <span className="mx-2 text-sm px-2">{children}</span>
                   <Button
                     variant="unactive"
                     size="sm"
@@ -88,9 +103,9 @@ export default function BookingHotelComponent() {
             </div>
             <Separator />
             <div className="flex flex-col items-center gap-y-2 pt-4">
-              <p className="text-xs text-gray-500">8 nuits / 9 jours</p>
-              <Button variant={'unactive'}>12-août-2024/20-août-2024</Button>
-              <Button size={'sm'} variant={'active'} disabled>
+              <p className="text-xs text-gray-500">{calculateDuration()}</p>
+              <DatePickerWithRange />
+              <Button size={'sm'} variant={'active'}>
                 Book Now
               </Button>
             </div>

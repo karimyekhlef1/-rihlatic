@@ -31,7 +31,7 @@ export default function Details() {
   return (
     <div className="flex flex-col items-center overflow-x-clip">
       <GallerySlider />
-      <div className="flex flex-row">
+      <div className="flex flex-row pt-8">
         <div className="flex flex-col">
           <div className="flex flex-col">
             <TitleComponent
@@ -84,7 +84,9 @@ export default function Details() {
           <div>{/* <ExploreSection /> */}</div>
         </div>
         <div className="hidden lg:flex lg:flex-col items-center pt-16 gap-y-8">
-          <BookingPackageComponent />
+          <Provider store={store}>
+            <BookingPackageComponent />
+          </Provider>
           <AdComponent />
         </div>
       </div>
