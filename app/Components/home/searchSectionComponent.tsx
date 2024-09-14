@@ -3,6 +3,9 @@ import searchBg from '@/public/images/home/search-bg.jpeg';
 import SearchCatBox from './searchCatBox';
 import SearchInputComponent from '@/app/commonComponents/searchInputComponent';
 import SearchSelectComponent from './searchSelectComponent';
+import { PiBagSimpleFill } from "react-icons/pi";
+import { GiGymBag } from "react-icons/gi";
+
 
 const SearchSectionComponent: React.FC = () => {
 
@@ -22,9 +25,29 @@ const SearchSectionComponent: React.FC = () => {
                 </div>
                 <div className="main-search-box mt-14 p-5">
                     <div className='flex flex-col gap-2'>
-                        <div className="flex gap-3">
+                        <div className="flex flex-wrap gap-3">
                             <SearchSelectComponent data={['Return', 'One Way']} />
                             <SearchSelectComponent data={['Economy', 'Premium Economy', 'Business', 'First Class']} />
+                            <div className="relative">
+                                <button className='text-black bg-transparent px-4 py-2'>
+                                    <div className="flex items-center gap-2">
+                                        <div className="flex gap-1 items-center">
+                                            <PiBagSimpleFill />
+                                            <span className='font-semibold'>0</span>
+                                        </div>
+                                        <div className="flex gap-1 items-center">
+                                            <GiGymBag />
+                                            <span className='font-semibold'>0</span>
+                                        </div>
+
+                                    </div>
+                                </button>
+                                <div className="bg-gray-400 p-2 absolute w-56">
+                                    <div className="item">
+                                        <span>Lorem, ipsum dolor.</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div className="flex justify-start gap-1 flex-wrap">
                             <div className="flex items-center gap-1">
