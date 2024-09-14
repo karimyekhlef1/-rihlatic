@@ -2,6 +2,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/lib/store/store';
 import { setSelectedOption } from '@/lib/store/searchSlices/travelOptionsSlice';
 import { cn } from '@/lib/utils';
+import { useState, useEffect } from 'react';
+
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
+import { SlidersHorizontal } from 'lucide-react';
 
 type Option = {
   type: string;
@@ -20,9 +31,17 @@ export default function TravelOptions() {
     (state: RootState) => state.travelOptions.selectedOption
   );
   const dispatch = useDispatch();
+  const [isMobile, setIsMobile] = useState(false);
 
-  return (
-    <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+  useEffect(() => {
+    const checkIfMobile = () => setIsMobile(window.innerWidth < 640);
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
+    return () => window.removeEventListener('resize', checkIfMobile);
+  }, []);
+
+  const OptionsContent = () => (
+    <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2 pt-4 sm:pt-0">
       {options.map((option) => (
         <button
           key={option.type}
@@ -44,5 +63,25 @@ export default function TravelOptions() {
         </button>
       ))}
     </div>
+  );
+
+  if (!isMobile) {
+    return <OptionsContent />;
+  }
+
+  return (
+    <Sheet>
+      <SheetTrigger>
+        <Button variant="ghost2" className="p-0">
+          <SlidersHorizontal size={15} className="text-orange-500" />
+          <span className="ml-2 text-xs font-semibold text-orange-500">
+            Prices
+          </span>
+        </Button>
+      </SheetTrigger>
+      <SheetContent side={'right'}>
+        <OptionsContent />
+      </SheetContent>
+    </Sheet>
   );
 }

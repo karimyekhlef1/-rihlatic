@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { RootState } from '@/lib/store/store';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -10,7 +11,7 @@ import {
 
 import BaggageItem from './baggageItem';
 import SidebarSection from './sidebarSection';
-import { Luggage, Briefcase } from 'lucide-react';
+import { Luggage, Briefcase, Filter } from 'lucide-react';
 import Stops from './stops';
 import Connections from './connections';
 import AirlineCarrierSelector from './carriers';
@@ -18,14 +19,35 @@ import BookingOptions from './bookingOptions';
 import TravelHacks from './travelHacks';
 import ExcludedCountriesSelector from './excludeCountries';
 
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
+
 export default function ResultsSidebar() {
   const dispatch = useDispatch();
   const { cabin: cabinBaggage, checked: checkedBaggage } = useSelector(
     (state: RootState) => state.baggage
   );
+  const [isMobile, setIsMobile] = useState(false);
 
-  return (
-    <div className="flex flex-col pt-4">
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768); // Adjust this breakpoint as needed
+    };
+
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
+
+  const sidebarContent = (
+    <>
       <SidebarSection title="Bags">
         <BaggageItem
           icon={<Luggage size={20} className="mr-2" />}
@@ -61,6 +83,26 @@ export default function ResultsSidebar() {
       <SidebarSection title="Exclude countries">
         <ExcludedCountriesSelector />
       </SidebarSection>
+    </>
+  );
+
+  return (
+    <div className="flex flex-col pt-4">
+      {isMobile ? (
+        <Sheet>
+          <SheetTrigger>
+            <Button variant="ghost2" className="p-0">
+              <Filter size={15} className="text-orange-500" />
+              <span className="ml-2 text-xs font-semibold text-orange-500">
+                Filters
+              </span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side={'left'}>{sidebarContent}</SheetContent>
+        </Sheet>
+      ) : (
+        sidebarContent
+      )}
     </div>
   );
 }
