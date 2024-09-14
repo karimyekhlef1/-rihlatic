@@ -10,29 +10,38 @@ import AlertPrices from '@/app/Components/search/alertPrices';
 
 export default function SearchResults() {
   return (
-    // Needs styling
     <Provider store={store}>
-      <div className="flex flex-row items-start justify-center p-2 sm:p-8 sm:space-x-8">
-        <div className="sm:flex flex-col w-[250px]">
-          {/* Alerts */}
+      <div className="flex flex-col sm:flex-row items-start justify-center p-2 sm:p-8 sm:space-x-8">
+        {/* Mobile layout for filters and travel options */}
+        <div className="flex w-full mb-4 sm:hidden">
+          <div className="w-1/2">
+            <ResultsSidebar />
+          </div>
+          <div className="w-1/2">
+            <TravelOptions />
+          </div>
+        </div>
+
+        {/* Desktop sidebar */}
+        <div className="hidden sm:flex flex-col w-[250px]">
           <div className="hidden lg:block">
             <AlertPrices />
           </div>
-          {/* Sidebar */}
           <ResultsSidebar />
         </div>
-        <div className="flex flex-col w-[800px]">
-          {/* Options */}
-          <TravelOptions />
-          {/* Main content */}
-          {/* Cards */}
+
+        {/* Main content */}
+        <div className="flex flex-col w-full space-y-4 sm:space-y-0 sm:w-[800px]">
+          <div className="hidden sm:block">
+            <TravelOptions />
+          </div>
           {[1, 2, 3, 4].map((index) => (
             <ResultCard key={index} />
           ))}
         </div>
+
+        {/* Desktop ads */}
         <div className="hidden lg:block">
-          {/* Right side */}
-          {/* Ads */}
           <AdComponent />
         </div>
       </div>
