@@ -31,7 +31,7 @@ export default function SearchResults() {
         </div>
 
         {/* Main content */}
-        <div className="flex flex-col w-full sm:w-[800px]">
+        <div className="flex flex-col w-full space-y-4 sm:space-y-0 sm:w-[800px]">
           <div className="hidden sm:block">
             <TravelOptions />
           </div>
