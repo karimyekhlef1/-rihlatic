@@ -22,13 +22,13 @@ export default function TravelOptions() {
   const dispatch = useDispatch();
 
   return (
-    <div className="flex space-x-4">
+    <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
       {options.map((option) => (
         <button
           key={option.type}
           className={cn(
-            'flex-1 px-4 py-3 rounded-md transition-all duration-200 ease-in-out',
-            'hover:shadow-md focus:outline-none',
+            'w-full sm:flex-1 px-3 py-2 rounded-md transition-all duration-200 ease-in-out',
+            'hover:shadow-md focus:outline-none text-sm sm:text-base',
             selectedOption === option.type
               ? 'bg-white text-blue-600 border-2 border-blue-600'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -37,7 +37,7 @@ export default function TravelOptions() {
         >
           <div className="text-left">
             <div className="font-semibold">{option.type}</div>
-            <div className="text-sm">
+            <div className="text-xs sm:text-sm">
               {option.price} · {option.duration}
             </div>
           </div>

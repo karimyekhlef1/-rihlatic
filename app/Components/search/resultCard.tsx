@@ -6,9 +6,9 @@ import FlightInfoFooter from './flightInfoFooter';
 
 export default function ResultCard() {
   return (
-    <div className="w-full max-w-3xl mx-auto pt-8">
-      <div className="flex w-full transition-all duration-300 ease-in-out hover:drop-shadow-md">
-        <Card className="flex-grow rounded-xl border-r-0">
+    <div className="w-full max-w-sm sm:max-w-4xl mx-auto pt-8 sm:px-0">
+      <div className="flex flex-col sm:flex-row w-full transition-all duration-300 ease-in-out sm:hover:drop-shadow-md">
+        <Card className="flex-grow rounded-t-xl sm:rounded-t-xl sm:border-r-0 sm:mb-0 border-b-0 sm:border-b">
           <CardContent className="p-4">
             <div className="space-y-4">
               <FlightInfos />
@@ -25,9 +25,9 @@ export default function ResultCard() {
           </CardFooter>
         </Card>
 
-        <div className="w-px border-r border-dashed border-gray-300 my-4"></div>
+        <div className="hidden sm:block w-px border-r border-dashed border-gray-300 my-4"></div>
 
-        <Card className="w-60 rounded-xl border-l-0 flex flex-col">
+        <Card className="w-full sm:w-60 rounded-b-xl sm:rounded-t-xl sm:border-l-0 flex flex-col border-t-0 sm:border-t">
           <CardContent className="p-4 flex-grow flex flex-col justify-between">
             <div className="flex-grow flex items-center justify-center">
               <span className="text-2xl font-bold">$584</span>

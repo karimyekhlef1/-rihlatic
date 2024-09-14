@@ -12,14 +12,14 @@ export default function SearchResults() {
   return (
     // Needs styling
     <Provider store={store}>
-      <div className="flex flex-row items-start justify-center p-8 space-x-8">
-        <div className="flex flex-col w-[250px]">
+      <div className="flex flex-row items-start justify-center p-2 sm:p-8 sm:space-x-8">
+        <div className="sm:flex flex-col w-[250px] hidden lg:block">
           {/* Alerts */}
           <AlertPrices />
           {/* Sidebar */}
           <ResultsSidebar />
         </div>
-        <div className="flex flex-col w-[700px]">
+        <div className="flex flex-col w-[800px]">
           {/* Options */}
           <TravelOptions />
           {/* Main content */}
@@ -28,7 +28,7 @@ export default function SearchResults() {
             <ResultCard key={index} />
           ))}
         </div>
-        <div>
+        <div className="hidden lg:block">
           {/* Right side */}
           {/* Ads */}
           <AdComponent />
