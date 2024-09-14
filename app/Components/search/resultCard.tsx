@@ -6,7 +6,7 @@ import FlightInfoFooter from './flightInfoFooter';
 
 export default function ResultCard() {
   return (
-    <div className="w-full max-w-sm sm:max-w-4xl mx-auto pt-8 sm:px-0">
+    <div className="w-full max-w-sm sm:max-w-4xl mx-auto sm:pt-8 sm:px-0">
       <div className="flex flex-col sm:flex-row w-full transition-all duration-300 ease-in-out sm:hover:drop-shadow-md">
         <Card className="flex-grow rounded-t-xl sm:rounded-t-xl sm:border-r-0 sm:mb-0 border-b-0 sm:border-b">
           <CardContent className="p-4">

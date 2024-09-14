@@ -72,7 +72,7 @@ export default function TravelOptions() {
   return (
     <Sheet>
       <SheetTrigger>
-        <Button variant="ghost2" className="p-0">
+        <Button variant="ghost2" className="pt-9">
           <SlidersHorizontal size={15} className="text-orange-500" />
           <span className="ml-2 text-xs font-semibold text-orange-500">
             Prices
@@ -80,6 +80,9 @@ export default function TravelOptions() {
         </Button>
       </SheetTrigger>
       <SheetContent side={'right'}>
+        <SheetHeader>
+          <SheetTitle>Sort by</SheetTitle>
+        </SheetHeader>
         <OptionsContent />
       </SheetContent>
     </Sheet>
