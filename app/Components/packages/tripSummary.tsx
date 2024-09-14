@@ -1,12 +1,7 @@
 'use client';
 
-import { RootState } from '@/lib/store/store';
-import { useDispatch, useSelector } from 'react-redux';
-import { toggleExpanded } from '@/lib/store/packagesSlices/flightSlice';
 import { useState, useEffect } from 'react';
-
 import { Card, CardContent } from '@/components/ui/card';
-
 import {
   MoveRight,
   CircleArrowRight,
@@ -17,22 +12,55 @@ import {
   Info,
   Plane,
 } from 'lucide-react';
-
 import { Button } from '@/components/ui/button';
-
 import airlineLogo from '@/public/images/airalgerie.svg';
 import AirlineCompanyComponent from './airlineCompany';
-
 import { FaPlane, FaCircle } from 'react-icons/fa';
 
-export default function TripSummaryComponent() {
-  // Initialize Redux dispatch and select flight state
-  const dispatch = useDispatch();
-  const { flightInfo, isExpanded } = useSelector(
-    (state: RootState) => state.flight
-  );
+// Define the FlightInfo interface
+interface FlightInfo {
+  from: string;
+  to: string;
+  duration: string;
+  departureTime: string;
+  departureDate: string;
+  arrivalTime: string;
+  arrivalDate: string;
+  departureAirport: string;
+  departureAirportName: string;
+  arrivalAirport: string;
+  arrivalAirportName: string;
+  airline: string;
+  flightNumber: string;
+  seatPitch: string;
+  seatWidth: string;
+  seatRecline: string;
+  wifiOnBoard: boolean;
+}
 
-  // State to manage the height of expandable content
+export default function TripSummaryComponent() {
+  // Use useState for local state management
+  const [flightInfo, setFlightInfo] = useState<FlightInfo>({
+    // Initialize with default values or fetch from an API
+    from: 'Algiers',
+    to: 'Paris',
+    duration: '2h 20m',
+    departureAirport: 'Algiers . ALG',
+    departureAirportName: 'Houari Boumediene',
+    departureTime: '18:35',
+    departureDate: 'Tue 24 Sep',
+    arrivalAirport: 'Paris . ORY',
+    arrivalAirportName: 'Paris Orly',
+    arrivalTime: '21:55',
+    arrivalDate: 'Tue 24 Sep',
+    airline: 'Air Algerie',
+    flightNumber: 'AH 1008',
+    seatPitch: '73-76 cm',
+    seatWidth: '43 cm',
+    seatRecline: '7 cm',
+    wifiOnBoard: false,
+  });
+  const [isExpanded, setIsExpanded] = useState(false);
   const [contentHeight, setContentHeight] = useState(0);
 
   // Effect to update content height when expanded state changes
@@ -46,6 +74,9 @@ export default function TripSummaryComponent() {
       setContentHeight(0);
     }
   }, [isExpanded]);
+
+  // Function to toggle expanded state
+  const toggleExpanded = () => setIsExpanded(!isExpanded);
 
   return (
     <div className="flex flex-col space-y-4 pb-8">
@@ -135,7 +166,7 @@ export default function TripSummaryComponent() {
                 <Button
                   variant="ghost2"
                   size="sm"
-                  onClick={() => dispatch(toggleExpanded())}
+                  onClick={toggleExpanded}
                   className="p-1"
                 >
                   {isExpanded ? (

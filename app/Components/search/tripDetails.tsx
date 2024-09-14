@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Card, CardContent } from '@/components/ui/card';
-import { Share } from 'lucide-react';
+import { Share2 } from 'lucide-react';
 import {
   openDialogDetail,
   closeDialogDetail,
@@ -15,6 +15,12 @@ import {
 } from '@/lib/store/mainSlices/dialogSlice';
 import { RootState } from '@/lib/store/store';
 import TripSummary from './tripSummary';
+import FlightInfoCard from './flightInfo';
+
+const flightData = [
+  { from: 'Algiers', to: 'Paris', airline: 'Air Algerie' },
+  { from: 'Paris', to: 'Algiers', airline: 'Air Algerie' },
+];
 
 export default function TripDetails() {
   const dispatch = useDispatch();
@@ -34,27 +40,25 @@ export default function TripDetails() {
           dispatch(open ? openDialogDetail() : closeDialogDetail())
         }
       >
-        <DialogContent className="sm:max-w-4xl">
+        <DialogContent className="sm:max-w-3xl">
           <DialogHeader>
             <DialogTitle>Trip Details</DialogTitle>
           </DialogHeader>
           <div className="py-4">
             <Card
-              className="mb-4 cursor-pointer hover:bg-gray-100 transition-colors"
+              className="mb-4 cursor-pointer hover:shadow-md transition-colors"
               onClick={handleOpenDialogSummary}
             >
-              <CardContent className="p-4">
-                <p>
-                  Click here to view your trip summary. This card contains dummy
-                  text for your trip details.
-                </p>
+              <CardContent className="p-2">
+                <FlightInfoCard flights={flightData} />
               </CardContent>
             </Card>
             <div className="flex justify-between items-center">
-              <Button variant="outline" size="icon">
-                <Share className="h-4 w-4" />
+              <Button variant="ghost2" size="sm" className="flex items-center">
+                <Share2 className="h-4 w-4 mr-2" fill="currentColor" />
+                Share
               </Button>
-              <Button>Next</Button>
+              <Button variant={'active'}>Next</Button>
             </div>
           </div>
         </DialogContent>

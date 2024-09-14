@@ -43,6 +43,7 @@ export default function TripSummary() {
           </DialogTitle>
         </DialogHeader>
         <TripSummaryComponent />
+        <TripSummaryComponent />
       </DialogContent>
     </Dialog>
   );
