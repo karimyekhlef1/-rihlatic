@@ -4,7 +4,16 @@ import FlightInfos from './flightInfos';
 import FlightSeparator from './flightSeparator';
 import FlightInfoFooter from './flightInfoFooter';
 
+import { useDispatch } from 'react-redux';
+import { openDialogDetail } from '@/lib/store/mainSlices/dialogSlice';
+import TripDetails from './tripDetails';
+
 export default function ResultCard() {
+  const dispatch = useDispatch();
+  const handleOpenDialog = () => {
+    dispatch(openDialogDetail());
+  };
+
   return (
     <div className="w-full max-w-sm sm:max-w-4xl mx-auto sm:pt-8 sm:px-0">
       <div className="flex flex-col sm:flex-row w-full transition-all duration-300 ease-in-out sm:hover:drop-shadow-md">
@@ -32,11 +41,18 @@ export default function ResultCard() {
             <div className="flex-grow flex items-center justify-center">
               <span className="text-2xl font-bold">$584</span>
             </div>
-            <Button className="w-full mt-4" variant={'active'}>
+            <Button
+              className="w-full mt-4"
+              variant={'active'}
+              onClick={handleOpenDialog}
+            >
               Select
             </Button>
           </CardContent>
         </Card>
+        <div>
+          <TripDetails />
+        </div>
       </div>
     </div>
   );
