@@ -14,6 +14,7 @@ import {
 } from '@/lib/store/mainSlices/dialogSlice';
 import { RootState } from '@/lib/store/store';
 import TripSummaryComponent from '../packages/tripSummary';
+import TripSeparator from '@/app/commonComponents/tripSeparator';
 
 export default function TripSummary() {
   const dispatch = useDispatch();
@@ -28,7 +29,7 @@ export default function TripSummary() {
         dispatch(open ? openDialogSummary() : closeDialogSummary())
       }
     >
-      <DialogContent className="sm:max-w-3xl">
+      <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center">
             <Button
@@ -43,16 +44,9 @@ export default function TripSummary() {
           </DialogTitle>
         </DialogHeader>
         <TripSummaryComponent />
-        <div className="relative py-4">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-300"></div>
-          </div>
-          <div className="relative flex justify-center">
-            <span className="bg-white px-2 text-xs font-semibold">
-              12 nights in Paris
-            </span>
-          </div>
-        </div>
+        <TripSeparator time="12 nights" place="Paris" />
+        <TripSummaryComponent />
+        <TripSeparator time="2 days" place="London" />
         <TripSummaryComponent />
       </DialogContent>
     </Dialog>

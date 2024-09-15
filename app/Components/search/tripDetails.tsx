@@ -12,10 +12,12 @@ import {
   openDialogDetail,
   closeDialogDetail,
   openDialogSummary,
+  openDialogSignUp,
 } from '@/lib/store/mainSlices/dialogSlice';
 import { RootState } from '@/lib/store/store';
 import TripSummary from './tripSummary';
 import FlightInfoCard from './flightInfo';
+import SignUpDialog from '@/app/commonComponents/signupComponent';
 
 const flightData = [
   { from: 'Algiers', to: 'Paris', airline: 'Air Algerie' },
@@ -30,6 +32,10 @@ export default function TripDetails() {
 
   const handleOpenDialogSummary = () => {
     dispatch(openDialogSummary());
+  };
+
+  const handleOpenDialogSignUp = () => {
+    dispatch(openDialogSignUp());
   };
 
   return (
@@ -58,12 +64,15 @@ export default function TripDetails() {
                 <Share2 className="h-4 w-4 mr-2" fill="currentColor" />
                 Share
               </Button>
-              <Button variant={'active'}>Next</Button>
+              <Button variant={'active'} onClick={handleOpenDialogSignUp}>
+                Next
+              </Button>
             </div>
           </div>
         </DialogContent>
       </Dialog>
       <TripSummary />
+      <SignUpDialog />
     </div>
   );
 }
