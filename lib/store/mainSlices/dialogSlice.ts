@@ -5,6 +5,9 @@ interface DialogState {
   isDetailOpen: boolean;
   isSummaryOpen: boolean;
   isSignUpOpen: boolean;
+  isSignInOpen: boolean;
+  isVerifyEmailOpen: boolean;
+  isCreateAccountOpen: boolean;
 }
 
 const initialState: DialogState = {
@@ -12,6 +15,9 @@ const initialState: DialogState = {
   isDetailOpen: false,
   isSummaryOpen: false,
   isSignUpOpen: false,
+  isSignInOpen: false,
+  isVerifyEmailOpen: false,
+  isCreateAccountOpen: false,
 };
 
 const dialogSlice = createSlice({
@@ -39,6 +45,24 @@ const dialogSlice = createSlice({
     closeDialogSignUp: (state) => {
       state.isSignUpOpen = false;
     },
+    openDialogSignIn: (state) => {
+      state.isSignInOpen = true;
+    },
+    closeDialogSignIn: (state) => {
+      state.isSignInOpen = false;
+    },
+    openDialogVerifyEmail: (state) => {
+      state.isVerifyEmailOpen = true;
+    },
+    closeDialogVerifyEmail: (state) => {
+      state.isVerifyEmailOpen = false;
+    },
+    openDialogCreateAccount: (state) => {
+      state.isCreateAccountOpen = true;
+    },
+    closeDialogCreateAccount: (state) => {
+      state.isCreateAccountOpen = false;
+    },
   },
 });
 
@@ -50,5 +74,11 @@ export const {
   setDialogOpen,
   openDialogSignUp,
   closeDialogSignUp,
+  openDialogSignIn,
+  closeDialogSignIn,
+  openDialogVerifyEmail,
+  closeDialogVerifyEmail,
+  openDialogCreateAccount,
+  closeDialogCreateAccount,
 } = dialogSlice.actions;
 export default dialogSlice.reducer;
