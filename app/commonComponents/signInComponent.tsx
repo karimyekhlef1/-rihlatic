@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   openDialogSignIn,
   closeDialogSignIn,
+  openDialogCreateAccount,
 } from '@/lib/store/mainSlices/dialogSlice';
 
 import Image from 'next/image';
@@ -21,12 +22,18 @@ import login from '@/public/images/login.png';
 import facebook from '@/public/images/facebook_logo.svg';
 import google from '@/public/images/google_logo.svg';
 import apple from '@/public/images/apple_logo.svg';
+import CreateAccountDialog from './createAccountComponent';
 
 export default function SignInDialog() {
   const dispatch = useDispatch();
   const isDialogOpen = useSelector(
     (state: RootState) => state.dialog.isSignInOpen
   );
+
+  const handleOpenDialogCreateAccount = () => {
+    dispatch(openDialogCreateAccount());
+    dispatch(closeDialogSignIn());
+  };
   return (
     <Dialog
       open={isDialogOpen}
@@ -51,6 +58,7 @@ export default function SignInDialog() {
             <Button
               variant="secondary"
               className="hover:bg-slate-200 text-xs w-full justify-start items-center"
+              onClick={handleOpenDialogCreateAccount}
             >
               <Mail size={16} className="mr-2 items-center" />
               Email
@@ -108,6 +116,7 @@ export default function SignInDialog() {
           .
         </p>
       </DialogContent>
+      <CreateAccountDialog />
     </Dialog>
   );
 }
