@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -12,15 +11,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   openDialogSignUp,
   closeDialogSignUp,
+  openDialogSignIn,
 } from '@/lib/store/mainSlices/dialogSlice';
 import { RootState } from '@/lib/store/store';
 import { ChevronRight, CircleUserRound } from 'lucide-react';
+import SignInDialog from './signInComponent';
 
 export default function SignUpDialog() {
   const dispatch = useDispatch();
   const isDialogOpen = useSelector(
     (state: RootState) => state.dialog.isSignUpOpen
   );
+
+  const handleOpenDialogSignin = () => {
+    dispatch(openDialogSignIn());
+  };
 
   return (
     <Dialog
@@ -38,7 +43,10 @@ export default function SignUpDialog() {
             You&apos;ll be able to book faster, set up price alerts, and see all
             your trips in one place.
           </DialogDescription>
-          <Button className="w-full mt-6 bg-orange-500 hover:bg-orange-600 text-white text-xs flex items-center justify-center">
+          <Button
+            className="w-full mt-6 bg-orange-500 hover:bg-orange-600 text-white text-xs flex items-center justify-center"
+            onClick={handleOpenDialogSignin}
+          >
             <CircleUserRound className="mr-2 h-4 w-4" />
             Sign-in
           </Button>
@@ -61,6 +69,7 @@ export default function SignUpDialog() {
           </div>
         </div>
       </DialogContent>
+      <SignInDialog />
     </Dialog>
   );
 }
