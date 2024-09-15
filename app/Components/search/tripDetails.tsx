@@ -29,9 +29,6 @@ export default function TripDetails() {
   const isDialogOpen = useSelector(
     (state: RootState) => state.dialog.isDetailOpen
   );
-  const isSignUpDialogOpen = useSelector(
-    (state: RootState) => state.dialog.isSignUpOpen
-  );
 
   const handleOpenDialogSummary = () => {
     dispatch(openDialogSummary());
