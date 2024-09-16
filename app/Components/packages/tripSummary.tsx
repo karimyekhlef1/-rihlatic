@@ -109,56 +109,57 @@ export default function TripSummaryComponent() {
       {/* Main flight information card */}
       <Card className="shadow-md pt-4">
         <CardContent>
-          <div className="flex relative">
+          <div className="flex flex-col sm:flex-row relative">
             {/* Left column: Departure and arrival times */}
-            <div className="w-1/4 pr-4 border-r flex flex-col justify-between relative">
-              <div>
-                <div className="mb-4">
-                  <p className="font-semibold text-sm">
+            <div className="w-full sm:w-1/4 pr-4 sm:border-r flex flex-row sm:flex-col justify-between relative mb-4 sm:mb-0">
+              <div className="flex flex-row sm:flex-col items-center sm:items-start">
+                <div className="mb-2 sm:mb-4 mr-2 sm:mr-0">
+                  <p className="font-semibold text-xs sm:text-sm">
                     {flightInfo.departureTime}
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-[10px] sm:text-xs text-gray-500">
                     {flightInfo.departureDate}
                   </p>
                 </div>
-                <div className="mb-4">
-                  <p className="text-xs font-semibold text-gray-500 pt-2">
+                <div className="mb-2 sm:mb-4">
+                  <p className="text-[10px] sm:text-xs font-semibold text-gray-500 pt-1 sm:pt-2">
                     {flightInfo.duration}
                   </p>
                 </div>
               </div>
-              <div className="mt-auto">
-                <p className="font-semibold text-sm">
+              <div className="sm:mt-auto">
+                <p className="font-semibold text-xs sm:text-sm">
                   {flightInfo.arrivalTime}
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-[10px] sm:text-xs text-gray-500">
                   {flightInfo.arrivalDate}
                 </p>
               </div>
-              <div className="absolute right-0 top-0 transform translate-x-1/2 -translate-y-1/2 p-1 rounded-full">
-                <FaCircle className="text-gray-400 text-[8px]" />
+              {/* Flight path indicators */}
+              <div className="hidden sm:block absolute right-0 top-0 transform translate-x-1/2 -translate-y-1/2 p-1 rounded-full">
+                <FaCircle className="text-gray-400 text-[6px] sm:text-[8px]" />
               </div>
-              <div className="absolute right-0 top-1/2 transform translate-x-1/2 -translate-y-1/2 bg-white p-1 rounded-full">
-                <FaPlane className="text-gray-400 transform rotate-90" />
+              <div className="hidden sm:block absolute right-0 top-1/2 transform translate-x-1/2 -translate-y-1/2 bg-white p-1 rounded-full">
+                <FaPlane className="text-gray-400 transform rotate-90 text-xs sm:text-sm" />
               </div>
-              <div className="absolute right-0 bottom-0 transform translate-x-1/2 translate-y-1/2 p-1 rounded-full">
-                <FaCircle className="text-gray-400 text-[8px]" />
+              <div className="hidden sm:block absolute right-0 bottom-0 transform translate-x-1/2 translate-y-1/2 p-1 rounded-full">
+                <FaCircle className="text-gray-400 text-[6px] sm:text-[8px]" />
               </div>
             </div>
 
             {/* Right column: Airport details and expandable content */}
-            <div className="w-2/3 pl-28 flex flex-col">
-              <div className="mb-4">
-                <p className="text-sm font-semibold">
+            <div className="w-full sm:w-2/3 sm:pl-4 md:pl-8 lg:pl-28 flex flex-col">
+              <div className="mb-2 sm:mb-4">
+                <p className="text-xs sm:text-sm font-semibold">
                   {flightInfo.departureAirport}
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-[10px] sm:text-xs text-gray-500">
                   {flightInfo.departureAirportName}
                 </p>
               </div>
 
               {/* Airline info and expand/collapse button */}
-              <div className="mb-4 flex items-center justify-between">
+              <div className="mb-2 sm:mb-4 flex items-center justify-between">
                 <AirlineCompanyComponent
                   logo={airlineLogo}
                   name={flightInfo.airline}
@@ -170,9 +171,9 @@ export default function TripSummaryComponent() {
                   className="p-1"
                 >
                   {isExpanded ? (
-                    <ChevronUp size={20} />
+                    <ChevronUp size={16} />
                   ) : (
-                    <ChevronDown size={20} />
+                    <ChevronDown size={16} />
                   )}
                 </Button>
               </div>
@@ -185,50 +186,71 @@ export default function TripSummaryComponent() {
                   transition: 'max-height 0.4s ease-in-out',
                 }}
               >
-                <div id="expandable-content" className="mb-4 space-y-4">
+                <div
+                  id="expandable-content"
+                  className="mb-2 sm:mb-4 space-y-2 sm:space-y-4"
+                >
                   {/* Connection info */}
                   <div>
-                    <h4 className="font-semibold text-sm mb-2">
+                    <h4 className="font-semibold text-xs sm:text-sm mb-1 sm:mb-2">
                       Connection info
                     </h4>
-                    <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div className="grid grid-cols-2 gap-1 sm:gap-2 text-[10px] sm:text-sm">
                       <div className="flex items-center">
-                        <Plane size={16} className="mr-2" fill="black" />
-                        <p className="font-normal text-xs">Airline</p>
+                        <Plane
+                          size={12}
+                          className="mr-1 sm:mr-2"
+                          fill="black"
+                        />
+                        <p className="font-normal text-[10px] sm:text-xs">
+                          Airline
+                        </p>
                       </div>
-                      <p className="font-semibold text-xs">
+                      <p className="font-semibold text-[10px] sm:text-xs">
                         {flightInfo.airline}
                       </p>
                       <div className="flex items-center">
-                        <Info size={16} className="mr-2" />
-                        <p className="font-normal text-xs">Flight no</p>
+                        <Info size={12} className="mr-1 sm:mr-2" />
+                        <p className="font-normal text-[10px] sm:text-xs">
+                          Flight no
+                        </p>
                       </div>
-                      <p className="font-semibold text-xs">
+                      <p className="font-semibold text-[10px] sm:text-xs">
                         {flightInfo.flightNumber}
                       </p>
                     </div>
                   </div>
                   {/* Seating info */}
                   <div>
-                    <h4 className="font-semibold text-sm mb-2">Seating info</h4>
-                    <div className="grid grid-cols-2 gap-2 text-sm">
-                      <p className="font-normal text-xs">Seat pitch</p>
-                      <p className="font-semibold text-xs">
+                    <h4 className="font-semibold text-xs sm:text-sm mb-1 sm:mb-2">
+                      Seating info
+                    </h4>
+                    <div className="grid grid-cols-2 gap-1 sm:gap-2 text-[10px] sm:text-sm">
+                      <p className="font-normal text-[10px] sm:text-xs">
+                        Seat pitch
+                      </p>
+                      <p className="font-semibold text-[10px] sm:text-xs">
                         {flightInfo.seatPitch}
                       </p>
-                      <p className="font-normal text-xs">Seat width</p>
-                      <p className="font-semibold text-xs">
+                      <p className="font-normal text-[10px] sm:text-xs">
+                        Seat width
+                      </p>
+                      <p className="font-semibold text-[10px] sm:text-xs">
                         {flightInfo.seatWidth}
                       </p>
-                      <p className="font-normal text-xs">Seat recline</p>
-                      <p className="font-semibold text-xs">
+                      <p className="font-normal text-[10px] sm:text-xs">
+                        Seat recline
+                      </p>
+                      <p className="font-semibold text-[10px] sm:text-xs">
                         {flightInfo.seatRecline}
                       </p>
                       <div className="flex items-center">
-                        <Wifi size={16} className="mr-2" />
-                        <p className="font-normal text-xs">Wi-Fi on board</p>
+                        <Wifi size={12} className="mr-1 sm:mr-2" />
+                        <p className="font-normal text-[10px] sm:text-xs">
+                          Wi-Fi on board
+                        </p>
                       </div>
-                      <p className="font-semibold text-xs">
+                      <p className="font-semibold text-[10px] sm:text-xs">
                         {flightInfo.wifiOnBoard ? 'Yes' : 'No'}
                       </p>
                     </div>
@@ -236,12 +258,12 @@ export default function TripSummaryComponent() {
                 </div>
               </div>
 
-              {/* Arrival airport (moved to bottom of right column) */}
-              <div className="mt-auto">
-                <p className="font-semibold text-sm">
+              {/* Arrival airport */}
+              <div className="mt-2 sm:mt-auto">
+                <p className="text-xs sm:text-sm font-semibold">
                   {flightInfo.arrivalAirport}
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-[10px] sm:text-xs text-gray-500">
                   {flightInfo.arrivalAirportName}
                 </p>
               </div>
