@@ -1,18 +1,22 @@
 import React from 'react';
-import { ChevronRight, CircleArrowRight, MoveRight, Plane } from 'lucide-react';
+import { ChevronRight, CircleArrowRight, MoveRight } from 'lucide-react';
 
 interface FlightInfo {
   from: string;
   to: string;
   airline: string;
-  additionalInfo?: React.ReactNode;
+  additionalInfo: boolean;
 }
 
 interface FlightInfoCardProps {
   flights: FlightInfo[];
+  additionalInfo?: React.ReactNode;
 }
 
-const FlightInfoCard: React.FC<FlightInfoCardProps> = ({ flights }) => {
+const FlightInfoCard: React.FC<FlightInfoCardProps> = ({
+  flights,
+  additionalInfo,
+}) => {
   return (
     <div className="px-4 py-2 max-w-3xl">
       {flights.map((flight, index) => (
@@ -38,7 +42,9 @@ const FlightInfoCard: React.FC<FlightInfoCardProps> = ({ flights }) => {
                     Direct flight
                   </p>
                 </div>
-                <div className="pt-2">{flight.additionalInfo}</div>
+                {flight.additionalInfo && (
+                  <div className="pt-2">{additionalInfo}</div>
+                )}
               </div>
             </div>
           </div>

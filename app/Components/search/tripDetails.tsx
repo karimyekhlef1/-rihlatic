@@ -18,10 +18,26 @@ import { RootState } from '@/lib/store/store';
 import TripSummary from './tripSummary';
 import FlightInfoCard from './flightInfo';
 import SignUpDialog from '@/app/commonComponents/signupComponent';
+import LayoverInfoComponent from './layoverInfoComponent';
+
+const layovers = [
+  { duration: '8h 35m', location: 'Paris', code: 'CDG' },
+  { duration: '6h 40m', location: 'Alger', code: 'ALG' },
+];
 
 const flightData = [
-  { from: 'Algiers', to: 'Paris', airline: 'Air Algerie' },
-  { from: 'Paris', to: 'Algiers', airline: 'Air Algerie' },
+  {
+    from: 'Algiers',
+    to: 'Paris',
+    airline: 'Air Algerie',
+    additionalInfo: false,
+  },
+  {
+    from: 'Paris',
+    to: 'Algiers',
+    airline: 'Air Algerie',
+    additionalInfo: true,
+  },
 ];
 
 export default function TripDetails() {
@@ -56,7 +72,10 @@ export default function TripDetails() {
               onClick={handleOpenDialogSummary}
             >
               <CardContent className="p-2">
-                <FlightInfoCard flights={flightData} />
+                <FlightInfoCard
+                  flights={flightData}
+                  additionalInfo={<LayoverInfoComponent layovers={layovers} />}
+                />
               </CardContent>
             </Card>
             <div className="flex justify-between items-center">
