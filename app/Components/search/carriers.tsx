@@ -37,22 +37,22 @@ export default function AirlineCarrierSelector() {
   return (
     <div className="w-full max-w-sm p-4">
       <div className="relative mb-4">
-        <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+        <Search className="absolute left-2 top-2.5 h-3 w-3 text-gray-400" />
         <Input
           type="text"
           placeholder="Search carriers"
           value={searchTerm}
           onChange={(e) => dispatch(setSearchTerm(e.target.value))}
-          className="pl-8"
+          className="pl-7 text-xs font-semibold"
         />
       </div>
       <div className="flex justify-between items-center mb-2">
-        <span className="text-sm font-medium">In results</span>
+        <span className="text-xs font-semibold">In results</span>
         <Button
           variant="ghost"
           size="sm"
           onClick={handleSelectAll}
-          className="text-sm"
+          className="text-xs font-semibold"
         >
           {selectedCarriers.length === carriers.length
             ? 'Deselect all'
@@ -69,8 +69,9 @@ export default function AirlineCarrierSelector() {
               id={carrier}
               checked={selectedCarriers.includes(carrier)}
               onCheckedChange={() => handleCarrierToggle(carrier)}
+              className="h-3 w-3"
             />
-            <Label htmlFor={carrier} className="text-sm">
+            <Label htmlFor={carrier} className="text-xs font-semibold">
               {carrier}
             </Label>
           </div>
@@ -81,7 +82,7 @@ export default function AirlineCarrierSelector() {
           variant="ghost"
           size="sm"
           onClick={() => dispatch(toggleShowAll())}
-          className="mt-2 w-full text-sm"
+          className="mt-2 w-full text-xs font-semibold"
         >
           {showAll ? 'Show less' : 'Show all carriers'}
         </Button>

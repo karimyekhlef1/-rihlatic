@@ -18,7 +18,7 @@ function CheckboxItem({ id, label }: { id: string; label: string }) {
       <Checkbox id={id} />
       <label
         htmlFor={id}
-        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        className="text-xs font-semibold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
       >
         {label}
       </label>

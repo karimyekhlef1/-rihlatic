@@ -7,6 +7,7 @@ import { store } from '@/lib/store/store';
 import AdComponent from '@/app/commonComponents/adComponent';
 import TravelOptions from '@/app/Components/search/travelOptions';
 import AlertPrices from '@/app/Components/search/alertPrices';
+import TravelOptions2 from '@/app/Components/search/travelOptions2';
 
 export default function SearchResults() {
   return (
@@ -31,9 +32,9 @@ export default function SearchResults() {
         </div>
 
         {/* Main content */}
-        <div className="flex flex-col w-full space-y-4 sm:space-y-0 sm:w-[800px]">
+        <div className="flex flex-col w-full space-y-4 sm:space-y-0 sm:w-[650px]">
           <div className="hidden sm:block">
-            <TravelOptions />
+            <TravelOptions2 />
           </div>
           {[1, 2, 3, 4].map((index) => (
             <ResultCard key={index} />
