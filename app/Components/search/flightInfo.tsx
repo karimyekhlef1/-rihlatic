@@ -5,6 +5,7 @@ interface FlightInfo {
   from: string;
   to: string;
   airline: string;
+  additionalInfo?: React.ReactNode;
 }
 
 interface FlightInfoCardProps {
@@ -24,8 +25,8 @@ const FlightInfoCard: React.FC<FlightInfoCardProps> = ({ flights }) => {
                 </p>
               </div>
             </div>
-            <div className="text-sm text-gray-600 mt-1">
-              <div className="flex flex-col items-start">
+            <div className="text-sm text-gray-500 mt-1">
+              <div className="flex flex-col items-start text-xs font-medium">
                 <span>{flight.airline}</span>
                 <div className="flex flex-row justify-center items-center gap-x-1">
                   <CircleArrowRight
@@ -37,6 +38,7 @@ const FlightInfoCard: React.FC<FlightInfoCardProps> = ({ flights }) => {
                     Direct flight
                   </p>
                 </div>
+                <div className="pt-2">{flight.additionalInfo}</div>
               </div>
             </div>
           </div>

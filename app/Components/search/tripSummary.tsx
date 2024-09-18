@@ -15,6 +15,7 @@ import {
 import { RootState } from '@/lib/store/store';
 import TripSummaryComponent from '../packages/tripSummary';
 import TripSeparator from '@/app/commonComponents/tripSeparator';
+import { outboundFlights } from '@/app/Data/flightInfos';
 
 export default function TripSummary() {
   const dispatch = useDispatch();
@@ -43,11 +44,11 @@ export default function TripSummary() {
             Trip Summary
           </DialogTitle>
         </DialogHeader>
-        <TripSummaryComponent />
+        <TripSummaryComponent flightInfo={outboundFlights[0]} />
         <TripSeparator time="12 nights" place="Paris" />
-        <TripSummaryComponent />
+        <TripSummaryComponent flightInfo={outboundFlights[1]} />
         <TripSeparator time="2 days" place="London" />
-        <TripSummaryComponent />
+        <TripSummaryComponent flightInfo={outboundFlights[2]} />
       </DialogContent>
     </Dialog>
   );
