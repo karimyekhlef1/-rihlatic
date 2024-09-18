@@ -37,13 +37,13 @@ export default function ExcludedCountriesSelector() {
   return (
     <div className="w-full max-w-sm p-4">
       <div className="relative mb-4">
-        <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+        <Search className="absolute left-2 top-2.5 h-3 w-3 text-gray-400" />
         <Input
           type="text"
           placeholder="Search countries"
           value={searchTerm}
           onChange={(e) => dispatch(setSearchTerm(e.target.value))}
-          className="pl-8"
+          className="pl-7 text-xs font-semibold"
         />
       </div>
       <div className="flex flex-col justify-between items-center mb-2">
@@ -63,7 +63,7 @@ export default function ExcludedCountriesSelector() {
               checked={selectedCountries.includes(country)}
               onCheckedChange={() => handleCountryToggle(country)}
             />
-            <Label htmlFor={country} className="text-sm">
+            <Label htmlFor={country} className="text-xs font-semibold">
               {country}
             </Label>
           </div>
@@ -74,7 +74,7 @@ export default function ExcludedCountriesSelector() {
           variant="ghost"
           size="sm"
           onClick={() => dispatch(toggleShowAll())}
-          className="mt-2 w-full text-sm"
+          className="mt-2 w-full text-xs font-semibold"
         >
           {showAll ? 'Show less' : 'Show all countries'}
         </Button>

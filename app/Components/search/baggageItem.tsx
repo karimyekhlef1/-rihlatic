@@ -12,22 +12,22 @@ const BaggageItem: React.FC<BaggageItemProps> = ({
     <div className="flex items-center justify-between py-2">
       <div className="flex items-center">
         {icon}
-        <span className="text-sm font-medium">{type}</span>
+        <span className="text-xs font-medium">{type}</span>
       </div>
       <div className="flex items-center">
         <Button
           variant="outline"
           size="sm"
-          className="h-6 w-6 rounded-full"
+          className="h-6 w-6 rounded-full text-xs"
           onClick={onDecrement}
         >
           -
         </Button>
-        <span className="mx-2 text-sm">{count}</span>
+        <span className="mx-2 text-xs">{count}</span>
         <Button
           variant="outline"
           size="sm"
-          className="h-6 w-6 rounded-full"
+          className="h-6 w-6 rounded-full text-xs"
           onClick={onIncrement}
         >
           +
