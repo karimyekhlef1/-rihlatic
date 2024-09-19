@@ -23,6 +23,7 @@ import HotelsComponent from '@/app/Components/packages/hotelsComponent';
 import TripSummaryComponent from '@/app/Components/packages/tripSummary';
 import BookingPackageComponent from '@/app/Components/packages/bookingPackageComponent';
 import ImportantNote from '@/app/Components/packages/importantNote';
+import { outboundFlights } from '@/app/Data/flightInfos';
 
 const content =
   'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Asperiores voluptate tempora reprehenderit natus in debitis voluptatibus non dolor itaque repellat? Rem dicta corrupti facere id eum nihil magni excepturi officia.';
@@ -49,7 +50,7 @@ export default function Details() {
             <ContentComponent
               dynamicContent={
                 <Provider store={store}>
-                  <TripSummaryComponent />
+                  <TripSummaryComponent flightInfo={outboundFlights[0]} />
                 </Provider>
               }
             />
