@@ -10,7 +10,7 @@ export default function TravelProgram() {
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 640);
+      setIsMobile(window.innerWidth < 1024);
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -46,10 +46,16 @@ export default function TravelProgram() {
             >
               <div className="absolute inset-x-5 bottom-4">
                 <div className="flex gap-3 text-white">
-                  <p>Day {day}</p>
+                  <p
+                    className={` ${isMobile ? 'font-semibold' : 'text-lg font-bold'} text-gray-100`}
+                  >
+                    Day {day}
+                  </p>
                 </div>
                 <div>
-                  <p className="font-semibold text-lg text-gray-100">
+                  <p
+                    className={` ${isMobile ? 'text-sm font-normal' : 'text-lg font-norml'} text-gray-100`}
+                  >
                     Libre tour in Istanbul (explore the city on your own).
                   </p>
                 </div>
