@@ -54,9 +54,9 @@ export default function BookingPackageComponent() {
                 />
                 <p className="text-sm font-semibold pl-2">
                   {startDate
-                    ? format(startDate, 'dd-MMM-yyyy')
+                    ? format(startDate, 'dd/MMM/yyyy')
                     : 'Select dates'}
-                  {endDate ? ` - ${format(endDate, 'dd-MMM-yyyy')}` : ''}
+                  {endDate ? ` - ${format(endDate, 'dd/MMM/yyyy')}` : ''}
                 </p>
               </div>
             </div>
