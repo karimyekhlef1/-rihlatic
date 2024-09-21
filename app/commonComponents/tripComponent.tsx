@@ -6,6 +6,7 @@ import { BsFillPeopleFill } from 'react-icons/bs';
 
 import Image from 'next/image';
 import packageImage from '@/public/images/packages/image_2.jpg';
+import Link from 'next/link';
 
 interface TripComponentProps {
   text: string;
@@ -69,9 +70,11 @@ const TripComponent: React.FC<TripComponentProps> = ({ text }) => {
             {' 1000 DZD'}
           </p>
         </div>
-        <button className="btn w-full p-2 rounded-xl text-[#FF8000] bg-[#FF800033] mt-2 text-sm sm:text-base">
-          {'View Details'}
-        </button>
+        <Link href="/packages/details">
+          <button className="btn w-full p-2 rounded-xl text-[#FF8000] bg-[#FF800033] mt-2 text-sm sm:text-base">
+            {'View Details'}
+          </button>
+        </Link>
       </div>
     </div>
   );
