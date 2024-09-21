@@ -1,8 +1,13 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { FileUploadButton } from '@/components/ui/file-upload-button';
 
 export default function ProfilePicture() {
+  const handleFileSelect = (file: File) => {
+    console.log('Selected file:', file.name);
+    // Here we can add logic to handle the file, such as uploading it to a server
+  };
   return (
     <div className="px-10">
       <Card className="w-[300px] sm:w-full">
@@ -25,9 +30,10 @@ export default function ProfilePicture() {
                 maximum file size.
               </p>
               <div className="pt-2 px-4">
-                <Button variant={'secondary'} className="h-[36px] w-[102px]">
-                  Upload
-                </Button>
+                <FileUploadButton
+                  onFileSelect={handleFileSelect}
+                  label="Upload"
+                />
               </div>
             </div>
           </div>
