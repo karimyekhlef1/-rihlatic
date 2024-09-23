@@ -13,7 +13,7 @@ const FlightDuration: React.FC<FlightDurationProps> = ({
   flightDuration,
 }) => {
   return (
-    <div className="flex flex-row justify-between">
+    <div className="flex flex-wrap flex-row justify-between">
       {/* From and To locations */}
       <div className="flex flex-row justify-center items-center gap-x-1">
         <p className="font-semibold text-sm flex flex-row justify-center items-center gap-x-2">

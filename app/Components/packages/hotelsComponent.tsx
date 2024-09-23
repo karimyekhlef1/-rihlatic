@@ -5,7 +5,7 @@ import StarRating from '@/app/commonComponents/starRating';
 
 export default function HotelsComponent() {
   return (
-    <div className="flex flex-row justify-between items-center w-full">
+    <div className="flex flex-col gap-3 sm:gap-0  sm:flex-row justify-between items-center w-full">
       <div className="flex items-center space-x-4">
         <Image
           src={image1}

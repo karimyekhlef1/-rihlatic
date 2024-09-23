@@ -84,7 +84,7 @@ export default function ImageSlider() {
           alt={images[currentIndex].name}
           width={1200}
           height={600}
-          className="w-[1250px] h-[600px] object-cover rounded-lg shadow-md"
+          className="w-1/1 max-h-[600px] object-cover rounded-lg shadow-md"
         />
         <div className="absolute bottom-[-50px] left-12">
           <Carousel ref={emblaRef} className="w-full max-w-md">
@@ -97,7 +97,7 @@ export default function ImageSlider() {
                       alt={image.name}
                       width={200}
                       height={200}
-                      className={`w-[120px] h-[110px] object-cover rounded-md cursor-pointer ${
+                      className={`w-[100px] h-[100px] object-cover rounded-md cursor-pointer ${
                         index === currentIndex ? 'ring-2 ring-[#ff7300]' : ''
                       }`}
                       onClick={() => scrollTo(index)}
