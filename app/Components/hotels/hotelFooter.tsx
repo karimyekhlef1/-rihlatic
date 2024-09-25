@@ -6,7 +6,7 @@ import { CircleCheck } from 'lucide-react';
 
 export default function HotelFooter() {
   return (
-    <div className="flex flex-col md:flex-row px-8 md:px-16 max-w-[350px] sm:max-w-[600px] md:max-w-[768px] lg:max-w-[1500px]">
+    <div className="flex flex-col md:flex-row md:px-16 max-w-[350px] sm:max-w-[600px] md:max-w-[768px] lg:max-w-[1500px]">
       {/* Left column for content */}
       <div className="flex-1 p-6">
         <h2 className="text-2xl font-bold mb-4">
