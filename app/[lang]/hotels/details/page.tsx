@@ -51,18 +51,18 @@ export default function Details() {
               ))}
             </div>
           </div>
-          <div className="flex flex-col lg:hidden items-center gap-y-8 pt-2 w-full">
+          <div className="md:hidden lg:flex lg:flex-col items-center pt-4 sm:pt-16 gap-y-8 space-y-8 sm:space-y-0">
             <MapComponent />
             <Provider store={store}>
               <BookingHotelComponent />
             </Provider>
           </div>
-          <div className="hidden lg:flex lg:flex-col items-center gap-y-8 lg:pt-16">
-            <MapComponent />
-            <Provider store={store}>
-              <BookingHotelComponent />
-            </Provider>
-          </div>
+        </div>
+        <div className="hidden lg:hidden md:flex md:pt-8 md:gap-x-8 md:justify-center md:items-center">
+          <MapComponent />
+          <Provider store={store}>
+            <BookingHotelComponent />
+          </Provider>
         </div>
       </div>
       <div className="container">
