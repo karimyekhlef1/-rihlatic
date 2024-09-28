@@ -9,6 +9,7 @@ import { RootState } from '@/lib/store/store'; // Adjust this import path as nee
 import { format, differenceInDays } from 'date-fns';
 
 import DropDownBookingComponent from './dropDownBooking';
+import Link from 'next/link';
 
 export default function BookingPackageComponent() {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -81,9 +82,11 @@ export default function BookingPackageComponent() {
             </div>
             <Separator />
             <div className="pt-4">
-              <Button className="px-14" variant={'rihlatic'}>
-                Book Now
-              </Button>
+              <Link href={'/payment'}>
+                <Button className="px-14" variant={'rihlatic'}>
+                  Book Now
+                </Button>
+              </Link>
             </div>
           </div>
         </CardContent>
