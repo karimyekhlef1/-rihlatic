@@ -3,6 +3,9 @@ import searchBg from '@/public/images/home/search-bg.jpeg';
 import SearchCatBox from './searchCatBox';
 import SearchInputComponent from '@/app/commonComponents/searchInputComponent';
 import SearchSelectComponent from './searchSelectComponent';
+import { PiBagSimpleFill } from "react-icons/pi";
+import { GiGymBag } from "react-icons/gi";
+
 
 const SearchSectionComponent: React.FC = () => {
   return (
