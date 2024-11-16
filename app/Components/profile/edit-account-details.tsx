@@ -24,8 +24,8 @@ import {
   updateField,
   resetForm,
   AccountState,
-} from '@/lib/store/mainSlices/accountSlice';
-import { setDialogOpen } from '@/lib/store/mainSlices/dialogSlice';
+} from '@/lib/store/custom/mainSlices/accountSlice';
+import { setDialogOpen } from '@/lib/store/custom/mainSlices/dialogSlice';
 import type { RootState } from '@/lib/store/store';
 
 export default function EditAccountOwnerDetails() {
