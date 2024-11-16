@@ -9,6 +9,7 @@ import { RootState } from '@/lib/store/store'; // Adjust this import path as nee
 import { format, differenceInDays } from 'date-fns';
 
 import DropDownBookingComponent from './dropDownBooking';
+import Link from 'next/link';
 
 export default function BookingPackageComponent() {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -27,7 +28,7 @@ export default function BookingPackageComponent() {
 
   return (
     <div>
-      <Card className="w-[300px] rounded-3xl">
+      <Card className="w-[300px] rounded-xl">
         <CardContent className="px-0 py-8">
           <div className="flex flex-col items-center">
             <div className="flex flex-col items-center justify-center pb-4">
@@ -54,9 +55,9 @@ export default function BookingPackageComponent() {
                 />
                 <p className="text-sm font-semibold pl-2">
                   {startDate
-                    ? format(startDate, 'dd-MMM-yyyy')
+                    ? format(startDate, 'dd/MMM/yyyy')
                     : 'Select dates'}
-                  {endDate ? ` - ${format(endDate, 'dd-MMM-yyyy')}` : ''}
+                  {endDate ? ` - ${format(endDate, 'dd/MMM/yyyy')}` : ''}
                 </p>
               </div>
             </div>
@@ -81,9 +82,11 @@ export default function BookingPackageComponent() {
             </div>
             <Separator />
             <div className="pt-4">
-              <Button className="px-14" variant={'rihlatic'}>
-                Book Now
-              </Button>
+              <Link href={'/payment'}>
+                <Button className="px-14" variant={'rihlatic'}>
+                  Book Now
+                </Button>
+              </Link>
             </div>
           </div>
         </CardContent>

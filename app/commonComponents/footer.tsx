@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import logo from '@/public/images/logo.svg';
-import instagram_logo from '@/public/images/instagram_logo.svg';
-import facebook_logo from '@/public/images/facebook_logo.svg';
+import { FaFacebook } from 'react-icons/fa';
+import { FaInstagram } from 'react-icons/fa';
 
 const rihlatic_services = [
   { name: 'Real estates ads', href: '#' },
@@ -17,8 +17,16 @@ const contact_info = [
 ];
 
 const social_networks = [
-  { name: 'Instagram', href: '#', icon: instagram_logo },
-  { name: 'Facebook', href: '#', icon: facebook_logo },
+  {
+    name: 'Instagram',
+    href: '#',
+    icon: <FaInstagram size={25} className="text-black" />,
+  },
+  {
+    name: 'Facebook',
+    href: '#',
+    icon: <FaFacebook size={25} className="text-black" />,
+  },
 ];
 
 export default function Footer() {
@@ -73,12 +81,7 @@ export default function Footer() {
                   className="text-gray-400 hover:text-gray-500"
                 >
                   <span className="sr-only">{network.name}</span>
-                  <Image
-                    src={network.icon}
-                    alt={network.name}
-                    width={40}
-                    height={40}
-                  />
+                  {network.icon}
                 </a>
               ))}
             </div>

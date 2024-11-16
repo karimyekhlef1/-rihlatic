@@ -37,10 +37,16 @@ const SidebarSection = ({ title, children }: SidebarSectionProps) => {
         collapsible
       >
         <AccordionItem value={sectionKey}>
-          <AccordionTrigger className="py-2 text-md font-semibold">
+          <AccordionTrigger className="py-1 text-sm font-semibold">
+            {' '}
+            {/* Adjusted classes */}
             {title}
           </AccordionTrigger>
-          <AccordionContent>{children}</AccordionContent>
+          <AccordionContent className="text-xs">
+            {' '}
+            {/* Added class */}
+            {children}
+          </AccordionContent>
         </AccordionItem>
       </Accordion>
     </div>

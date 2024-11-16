@@ -6,6 +6,7 @@ import { BsFillPeopleFill } from 'react-icons/bs';
 
 import Image from 'next/image';
 import hotelImage from '@/public/images/home/four.jpeg';
+import Link from 'next/link';
 
 interface TripComponentProps {
   text: string;
@@ -58,11 +59,13 @@ const HotelInfoComponent: React.FC<TripComponentProps> = ({ text, rank }) => {
         <div>
           <p className="text-xs text-gray-500 py-4">0 Avis</p>
         </div>
-        <div className="flex justify-center">
-          <button className="btn w-4/5 rounded-xl text-[#FF8000] bg-[#FF800033] mt-2 text-xs py-3">
-            {'Details'}
-          </button>
-        </div>
+        <Link href="/hotels/details">
+          <div className="flex justify-center">
+            <button className="btn w-[90%] rounded-xl text-[#FF8000] bg-[#FF800033] mt-2 text-xs py-3">
+              {'Details'}
+            </button>
+          </div>
+        </Link>
       </div>
     </div>
   );

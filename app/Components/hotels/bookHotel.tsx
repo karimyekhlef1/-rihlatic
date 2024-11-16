@@ -13,6 +13,7 @@ import { RootState } from '@/lib/store/store';
 import { DatePickerWithRange } from '@/app/commonComponents/datePicker';
 
 import { format, differenceInDays } from 'date-fns';
+import Link from 'next/link';
 
 export default function BookingHotelComponent() {
   const dispatch = useDispatch();
@@ -105,9 +106,15 @@ export default function BookingHotelComponent() {
             <div className="flex flex-col items-center gap-y-2 pt-4">
               <p className="text-xs text-gray-500">{calculateDuration()}</p>
               <DatePickerWithRange />
-              <Button size={'sm'} variant={'active'}>
-                Book Now
-              </Button>
+              <Link href={'/payment'}>
+                <Button
+                  size={'sm'}
+                  variant={'rihlatic'}
+                  className="h-[40px] w-[250px]"
+                >
+                  Book Now
+                </Button>
+              </Link>
             </div>
           </div>
         </CardContent>

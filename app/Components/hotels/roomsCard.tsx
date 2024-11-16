@@ -43,7 +43,7 @@ export default function RoomsCard() {
                     </Button>
                   </div>
                 </div>
-                <ul className="space-y-2 mb-4">
+                <ul className="space-y-2 mb-4 text-sm sm:text-md">
                   <li className="flex items-center">
                     <Checkbox id="item1" className="mr-2" />
                     <label htmlFor="item1">Checkbox item 1</label>
@@ -58,19 +58,24 @@ export default function RoomsCard() {
                   </li>
                 </ul>
               </div>
-              <p className="text-sm text-nowrap text-green-500">
+              <p className="text-xs sm:text-sm text-nowrap text-green-500">
                 Annulation gratuite avant le 24/09/2024
               </p>
             </div>
 
             {/* Price column - 1/3 width on medium screens and above */}
-            <div className="w-full md:w-1/3 p-4 flex items-center justify-center">
+            <div className="w-full md:w-1/3 pt-0 pb-4 flex items-center justify-center">
               <div className="text-center">
                 <Checkbox id="book" className="w-6 h-6 mb-2" />
-                <label htmlFor="book" className="block text-2xl font-bold">
+                <label
+                  htmlFor="book"
+                  className="block text-lg sm:text-2xl font-bold"
+                >
                   97 263 DZD 
                 </label>
-                <span className="text-sm text-gray-600">4 nuits</span>
+                <span className="text-xs sm:text-sm text-gray-600">
+                  4 nuits
+                </span>
               </div>
             </div>
           </div>
