@@ -5,7 +5,7 @@ import {
   toggleCarrier,
   toggleSelectAll,
   toggleShowAll,
-} from '@/lib/store/searchSlices/carrierSlice';
+} from '@/lib/store/custom/searchSlices/carrierSlice';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';

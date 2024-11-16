@@ -33,9 +33,7 @@ const SearchSectionComponent: React.FC = () => {
           <div className="flex flex-col gap-2">
             <div className="flex gap-3">
               <SearchSelectComponent data={['Return', 'One Way']} />
-              <SearchSelectComponent
-                data={['Economy', 'Premium Economy', 'Business', 'First Class']}
-              />
+              <SearchSelectComponent data={['Economy', 'Premium Economy', 'Business', 'First Class']} />
             </div>
             <div className="flex justify-start gap-1 flex-wrap">
               <div className="flex items-center gap-1">

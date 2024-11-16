@@ -5,7 +5,7 @@ import {
   toggleCountry,
   toggleSelectAll,
   toggleShowAll,
-} from '@/lib/store/searchSlices/excludedCountriesSlice';
+} from '@/lib/store/custom/searchSlices/excludedCountriesSlice';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';

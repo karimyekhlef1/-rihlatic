@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState, AppDispatch } from '@/lib/store/store';
-import { setPage } from '@/lib/store/commonSlices/paginationSlice';
+import { setPage } from '@/lib/store/custom/commonSlices/paginationSlice';
 
 import {
   Pagination,

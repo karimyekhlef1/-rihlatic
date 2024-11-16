@@ -2,7 +2,7 @@
 
 import { RootState } from '@/lib/store/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleExpanded } from '@/lib/store/packagesSlices/flightSlice';
+import { toggleExpanded } from '@/lib/store/custom/packagesSlices/flightSlice';
 import { useState, useEffect } from 'react';
 
 import { Card, CardContent } from '@/components/ui/card';

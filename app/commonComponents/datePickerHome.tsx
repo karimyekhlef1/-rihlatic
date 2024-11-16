@@ -15,7 +15,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { RootState } from '@/lib/store/store';
-import { setDateRange } from '@/lib/store/commonSlices/calendarSlice';
+import { setDateRange } from '@/lib/store/custom/commonSlices/calendarSlice';
 
 export function DatePickerHome() {
   const dispatch = useDispatch();

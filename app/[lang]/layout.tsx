@@ -3,6 +3,8 @@ import localFont from 'next/font/local';
 // import { Poppins } from 'next/font/google';
 import './globals.css';
 import './index.scss';
+import { Providers } from '@/lib/Providers';
+
 
 // const poppins = Poppins({
 //   subsets: ['latin'],
@@ -64,8 +66,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${poppins.variable} font-sans`}>{children}</body>
-    </html>
+    <Providers>
+      <html lang="en">
+        <body className={`${poppins.variable} font-sans`}>{children}</body>
+      </html>
+    </Providers>
   );
 }

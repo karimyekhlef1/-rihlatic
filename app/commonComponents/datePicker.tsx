@@ -14,7 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { setDate } from '@/lib/store/commonSlices/datePickerSlice';
+import { setDate } from '@/lib/store/custom/commonSlices/datePickerSlice';
 
 export function DatePickerWithRange({
   className,

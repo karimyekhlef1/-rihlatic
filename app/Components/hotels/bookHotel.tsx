@@ -8,7 +8,7 @@ import {
   decrementAdults,
   incrementChildren,
   decrementChildren,
-} from '@/lib/store/hotelSlices/bookingSlice';
+} from '@/lib/store/custom/hotelSlices/bookingSlice';
 import { RootState } from '@/lib/store/store';
 import { DatePickerWithRange } from '@/app/commonComponents/datePicker';
 

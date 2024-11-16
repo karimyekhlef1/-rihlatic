@@ -3,10 +3,10 @@
 import { RootState } from '@/lib/store/store';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setStep } from '@/lib/store/paymentSlices/paymentStepSlice';
-import { setDob } from '@/lib/store/paymentSlices/dobSlice';
-import { setPassportNumber } from '@/lib/store/paymentSlices/passportNumberSlice';
-import { setExpirationDate } from '@/lib/store/paymentSlices/expirationDateSlice';
+import { setStep } from '@/lib/store/custom/paymentSlices/paymentStepSlice';
+import { setDob } from '@/lib/store/custom/paymentSlices/dobSlice';
+import { setPassportNumber } from '@/lib/store/custom/paymentSlices/passportNumberSlice';
+import { setExpirationDate } from '@/lib/store/custom/paymentSlices/expirationDateSlice';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
