@@ -4,7 +4,7 @@ import { RootState } from '@/lib/store/store';
 import { Bell } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 
-import { togglePriceAlerts } from '@/lib/store/searchSlices/priceAlertsSlice';
+import { togglePriceAlerts } from '@/lib/store/custom/searchSlices/priceAlertsSlice';
 
 const AlertPrices: React.FC = () => {
   const dispatch = useDispatch();

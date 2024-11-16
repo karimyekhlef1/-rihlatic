@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/lib/store/store';
-import { setSelectedOption } from '@/lib/store/searchSlices/travelOptionsSlice';
+import { setSelectedOption } from '@/lib/store/custom/searchSlices/travelOptionsSlice';
 import { cn } from '@/lib/utils';
 import { useState, useEffect } from 'react';
 

@@ -7,7 +7,7 @@ import {
   decrementCabin,
   incrementChecked,
   decrementChecked,
-} from '@/lib/store/searchSlices/baggageSlice';
+} from '@/lib/store/custom/searchSlices/baggageSlice';
 
 import BaggageItem from './baggageItem';
 import SidebarSection from './sidebarSection';

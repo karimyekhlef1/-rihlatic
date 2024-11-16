@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/accordion';
 import { RootState } from '@/lib/store/store';
 
-import { toggleSection } from '@/lib/store/searchSlices/sidebarSectionsSlice';
+import { toggleSection } from '@/lib/store/custom/searchSlices/sidebarSectionsSlice';
 
 interface SidebarSectionProps {
   title: string;

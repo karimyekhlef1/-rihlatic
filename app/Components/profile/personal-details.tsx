@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 
 import { useDispatch } from 'react-redux';
-import { setDialogOpen } from '@/lib/store/mainSlices/dialogSlice';
+import { setDialogOpen } from '@/lib/store/custom/mainSlices/dialogSlice';
 
 import EditAccountDetails from '@/app/Components/profile/edit-account-details';
 
