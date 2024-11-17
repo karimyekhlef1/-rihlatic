@@ -9,7 +9,6 @@ interface LinkNavProps extends NavbarItem {
 const getSecondPathSegment = (pathname: string): string => {
   return pathname.split('/')[2] ?? '';
 };
-
 const LinkNav: React.FC<LinkNavProps> = ({
   name,
   route,

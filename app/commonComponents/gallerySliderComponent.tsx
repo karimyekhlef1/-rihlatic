@@ -26,6 +26,63 @@ const images: GalleryProps[] = [
     rating: 4.5,
   },
   {
+    title: 'Istanbul Group Trip , Turkey',
+    image: image1.src,
+    name: 'Turkey',
+    description:
+      'Non quo aperiam repellendus quas est est. Eos aut dolore aut ut sit nesciunt. Ex tempora quia. Sit nobis consequatur dolores incidunt.',
+    rating: 4.5,
+  },  {
+    title: 'Explore the city',
+    image: image2.src,
+    name: 'Istanbul city',
+    description:
+      'Vero eum voluptatem aliquid nostrum voluptatem. Vitae esse natus. Earum nihil deserunt eos quasi cupiditate. A inventore et molestiae natus.',
+    rating: 3,
+  }, {
+    title: 'Istanbul Group Trip , Turkey',
+    image: image1.src,
+    name: 'Turkey',
+    description:
+      'Non quo aperiam repellendus quas est est. Eos aut dolore aut ut sit nesciunt. Ex tempora quia. Sit nobis consequatur dolores incidunt.',
+    rating: 4.5,
+  },  {
+    title: 'Explore the city',
+    image: image2.src,
+    name: 'Istanbul city',
+    description:
+      'Vero eum voluptatem aliquid nostrum voluptatem. Vitae esse natus. Earum nihil deserunt eos quasi cupiditate. A inventore et molestiae natus.',
+    rating: 3,
+  }, {
+    title: 'Istanbul Group Trip , Turkey',
+    image: image1.src,
+    name: 'Turkey',
+    description:
+      'Non quo aperiam repellendus quas est est. Eos aut dolore aut ut sit nesciunt. Ex tempora quia. Sit nobis consequatur dolores incidunt.',
+    rating: 4.5,
+  }, {
+    title: 'Istanbul Group Trip , Turkey',
+    image: image1.src,
+    name: 'Turkey',
+    description:
+      'Non quo aperiam repellendus quas est est. Eos aut dolore aut ut sit nesciunt. Ex tempora quia. Sit nobis consequatur dolores incidunt.',
+    rating: 4.5,
+  },  {
+    title: 'Explore the city',
+    image: image2.src,
+    name: 'Istanbul city',
+    description:
+      'Vero eum voluptatem aliquid nostrum voluptatem. Vitae esse natus. Earum nihil deserunt eos quasi cupiditate. A inventore et molestiae natus.',
+    rating: 3,
+  }, {
+    title: 'Istanbul Group Trip , Turkey',
+    image: image1.src,
+    name: 'Turkey',
+    description:
+      'Non quo aperiam repellendus quas est est. Eos aut dolore aut ut sit nesciunt. Ex tempora quia. Sit nobis consequatur dolores incidunt.',
+    rating: 4.5,
+  },
+  {
     title: 'Explore the city',
     image: image2.src,
     name: 'Istanbul city',
@@ -34,6 +91,49 @@ const images: GalleryProps[] = [
     rating: 3,
   },
   {
+    title: 'Hotel in the woods',
+    image: image3.src,
+    name: 'Visit Turkey with friends',
+    description:
+      'Et quod quaerat dolorem quaerat architecto aliquam accusantium. Ex adipisci et doloremque autem quia quam. Quis eos molestiae at iure impedit.',
+    rating: 5,
+  },
+  {
+    title: 'Hotel in the woods',
+    image: image3.src,
+    name: 'Visit Turkey with friends',
+    description:
+      'Et quod quaerat dolorem quaerat architecto aliquam accusantium. Ex adipisci et doloremque autem quia quam. Quis eos molestiae at iure impedit.',
+    rating: 5,
+  },  {
+    title: 'Hotel in the woods',
+    image: image3.src,
+    name: 'Visit Turkey with friends',
+    description:
+      'Et quod quaerat dolorem quaerat architecto aliquam accusantium. Ex adipisci et doloremque autem quia quam. Quis eos molestiae at iure impedit.',
+    rating: 5,
+  },  {
+    title: 'Hotel in the woods',
+    image: image3.src,
+    name: 'Visit Turkey with friends',
+    description:
+      'Et quod quaerat dolorem quaerat architecto aliquam accusantium. Ex adipisci et doloremque autem quia quam. Quis eos molestiae at iure impedit.',
+    rating: 5,
+  },  {
+    title: 'Hotel in the woods',
+    image: image3.src,
+    name: 'Visit Turkey with friends',
+    description:
+      'Et quod quaerat dolorem quaerat architecto aliquam accusantium. Ex adipisci et doloremque autem quia quam. Quis eos molestiae at iure impedit.',
+    rating: 5,
+  },  {
+    title: 'Hotel in the woods',
+    image: image3.src,
+    name: 'Visit Turkey with friends',
+    description:
+      'Et quod quaerat dolorem quaerat architecto aliquam accusantium. Ex adipisci et doloremque autem quia quam. Quis eos molestiae at iure impedit.',
+    rating: 5,
+  },  {
     title: 'Hotel in the woods',
     image: image3.src,
     name: 'Visit Turkey with friends',
@@ -70,7 +170,10 @@ export default function ImageSlider() {
     },
     [emblaApi]
   );
-
+  const getOpacity = (index: number) => {
+    const distance = Math.abs(index - currentIndex);
+    return Math.max(1 - (distance * 0.2),0.05);
+  };
   return (
     <div className="px-4 py-12">
       <PageTitleComponent
@@ -86,20 +189,22 @@ export default function ImageSlider() {
           height={600}
           className="w-1/1 max-h-[600px] object-cover rounded-lg shadow-md"
         />
-        <div className="absolute bottom-[-40px] sm:bottom-[-50px] left-6 sm:left-12">
-          <Carousel ref={emblaRef} className="w-full max-w-md">
-            <CarouselContent>
+        <div className="absolute bottom-[-40px] sm:bottom-[-50px] left-6 sm:left-12  w-10/12 ">
+          <Carousel ref={emblaRef} className="w-full ">
+            <CarouselContent className=' w-full '>
               {images.map((image, index) => (
-                <CarouselItem key={index} className="basis-1/3 pl-2">
+                <CarouselItem key={index} className="basis-1/8 pl-2">
                   <div className="p-1">
                     <Image
                       src={image.image}
                       alt={image.name}
                       width={200}
                       height={200}
-                      className={`w-[60px] h-[60px] sm:w-[100px] sm:h-[100px] object-cover rounded-md cursor-pointer ${
+                      className={` w-[60px] h-[60px] sm:w-[100px] sm:h-[100px] object-cover rounded-md cursor-pointer ${
                         index === currentIndex ? 'ring-2 ring-[#ff7300]' : ''
+                        
                       }`}
+                      style={{ opacity: getOpacity(index) }}
                       onClick={() => scrollTo(index)}
                     />
                   </div>
