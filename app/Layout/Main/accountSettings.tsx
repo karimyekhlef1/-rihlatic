@@ -24,14 +24,13 @@ export default function AccountSettings() {
       try {
         const result = await dispatch(accountFunc()).unwrap(); // Ensure we have clean error handling
         const user = result.user;
-
-        // Only update fields if values differ
         Object.keys(user).forEach((field) => {
-          const key = field as keyof AccountState;
-          if (accountState[key] !== user[key]) {
-            handleUpdatingField(key, user[key]);
+          if (accountState.hasOwnProperty(field)) {
+            console.log("field",field)
+            handleUpdatingField(field as keyof AccountState, user[field]);
           }
         });
+        
       } catch (error) {
         console.error('Failed to fetch account data:', error);
       }

@@ -1,29 +1,33 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface AccountState {
-  firstName: string;
-  lastName: string;
-  gender: string;
-  birthdate: string;
+  first_name: string;
+  last_name: string;
+  username:string;
+  sexe: string;
+  birthday: string;
   nationality: string;
-  documentNumber: string;
-  documentExpiration: string;
   email: string;
   phone: string;
   avatar:string;
+  passport_nbr: string;
+  passport_expire_at: string;
+  // lang:string
 }
 
 const initialState: AccountState = {
-  firstName: 'karim',
-  lastName: '',
-  gender: '',
-  birthdate: '',
+  first_name: '',
+  last_name: '',
+  username:'',
+  sexe: '',
+  birthday: '',
   nationality: '',
-  documentNumber: '',
-  documentExpiration: '',
   email: '',
   phone: '',
-  avatar:''
+  avatar: '',
+  passport_nbr: '',
+  passport_expire_at:'',
+  // lang:''
 };
 
 const accountSlice = createSlice({
