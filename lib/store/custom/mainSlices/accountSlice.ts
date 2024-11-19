@@ -10,10 +10,11 @@ export interface AccountState {
   documentExpiration: string;
   email: string;
   phone: string;
+  avatar:string;
 }
 
 const initialState: AccountState = {
-  firstName: '',
+  firstName: 'karim',
   lastName: '',
   gender: '',
   birthdate: '',
@@ -22,6 +23,7 @@ const initialState: AccountState = {
   documentExpiration: '',
   email: '',
   phone: '',
+  avatar:''
 };
 
 const accountSlice = createSlice({

@@ -1,13 +1,22 @@
+import { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { FileUploadButton } from '@/components/ui/file-upload-button';
-
+import { useSelector } from 'react-redux';
+import Image from 'next/image';
+import { useDispatch } from 'react-redux';
+import { updateField ,AccountState} from '@/lib/store/custom/mainSlices/accountSlice';
 export default function ProfilePicture() {
+  const [preview, setPreview] = useState<string | null>(null);
+  const dispatch = useDispatch<any>();
   const handleFileSelect = (file: File) => {
-    console.log('Selected file:', file.name);
-    // Here we can add logic to handle the file, such as uploading it to a server
+    const previewUrl = URL.createObjectURL(file);
+    setPreview(previewUrl);
+    dispatch(updateField({ field: 'avatar', value: previewUrl }));
   };
+  const accountState = useSelector((state: any) => state.account)
+
   return (
     <div className="px-10">
       <Card className="w-[300px] sm:w-full">
@@ -20,8 +29,10 @@ export default function ProfilePicture() {
           <div className="flex items-center justify-center sm:items-start sm:justify-start flex-row pt-6">
             <div>
               <Avatar className="hidden sm:block w-20 h-20">
-                <AvatarImage />
-                <AvatarFallback>Y</AvatarFallback>
+                <AvatarImage 
+                 src={preview || accountState.avatar}
+                 alt={accountState.firstName}/>
+                <AvatarFallback></AvatarFallback>
               </Avatar>
             </div>
             <div className="flex flex-col justify-start">
@@ -33,6 +44,7 @@ export default function ProfilePicture() {
                 <FileUploadButton
                   onFileSelect={handleFileSelect}
                   label="Upload"
+              
                 />
               </div>
             </div>
