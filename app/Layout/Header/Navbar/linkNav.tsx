@@ -17,7 +17,7 @@ const LinkNav: React.FC<LinkNavProps> = ({
 }) => {
   const pathname = usePathname();
   const secondSegment = getSecondPathSegment(pathname);
-  const isCurrentPath = secondSegment.toLowerCase() === name.toLowerCase();
+  const isCurrentPath = secondSegment.toLowerCase() === route.split('/')[1].toLowerCase();
 
   return (
     <a

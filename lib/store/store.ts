@@ -20,7 +20,9 @@ import LanguageSlice from "@/lib/store/custom/LanguageSlice";
 
 // Home
 import homeSlice from '@/lib/store/api/home/homeSlice';
-
+// auth
+import accountSlice from '@/lib/store/api/account/accountSlice'
+//
 export const store = configureStore({
   reducer: {
     account: accountReducer,
@@ -47,6 +49,7 @@ export const store = configureStore({
     // ---------------------------
 
     // Auth
+    authAccount :accountSlice,
 
 
     // Home
