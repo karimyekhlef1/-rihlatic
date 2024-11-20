@@ -21,6 +21,7 @@ import LanguageSlice from "@/lib/store/custom/LanguageSlice";
 // Home
 import homeSlice from '@/lib/store/api/home/homeSlice';
 
+
 export const store = configureStore({
   reducer: {
     account: accountReducer,
