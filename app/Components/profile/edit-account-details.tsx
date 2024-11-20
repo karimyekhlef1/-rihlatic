@@ -27,19 +27,26 @@ import {
 } from '@/lib/store/custom/mainSlices/accountSlice';
 import { setDialogOpen } from '@/lib/store/custom/mainSlices/dialogSlice';
 import type { RootState } from '@/lib/store/store';
-
+import { updateAccountFunc } from '@/lib/store/api/account/accountSlice';
 export default function EditAccountOwnerDetails() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
   const account = useSelector((state: RootState) => state.account);
   const { isOpen } = useSelector((state: RootState) => state.dialog);
-
   const handleInputChange = (field: keyof AccountState, value: string) => {
     dispatch(updateField({ field, value }));
   };
 
   const handleSave = () => {
-    console.log('Saving account details:', account);
-    // Implement the save logic here
+    const updateAccountData =async (account :any)=>{
+      try{
+        const result = await dispatch(updateAccountFunc(account ))
+        console.log("result updating ",result)
+      } catch {
+
+      }
+    }
+    updateAccountData(account)
+    
     dispatch(setDialogOpen(false));
   };
 
@@ -69,10 +76,10 @@ export default function EditAccountOwnerDetails() {
               <div className="grid gap-2">
                 <Label htmlFor="firstName">First name</Label>
                 <Input
-                  id="firstName"
-                  value={account.firstName}
+                  id="first_name"
+                  value={account.first_name}
                   onChange={(e) =>
-                    handleInputChange('firstName', e.target.value)
+                    handleInputChange('first_name', e.target.value)
                   }
                   placeholder="Enter first name"
                 />
@@ -80,10 +87,10 @@ export default function EditAccountOwnerDetails() {
               <div className="grid gap-2">
                 <Label htmlFor="lastName">Last name</Label>
                 <Input
-                  id="lastName"
-                  value={account.lastName}
+                  id="last_name"
+                  value={account.last_name}
                   onChange={(e) =>
-                    handleInputChange('lastName', e.target.value)
+                    handleInputChange('last_name', e.target.value)
                   }
                   placeholder="Enter last name"
                 />
@@ -93,15 +100,15 @@ export default function EditAccountOwnerDetails() {
               <div className="grid gap-2">
                 <Label htmlFor="gender">Gender</Label>
                 <Select
-                  value={account.gender}
-                  onValueChange={(value) => handleInputChange('gender', value)}
+                  value={account.sexe}
+                  onValueChange={(value) => handleInputChange('sexe', value)}
                 >
-                  <SelectTrigger id="gender">
+                  <SelectTrigger id="sexe">
                     <SelectValue placeholder="Select gender" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="male">Male</SelectItem>
-                    <SelectItem value="female">Female</SelectItem>
+                    <SelectItem value="Male">Male</SelectItem>
+                    <SelectItem value="Female">Female</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -110,11 +117,11 @@ export default function EditAccountOwnerDetails() {
                   Date of birth
                 </Label>
                 <Input
-                  id="dateofbirth"
+                  id="birthday"
                   type="date"
-                  value={account.birthdate}
+                  value={account.birthday}
                   onChange={(e) =>
-                    handleInputChange('birthdate', e.target.value)
+                    handleInputChange('birthday', e.target.value)
                   }
                 />
               </div>
@@ -131,7 +138,7 @@ export default function EditAccountOwnerDetails() {
                   <SelectValue placeholder="Select nationality" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="dz">Algeria</SelectItem>
+                  <SelectItem value="Algerienne">Algerienne</SelectItem>
                   <SelectItem value="fr">France</SelectItem>
                   <SelectItem value="ca">Canada</SelectItem>
                   <SelectItem value="us">United States</SelectItem>
@@ -145,10 +152,10 @@ export default function EditAccountOwnerDetails() {
                 <div className="grid gap-2">
                   <Label htmlFor="documentNumber">Passport or ID number</Label>
                   <Input
-                    id="documentNumber"
-                    value={account.documentNumber}
+                    id="passport_nbr"
+                    value={account.passport_nbr}
                     onChange={(e) =>
-                      handleInputChange('documentNumber', e.target.value)
+                      handleInputChange('passport_nbr', e.target.value)
                     }
                     placeholder="Enter document number"
                   />
@@ -158,11 +165,11 @@ export default function EditAccountOwnerDetails() {
                     Passport or ID expiration
                   </Label>
                   <Input
-                    id="documentExpiration"
+                    id="passport_expire_at"
                     type="date"
-                    value={account.documentExpiration}
+                    value={account.passport_expire_at}
                     onChange={(e) =>
-                      handleInputChange('documentExpiration', e.target.value)
+                      handleInputChange('passport_expire_at', e.target.value)
                     }
                   />
                 </div>
