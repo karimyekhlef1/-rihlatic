@@ -5,7 +5,7 @@ import FlightSeparator from './flightSeparator';
 import FlightInfoFooter from './flightInfoFooter';
 
 import { useDispatch } from 'react-redux';
-import { openDialogDetail } from '@/lib/store/mainSlices/dialogSlice';
+import { openDialogDetail } from '@/lib/store/custom/mainSlices/dialogSlice';
 import TripDetails from './tripDetails';
 
 export default function ResultCard() {

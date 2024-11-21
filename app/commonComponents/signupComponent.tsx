@@ -12,7 +12,7 @@ import {
   openDialogSignUp,
   closeDialogSignUp,
   openDialogSignIn,
-} from '@/lib/store/mainSlices/dialogSlice';
+} from '@/lib/store/custom/mainSlices/dialogSlice';
 import { RootState } from '@/lib/store/store';
 import { ChevronRight, CircleUserRound } from 'lucide-react';
 import SignInDialog from './signInComponent';
