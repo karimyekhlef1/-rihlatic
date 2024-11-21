@@ -16,12 +16,12 @@ import travelOptionsReducer from '@/lib/store/custom/searchSlices/travelOptionsS
 import calendarReducer from '@/lib/store/custom/commonSlices/calendarSlice';
 import carrierReducer from '@/lib/store/custom/searchSlices/carrierSlice';
 import excludedCountriesReducer from '@/lib/store/custom/searchSlices/excludedCountriesSlice';
-import LanguageSlice from "@/lib/store/custom/LanguageSlice";
+import LanguageSlice from '@/lib/store/custom/LanguageSlice';
 
 // Home
 import homeSlice from '@/lib/store/api/home/homeSlice';
 // auth
-import accountSlice from '@/lib/store/api/account/accountSlice'
+import accountSlice from '@/lib/store/api/account/accountSlice';
 //
 export const store = configureStore({
   reducer: {
@@ -49,12 +49,10 @@ export const store = configureStore({
     // ---------------------------
 
     // Auth
-    authAccount :accountSlice,
-
+    authAccount: accountSlice,
 
     // Home
     home: homeSlice,
-
   },
 });
 
