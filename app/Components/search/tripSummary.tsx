@@ -11,7 +11,7 @@ import { ArrowLeft } from 'lucide-react';
 import {
   openDialogSummary,
   closeDialogSummary,
-} from '@/lib/store/mainSlices/dialogSlice';
+} from '@/lib/store/custom/mainSlices/dialogSlice';
 import { RootState } from '@/lib/store/store';
 import TripSummaryComponent from '../packages/tripSummary';
 import TripSeparator from '@/app/commonComponents/tripSeparator';
