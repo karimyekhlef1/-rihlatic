@@ -15,7 +15,6 @@ export default function AccountSettings() {
   const { loading, accountData } = useSelector((state: any) => state.authAccount);
   const dispatch = useDispatch<any>();
   const accountState = useSelector((state: any) => state.account)
-  //Helper function for updating fields
   const handleUpdatingField = (field: keyof AccountState, value: string) => {
     dispatch(updateField({ field, value }));
   };
@@ -26,7 +25,6 @@ export default function AccountSettings() {
         const user = result.user;
         Object.keys(user).forEach((field) => {
           if (accountState.hasOwnProperty(field)) {
-            console.log("field",field)
             handleUpdatingField(field as keyof AccountState, user[field]);
           }
         });
@@ -37,10 +35,9 @@ export default function AccountSettings() {
     };
     fetchAccountData();
   }, []);
-  console.log("accountState",accountState)
-if (loading) {
-    return <h1>Loading...</h1>;
-}
+// if (loading) {
+//     return <h1>Loading...</h1>;
+// }
 
   return (
     <div className="flex overflow-x-auto flex-wrap flex-col items-center md:items-start md:flex-row md:justify-center pt-8 pb-20 bg-[#f8f8f8]">
