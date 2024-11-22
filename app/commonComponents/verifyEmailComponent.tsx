@@ -15,7 +15,7 @@ import {
   openDialogVerifyEmail,
   closeDialogVerifyEmail,
   openDialogCreateAccount,
-} from '@/lib/store/mainSlices/dialogSlice';
+} from '@/lib/store/custom/mainSlices/dialogSlice';
 
 import Image from 'next/image';
 import verify from '@/public/images/home/news.png';

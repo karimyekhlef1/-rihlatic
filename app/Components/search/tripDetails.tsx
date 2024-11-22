@@ -13,7 +13,7 @@ import {
   closeDialogDetail,
   openDialogSummary,
   openDialogSignUp,
-} from '@/lib/store/mainSlices/dialogSlice';
+} from '@/lib/store/custom/mainSlices/dialogSlice';
 import { RootState } from '@/lib/store/store';
 import TripSummary from './tripSummary';
 import FlightInfoCard from './flightInfo';
