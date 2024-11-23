@@ -23,6 +23,7 @@ import homeSlice from '@/lib/store/api/home/homeSlice';
 // auth
 import accountSlice from '@/lib/store/api/account/accountSlice';
 //
+import packagesSlice from  '@/lib/store/api/packages/packagesSlice'
 export const store = configureStore({
   reducer: {
     account: accountReducer,
@@ -53,6 +54,8 @@ export const store = configureStore({
 
     // Home
     home: homeSlice,
+    //packages
+    packages :packagesSlice
   },
 });
 

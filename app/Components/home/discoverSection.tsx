@@ -6,7 +6,7 @@ import SwiperNavigation from '@/app/commonComponents/swiperNavigationComponent';
 import { Swiper as SwiperType } from 'swiper';
 import image4 from '@/public/images/home/four.jpeg';
 
-const DiscoverSection: React.FC = () => {
+const DiscoverSection= ({data}: any) => {
     const fakeList = [
         {
             image: image4.src,

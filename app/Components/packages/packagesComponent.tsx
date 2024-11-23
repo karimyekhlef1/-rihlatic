@@ -17,14 +17,15 @@ import {
 
 import TripComponent from '@/app/commonComponents/tripComponent';
 
-export default function PackagesComponent() {
+export default function PackagesComponent({data}:any) {
   // Sample data
-  const fakeList = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7,
-    8, 9, 10, 11,
-  ];
+  // const fakeList = [
+  //   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7,
+  //   8, 9, 10, 11,
+  // ];
+  console.log("PackagesComponent",PackagesComponent)
 
-  const totalItems = fakeList.length;
+  const totalItems = data?.length;
 
   // Constants for pagination
   const [itemsPerPage, setItemsPerPage] = useState(9);
@@ -59,7 +60,7 @@ export default function PackagesComponent() {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = fakeList.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = data?.slice(indexOfFirstItem, indexOfLastItem);
 
   // Handle page changes
   const handlePageChange = (page: number) => {
@@ -78,6 +79,7 @@ export default function PackagesComponent() {
 
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   };
+  console.log("currentItems",currentItems)
 
   return (
     <div>
@@ -85,10 +87,16 @@ export default function PackagesComponent() {
         role="list"
         className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
       >
-        {currentItems.map((item, index) => (
+        {currentItems?.map((item :any, index :number) => (
           <li key={index} className="col-span-1 divide-y">
             <div>
-              <TripComponent text={`Voyage ${item}`} />
+              <TripComponent 
+              destinations ={item.destinations}
+              url_featured_image ={item.url_featured_image}
+              name={item.name}
+              category={item.category}
+              departures_count={item.departures_count}
+              departures ={item.departures}/>
             </div>
           </li>
         ))}
