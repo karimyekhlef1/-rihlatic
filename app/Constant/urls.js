@@ -13,3 +13,6 @@ export const signup_endpoint = BASE_URL + 'front/user/register';
 export const signin_endpoint = BASE_URL + '/login';
 //Logout
 export const logout_endpoint = BASE_URL + '/logout';
+
+//packages
+export const packages_endpoint = BASE_URL + 'front/packages'

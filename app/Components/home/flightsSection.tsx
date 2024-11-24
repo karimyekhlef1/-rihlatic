@@ -2,7 +2,7 @@ import React from 'react';
 import SectionHeader from './sectionHeader';
 import FlightComponent from './flightComponent';
 
-const FlightsSection = ({list}: any) => {
+const FlightsSection = ({data}: any) => {
     return (
         <div className="flights py-5">
             <div className="my-5 container">
@@ -12,7 +12,7 @@ const FlightsSection = ({list}: any) => {
                 </div>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mt-5">
                     {
-                        list?.map((item: any, index: number) => (
+                     data?.map((item: any, index: number) => (
                             <FlightComponent key={index} item={item} />
                         ))
                     }

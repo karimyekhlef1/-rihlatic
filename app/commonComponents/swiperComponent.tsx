@@ -27,7 +27,8 @@ export default function SwiperComponent({swiper, list, Component, slidesPerView}
         }}
       >
         {
-            list.map((item, index) => (
+            list?.map((item, index) => (
+           
                 <SwiperSlide key={index}>
                   <Component {...item} />
                 </SwiperSlide>

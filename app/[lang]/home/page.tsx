@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect , useState } from 'react';
 import DiscoverSection from '@/app/Components/home/discoverSection';
 import ServiceSection from '@/app/Components/home/serviceSection';
 import FavSection from '@/app/Components/home/favSection';
@@ -11,35 +11,48 @@ import SearchSectionComponent from '@/app/Components/home/searchSectionComponent
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/lib/store/store';
 import { HomeFunc } from '@/lib/store/api/home/homeSlice';
+import Loading from '@/app/Components/home/Loading';
 
 const HomePage: React.FC = () => {
 
     const { loading, homeData } = useSelector((state: any) => state.home);
     const dispatch = useDispatch<any>();
-
+    const [homeDate , setHomeData] = useState()
     useEffect(() => {
         const getData = async () => {
-            const act = await dispatch(HomeFunc());
-            console.log(act)
+            const result = await dispatch(HomeFunc({ include: 'departures' }));
+            setHomeData(result.payload)
+
+   
         };
         getData();
     }, []);
 
     if (loading) {
-        return <h1>Loading...</h1>;
+        return <Loading/>
+
     }
 
+
+
+
+
+
+
+console.log("homeData",homeData)
     return (
         <div id="home-page">
+    
+    {/* <Loading/> */}
             <SearchSectionComponent />
-            <ServiceSection />
+            <ServiceSection  />
             <br />
             <hr style={{border: '1px solid #e5e7eb40'}} />
-            <DiscoverSection />
-            <FavSection />
-            <OrganizeSection />
-            <PopularSection />
-            <FlightsSection list={homeData.populaireFlights}  />
+            <DiscoverSection data={homeData?.discoverAlgeria}  />
+           <FavSection data={homeData?.favoriteDestinations} />
+             <OrganizeSection data={homeData?.organzidTrip}/>
+            <PopularSection data={homeData?.popularFromAlgiers}/>
+            <FlightsSection data={homeData?.popularFlights}  />
             <br />
             <br />
             <br />
