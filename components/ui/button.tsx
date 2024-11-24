@@ -28,6 +28,8 @@ const buttonVariants = cva(
         unactive: 'bg-[#f6ddc3] text-orange-500 font-semibold',
         search:
           'bg-white text-[#64656a] text-md rounded-lg border-[#bac7d5] border-[1px]',
+        login:
+          'text-orange-500 w-full h-12 px-6  g-white font-semibold hover:text-orange-700',
       },
       size: {
         default: 'h-10 px-4 py-2',

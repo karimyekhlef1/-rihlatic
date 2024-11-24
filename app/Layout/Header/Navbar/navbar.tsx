@@ -1,3 +1,4 @@
+'use client';
 import {
   Disclosure,
   DisclosureButton,
@@ -8,6 +9,8 @@ import {
   MenuItems,
 } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { CircleUserRound } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 import Image from 'next/image';
 import logo from '@/public/images/logo.svg';
@@ -15,8 +18,24 @@ import { env } from 'process';
 import LinkNav from './linkNav';
 import navbarItems from '@/app/Data/navbar';
 import { NavbarItem } from '@/app/Types/Common/navLink';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/lib/store/store';
+import {
+  openDialogSignUp,
+  openDialogSummary,
+} from '@/lib/store/custom/mainSlices/dialogSlice';
+import SignUpDialog from '@/app/commonComponents/signupComponent';
 
 export default function Navbar() {
+  const dispatch = useDispatch();
+  const isDialogOpen = useSelector(
+    (state: RootState) => state.dialog.isDetailOpen
+  );
+
+  const handleOpenDialogSignUp = () => {
+    dispatch(openDialogSignUp());
+  };
+
   return (
     <Disclosure as="nav" className="bg-white shadow">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -96,6 +115,11 @@ export default function Navbar() {
                   </a>
                 </MenuItem>
               </MenuItems>
+              <Button variant={'login'} onClick={handleOpenDialogSignUp}>
+                <CircleUserRound className="h-5 w-5 mr-2" />
+                Sign-in
+              </Button>
+              <SignUpDialog />
             </Menu>
           </div>
         </div>

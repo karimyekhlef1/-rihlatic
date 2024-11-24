@@ -5,6 +5,7 @@ interface DialogState {
   isDetailOpen: boolean;
   isSummaryOpen: boolean;
   isSignUpOpen: boolean;
+  isRegisterOpen: boolean;
   isSignInOpen: boolean;
   isVerifyEmailOpen: boolean;
   isCreateAccountOpen: boolean;
@@ -15,6 +16,7 @@ const initialState: DialogState = {
   isDetailOpen: false,
   isSummaryOpen: false,
   isSignUpOpen: false,
+  isRegisterOpen: false,
   isSignInOpen: false,
   isVerifyEmailOpen: false,
   isCreateAccountOpen: false,
@@ -45,6 +47,12 @@ const dialogSlice = createSlice({
     closeDialogSignUp: (state) => {
       state.isSignUpOpen = false;
     },
+    openDialogRegister: (state) => {
+      state.isRegisterOpen = true;
+    },
+    closeDialogRegister: (state) => {
+      state.isRegisterOpen = false;
+    },
     openDialogSignIn: (state) => {
       state.isSignInOpen = true;
     },
@@ -74,6 +82,8 @@ export const {
   setDialogOpen,
   openDialogSignUp,
   closeDialogSignUp,
+  openDialogRegister,
+  closeDialogRegister,
   openDialogSignIn,
   closeDialogSignIn,
   openDialogVerifyEmail,
