@@ -23,12 +23,6 @@ export default function Packages() {
       getData();
   }, []);
 
-  if (loading) {
-      return <Loading/>
-
-  }
-
-// console.log("packagesDate",packagesDate)
   return (
     <div className="flex md:flex-row flex-col">
       <div className="px-14 flex flex-col items-center pt-10 gap-y-8 md:pb-10">
@@ -37,9 +31,12 @@ export default function Packages() {
           <AdComponent />
         </div>
       </div>
-      <div className="px-10 pt-10 gap-y-8 pb-10">
+      <div className="px-10 pt-10 gap-y-8 pb-10 w-full">
         <Provider store={store}>
-          <PackagesComponent data={packagesDate} />
+          {loading ? <Loading/> :
+            <PackagesComponent data={packagesDate} />
+          }
+          
         </Provider>
       </div>
     </div>

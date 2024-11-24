@@ -42,7 +42,6 @@ const HomePage: React.FC = () => {
 console.log("homeData",homeData)
     return (
         <div id="home-page">
-    
     {/* <Loading/> */}
             <SearchSectionComponent />
             <ServiceSection  />

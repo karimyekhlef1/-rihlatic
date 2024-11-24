@@ -3,7 +3,7 @@ import Image from "next/image";
 import logo from "@/public/images/logo.svg";
 const Loading = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full bg-white">
+    <div className="flex flex-col items-center justify-center min-h-screen w-full ">
       <style jsx>{`
         @keyframes bounce {
           0%,
