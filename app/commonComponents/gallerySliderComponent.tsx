@@ -191,7 +191,7 @@ export default function ImageSlider() {
         />
         <div className="absolute bottom-[-40px] sm:bottom-[-50px] left-6 sm:left-12  w-10/12 ">
           <Carousel ref={emblaRef} className="w-full ">
-            <CarouselContent className=' w-full '>
+            <CarouselContent className='ml-4 w-full '>
               {images.map((image, index) => (
                 <CarouselItem key={index} className="basis-1/8 pl-2">
                   <div className="p-1">

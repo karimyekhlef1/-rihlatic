@@ -15,8 +15,8 @@ const PopularSection = ({data}: any) => {
                 <div className="flex flex-col gap-3">
                     <PopularDestinationComponent data={data && data[0]}  />
                     <div className="flex flex-col gap-3 sm:flex-row">
-                        <PopularDestinationComponent data={data[1]}/>
-                        <PopularDestinationComponent data={data[2]}/>
+                        {/* <PopularDestinationComponent data={data[1]}/>
+                        <PopularDestinationComponent data={data[2]}/> */}
                     </div>
                 </div>
                 <Newsletter />

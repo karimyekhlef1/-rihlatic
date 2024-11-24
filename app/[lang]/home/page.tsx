@@ -51,7 +51,7 @@ console.log("homeData",homeData)
             <DiscoverSection data={homeData?.discoverAlgeria}  />
            <FavSection data={homeData?.favoriteDestinations} />
              <OrganizeSection data={homeData?.organzidTrip}/>
-            {/* <PopularSection data={homeData?.popularFromAlgiers}/> */}
+            <PopularSection data={homeData?.popularFromAlgiers}/>
             <FlightsSection data={homeData?.popularFlights}  />
             <br />
             <br />
