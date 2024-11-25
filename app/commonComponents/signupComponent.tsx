@@ -12,10 +12,13 @@ import {
   openDialogSignUp,
   closeDialogSignUp,
   openDialogSignIn,
-} from '@/lib/store/mainSlices/dialogSlice';
+  openDialogRegister,
+  closeDialogRegister,
+} from '@/lib/store/custom/mainSlices/dialogSlice';
 import { RootState } from '@/lib/store/store';
-import { ChevronRight, CircleUserRound } from 'lucide-react';
+import { ChevronRight, CircleUserRound, UserRoundPlus } from 'lucide-react';
 import SignInDialog from './signInComponent';
+import RegisterDialog from './registerComponent';
 
 export default function SignUpDialog() {
   const dispatch = useDispatch();
@@ -23,8 +26,21 @@ export default function SignUpDialog() {
     (state: RootState) => state.dialog.isSignUpOpen
   );
 
+  const isRegisterOpen = useSelector(
+    (state: RootState) => state.dialog.isRegisterOpen
+  );
+
   const handleOpenDialogSignin = () => {
     dispatch(openDialogSignIn());
+    dispatch(closeDialogSignUp());
+  };
+
+  const handleOpenRegister = () => {
+    dispatch(openDialogRegister());
+    dispatch(closeDialogSignUp()); // Close the signup dialog when opening register
+  };
+
+  const handleCLoseDialogSignin = () => {
     dispatch(closeDialogSignUp());
   };
 
@@ -51,6 +67,16 @@ export default function SignUpDialog() {
             <CircleUserRound className="mr-2 h-4 w-4" />
             Sign-in
           </Button>
+          <p className="text-left mt-2 text-xs text-gray-500">
+            If you don't have an account you can register a new one
+          </p>
+          <Button
+            className="w-full mt-2 bg-white hover:bg-slate-100 text-orange-500 hover:text-orange-600 text-xs flex items-center justify-center"
+            onClick={handleOpenRegister}
+          >
+            <UserRoundPlus className="mr-2 h-4 w-4" />
+            Sign-up
+          </Button>
           <div className="text-center pt-2">
             <div className="relative my-4">
               <hr className="border-t border-gray-300" />
@@ -62,6 +88,7 @@ export default function SignUpDialog() {
               <Button
                 variant="link"
                 className="text-orange-800 text-xs hover:text-orange-900 underline underline-offset-2 flex items-center"
+                onClick={handleCLoseDialogSignin}
               >
                 Continue as a guest
                 <ChevronRight className="ml-1 h-4 w-4" />
@@ -71,6 +98,7 @@ export default function SignUpDialog() {
         </div>
       </DialogContent>
       <SignInDialog />
+      <RegisterDialog />
     </Dialog>
   );
 }

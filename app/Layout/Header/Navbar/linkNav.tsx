@@ -2,6 +2,7 @@
 import { NavbarItem } from '@/app/Types/Common/navLink';
 import React from 'react';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 interface LinkNavProps extends NavbarItem {
   onClick?: () => void;
 }
@@ -20,13 +21,13 @@ const LinkNav: React.FC<LinkNavProps> = ({
   const isCurrentPath = secondSegment.toLowerCase() === route.split('/')[1].toLowerCase();
 
   return (
-    <a
+    <Link
       href={route}
       onClick={onClick}
       className={`inline-flex items-center ${isCurrentPath ? 'text-[#FF8000] border-b-2 border-[#FF8000]' : 'text-gray-500'} px-1 pt-1 text-sm font-semibold`}
     >
       {name}
-    </a>
+    </Link>
   );
 };
 

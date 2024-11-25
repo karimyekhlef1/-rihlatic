@@ -9,10 +9,17 @@ import packageImage from '@/public/images/packages/image_2.jpg';
 import Link from 'next/link';
 
 interface TripComponentProps {
-  text: string;
+ 
+  name:string
+url_featured_image:string
+category:string
+departures_count:number
+departures:any
+destinations:any
 }
 
-const TripComponent: React.FC<TripComponentProps> = ({ text }) => {
+const TripComponent: React.FC<TripComponentProps> = ({destinations  ,url_featured_image,name,category,departures_count,departures }:TripComponentProps) => {
+  console.log("departures_count",departures_count)
   return (
     <div className="tripComponent rounded-3xl shadow-lg my-3 max-w-sm mx-auto sm:max-w-md md:max-w-lg lg:max-w-xl">
       <div className="image">
@@ -21,8 +28,12 @@ const TripComponent: React.FC<TripComponentProps> = ({ text }) => {
           alt="trip"
           className="h-48 sm:h-52 md:h-60 w-full object-cover rounded-t-2xl"
         /> */}
-        <Image
-          src={packageImage}
+        <img
+        // width="100"
+        // height="100"
+                // objectFit='cover'
+      
+          src={url_featured_image}
           alt="trip"
           className="h-48 sm:h-52 md:h-60 w-full object-cover rounded-t-2xl"
         />
@@ -30,23 +41,23 @@ const TripComponent: React.FC<TripComponentProps> = ({ text }) => {
       <div className="info p-3 sm:p-4">
         <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
           <RiMapPin2Line />
-          <p>Lorem, ipsum dolor.</p>
+          <p>{destinations?.length > 0 && destinations[0]?.name}</p>
         </div>
         <div className="flex gap-2 flex-wrap mt-2">
           <TripTagComponent
-            text="1 depart"
+            text={`${departures_count} depart`}
             background="#FF8000"
             iconColor="white"
             textColor="white"
           />
           <TripTagComponent
-            text="09 nuits"
+            text={`${destinations?.length > 0 && departures[0]?.total_days} nuits`}
             background="#FF800030"
             iconColor="#FF8000"
             textColor="#FF8000"
           />
           <TripTagComponent
-            text="08"
+            text={destinations?.length > 0 && departures[0]?.remainder_seats}
             background="#FF800000"
             iconColor="#646469"
             textColor="#646469"
@@ -55,19 +66,19 @@ const TripComponent: React.FC<TripComponentProps> = ({ text }) => {
         </div>
         <div className="name">
           <p className="text-base sm:text-lg font-semibold mt-2">
-            {'Voyage Sharm el sheikh Août'}
+            {name}
           </p>
         </div>
         <div className="hotel flex items-center gap-2">
-          <FaStar style={{ color: '#FFE500' }} />
+          <FaStar style={{ color: '#FFE500' }} />{destinations.length > 0 && departures[0]?.hotel_stay[0].rate}
           <p className="text-xs sm:text-sm mt-2">
-            {'Hotel Amarina Sun Resort &Aquapark 5'}
+            {destinations?.length > 0 && departures[0]?.hotel_stay[0].name}
           </p>
         </div>
         <div className="pricing">
           <p className="text-base sm:text-lg font-semibold mt-2">
             <span className="text-gray-600">From </span>
-            {' 1000 DZD'}
+            {`${destinations?.length > 0 && departures[0]?.price_ini} DZD`}
           </p>
         </div>
         <Link href="/packages/details">

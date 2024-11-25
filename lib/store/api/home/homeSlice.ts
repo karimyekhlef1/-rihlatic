@@ -11,9 +11,9 @@ const initialState: HomeState = {
     homeData: {},
 };
 
-export const HomeFunc = createAsyncThunk('home/slice', async (_, thunkApi) => {
+export const HomeFunc = createAsyncThunk('home/slice', async (params:any, thunkApi) => {
     try {
-        const response = await homeService.getHomeData();
+        const response = await homeService.getHomeData(params);
         return response;
     } catch (error: any) {
         return thunkApi.rejectWithValue(error.response.data);

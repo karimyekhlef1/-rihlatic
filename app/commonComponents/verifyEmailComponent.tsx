@@ -14,8 +14,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   openDialogVerifyEmail,
   closeDialogVerifyEmail,
-  openDialogCreateAccount,
-} from '@/lib/store/mainSlices/dialogSlice';
+  openDialogRegister,
+  closeDialogRegister,
+} from '@/lib/store/custom/mainSlices/dialogSlice';
 
 import Image from 'next/image';
 import verify from '@/public/images/home/news.png';
@@ -27,10 +28,11 @@ export default function VerifyEmailDialog() {
     (state: RootState) => state.dialog.isVerifyEmailOpen
   );
 
-  const handleOpenDialogCreateAccount = () => {
-    dispatch(openDialogCreateAccount());
+  const handleOpenRegister = () => {
+    dispatch(openDialogRegister());
     dispatch(closeDialogVerifyEmail());
   };
+
   return (
     <Dialog
       open={isDialogOpen}
@@ -64,7 +66,7 @@ export default function VerifyEmailDialog() {
           <Button
             variant={'secondary'}
             className="text-xs"
-            onClick={handleOpenDialogCreateAccount}
+            onClick={handleOpenRegister}
           >
             Back
           </Button>

@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -6,20 +9,21 @@ import {
 } from '@/components/ui/dialog';
 
 import { Input } from '@/components/ui/input';
-
 import { Button } from '@/components/ui/button';
-
 import { RootState } from '@/lib/store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   openDialogCreateAccount,
   closeDialogCreateAccount,
-  openDialogVerifyEmail,
-} from '@/lib/store/mainSlices/dialogSlice';
+} from '@/lib/store/custom/mainSlices/dialogSlice';
 
 import Image from 'next/image';
 import login from '@/public/images/login.png';
-import VerifyEmailDialog from './verifyEmailComponent';
+
+interface FormData {
+  email: string;
+  password: string;
+}
 
 export default function CreateAccountDialog() {
   const dispatch = useDispatch();
@@ -27,10 +31,48 @@ export default function CreateAccountDialog() {
     (state: RootState) => state.dialog.isCreateAccountOpen
   );
 
-  const handleOpenDialogVerifyEmail = () => {
-    dispatch(openDialogVerifyEmail());
-    dispatch(closeDialogCreateAccount());
+  const [formData, setFormData] = useState<FormData>({
+    email: '',
+    password: '',
+  });
+
+  const [errors, setErrors] = useState<Partial<FormData>>({});
+
+  const validateForm = () => {
+    const newErrors: Partial<FormData> = {};
+
+    if (!formData.email) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Email is invalid';
+    }
+
+    if (!formData.password) {
+      newErrors.password = 'Password is required';
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateForm()) {
+      // Handle login logic here
+      console.log('Form submitted:', formData);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   return (
     <Dialog
       open={isDialogOpen}
@@ -45,21 +87,52 @@ export default function CreateAccountDialog() {
             Continue to your account
           </DialogTitle>
         </DialogHeader>
-        <div className="space-y-3 mt-4">
-          <p className="text-xs font-medium text-gray-500">
-            Sign in or register with your email
-          </p>
-        </div>
-        <Input type="email" placeholder="e.g  your@email.com" />
-        <Button
-          variant={'active'}
-          className="text-xs"
-          onClick={handleOpenDialogVerifyEmail}
-        >
-          Continue
-        </Button>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-3">
+            <p className="text-xs font-medium text-gray-500">
+              Sign in or register with your email and password
+            </p>
+          </div>
+          <div className="space-y-2">
+            <Input
+              type="email"
+              name="email"
+              placeholder="Your@email.com"
+              value={formData.email}
+              onChange={handleChange}
+            />
+            {errors.email && (
+              <p className="text-red-500 text-xs">{errors.email}</p>
+            )}
+          </div>
+          <div className="space-y-2">
+            <Input
+              type="password"
+              name="password"
+              placeholder="Your password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+            {errors.password && (
+              <p className="text-red-500 text-xs">{errors.password}</p>
+            )}
+          </div>
+          <Button
+            variant={'active'}
+            className="text-xs w-full"
+            type="submit"
+            onClick={(e) => {
+              e.preventDefault();
+              if (validateForm()) {
+                // Handle successful validation
+                console.log('Form is valid');
+              }
+            }}
+          >
+            Continue
+          </Button>
+        </form>
       </DialogContent>
-      <VerifyEmailDialog />
     </Dialog>
   );
 }

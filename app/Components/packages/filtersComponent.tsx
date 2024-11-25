@@ -5,14 +5,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Separator } from '@/components/ui/separator';
 
 export default function FilterComponent() {
   return (
     <div className="p-4">
       <Accordion type="multiple" className="w-[270px]">
-        <AccordionItem value="pays">
-          <AccordionTrigger>Pays</AccordionTrigger>
+        <AccordionItem value="country">
+          <AccordionTrigger>Country</AccordionTrigger>
           <AccordionContent>
             <div className="flex flex-col space-y-2">
               <CheckboxItem id="all" label="All" />
@@ -27,7 +26,7 @@ export default function FilterComponent() {
 
       <Accordion type="multiple" className="w-[270px]">
         <AccordionItem value="categorie">
-          <AccordionTrigger>Catégorie</AccordionTrigger>
+          <AccordionTrigger>Category</AccordionTrigger>
           <AccordionContent>
             <div className="flex flex-col space-y-2">
               <CheckboxItem id="family-trip" label="Family Trip" />
