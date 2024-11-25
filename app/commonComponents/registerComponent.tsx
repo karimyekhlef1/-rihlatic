@@ -20,6 +20,13 @@ import {
 
 import Image from 'next/image';
 import login from '@/public/images/login.png';
+import VerifyEmailDialog from './verifyEmailComponent';
+
+import {
+  openDialogCreateAccount,
+  closeDialogCreateAccount,
+  openDialogVerifyEmail,
+} from '@/lib/store/custom/mainSlices/dialogSlice';
 
 interface FormData {
   email: string;
@@ -31,6 +38,11 @@ export default function RegisterDialog() {
   const isDialogOpen = useSelector(
     (state: RootState) => state.dialog.isRegisterOpen
   );
+
+  const handleOpenDialogVerifyEmail = () => {
+    dispatch(openDialogVerifyEmail());
+    dispatch(closeDialogCreateAccount());
+  };
 
   const [formData, setFormData] = useState<FormData>({
     email: '',
@@ -79,6 +91,7 @@ export default function RegisterDialog() {
       [name]: value,
     }));
   };
+
   return (
     <Dialog
       open={isDialogOpen}
@@ -141,10 +154,16 @@ export default function RegisterDialog() {
               <p className="text-red-500 text-xs">{errors.confirmPassword}</p>
             )}
           </div>
-
           <Button
             type="submit"
             className="w-full mt-6 bg-orange-500 hover:bg-orange-600 text-white text-xs flex items-center justify-center"
+            onClick={(e) => {
+              e.preventDefault();
+              if (validateForm()) {
+                // Check if all required fields are filled
+                handleOpenDialogVerifyEmail();
+              }
+            }}
           >
             Create Account
           </Button>
@@ -162,6 +181,7 @@ export default function RegisterDialog() {
           .
         </p>
       </DialogContent>
+      <VerifyEmailDialog />
     </Dialog>
   );
 }
