@@ -5,7 +5,7 @@ const PageTitleComponent: React.FC<PageTitleProps> = ({
   title,
   rating,
   adress,
-}) => {
+}:any) => {
   return (
     <div className="flex flex-col pb-3">
       <div className="flex flex-row items-center">
@@ -13,17 +13,17 @@ const PageTitleComponent: React.FC<PageTitleProps> = ({
           {title}
         </h2>
         <div className="pl-2">
-          <StarRating rating={rating} />
+         {rating && <StarRating rating={rating} />}
         </div>
       </div>
-      <div className="flex flex-row items-center">
+      { adress &&<div className="flex flex-row items-center">
         <div>
           <MapPin size={15} fill="#ff7300" color="#ffffff" />
         </div>
         <div>
-          <p className="text-xs font-semibold">{adress}</p>
+        <p className="text-xs font-semibold">{adress}</p>
         </div>
-      </div>
+      </div>}
     </div>
   );
 };

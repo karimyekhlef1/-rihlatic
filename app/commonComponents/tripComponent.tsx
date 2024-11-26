@@ -7,10 +7,12 @@ import { BsFillPeopleFill } from 'react-icons/bs';
 import Image from 'next/image';
 import packageImage from '@/public/images/packages/image_2.jpg';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Router } from 'lucide-react';
 
 interface TripComponentProps {
- 
-  name:string
+id:number
+name:string
 url_featured_image:string
 category:string
 departures_count:number
@@ -18,10 +20,18 @@ departures:any
 destinations:any
 }
 
-const TripComponent: React.FC<TripComponentProps> = ({destinations  ,url_featured_image,name,category,departures_count,departures }:TripComponentProps) => {
-  console.log("departures_count",departures_count)
+const TripComponent: React.FC<TripComponentProps> = ({id, destinations  ,url_featured_image,name,category,departures_count,departures }:TripComponentProps) => {
+  const router = useRouter()
+  const useGoToPackagesDetails =()=>{
+    router.push(`packages/${id}`)
+    
+
+  }
   return (
-    <div className="tripComponent rounded-3xl shadow-lg my-3 max-w-sm mx-auto sm:max-w-md md:max-w-lg lg:max-w-xl">
+    <div 
+    className="tripComponent rounded-3xl shadow-lg my-3 max-w-sm mx-auto sm:max-w-md md:max-w-lg lg:max-w-xl"
+ 
+    >
       <div className="image">
         {/* <img
           src="https://via.placeholder.com/400"
@@ -81,8 +91,9 @@ const TripComponent: React.FC<TripComponentProps> = ({destinations  ,url_feature
             {`${destinations?.length > 0 && departures[0]?.price_ini} DZD`}
           </p>
         </div>
-        <Link href="/packages/details">
+        <Link href={`/packages/${id}`} >
           <button className="btn w-full p-2 rounded-xl text-[#FF8000] bg-[#FF800033] mt-2 text-sm sm:text-base">
+              {/* // onClick={useGoToPackagesDetails}> */}
             {'View Details'}
           </button>
         </Link>

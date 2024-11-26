@@ -10,13 +10,14 @@ import Loading from '@/app/Components/home/Loading';
 import { useSelector , useDispatch } from 'react-redux';
 import { packagesFunc } from '@/lib/store/api/packages/packagesSlice';
 export default function Packages() {
-  const { loading, homeData } = useSelector((state: any) => state.home);
+  const { loading, packagesData } = useSelector((state: any) => state.packages);
   const dispatch = useDispatch<any>();
   const [packagesDate , setPackageData] = useState()
   useEffect(() => {
       const getData = async () => {
           const result = await dispatch(packagesFunc({ include: 'departures' }));
-          setPackageData(result.payload.packages)
+          console.log("result ", result)
+          setPackageData(result.payload.result.packages)
 
  
       };
@@ -36,7 +37,6 @@ export default function Packages() {
           {loading ? <Loading/> :
             <PackagesComponent data={packagesDate} />
           }
-          
         </Provider>
       </div>
     </div>
