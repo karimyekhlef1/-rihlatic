@@ -29,14 +29,16 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { packagesFunc } from "@/lib/store/api/packages/packagesSlice";
 import Loading from "@/app/Components/home/Loading";
+import { PackageDetails } from "@/app/Types/package/packageDetails";
 const content =
   "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Asperiores voluptate tempora reprehenderit natus in debitis voluptatibus non dolor itaque repellat? Rem dicta corrupti facere id eum nihil magni excepturi officia.";
+
 
 export default function Details() {
   const { loading, packagesData } = useSelector((state: any) => state.packages);
   const dispatch = useDispatch<any>();
   const { id } = useParams();
-  const [packagesDetails, setPackageDetails] = useState();
+  const [packagesDetails, setPackageDetails] = useState<PackageDetails | undefined>(undefined);
 
   useEffect(() => {
     const getData = async () => {
