@@ -26,6 +26,7 @@ import signupSlice from '@/lib/store/api/signup/signupSlice';
 import signinSlice from '@/lib/store/api/signin/signinSlice';
 import logoutSlice from '@/lib/store/api/logout/logoutSlice';
 import verifyEmailSlice from '@/lib/store/api/verifyEmail/verifyEmailSlice';
+import resendCodeSlice from '@/lib/store/api/resendCode/resendCodeSlice';
 
 //
 import packagesSlice from '@/lib/store/api/packages/packagesSlice';
@@ -65,6 +66,7 @@ export const store = configureStore({
     signIn: signinSlice,
     logOut: logoutSlice,
     verifyEmail: verifyEmailSlice,
+    resendCode: resendCodeSlice,
 
     // Home
     home: homeSlice,
