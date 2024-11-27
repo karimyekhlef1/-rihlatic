@@ -13,16 +13,20 @@ import {
   openDialogVerifyEmail,
   closeDialogVerifyEmail,
   openDialogRegister,
-  closeDialogRegister,
 } from '@/lib/store/custom/mainSlices/dialogSlice';
 import {
   verifyEmail,
   clearVerifyEmailState,
 } from '@/lib/store/api/verifyEmail/verifyEmailSlice';
+import {
+  resendCode,
+  clearResendCodeState,
+} from '@/lib/store/api/resendCode/resendCodeSlice';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import verify from '@/public/images/home/news.png';
 import Link from 'next/link';
+import { toast } from 'sonner';
 
 interface VerifyEmailDialogProps {
   email: string;
@@ -32,16 +36,19 @@ export default function VerifyEmailDialog({ email }: VerifyEmailDialogProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [verificationCode, setVerificationCode] = useState('');
 
-  const accountDetails = useSelector(
-    (state: RootState) => state.accountDetails
-  );
-
   const isDialogOpen = useSelector(
     (state: RootState) => state.dialog.isVerifyEmailOpen
   );
+
   const { loading, success, error } = useSelector(
     (state: RootState) => state.verifyEmail
   );
+
+  const {
+    loading: resendCodeLoading,
+    success: resendCodeSuccess,
+    error: resendCodeError,
+  } = useSelector((state: RootState) => state.resendCode);
 
   const handleOpenRegister = () => {
     dispatch(openDialogRegister());
@@ -62,6 +69,16 @@ export default function VerifyEmailDialog({ email }: VerifyEmailDialogProps) {
         console.error('Verification failed:', err);
       }
     }
+    toast('Account has been created.');
+  };
+
+  const handleResendCode = async () => {
+    try {
+      await dispatch(resendCode({ email: email }));
+      toast('Verification code has been resent.');
+    } catch (error) {
+      console.error('Resending code failed:', error);
+    }
   };
 
   // Clean up verification state when component unmounts
@@ -71,13 +88,13 @@ export default function VerifyEmailDialog({ email }: VerifyEmailDialogProps) {
     };
   }, [dispatch]);
 
-  // Handle successful verification
-  useEffect(() => {
-    if (success) {
-      dispatch(closeDialogVerifyEmail());
-      // Add any additional success handling here
-    }
-  }, [success, dispatch]);
+  // // Handle successful verification
+  // useEffect(() => {
+  //   if (success) {
+  //     dispatch(closeDialogVerifyEmail());
+  //     // Add any additional success handling here
+  //   }
+  // }, [success, dispatch]);
 
   return (
     <Dialog
@@ -109,6 +126,7 @@ export default function VerifyEmailDialog({ email }: VerifyEmailDialogProps) {
         <Link
           href="#"
           className="text-xs text-orange-500 underline underline-offset-2"
+          onClick={handleResendCode}
         >
           Resend code
         </Link>
