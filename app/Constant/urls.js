@@ -16,6 +16,6 @@ export const logout_endpoint = BASE_URL + '/logout';
 // Verify Email
 export const verif_email_endpoint = BASE_URL + '/front/email/verify';
 // Resend Verification Code
-export const resend_code_endpoint = BASE_URL + '/front/email/resend';
+export const resend_code_endpoint = BASE_URL + '/front/email/resend_code';
 // Packages
 export const packages_endpoint = BASE_URL + '/front/packages';
