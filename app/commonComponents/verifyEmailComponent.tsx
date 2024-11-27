@@ -88,14 +88,6 @@ export default function VerifyEmailDialog({ email }: VerifyEmailDialogProps) {
     };
   }, [dispatch]);
 
-  // // Handle successful verification
-  // useEffect(() => {
-  //   if (success) {
-  //     dispatch(closeDialogVerifyEmail());
-  //     // Add any additional success handling here
-  //   }
-  // }, [success, dispatch]);
-
   return (
     <Dialog
       open={isDialogOpen}

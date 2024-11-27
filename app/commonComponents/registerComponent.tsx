@@ -62,8 +62,8 @@ export default function RegisterDialog() {
 
     if (!accountDetails.password) {
       newErrors.password = 'Password is required';
-    } else if (accountDetails.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+    } else if (accountDetails.password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters';
     }
 
     if (!accountDetails.confirmPassword) {
