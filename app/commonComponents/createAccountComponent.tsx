@@ -19,6 +19,7 @@ import {
 
 import Image from 'next/image';
 import login from '@/public/images/login.png';
+import Link from 'next/link';
 
 interface FormData {
   email: string;
@@ -132,6 +133,13 @@ export default function CreateAccountDialog() {
             Continue
           </Button>
         </form>
+        <Link
+          href="#"
+          className="text-xs text-orange-500 underline underline-offset-2"
+          onClick={() => {}}
+        >
+          Forogot your password?
+        </Link>
       </DialogContent>
     </Dialog>
   );

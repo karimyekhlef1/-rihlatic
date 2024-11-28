@@ -27,6 +27,9 @@ import signinSlice from '@/lib/store/api/signin/signinSlice';
 import logoutSlice from '@/lib/store/api/logout/logoutSlice';
 import verifyEmailSlice from '@/lib/store/api/verifyEmail/verifyEmailSlice';
 import resendCodeSlice from '@/lib/store/api/resendCode/resendCodeSlice';
+import checkUserStatusSlice from '@/lib/store/api/checkUserStatus/checkUserStatusSlice';
+import remindPasswordSlice from '@/lib/store/api/remindPassword/remindPasswordSlice';
+import resetPasswordSlice from '@/lib/store/api/resetPassword/resetPasswordSlice';
 
 //
 import packagesSlice from '@/lib/store/api/packages/packagesSlice';
@@ -67,6 +70,9 @@ export const store = configureStore({
     logOut: logoutSlice,
     verifyEmail: verifyEmailSlice,
     resendCode: resendCodeSlice,
+    checkUserStatus: checkUserStatusSlice,
+    remindPassword: remindPasswordSlice,
+    resetPassword: resetPasswordSlice,
 
     // Home
     home: homeSlice,
