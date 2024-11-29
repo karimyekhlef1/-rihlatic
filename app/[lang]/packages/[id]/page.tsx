@@ -104,7 +104,7 @@ export default function Details() {
                 icon={<Luggage size={20} />}
                 label={""}
               />
-              <ContentComponent dynamicContent={<TravelProgram />} />
+              <ContentComponent dynamicContent={<TravelProgram data={packagesDetails?.departures} />} />
 
               <TitleComponent
                 title={"important note"}
@@ -118,7 +118,7 @@ export default function Details() {
           </div>
           <div className="md:hidden lg:flex lg:flex-col items-center pt-4 sm:pt-16 gap-y-8">
             <Provider store={store}>
-              <BookingPackageComponent />
+              <BookingPackageComponent data={packagesDetails?.departures} />
             </Provider>
             <div className="pt-6 sm:pt-0">
               <AdComponent />
@@ -127,7 +127,7 @@ export default function Details() {
         </div>
         <div className="hidden lg:hidden md:flex md:pt-8 md:gap-x-8 md:justify-center md:items-center">
           <Provider store={store}>
-            <BookingPackageComponent />
+            <BookingPackageComponent  data={packagesDetails?.departures} />
           </Provider>
           <div className="pt-6 sm:pt-0">
             <AdComponent />

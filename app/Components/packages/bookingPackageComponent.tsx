@@ -1,30 +1,87 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { CircleCheck } from 'lucide-react';
-import { DatePickerWithRange } from '@/app/commonComponents/datePicker';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/lib/store/store'; // Adjust this import path as needed
+import { RootState } from '@/lib/store/store';
 import { format, differenceInDays } from 'date-fns';
-
+import { extractData } from '@/app/hooks/useExtractData';
 import DropDownBookingComponent from './dropDownBooking';
 import Link from 'next/link';
 
-export default function BookingPackageComponent() {
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+interface Room {
+  name: string;
+}
+
+interface Departure {
+  id: number;
+  price_ini?: number;
+  departure_date?: string;
+  return_date?: string;
+  pricing?: {
+    rooms?: Room[];
+  };
+}
+
+export default function BookingPackageComponent({ data }: { data?: Departure[] }) {
+  // Ensure data is always an array
+  const packageData = data || [];
+
+  const [selectedDeparture, setSelectedDeparture] = useState<Departure | undefined>(
+    packageData.length > 0 ? packageData[0] : undefined
+  );
+  const [selectedOption, setSelectedOption] = useState<string | null>('test');
+  const [roomNames, setRoomNames] = useState<string[]>([]);
+  const [departureNames, setDepartureNames] = useState<number[]>([]);
+  
+  // Derive these states directly from selectedDeparture
+  const price = selectedDeparture?.price_ini;
+  const startDate = selectedDeparture?.departure_date;
+  const endDate = selectedDeparture?.return_date;
+
   const { date } = useSelector((state: RootState) => state.datePicker);
-  const startDate = date?.from;
-  const endDate = date?.to;
 
   const calculateDuration = () => {
     if (startDate && endDate) {
-      const nights = differenceInDays(endDate, startDate);
-      const days = nights + 1;
-      return `${nights} nights / ${days} days`;
+      try {
+        const nights = differenceInDays(new Date(endDate), new Date(startDate));
+        const days = nights + 1;
+        return `${nights} nights / ${days} days`;
+      } catch (error) {
+        console.error('Error calculating duration:', error);
+        return 'Invalid dates';
+      }
     }
     return 'Select dates';
   };
+
+  useEffect(() => {
+    if (packageData.length > 0) {
+      // Extract room names
+      const roomNames = extractData(packageData, (departure) =>
+        departure.pricing?.rooms?.map((room:any) => room.name) || []
+      );
+      
+      // Extract departure IDs
+      const departureIds = packageData.map((departure) => departure.id);
+      
+      setRoomNames(roomNames);
+      setDepartureNames(departureIds);
+    }
+  }, [packageData]);
+
+  const handleSelectDeparture = (id: number) => {
+    const selected = packageData.find((item) => item.id === id);
+    if (selected) {
+      setSelectedDeparture(selected);
+    }
+  };
+
+  // Render nothing if no data
+  if (packageData.length === 0) {
+    return <div>No package data available</div>;
+  }
 
   return (
     <div>
@@ -33,7 +90,9 @@ export default function BookingPackageComponent() {
           <div className="flex flex-col items-center">
             <div className="flex flex-col items-center justify-center pb-4">
               <p className="text-xs">Starting from</p>
-              <p className="font-semibold text-lg">149000 DZD</p>
+              <p className="font-semibold text-lg">
+                {price ? `${price} DZD` : 'N/A'}
+              </p>
             </div>
             <Separator />
             <div className="flex flex-col pt-4 pb-[100px]">
@@ -55,9 +114,9 @@ export default function BookingPackageComponent() {
                 />
                 <p className="text-sm font-semibold pl-2">
                   {startDate
-                    ? format(startDate, 'dd/MMM/yyyy')
+                    ? format(new Date(startDate), 'dd/MMM/yyyy')
                     : 'Select dates'}
-                  {endDate ? ` - ${format(endDate, 'dd/MMM/yyyy')}` : ''}
+                  {endDate ? ` - ${format(new Date(endDate), 'dd/MMM/yyyy')}` : ''}
                 </p>
               </div>
             </div>
@@ -71,14 +130,22 @@ export default function BookingPackageComponent() {
                   <p className="text-sm font-medium text-gray-500">
                     {selectedOption}
                   </p>
-                  <p className="font-semibold text-sm">149000 DZD</p>
+                  <p className="font-semibold text-sm">{price ? `${price} DZD` : 'N/A'}</p>
                 </div>
                 <Separator />
               </>
             )}
             <div className="flex flex-col gap-y-2 pb-4 pt-4">
-              <DropDownBookingComponent onSelect={setSelectedOption} />
-              <DatePickerWithRange />
+              <DropDownBookingComponent 
+                onSelect={setSelectedOption} 
+                data={roomNames} 
+                title='Kind of room' 
+              />
+              <DropDownBookingComponent 
+                onSelect={handleSelectDeparture} 
+                data={departureNames} 
+                title='Select a departure' 
+              />
             </div>
             <Separator />
             <div className="pt-4">
