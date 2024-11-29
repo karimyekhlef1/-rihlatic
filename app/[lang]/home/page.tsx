@@ -21,7 +21,7 @@ const HomePage: React.FC = () => {
     useEffect(() => {
         const getData = async () => {
             const result = await dispatch(HomeFunc({ include: 'departures' }));
-            setHomeData(result.payload)
+            setHomeData(result.payload.result)
 
    
         };

@@ -96,8 +96,9 @@ export default function Details() {
               ))}
 
               <TitleComponent title={"Hôtel Details"} label={""} />
-              <ContentComponent dynamicContent={<HotelDetails />} />
-
+              <ContentComponent dynamicContent={<HotelDetails data={packagesDetails?.departures}/>} />
+        
+        
               <TitleComponent
                 title={"Travel program"}
                 icon={<Luggage size={20} />}
