@@ -1,43 +1,52 @@
 'use client';
 
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '@/lib/store/store';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { RootState } from '@/lib/store/store';
-import { useDispatch, useSelector } from 'react-redux';
 import {
-  openDialogCreateAccount,
-  closeDialogCreateAccount,
   openDialogForgotPassword,
+  closeDialogForgotPassword,
+  openDialogResetPassword,
 } from '@/lib/store/custom/mainSlices/dialogSlice';
 
+import {
+  remindPassword,
+  clearRemindPasswordState,
+} from '@/lib/store/api/remindPassword/remindPasswordSlice';
+
 import Image from 'next/image';
-import login from '@/public/images/login.png';
-import Link from 'next/link';
-import ForgotPasswordDialogue from './forgotPasswordComponent';
+import logo from '@/public/images/logo.svg';
+import { toast } from 'sonner';
+import ResetPasswordDialogue from './resetPasswordComponent';
 
 interface FormData {
   email: string;
-  password: string;
 }
 
-export default function CreateAccountDialog() {
-  const dispatch = useDispatch();
+export default function ForgotPasswordDialogue() {
+  const dispatch = useDispatch<AppDispatch>();
   const isDialogOpen = useSelector(
-    (state: RootState) => state.dialog.isCreateAccountOpen
+    (state: RootState) => state.dialog.isForgotPasswordOpen
+  );
+
+  const { loading, success, error } = useSelector(
+    (state: RootState) => state.remindPassword
   );
 
   const [formData, setFormData] = useState<FormData>({
     email: '',
-    password: '',
   });
+
+  const [email, setEmail] = useState('');
 
   const [errors, setErrors] = useState<Partial<FormData>>({});
 
@@ -50,12 +59,6 @@ export default function CreateAccountDialog() {
       newErrors.email = 'Email is invalid';
     }
 
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -63,8 +66,7 @@ export default function CreateAccountDialog() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      // Handle login logic here
-      console.log('Form submitted:', formData);
+      console.log('Email submitted:', formData.email);
     }
   };
 
@@ -76,24 +78,41 @@ export default function CreateAccountDialog() {
     }));
   };
 
+  const handleSendCode = async () => {
+    try {
+      await dispatch(remindPassword({ email: formData.email }));
+      toast(`Verification code has been sent to ${formData.email}.`);
+      dispatch(openDialogResetPassword());
+      dispatch(closeDialogForgotPassword());
+    } catch (error) {
+      console.error('Sending verification code failed:', error);
+    }
+  };
+
   return (
     <Dialog
       open={isDialogOpen}
       onOpenChange={(open) =>
-        dispatch(open ? openDialogCreateAccount() : closeDialogCreateAccount())
+        dispatch(
+          open ? openDialogForgotPassword() : closeDialogForgotPassword()
+        )
       }
     >
       <DialogContent className="sm:max-w-[355px]">
         <DialogHeader>
-          <Image src={login} alt="signin" width={162} height={96} />
-          <DialogTitle className="text-lg font-semibold mt-4">
-            Continue to your account
-          </DialogTitle>
+          <div className="flex flex-col items-center justify-center">
+            <Image src={logo} alt="Rihlatic" width={80} height={80} />
+            <div className="flex pt-5">
+              <DialogTitle className="text-lg font-semibold">
+                Send verification email
+              </DialogTitle>
+            </div>
+          </div>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-3">
             <p className="text-xs font-medium text-gray-500">
-              Sign in or register with your email and password
+              Please provide your email
             </p>
           </div>
           <div className="space-y-2">
@@ -108,46 +127,17 @@ export default function CreateAccountDialog() {
               <p className="text-red-500 text-xs">{errors.email}</p>
             )}
           </div>
-          <div className="space-y-2">
-            <Input
-              type="password"
-              name="password"
-              placeholder="Your password"
-              value={formData.password}
-              onChange={handleChange}
-            />
-            {errors.password && (
-              <p className="text-red-500 text-xs">{errors.password}</p>
-            )}
-          </div>
           <Button
             variant={'active'}
             className="text-xs w-full"
             type="submit"
-            onClick={(e) => {
-              e.preventDefault();
-              if (validateForm()) {
-                // Handle successful validation
-                console.log('Form is valid');
-              }
-            }}
+            onClick={handleSendCode}
           >
-            Continue
+            Send
           </Button>
         </form>
-        <Link
-          href="#"
-          className="text-xs text-orange-500 underline underline-offset-2"
-          onClick={(e) => {
-            e.preventDefault();
-            dispatch(openDialogForgotPassword());
-            dispatch(closeDialogCreateAccount());
-          }}
-        >
-          Forgot your password?
-        </Link>
       </DialogContent>
-      <ForgotPasswordDialogue />
+      <ResetPasswordDialogue />
     </Dialog>
   );
 }
