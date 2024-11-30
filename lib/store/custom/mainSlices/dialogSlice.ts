@@ -9,6 +9,8 @@ interface DialogState {
   isSignInOpen: boolean;
   isVerifyEmailOpen: boolean;
   isCreateAccountOpen: boolean;
+  isForgotPasswordOpen: boolean;
+  isResetPasswordOpen: boolean;
 }
 
 const initialState: DialogState = {
@@ -20,6 +22,8 @@ const initialState: DialogState = {
   isSignInOpen: false,
   isVerifyEmailOpen: false,
   isCreateAccountOpen: false,
+  isForgotPasswordOpen: false,
+  isResetPasswordOpen: false,
 };
 
 const dialogSlice = createSlice({
@@ -71,6 +75,18 @@ const dialogSlice = createSlice({
     closeDialogCreateAccount: (state) => {
       state.isCreateAccountOpen = false;
     },
+    openDialogForgotPassword: (state) => {
+      state.isForgotPasswordOpen = true;
+    },
+    closeDialogForgotPassword: (state) => {
+      state.isForgotPasswordOpen = false;
+    },
+    openDialogResetPassword: (state) => {
+      state.isResetPasswordOpen = true;
+    },
+    closeDialogResetPassword: (state) => {
+      state.isResetPasswordOpen = false;
+    },
   },
 });
 
@@ -90,5 +106,9 @@ export const {
   closeDialogVerifyEmail,
   openDialogCreateAccount,
   closeDialogCreateAccount,
+  openDialogForgotPassword,
+  closeDialogForgotPassword,
+  openDialogResetPassword,
+  closeDialogResetPassword,
 } = dialogSlice.actions;
 export default dialogSlice.reducer;
