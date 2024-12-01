@@ -66,13 +66,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Providers>
-      <html lang="en">
-        <body className={`${poppins.variable} font-sans`}>
+    <html lang="en">
+      <body className={`${poppins.variable} font-sans`}>
+        <Providers>
           {children}
           <Toaster />
-        </body>
-      </html>
-    </Providers>
+        </Providers>
+      </body>
+    </html>
   );
 }
