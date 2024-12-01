@@ -19,7 +19,7 @@ export const remind_password_endpoint = BASE_URL + '/front/password/remind';
 //Reset Password
 export const reset_password_endpoint = BASE_URL + '/front/password/reset';
 // Logout
-export const logout_endpoint = BASE_URL + '/logout';
+export const logout_endpoint = BASE_URL + '/front/logout';
 // Verify Email
 export const verif_email_endpoint = BASE_URL + '/front/email/verify';
 // Resend Verification Code
