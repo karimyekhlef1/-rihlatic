@@ -47,7 +47,6 @@ export default function Navbar() {
   const handleLogout = async () => {
     try {
       const token = storageUtils.getToken();
-      console.log('Token before logout:', token);
 
       if (!token) {
         console.log('No token found, redirecting...');

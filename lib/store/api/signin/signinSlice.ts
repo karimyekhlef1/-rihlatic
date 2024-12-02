@@ -32,32 +32,27 @@ export const signinUser = createAsyncThunk(
   'auth/signin',
   async (userData: any, thunkApi) => {
     try {
-      console.log('Attempting signin...'); // Debug log
       const response = await signinService.loginUser(userData);
-      console.log('Sign in response:', response); // Debug log
 
       // Extract the token from the nested structure
       const token = response?.token;
       const user = response?.user;
-      console.log('Extracted token:', token); // Debug log
 
       if (token) {
-        console.log('Storing token...'); // Debug log
+
         storageUtils.setToken(token);
         storageUtils.setUser(user);
         const storedToken = storageUtils.getToken();
-        console.log('Verification - Stored token:', storedToken); // Debug log
+
 
         return {
           user: user,
           token: token,
         };
       } else {
-        console.log('No token found in response'); // Debug log
         return thunkApi.rejectWithValue('No token in response');
       }
     } catch (error: any) {
-      console.error('Sign in error:', error); // Debug log
       return thunkApi.rejectWithValue(error.response?.data || 'Login failed');
     }
   }

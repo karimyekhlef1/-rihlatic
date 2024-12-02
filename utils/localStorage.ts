@@ -10,7 +10,6 @@ export const storageUtils = {
     try {
       if (typeof window !== 'undefined' && token) {
         localStorage.setItem(TOKEN_KEY, token);
-        console.log('Token stored successfully');
       }
     } catch (error) {
       console.error('Error storing token:', error);

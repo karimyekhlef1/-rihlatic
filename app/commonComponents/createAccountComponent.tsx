@@ -119,7 +119,6 @@ export default function CreateAccountDialog() {
         })
       );
       toast.success('Login successful!');
-      console.log('Token after login:', storageUtils.getToken());
       dispatch(closeDialogCreateAccount());
     } catch (err: any) {
       toast.error(err.message || 'Login failed');
