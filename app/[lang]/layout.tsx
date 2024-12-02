@@ -4,7 +4,7 @@ import localFont from 'next/font/local';
 import './globals.css';
 import './index.scss';
 import { Providers } from '@/lib/Providers';
-
+import { Toaster } from '@/components/ui/sonner';
 
 // const poppins = Poppins({
 //   subsets: ['latin'],
@@ -66,10 +66,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Providers>
-      <html lang="en">
-        <body className={`${poppins.variable} font-sans`}>{children}</body>
-      </html>
-    </Providers>
+    <html lang="en">
+      <body className={`${poppins.variable} font-sans`}>
+        <Providers>
+          {children}
+          <Toaster />
+        </Providers>
+      </body>
+    </html>
   );
 }
