@@ -26,6 +26,7 @@ import { useRouter } from 'next/navigation';
 import { storageUtils } from '@/utils/localStorage';
 import { logoutUser } from '@/lib/store/api/logout/logoutSlice';
 import { clearSinginState } from '@/lib/store/api/signin/signinSlice';
+import { toast } from 'sonner';
 
 export default function Navbar() {
   const dispatch = useDispatch<AppDispatch>();
@@ -46,7 +47,6 @@ export default function Navbar() {
   const handleLogout = async () => {
     try {
       const token = storageUtils.getToken();
-      console.log('Token before logout:', token);
 
       if (!token) {
         console.log('No token found, redirecting...');
@@ -58,6 +58,7 @@ export default function Navbar() {
 
       const result = await dispatch(logoutUser(token)).unwrap();
       console.log('Logout successful:', result);
+      toast.success('Logout successful!');
 
       router.push('/');
     } catch (error) {

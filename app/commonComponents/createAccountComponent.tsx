@@ -118,8 +118,7 @@ export default function CreateAccountDialog() {
           device_name: result.device_name,
         })
       );
-      toast('Login successful!');
-      console.log('Token after login:', storageUtils.getToken());
+      toast.success('Login successful!');
       dispatch(closeDialogCreateAccount());
     } catch (err: any) {
       toast.error(err.message || 'Login failed');
@@ -174,6 +173,7 @@ export default function CreateAccountDialog() {
             variant={'active'}
             className="text-xs w-full"
             type="submit"
+            disabled={loading}
             onClick={handleSignIn}
           >
             Continue
