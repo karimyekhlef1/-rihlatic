@@ -3,4 +3,5 @@ export interface PackageDetails {
     description: string;
     departures: any[]; 
     media?: any; 
+    note:string
   }

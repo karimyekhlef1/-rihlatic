@@ -14,13 +14,12 @@ export default function Packages() {
   const { loading, packagesData } = useSelector((state: any) => state.packages);
   const dispatch = useDispatch<any>();
   const [packages, setPackage] = useState<any[]>([]);
+  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   useEffect(() => {
       const getData = async () => {
           const result = await dispatch(packagesFunc({ include: 'departures' }));
-          console.log("result ", result)
           setPackage(result.payload.result.packages)
-
- 
       };
       getData();
   }, []);
@@ -36,7 +35,14 @@ export default function Packages() {
   return (
     <div className="flex md:flex-row flex-col">
       <div className="px-14 flex flex-col items-center pt-10 gap-y-8 md:pb-10">
-        <FilterComponent packageCategories={packageCategories} countryNames={countryNames}/>
+        <FilterComponent 
+        packageCategories={packageCategories} 
+        countryNames={countryNames}
+        selectedCountries={selectedCountries}
+        selectedCategories={selectedCategories}
+        setSelectedCountries={setSelectedCountries}
+        setSelectedCategories={setSelectedCategories}
+        />
         <div className="hidden md:block">
           <AdComponent />
         </div>

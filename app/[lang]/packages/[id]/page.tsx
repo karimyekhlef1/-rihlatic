@@ -36,6 +36,7 @@ const content =
 
 export default function Details() {
   const { loading, packagesData } = useSelector((state: any) => state.packages);
+  const [packages, setPackage] = useState<any[]>([]);
   const dispatch = useDispatch<any>();
   const { id } = useParams();
   const [packagesDetails, setPackageDetails] = useState<PackageDetails | undefined>(undefined);
@@ -50,6 +51,8 @@ export default function Details() {
         })
       );
       setPackageDetails(result.payload.result.package);
+      const all =  await dispatch(packagesFunc({ include: 'departures' }));
+      setPackage(all.payload.result.packages)
     };
     getData();
   }, []);
@@ -112,7 +115,7 @@ export default function Details() {
                 label={""}
               />
               <ContentComponent
-                dynamicContent={<ImportantNote content={content} />}
+                dynamicContent={<ImportantNote content={packagesDetails?.note} />}
               />
             </div>
           </div>
@@ -136,7 +139,7 @@ export default function Details() {
       </div>
       <div className="container">
         <div className="w-100" id="home-page">
-          <OrganizeSection />
+        <OrganizeSection data={packages} />
         </div>
       </div>
     </div>

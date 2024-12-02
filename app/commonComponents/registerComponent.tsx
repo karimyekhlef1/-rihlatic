@@ -7,56 +7,68 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { RootState } from '@/lib/store/store';
+import { RootState, AppDispatch } from '@/lib/store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   closeDialogRegister,
   openDialogRegister,
+  closeDialogCreateAccount,
+  openDialogVerifyEmail,
 } from '@/lib/store/custom/mainSlices/dialogSlice';
-
+import {
+  updateAccountDetails,
+  resetAccountDetails,
+} from '@/lib/store/custom/commonSlices/accountDetailsSlice';
 import Image from 'next/image';
 import login from '@/public/images/login.png';
+import VerifyEmailDialog from './verifyEmailComponent';
+import { signupUser } from '@/lib/store/api/signup/signupSlice';
 
 interface FormData {
   email: string;
   password: string;
   confirmPassword: string;
 }
+
 export default function RegisterDialog() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const accountDetails = useSelector(
+    (state: RootState) => state.accountDetails
+  );
   const isDialogOpen = useSelector(
     (state: RootState) => state.dialog.isRegisterOpen
   );
-
-  const [formData, setFormData] = useState<FormData>({
-    email: '',
-    password: '',
-    confirmPassword: '',
-  });
+  const signupStatus = useSelector((state: RootState) => state.signUp.loading);
+  const signupError = useSelector((state: RootState) => state.signUp.error);
 
   const [errors, setErrors] = useState<Partial<FormData>>({});
+
+  const handleOpenDialogVerifyEmail = () => {
+    dispatch(openDialogVerifyEmail());
+    dispatch(closeDialogCreateAccount());
+  };
+
   const validateForm = () => {
     const newErrors: Partial<FormData> = {};
 
-    if (!formData.email) {
+    if (!accountDetails.email) {
       newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    } else if (!/\S+@\S+\.\S+/.test(accountDetails.email)) {
       newErrors.email = 'Email is invalid';
     }
 
-    if (!formData.password) {
+    if (!accountDetails.password) {
       newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+    } else if (accountDetails.password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters';
     }
 
-    if (!formData.confirmPassword) {
+    if (!accountDetails.confirmPassword) {
       newErrors.confirmPassword = 'Please confirm your password';
-    } else if (formData.password !== formData.confirmPassword) {
+    } else if (accountDetails.password !== accountDetails.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
 
@@ -64,27 +76,43 @@ export default function RegisterDialog() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      // Handle registration logic here
-      console.log('Form submitted:', formData);
+      try {
+        const resultAction = await dispatch(
+          signupUser({
+            username: accountDetails.email.split('@')[0],
+            email: accountDetails.email,
+            password: accountDetails.password,
+            password_confirmation: accountDetails.confirmPassword,
+          })
+        );
+
+        if (signupUser.fulfilled.match(resultAction)) {
+          // Registration successful
+          handleOpenDialogVerifyEmail();
+        }
+      } catch (error) {
+        console.error('Registration failed:', error);
+      }
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    dispatch(updateAccountDetails({ field: name as keyof FormData, value }));
   };
+
   return (
     <Dialog
       open={isDialogOpen}
-      onOpenChange={(open) =>
-        dispatch(open ? openDialogRegister() : closeDialogRegister())
-      }
+      onOpenChange={(open) => {
+        if (!open) {
+          dispatch(resetAccountDetails()); // Reset form when dialog is closed
+        }
+        dispatch(open ? openDialogRegister() : closeDialogRegister());
+      }}
     >
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -99,6 +127,7 @@ export default function RegisterDialog() {
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+          {signupError && <p className="text-red-500 text-xs">{signupError}</p>}
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -106,7 +135,7 @@ export default function RegisterDialog() {
               name="email"
               type="email"
               placeholder="Enter your email"
-              value={formData.email}
+              value={accountDetails.email}
               onChange={handleChange}
             />
             {errors.email && (
@@ -120,7 +149,7 @@ export default function RegisterDialog() {
               name="password"
               type="password"
               placeholder="Create a password"
-              value={formData.password}
+              value={accountDetails.password}
               onChange={handleChange}
             />
             {errors.password && (
@@ -134,19 +163,19 @@ export default function RegisterDialog() {
               name="confirmPassword"
               type="password"
               placeholder="Confirm your password"
-              value={formData.confirmPassword}
+              value={accountDetails.confirmPassword}
               onChange={handleChange}
             />
             {errors.confirmPassword && (
               <p className="text-red-500 text-xs">{errors.confirmPassword}</p>
             )}
           </div>
-
           <Button
             type="submit"
             className="w-full mt-6 bg-orange-500 hover:bg-orange-600 text-white text-xs flex items-center justify-center"
+            disabled={signupStatus === true}
           >
-            Create Account
+            {signupStatus === true ? 'Creating Account...' : 'Create Account'}
           </Button>
         </form>
 
@@ -162,6 +191,7 @@ export default function RegisterDialog() {
           .
         </p>
       </DialogContent>
+      <VerifyEmailDialog email={accountDetails.email} />
     </Dialog>
   );
 }

@@ -16,7 +16,7 @@ export const accountFunc = createAsyncThunk('account/slice', async (_, thunkApi)
     try {
         const response = await accountService.getAccountData();
        
-        return response;
+        return response.result;
     } catch (error: any) {
         return thunkApi.rejectWithValue(error.response.data);
     }
@@ -24,7 +24,7 @@ export const accountFunc = createAsyncThunk('account/slice', async (_, thunkApi)
 export const updateAccountFunc = createAsyncThunk('updateAccount/slice', async (account :any, thunkApi) => {
     try {
         const response = await accountService.updateAccount(account);
-        return response;
+        return response.result;
     } catch (error: any) {
         return thunkApi.rejectWithValue(error.response.data);
     }

@@ -1,3 +1,3 @@
 interface ImportantNoteProps {
-  content: string;
+  content?:string;
 }

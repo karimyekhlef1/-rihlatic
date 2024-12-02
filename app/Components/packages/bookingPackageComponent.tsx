@@ -28,9 +28,11 @@ export default function BookingPackageComponent({ data }: { data?: Departure[] }
   // Ensure data is always an array
   const packageData = data || [];
 
-  const [selectedDeparture, setSelectedDeparture] = useState<Departure | undefined>(
-    packageData.length > 0 ? packageData[0] : undefined
-  );
+  const [selectedDeparture, setSelectedDeparture] = useState<Departure | undefined>(() => {
+    // If packageData is not empty, use the first item
+    // Otherwise, return undefined
+    return packageData.length > 0 ? packageData[0] : undefined;
+  });
   const [selectedOption, setSelectedOption] = useState<string | null>('test');
   const [roomNames, setRoomNames] = useState<string[]>([]);
   const [departureNames, setDepartureNames] = useState<number[]>([]);

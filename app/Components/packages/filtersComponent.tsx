@@ -10,15 +10,20 @@ import {
 interface FilterComponentProps {
   packageCategories: string[];
   countryNames: string[];
+  selectedCountries: string[];
+  selectedCategories: string[];
+  setSelectedCountries: React.Dispatch<React.SetStateAction<string[]>>;
+  setSelectedCategories: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const FilterComponent: React.FC<FilterComponentProps> = ({
   packageCategories,
   countryNames,
+  selectedCountries,
+  selectedCategories,
+  setSelectedCountries,
+  setSelectedCategories,
 }) => {
-  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-
   const handleCountryChange = (country: string) => {
     setSelectedCountries((prev) =>
       prev.includes(country)
@@ -34,6 +39,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
         : [...prev, category]
     );
   };
+
 
   return (
     <div className="p-4">
