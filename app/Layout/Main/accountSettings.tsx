@@ -1,6 +1,7 @@
 'use client';
 import ProfilePicture from '@/app/Components/profile/profile-picture';
 import PersonalDetails from '@/app/Components/profile/personal-details';
+import PasswordChange from '@/app/Components/profile/password-change';
 import LanguageAndCurrency from '@/app/Components/profile/lang-and-currency';
 import Notifications from '@/app/Components/profile/notifications';
 import { withAuth } from '@/middleware/withAuth';
@@ -20,6 +21,7 @@ export default withAuth(function AccountSettings() {
       <div className="flex flex-wrap flex-col md:px-20">
         <ProfilePicture />
         <PersonalDetails />
+        <PasswordChange />
         <LanguageAndCurrency />
         <Notifications />
       </div>
