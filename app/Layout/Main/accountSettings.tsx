@@ -7,11 +7,13 @@ import Notifications from '@/app/Components/profile/notifications';
 import { useDispatch, useSelector } from 'react-redux';
 import { accountFunc } from '@/lib/store/api/account/accountSlice';
 import { updateField ,AccountState } from '@/lib/store/custom/mainSlices/accountSlice';
+import { withAuth } from '@/middleware/withAuth';
 
 
 
 
-export default function AccountSettings() {
+
+export default withAuth(function AccountSettings() {
   const { loading, accountData } = useSelector((state: any) => state.authAccount);
   const dispatch = useDispatch<any>();
   const accountState = useSelector((state: any) => state.account)
@@ -57,4 +59,4 @@ export default function AccountSettings() {
       </div>
     </div>
   );
-}
+});

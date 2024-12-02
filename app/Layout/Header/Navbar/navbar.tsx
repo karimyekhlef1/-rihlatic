@@ -120,10 +120,12 @@ export default function Navbar() {
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only">Open user menu</span>
                     <div className="flex gap-2 items-center">
-                      <img
+                      <Image
                         alt="profile"
                         src={userData?.user.avatar}
                         className="h-8 w-8 rounded-full"
+                        height={50}
+                        width={50}
                       />
                       <span className="text-black font-medium">
                         {userData?.user.username || 'User'}
