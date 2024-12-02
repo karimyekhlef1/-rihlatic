@@ -28,7 +28,7 @@ import {
 } from '@/lib/store/custom/mainSlices/accountSlice';
 import { setDialogOpen } from '@/lib/store/custom/mainSlices/dialogSlice';
 import type { RootState } from '@/lib/store/store';
-import { updateAccountFunc } from '@/lib/store/api/account/accountSlice';
+import { updateAccountDetails } from '@/lib/store/api/account/accountSlice';
 export default function EditAccountOwnerDetails() {
   const dispatch = useDispatch<any>();
   const account = useSelector((state: RootState) => state.account);
@@ -52,7 +52,7 @@ export default function EditAccountOwnerDetails() {
   const handleSave = () => {
     const updateAccountData =async ( account :AccountState)=>{
       try{
-        const result = await dispatch(updateAccountFunc(account ))
+        const result = await dispatch(updateAccountDetails(account ))
         const user = result.payload.user;
         Object.keys(user).forEach((field) => {
           if (account.hasOwnProperty(field)) {

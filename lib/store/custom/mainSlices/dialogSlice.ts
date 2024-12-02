@@ -11,6 +11,7 @@ interface DialogState {
   isCreateAccountOpen: boolean;
   isForgotPasswordOpen: boolean;
   isResetPasswordOpen: boolean;
+  isPasswordDialogOpen: boolean;
 }
 
 const initialState: DialogState = {
@@ -24,6 +25,7 @@ const initialState: DialogState = {
   isCreateAccountOpen: false,
   isForgotPasswordOpen: false,
   isResetPasswordOpen: false,
+  isPasswordDialogOpen: false,
 };
 
 const dialogSlice = createSlice({
@@ -87,6 +89,9 @@ const dialogSlice = createSlice({
     closeDialogResetPassword: (state) => {
       state.isResetPasswordOpen = false;
     },
+    setPasswordDialogOpen: (state, action: PayloadAction<boolean>) => {
+      state.isPasswordDialogOpen = action.payload;
+    },
   },
 });
 
@@ -110,5 +115,7 @@ export const {
   closeDialogForgotPassword,
   openDialogResetPassword,
   closeDialogResetPassword,
+  setPasswordDialogOpen,
 } = dialogSlice.actions;
+
 export default dialogSlice.reducer;
