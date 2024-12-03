@@ -5,7 +5,8 @@ import { FileUploadButton } from '@/components/ui/file-upload-button';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/lib/store/store';
-import { fetchAccountData } from '@/lib/store/api/account/accountSlice';
+import { fetchAccountData, updateAvatar } from '@/lib/store/api/account/accountSlice';
+import { toast } from 'sonner';
 
 interface User {
   id: number;
@@ -31,8 +32,38 @@ export default function ProfilePicture() {
     dispatch(fetchAccountData());
   }, [dispatch]);
 
-  const handleFileSelect = (file: File) => {
-    console.log('Selected file:', file);
+  const handleFileSelect = async (file: File) => {
+    // Check file size (1MB = 1024 * 1024 bytes)
+    if (file.size > 1024 * 1024) {
+      toast.error('File too large. Please select a file smaller than 1MB');
+      return;
+    }
+
+    // Check file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Invalid file type. Please select an image file');
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await dispatch(updateAvatar(formData)).unwrap();
+      
+      if (response.success === true) {
+        toast.success(response.message || 'Avatar updated successfully!');
+        // Refresh account data to get the new avatar
+        dispatch(fetchAccountData());
+      } else {
+        console.error('Invalid response:', response);
+        toast.error(response.message || 'Failed to update avatar');
+      }
+    } catch (err: any) {
+      console.error('Avatar upload error:', err);
+      const errorMessage = err?.response?.data?.message || err.message || 'Failed to update avatar';
+      toast.error(`Failed to update avatar: ${errorMessage}`);
+    }
   };
 
   return (
@@ -62,7 +93,6 @@ export default function ProfilePicture() {
                 <FileUploadButton
                   onFileSelect={handleFileSelect}
                   label="Upload"
-              
                 />
               </div>
             </div>
