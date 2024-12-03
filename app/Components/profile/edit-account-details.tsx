@@ -23,9 +23,46 @@ import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { useDispatch, useSelector } from 'react-redux';
 import { setDialogOpen } from '@/lib/store/custom/mainSlices/dialogSlice';
 import type { RootState } from '@/lib/store/store';
+import { updateAccountDetails } from '@/lib/store/api/account/accountSlice';
+import { toast } from 'sonner';
+
 export default function EditAccountOwnerDetails() {
   const dispatch = useDispatch<any>();
   const { isOpen } = useSelector((state: RootState) => state.dialog);
+  const { loading } = useSelector((state: RootState) => state.account);
+
+  // Add form state
+  const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    phone: '',
+    birthday: '',
+    passport_nbr: '',
+    passport_expire_at: '',
+    nationality: '',
+    sex: '',
+  });
+
+  // Handle input changes
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmit = async () => {
+    try {
+      await dispatch(updateAccountDetails(formData)).unwrap();
+      dispatch(setDialogOpen(false)); // Close dialog on success
+      toast.success('Account details updated successfully');
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to update account details');
+      console.error('Failed to update account details:', error);
+    }
+  };
 
   return (
     <Dialog
@@ -54,8 +91,8 @@ export default function EditAccountOwnerDetails() {
                 <Label htmlFor="firstName">First name</Label>
                 <Input
                   id="first_name"
-                  value={''}
-                  onChange={() => {}}
+                  value={formData.first_name}
+                  onChange={(e) => handleInputChange('first_name', e.target.value)}
                   placeholder="Enter first name"
                 />
               </div>
@@ -63,8 +100,8 @@ export default function EditAccountOwnerDetails() {
                 <Label htmlFor="lastName">Last name</Label>
                 <Input
                   id="last_name"
-                  value={''}
-                  onChange={() => {}}
+                  value={formData.last_name}
+                  onChange={(e) => handleInputChange('last_name', e.target.value)}
                   placeholder="Enter last name"
                 />
               </div>
@@ -73,8 +110,8 @@ export default function EditAccountOwnerDetails() {
               <div className="grid gap-2">
                 <Label htmlFor="gender">Gender</Label>
                 <Select
-                  value={''}
-                  onValueChange={() => {}}
+                  value={formData.sex}
+                  onValueChange={(value) => handleInputChange('sex', value)}
                 >
                   <SelectTrigger id="sexe">
                     <SelectValue placeholder="Select gender" />
@@ -92,25 +129,25 @@ export default function EditAccountOwnerDetails() {
                 <Input
                   id="birthday"
                   type="date"
-                  value={''}
-                  onChange={() => {}}
+                  value={formData.birthday}
+                  onChange={(e) => handleInputChange('birthday', e.target.value)}
                 />
               </div>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="nationality">Nationality</Label>
               <Select
-                value={''}
-                onValueChange={() => {} }
+                value={formData.nationality}
+                onValueChange={(value) => handleInputChange('nationality', value)}
               >
                 <SelectTrigger id="nationality">
                   <SelectValue placeholder="Select nationality" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Algerienne">Algerienne</SelectItem>
-                  <SelectItem value="fr">France</SelectItem>
-                  <SelectItem value="ca">Canada</SelectItem>
-                  <SelectItem value="us">United States</SelectItem>
+                  <SelectItem value="Algerienne">Algerian</SelectItem>
+                  <SelectItem value="fr">French</SelectItem>
+                  <SelectItem value="ca">Canadian</SelectItem>
+                  <SelectItem value="us">American</SelectItem>
                   {/* Add more nationalities as needed */}
                 </SelectContent>
               </Select>
@@ -122,8 +159,8 @@ export default function EditAccountOwnerDetails() {
                   <Label htmlFor="documentNumber">Passport or ID number</Label>
                   <Input
                     id="passport_nbr"
-                    value={''}
-                    onChange={() => {}}
+                    value={formData.passport_nbr}
+                    onChange={(e) => handleInputChange('passport_nbr', e.target.value)}
                     placeholder="Enter document number"
                   />
                 </div>
@@ -134,8 +171,8 @@ export default function EditAccountOwnerDetails() {
                   <Input
                     id="passport_expire_at"
                     type="date"
-                    value={''}
-                    onChange={() => {}}
+                    value={formData.passport_expire_at}
+                    onChange={(e) => handleInputChange('passport_expire_at', e.target.value)}
                   />
                 </div>
               </div>
@@ -148,8 +185,8 @@ export default function EditAccountOwnerDetails() {
                   <Input
                     id="email"
                     type="email"
-                    value={''}
-                    onChange={() => {}}
+                    value={formData.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
                     placeholder="Enter email"
                   />
                 </div>
@@ -158,8 +195,8 @@ export default function EditAccountOwnerDetails() {
                   <Input
                     id="phone"
                     type="tel"
-                    value={''}
-                    onChange={() => {}}
+                    value={formData.phone}
+                    onChange={(e) => handleInputChange('phone', e.target.value)}
                     placeholder="Enter phone number"
                   />
                 </div>
@@ -171,15 +208,17 @@ export default function EditAccountOwnerDetails() {
               <Button
                 variant="outline"
                 className="w-1/3"
-                onClick={() => {}}
+                onClick={() => dispatch(setDialogOpen(false))}
+                disabled={loading}
               >
                 Cancel
               </Button>
               <Button
                 className="w-2/3 bg-orange-600 hover:bg-orange-700"
-                onClick={() => {}}
+                onClick={handleSubmit}
+                disabled={loading}
               >
-                Save
+                {loading ? 'Saving...' : 'Save'}
               </Button>
             </div>
           </CardFooter>
