@@ -18,8 +18,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-import { Dialog, DialogContent } from '@/components/ui/dialog';
-
+import { Dialog, DialogTitle, DialogContent } from '@/components/ui/dialog';
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { useDispatch, useSelector } from 'react-redux';
 import {
   updateField,
@@ -85,6 +85,11 @@ export default function EditAccountOwnerDetails() {
       onOpenChange={(open) => dispatch(setDialogOpen(open))}
     >
       <DialogContent className="sm:max-w-[425px] md:max-w-2xl">
+      <VisuallyHidden.Root>
+            <DialogTitle className="hidden">
+            Edit account owner details
+            </DialogTitle>
+        </VisuallyHidden.Root>
         <Card className="w-full bg-white border-0 shadow-none">
           <CardHeader>
             <CardTitle className="text-2xl text-black">

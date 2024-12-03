@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -8,24 +8,97 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogTitle, DialogContent } from '@/components/ui/dialog';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '@/lib/store/store';
+import { RootState, AppDispatch } from '@/lib/store/store';
 import { setPasswordDialogOpen } from '@/lib/store/custom/mainSlices/dialogSlice';
+import { updatePassword } from '@/lib/store/api/account/accountSlice';
+import { toast } from 'sonner';
+import { storageUtils } from '@/utils/localStorage';
 
 export default function EditPassword() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const isOpen = useSelector((state: RootState) => state.dialog.isPasswordDialogOpen);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClose = () => {
     dispatch(setPasswordDialogOpen(false));
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+  };
+
+  const handleSubmit = async () => {
+    // Validation
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      toast.error('Please fill in all fields');
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      toast.error('New passwords do not match');
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      toast.error('New password must be at least 8 characters long');
+      return;
+    }
+
+    const token = storageUtils.getToken();
+    if (!token) {
+      toast.error('Authentication required. Please log in again.');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await dispatch(updatePassword({
+        password: newPassword,
+        password_confirmation: confirmPassword,
+        old_password: currentPassword,
+      })).unwrap();
+
+      if (response.success) {
+        toast.success(response.message || 'Password updated successfully');
+        handleClose();
+      } else {
+        toast.error(response.message || 'Failed to update password');
+      }
+    } catch (error: any) {
+      console.error('Password update error:', error);
+      
+      // Handle different error response structures
+      const errorMessage = error.response?.data?.message 
+        || error.response?.data?.error 
+        || error.message 
+        || 'Failed to update password';
+      
+      toast.error(errorMessage);
+      
+      // Handle token expiration or authentication errors
+      if (error.response?.status === 401) {
+        storageUtils.clearAuth();
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[425px] md:max-w-2xl">
+      <VisuallyHidden.Root>
+            <DialogTitle className="hidden">
+            Change your password
+            </DialogTitle>
+        </VisuallyHidden.Root>
         <Card className="w-full bg-white border-0 shadow-none">
           <CardHeader>
             <CardTitle className="text-2xl text-black">
@@ -43,6 +116,8 @@ export default function EditPassword() {
                   id="currentPassword"
                   type="password"
                   placeholder="Enter your current password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
@@ -51,6 +126,8 @@ export default function EditPassword() {
                   id="newPassword"
                   type="password"
                   placeholder="Enter your new password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
@@ -59,6 +136,8 @@ export default function EditPassword() {
                   id="confirmPassword"
                   type="password"
                   placeholder="Confirm your new password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </div>
             </div>
@@ -69,14 +148,16 @@ export default function EditPassword() {
                 variant="outline"
                 className="w-1/2"
                 onClick={handleClose}
+                disabled={isLoading}
               >
                 Cancel
               </Button>
               <Button
                 className="w-1/2 bg-orange-600 hover:bg-orange-700"
-                onClick={()=>{}}
+                onClick={handleSubmit}
+                disabled={isLoading}
               >
-                Change
+                {isLoading ? 'Updating...' : 'Change'}
               </Button>
             </div>
           </CardFooter>

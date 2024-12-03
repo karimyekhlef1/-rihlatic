@@ -17,48 +17,6 @@ const initialState: LogoutState = {
   logoutData: {},
 };
 
-// export const logoutUser = createAsyncThunk(
-//   'auth/logout',
-//   async (token: string, thunkApi) => {
-//     try {
-//       const response = await logoutService.logoutUser(token);
-//       // Clear token on successful logout
-//       storageUtils.removeToken();
-//       return response.data;
-//     } catch (error: any) {
-//       // If unauthorized, clear token anyway
-//       if (error.response?.status === 401) {
-//         storageUtils.removeToken();
-//       }
-//       return thunkApi.rejectWithValue(
-//         error.response.data ||
-//           error.response?.data?.message ||
-//           error.message ||
-//           'Logout failed'
-//       );
-//     }
-//   }
-// );
-
-// export const logoutUser = createAsyncThunk(
-//   'auth/logout',
-//   async (token: string, thunkApi) => {
-//     if (!token) {
-//       return thunkApi.rejectWithValue('No token provided');
-//     }
-
-//     try {
-//       const response = await logoutService.logoutUser(token);
-//       return response.data;
-//     } catch (error: any) {
-//       console.error('Logout error:', error.response || error);
-//       return thunkApi.rejectWithValue(
-//         error.response?.data?.message || error.message || 'Logout failed'
-//       );
-//     }
-//   }
-// );
-
 export const logoutUser = createAsyncThunk(
   'auth/logout',
   async (token: string, { dispatch, rejectWithValue }) => {
