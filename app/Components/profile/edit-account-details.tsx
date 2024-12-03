@@ -21,63 +21,11 @@ import {
 import { Dialog, DialogTitle, DialogContent } from '@/components/ui/dialog';
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  updateField,
-  resetForm,
-  AccountState,
-} from '@/lib/store/custom/mainSlices/accountSlice';
 import { setDialogOpen } from '@/lib/store/custom/mainSlices/dialogSlice';
 import type { RootState } from '@/lib/store/store';
-import { updateAccountDetails } from '@/lib/store/api/account/accountSlice';
 export default function EditAccountOwnerDetails() {
   const dispatch = useDispatch<any>();
-  const account = useSelector((state: RootState) => state.account);
-  const [localAccount, setLocalAccount] = useState<AccountState>(account);
   const { isOpen } = useSelector((state: RootState) => state.dialog);
-
-  useEffect(() => {
-    setLocalAccount(account);
-  }, [account]);
-
-  const handleUpdatingField = (field: keyof AccountState, value: string) => {
-    dispatch(updateField({ field, value }));
-  };
-  const handleInputChange = (field: keyof AccountState, value: string) => {
-    setLocalAccount(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
-
-  const handleSave = () => {
-    const updateAccountData =async ( account :AccountState)=>{
-      try{
-        const result = await dispatch(updateAccountDetails(account ))
-        const user = result.payload.user;
-        Object.keys(user).forEach((field) => {
-          if (account.hasOwnProperty(field)) {
-            handleUpdatingField(field as keyof AccountState, user[field]);
-          }
-        });
-      } catch(error) {
-        console.log(error)
-
-      }
-    }
-    updateAccountData(localAccount)
-    dispatch(setDialogOpen(false));
-
-  };
-
-  const handleCancel = () => {
-   
-    setLocalAccount(account);
-    // dispatch(resetForm());
-    dispatch(setDialogOpen(false));
-    // console.log("account",account)
-    // console.log("local",localAccount)
-
-  };
 
   return (
     <Dialog
@@ -106,10 +54,8 @@ export default function EditAccountOwnerDetails() {
                 <Label htmlFor="firstName">First name</Label>
                 <Input
                   id="first_name"
-                  value={localAccount.first_name}
-                  onChange={(e) =>
-                    handleInputChange('first_name', e.target.value)
-                  }
+                  value={''}
+                  onChange={() => {}}
                   placeholder="Enter first name"
                 />
               </div>
@@ -117,10 +63,8 @@ export default function EditAccountOwnerDetails() {
                 <Label htmlFor="lastName">Last name</Label>
                 <Input
                   id="last_name"
-                  value={localAccount.last_name}
-                  onChange={(e) =>
-                    handleInputChange('last_name', e.target.value)
-                  }
+                  value={''}
+                  onChange={() => {}}
                   placeholder="Enter last name"
                 />
               </div>
@@ -129,8 +73,8 @@ export default function EditAccountOwnerDetails() {
               <div className="grid gap-2">
                 <Label htmlFor="gender">Gender</Label>
                 <Select
-                  value={localAccount.sexe}
-                  onValueChange={(value) => handleInputChange('sexe', value)}
+                  value={''}
+                  onValueChange={() => {}}
                 >
                   <SelectTrigger id="sexe">
                     <SelectValue placeholder="Select gender" />
@@ -148,20 +92,16 @@ export default function EditAccountOwnerDetails() {
                 <Input
                   id="birthday"
                   type="date"
-                  value={localAccount.birthday}
-                  onChange={(e) =>
-                    handleInputChange('birthday', e.target.value)
-                  }
+                  value={''}
+                  onChange={() => {}}
                 />
               </div>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="nationality">Nationality</Label>
               <Select
-                value={localAccount.nationality}
-                onValueChange={(value) =>
-                  handleInputChange('nationality', value)
-                }
+                value={''}
+                onValueChange={() => {} }
               >
                 <SelectTrigger id="nationality">
                   <SelectValue placeholder="Select nationality" />
@@ -182,10 +122,8 @@ export default function EditAccountOwnerDetails() {
                   <Label htmlFor="documentNumber">Passport or ID number</Label>
                   <Input
                     id="passport_nbr"
-                    value={localAccount.passport_nbr}
-                    onChange={(e) =>
-                      handleInputChange('passport_nbr', e.target.value)
-                    }
+                    value={''}
+                    onChange={() => {}}
                     placeholder="Enter document number"
                   />
                 </div>
@@ -196,10 +134,8 @@ export default function EditAccountOwnerDetails() {
                   <Input
                     id="passport_expire_at"
                     type="date"
-                    value={localAccount.passport_expire_at}
-                    onChange={(e) =>
-                      handleInputChange('passport_expire_at', e.target.value)
-                    }
+                    value={''}
+                    onChange={() => {}}
                   />
                 </div>
               </div>
@@ -212,8 +148,8 @@ export default function EditAccountOwnerDetails() {
                   <Input
                     id="email"
                     type="email"
-                    value={localAccount.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    value={''}
+                    onChange={() => {}}
                     placeholder="Enter email"
                   />
                 </div>
@@ -222,8 +158,8 @@ export default function EditAccountOwnerDetails() {
                   <Input
                     id="phone"
                     type="tel"
-                    value={localAccount.phone}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
+                    value={''}
+                    onChange={() => {}}
                     placeholder="Enter phone number"
                   />
                 </div>
@@ -235,13 +171,13 @@ export default function EditAccountOwnerDetails() {
               <Button
                 variant="outline"
                 className="w-1/3"
-                onClick={handleCancel}
+                onClick={() => {}}
               >
                 Cancel
               </Button>
               <Button
                 className="w-2/3 bg-orange-600 hover:bg-orange-700"
-                onClick={handleSave}
+                onClick={() => {}}
               >
                 Save
               </Button>
