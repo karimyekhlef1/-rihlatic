@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import logoutService from '../../../services/logout/logout_service';
+import { storageUtils } from '@/utils/localStorage';
+import { clearSinginState } from '../signin/signinSlice';
 
 interface LogoutState {
   loading: boolean;
@@ -15,14 +17,68 @@ const initialState: LogoutState = {
   logoutData: {},
 };
 
+// export const logoutUser = createAsyncThunk(
+//   'auth/logout',
+//   async (token: string, thunkApi) => {
+//     try {
+//       const response = await logoutService.logoutUser(token);
+//       // Clear token on successful logout
+//       storageUtils.removeToken();
+//       return response.data;
+//     } catch (error: any) {
+//       // If unauthorized, clear token anyway
+//       if (error.response?.status === 401) {
+//         storageUtils.removeToken();
+//       }
+//       return thunkApi.rejectWithValue(
+//         error.response.data ||
+//           error.response?.data?.message ||
+//           error.message ||
+//           'Logout failed'
+//       );
+//     }
+//   }
+// );
+
+// export const logoutUser = createAsyncThunk(
+//   'auth/logout',
+//   async (token: string, thunkApi) => {
+//     if (!token) {
+//       return thunkApi.rejectWithValue('No token provided');
+//     }
+
+//     try {
+//       const response = await logoutService.logoutUser(token);
+//       return response.data;
+//     } catch (error: any) {
+//       console.error('Logout error:', error.response || error);
+//       return thunkApi.rejectWithValue(
+//         error.response?.data?.message || error.message || 'Logout failed'
+//       );
+//     }
+//   }
+// );
+
 export const logoutUser = createAsyncThunk(
   'auth/logout',
-  async (token: string, thunkApi) => {
+  async (token: string, { dispatch, rejectWithValue }) => {
     try {
-      const response = await logoutService.logoutUser(token);
-      return response;
+      await logoutService.logoutUser(token);
+
+      // Clear all auth data
+      storageUtils.clearAuth();
+
+      // Reset auth state
+      dispatch(clearSinginState());
+
+      return true;
     } catch (error: any) {
-      return thunkApi.rejectWithValue(error.response.data);
+      console.error('Logout error:', error);
+      // Even if the API call fails, clear local auth data
+      storageUtils.clearAuth();
+      dispatch(clearSinginState());
+
+      return rejectWithValue(error.response?.data?.message || 'Logout failed');
     }
   }
 );
@@ -53,7 +109,7 @@ const logoutSlice = createSlice({
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.loading = false;
-        state.success = false;
+        state.success = true; // Consider logout successful even if API fails
         state.error = action.payload as string;
         state.logoutData = {};
       });

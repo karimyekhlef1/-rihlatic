@@ -3,10 +3,13 @@ const BASE_URL =
 
 // Home
 export const home_endpoint = BASE_URL + '/home';
-// Account
+// Account & Profile settings
 export const account_endpoint = BASE_URL + '/front/me';
-
 export const edit_account_endpoint = BASE_URL + '/front/me/details';
+export const update_password_endpoint = BASE_URL + '/front/me/details/auth';
+export const update_avatar_endpoint = BASE_URL + '/front/user/update/avatar';
+
+
 // Check user status
 export const check_user_status_endpoint =
   BASE_URL + '/front/user/check_user_status';
@@ -19,7 +22,7 @@ export const remind_password_endpoint = BASE_URL + '/front/password/remind';
 //Reset Password
 export const reset_password_endpoint = BASE_URL + '/front/password/reset';
 // Logout
-export const logout_endpoint = BASE_URL + '/logout';
+export const logout_endpoint = BASE_URL + '/front/logout';
 // Verify Email
 export const verif_email_endpoint = BASE_URL + '/front/email/verify';
 // Resend Verification Code

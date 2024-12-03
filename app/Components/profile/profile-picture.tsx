@@ -1,21 +1,39 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { FileUploadButton } from '@/components/ui/file-upload-button';
 import { useSelector } from 'react-redux';
-import Image from 'next/image';
 import { useDispatch } from 'react-redux';
-import { updateField ,AccountState} from '@/lib/store/custom/mainSlices/accountSlice';
-export default function ProfilePicture() {
-  const [preview, setPreview] = useState<string | null>(null);
-  const dispatch = useDispatch<any>();
-  const handleFileSelect = (file: File) => {
-    const previewUrl = URL.createObjectURL(file);
-    setPreview(previewUrl);
-    dispatch(updateField({ field: 'avatar', value: previewUrl }));
+import { AppDispatch } from '@/lib/store/store';
+import { fetchAccountData } from '@/lib/store/api/account/accountSlice';
+
+interface User {
+  id: number;
+  email: string;
+  avatar: string;
+  username: string;
+  first_name: string | null;
+  last_name: string | null;
+}
+interface RootState {
+  account: {
+    loading: boolean;
+    accountData: User | null;
+    error: string | null;
   };
-  const accountState = useSelector((state: any) => state.account)
+}
+
+export default function ProfilePicture() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { accountData, loading, error } = useSelector((state: RootState) => state.account);
+
+  useEffect(() => {
+    dispatch(fetchAccountData());
+  }, [dispatch]);
+
+  const handleFileSelect = (file: File) => {
+    console.log('Selected file:', file);
+  };
 
   return (
     <div className="px-10">
@@ -30,8 +48,8 @@ export default function ProfilePicture() {
             <div>
               <Avatar className="hidden sm:block w-20 h-20">
                 <AvatarImage 
-                 src={preview || accountState.avatar}
-                 alt={accountState.firstName}/>
+                 src={accountData?.avatar}
+                 alt={accountData?.username}/>
                 <AvatarFallback></AvatarFallback>
               </Avatar>
             </div>

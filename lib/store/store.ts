@@ -1,5 +1,4 @@
 import { configureStore } from '@reduxjs/toolkit';
-import accountReducer from '@/lib/store/custom/mainSlices/accountSlice';
 import dialogReducer from '@/lib/store/custom/mainSlices/dialogSlice';
 import paginationReducer from '@/lib/store/custom/commonSlices/paginationSlice';
 import bookingReducer from '@/lib/store/custom/hotelSlices/bookingSlice';
@@ -37,7 +36,7 @@ import accountDetailsSlice from './custom/commonSlices/accountDetailsSlice';
 
 export const store = configureStore({
   reducer: {
-    account: accountReducer,
+    account: accountSlice,
     dialog: dialogReducer,
     pagination: paginationReducer,
     booking: bookingReducer,

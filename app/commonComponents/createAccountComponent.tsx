@@ -10,7 +10,7 @@ import {
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { RootState } from '@/lib/store/store';
+import { AppDispatch, RootState } from '@/lib/store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   openDialogCreateAccount,
@@ -22,6 +22,9 @@ import Image from 'next/image';
 import login from '@/public/images/login.png';
 import Link from 'next/link';
 import ForgotPasswordDialogue from './forgotPasswordComponent';
+import { signinUser } from '@/lib/store/api/signin/signinSlice';
+import { toast } from 'sonner';
+import { storageUtils } from '@/utils/localStorage';
 
 interface FormData {
   email: string;
@@ -29,15 +32,29 @@ interface FormData {
 }
 
 export default function CreateAccountDialog() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const isDialogOpen = useSelector(
     (state: RootState) => state.dialog.isCreateAccountOpen
+  );
+
+  const { loading, success, error, userData } = useSelector(
+    (state: RootState) => state.signIn
   );
 
   const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
   });
+
+  // Helper function to generate a random string
+  function generateRandomToken(length: number): string {
+    const characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    return Array.from(
+      { length },
+      () => characters[Math.floor(Math.random() * characters.length)]
+    ).join('');
+  }
 
   const [errors, setErrors] = useState<Partial<FormData>>({});
 
@@ -60,10 +77,24 @@ export default function CreateAccountDialog() {
     return Object.keys(newErrors).length === 0;
   };
 
+  // Function to generate random device informations
+  function generateDeviceInfo() {
+    const deviceToken = generateRandomToken(10); // Generate a 10-character random token for device_token
+    const deviceNameToken = generateRandomToken(8); // Generate an 8-character random token for device_name
+    return {
+      username: formData.email.split('@')[0],
+      password: formData.password,
+      device_token: `device_${deviceToken}`,
+      device_id: `${Math.floor(100000000 + Math.random() * 900000000)}`, // Random 9-digit number as a string
+      device_name: `device_${deviceNameToken}`,
+    };
+  }
+
+  const result = generateDeviceInfo();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      // Handle login logic here
       console.log('Form submitted:', formData);
     }
   };
@@ -74,6 +105,24 @@ export default function CreateAccountDialog() {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const handleSignIn = async () => {
+    try {
+      await dispatch(
+        signinUser({
+          username: result.username,
+          password: result.password,
+          device_token: result.device_token,
+          device_id: result.device_id,
+          device_name: result.device_name,
+        })
+      );
+      toast.success('Login successful!');
+      dispatch(closeDialogCreateAccount());
+    } catch (err: any) {
+      toast.error(err.message || 'Login failed');
+    }
   };
 
   return (
@@ -124,13 +173,8 @@ export default function CreateAccountDialog() {
             variant={'active'}
             className="text-xs w-full"
             type="submit"
-            onClick={(e) => {
-              e.preventDefault();
-              if (validateForm()) {
-                // Handle successful validation
-                console.log('Form is valid');
-              }
-            }}
+            disabled={loading}
+            onClick={handleSignIn}
           >
             Continue
           </Button>

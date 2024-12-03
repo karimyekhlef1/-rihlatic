@@ -8,7 +8,7 @@ import {
   MenuItem,
   MenuItems,
 } from '@headlessui/react';
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { CircleUserRound } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -19,21 +19,55 @@ import LinkNav from './linkNav';
 import navbarItems from '@/app/Data/navbar';
 import { NavbarItem } from '@/app/Types/Common/navLink';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/lib/store/store';
-import {
-  openDialogSignUp,
-  openDialogSummary,
-} from '@/lib/store/custom/mainSlices/dialogSlice';
+import { AppDispatch, RootState } from '@/lib/store/store';
+import { openDialogSignUp } from '@/lib/store/custom/mainSlices/dialogSlice';
 import SignUpDialog from '@/app/commonComponents/signupComponent';
+import { useRouter } from 'next/navigation';
+import { storageUtils } from '@/utils/localStorage';
+import { logoutUser } from '@/lib/store/api/logout/logoutSlice';
+import { clearSinginState } from '@/lib/store/api/signin/signinSlice';
+import { toast } from 'sonner';
 
 export default function Navbar() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const isDialogOpen = useSelector(
     (state: RootState) => state.dialog.isDetailOpen
   );
 
+  const { success, userData, isInitialized } = useSelector(
+    (state: RootState) => state.signIn
+  );
+
   const handleOpenDialogSignUp = () => {
     dispatch(openDialogSignUp());
+  };
+
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      const token = storageUtils.getToken();
+
+      if (!token) {
+        console.log('No token found, redirecting...');
+        storageUtils.clearAuth();
+        dispatch(clearSinginState());
+        router.push('/');
+        return;
+      }
+
+      const result = await dispatch(logoutUser(token)).unwrap();
+      console.log('Logout successful:', result);
+      toast.success('Logout successful!');
+
+      router.push('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Optionally clear token on error if you want to force logout
+      storageUtils.clearAuth();
+      dispatch(clearSinginState());
+      router.push('/');
+    }
   };
 
   return (
@@ -79,48 +113,58 @@ export default function Navbar() {
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             {/* Profile dropdown */}
-            <Menu as="div" className="relative ml-3">
-              <div>
-                <MenuButton className="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                  <span className="absolute -inset-1.5" />
-                  <span className="sr-only">Open user menu</span>
-                  <div className="flex gap-2 items-center">
-                    <img
-                      alt=""
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                      className="h-8 w-8 rounded-full"
-                    />
-                    <span className="text-black">Yu name</span>
-                  </div>
-                </MenuButton>
-              </div>
-              <MenuItems
-                transition
-                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-              >
-                <MenuItem>
-                  <a
-                    href="/profile"
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
-                  >
-                    Your Profile
-                  </a>
-                </MenuItem>
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
-                  >
-                    Sign out
-                  </a>
-                </MenuItem>
-              </MenuItems>
+            {isInitialized && success && userData ? (
+              // Profile dropdown for logged in users
+              <Menu as="div" className="relative ml-3">
+                <div>
+                  <MenuButton className="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <span className="absolute -inset-1.5" />
+                    <span className="sr-only">Open user menu</span>
+                    <div className="flex gap-2 items-center">
+                      <Image
+                        alt="profile"
+                        src={userData?.user.avatar}
+                        className="h-8 w-8 rounded-full"
+                        height={50}
+                        width={50}
+                      />
+                      <span className="text-black font-medium">
+                        {userData?.user.username || 'User'}
+                      </span>
+                    </div>
+                  </MenuButton>
+                </div>
+                <MenuItems
+                  transition
+                  className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                >
+                  <MenuItem>
+                    <a
+                      href="/profile"
+                      className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                    >
+                      Your Profile
+                    </a>
+                  </MenuItem>
+                  <MenuItem>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                      onClick={handleLogout}
+                    >
+                      Sign out
+                    </a>
+                  </MenuItem>
+                </MenuItems>
+              </Menu>
+            ) : (
+              // Sign in button for non-logged in users
               <Button variant={'login'} onClick={handleOpenDialogSignUp}>
                 <CircleUserRound className="h-5 w-5 mr-2" />
                 Sign-in
               </Button>
-              <SignUpDialog />
-            </Menu>
+            )}
+            <SignUpDialog />
           </div>
         </div>
       </div>
