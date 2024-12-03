@@ -14,7 +14,6 @@ import {
   Luggage,
   CircleAlert,
 } from "lucide-react";
-
 import AdComponent from "@/app/commonComponents/adComponent";
 import HotelDetails from "@/app/Components/packages/hotelDetails";
 import TravelProgram from "@/app/Components/packages/travelProgram";
@@ -30,16 +29,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { packagesFunc } from "@/lib/store/api/packages/packagesSlice";
 import Loading from "@/app/Components/home/Loading";
 import { PackageDetails } from "@/app/Types/package/packageDetails";
-const content =
-  "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Asperiores voluptate tempora reprehenderit natus in debitis voluptatibus non dolor itaque repellat? Rem dicta corrupti facere id eum nihil magni excepturi officia.";
-
 
 export default function Details() {
-  const { loading, packagesData } = useSelector((state: any) => state.packages);
-  const [packages, setPackage] = useState<any[]>([]);
   const dispatch = useDispatch<any>();
-  const { id } = useParams();
+  const { loading, packagesData } = useSelector((state: any) => state.packages);
   const [packagesDetails, setPackageDetails] = useState<PackageDetails | undefined>(undefined);
+  const [packages, setPackage] = useState<any[]>([]);
+  const { id } = useParams();
 
   useEffect(() => {
     const getData = async () => {

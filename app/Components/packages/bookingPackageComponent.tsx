@@ -9,42 +9,42 @@ import { format, differenceInDays } from 'date-fns';
 import { extractData } from '@/app/hooks/useExtractData';
 import DropDownBookingComponent from './dropDownBooking';
 import Link from 'next/link';
-
+import RoomsDetailsBooking from './RoomsDetailsBooking';
 interface Room {
   name: string;
+    id: Number;
+    type: string;
+    description: string;
+    capacity_adult: number;
+    capacity_child: number;
+    capacity_bebe: number;
 }
 
 interface Departure {
   id: number;
   price_ini?: number;
-  departure_date?: string;
-  return_date?: string;
-  pricing?: {
-    rooms?: Room[];
+  departure_date: Date;
+  return_date: Date;
+  pricing: {
+    rooms: Room[];
   };
 }
 
-export default function BookingPackageComponent({ data }: { data?: Departure[] }) {
-  // Ensure data is always an array
-  const packageData = data || [];
-
-  const [selectedDeparture, setSelectedDeparture] = useState<Departure | undefined>(() => {
-    // If packageData is not empty, use the first item
-    // Otherwise, return undefined
-    return packageData.length > 0 ? packageData[0] : undefined;
-  });
+export default function BookingPackageComponent({ data }: { data: Departure[] }) {
+  const [selectedDeparture, setSelectedDeparture] = useState<Departure | undefined>();
   const [selectedOption, setSelectedOption] = useState<string | null>('test');
-  const [roomNames, setRoomNames] = useState<string[]>([]);
-  const [departureNames, setDepartureNames] = useState<number[]>([]);
-  
-  // Derive these states directly from selectedDeparture
-  const price = selectedDeparture?.price_ini;
-  const startDate = selectedDeparture?.departure_date;
-  const endDate = selectedDeparture?.return_date;
+  const [roomNames , setRoomNames] =  useState<any>();
 
-  const { date } = useSelector((state: RootState) => state.datePicker);
-
-  const calculateDuration = () => {
+  useEffect (()=>{
+    if (selectedDeparture) {
+      const roomNames =selectedDeparture.pricing.rooms.map((room)=>({
+        label:room.name,
+        id:room.id
+      }))
+ setRoomNames(roomNames)
+    }
+  },[selectedDeparture])
+  const calculateDuration = (startDate:Date,endDate:Date) => {
     if (startDate && endDate) {
       try {
         const nights = differenceInDays(new Date(endDate), new Date(startDate));
@@ -58,44 +58,37 @@ export default function BookingPackageComponent({ data }: { data?: Departure[] }
     return 'Select dates';
   };
 
-  useEffect(() => {
-    if (packageData.length > 0) {
-      // Extract room names
-      const roomNames = extractData(packageData, (departure) =>
-        departure.pricing?.rooms?.map((room:any) => room.name) || []
-      );
-      
-      // Extract departure IDs
-      const departureIds = packageData.map((departure) => departure.id);
-      
-      setRoomNames(roomNames);
-      setDepartureNames(departureIds);
-    }
-  }, [packageData]);
+  if(!data){
+    return <p> loading ...</p>
 
-  const handleSelectDeparture = (id: number) => {
-    const selected = packageData.find((item) => item.id === id);
+  }
+  const price = selectedDeparture ? selectedDeparture.price_ini :data[0].price_ini ;
+  const startDate = selectedDeparture ? selectedDeparture.departure_date :data[0].departure_date;
+  const endDate =selectedDeparture ? selectedDeparture.return_date :data[0].return_date;
+
+  const departureDates = data.map((departure) => ({
+    label: `${format(new Date(departure.departure_date), 'dd-MMM-yyyy')}/${format(new Date(departure.return_date), 'dd-MMM-yyyy')}`,
+    id: departure.id,
+  }));
+
+  const handleSelectDeparture = (selectedOption: { label: string; id: number }) => {
+    const selected = data.find((item) => item.id === selectedOption.id);
     if (selected) {
       setSelectedDeparture(selected);
     }
   };
-
-  // Render nothing if no data
-  if (packageData.length === 0) {
-    return <div>No package data available</div>;
-  }
-
   return (
     <div>
+      <RoomsDetailsBooking />
       <Card className="w-[300px] rounded-xl">
-        <CardContent className="px-0 py-8">
-          <div className="flex flex-col items-center">
+        <CardContent className="px-0 py-8">  
+          <div className="flex flex-col items-center"> 
             <div className="flex flex-col items-center justify-center pb-4">
               <p className="text-xs">Starting from</p>
               <p className="font-semibold text-lg">
                 {price ? `${price} DZD` : 'N/A'}
               </p>
-            </div>
+            </div> 
             <Separator />
             <div className="flex flex-col pt-4 pb-[100px]">
               <div className="flex flex-row items-center">
@@ -105,7 +98,7 @@ export default function BookingPackageComponent({ data }: { data?: Departure[] }
                   fill="#b4deff"
                 />
                 <p className="text-sm font-semibold pl-2">
-                  {calculateDuration()}
+                  {calculateDuration(startDate,endDate)}
                 </p>
               </div>
               <div className="flex flex-row items-center mt-2">
@@ -138,28 +131,31 @@ export default function BookingPackageComponent({ data }: { data?: Departure[] }
               </>
             )}
             <div className="flex flex-col gap-y-2 pb-4 pt-4">
+      
+              <DropDownBookingComponent 
+                onSelect={handleSelectDeparture} 
+                data={departureDates} 
+                title='Select a departure' 
+              />
+                    {selectedDeparture ?
               <DropDownBookingComponent 
                 onSelect={setSelectedOption} 
                 data={roomNames} 
                 title='Kind of room' 
-              />
-              <DropDownBookingComponent 
-                onSelect={handleSelectDeparture} 
-                data={departureNames} 
-                title='Select a departure' 
-              />
+              />:null}
             </div>
             <Separator />
             <div className="pt-4">
               <Link href={'/payment'}>
-                <Button className="px-14" variant={'rihlatic'}>
+                <Button className="px-14" variant={'rihlatic'} disabled={!selectedDeparture || !selectedOption}
+                >
                   Book Now
                 </Button>
               </Link>
             </div>
           </div>
         </CardContent>
-      </Card>
+      </Card> 
     </div>
   );
 }
