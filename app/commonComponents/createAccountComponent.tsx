@@ -15,16 +15,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   openDialogCreateAccount,
   closeDialogCreateAccount,
+  openDialogVerifyEmail,
   openDialogForgotPassword,
 } from '@/lib/store/custom/mainSlices/dialogSlice';
+import { setEmailToVerify } from '@/lib/store/custom/mainSlices/verificationSlice';
 
 import Image from 'next/image';
 import login from '@/public/images/login.png';
 import Link from 'next/link';
 import ForgotPasswordDialogue from './forgotPasswordComponent';
+import VerifyEmailDialog from './verifyEmailComponent';
 import { signinUser } from '@/lib/store/api/signin/signinSlice';
+import { resendCode } from '@/lib/store/api/resendCode/resendCodeSlice';
 import { toast } from 'sonner';
-import { storageUtils } from '@/utils/localStorage';
 
 interface FormData {
   email: string;
@@ -37,9 +40,10 @@ export default function CreateAccountDialog() {
     (state: RootState) => state.dialog.isCreateAccountOpen
   );
 
-  const { loading, success, error, userData } = useSelector(
-    (state: RootState) => state.signIn
-  );
+  const { loading, error } = useSelector((state: RootState) => state.signIn);
+
+  const [signInError, setSignInError] = useState<string | null>(null);
+  const [unactivatedEmail, setUnactivatedEmail] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<FormData>({
     email: '',
@@ -84,6 +88,7 @@ export default function CreateAccountDialog() {
     return {
       username: formData.email.split('@')[0],
       password: formData.password,
+      email: formData.email,
       device_token: `device_${deviceToken}`,
       device_id: `${Math.floor(100000000 + Math.random() * 900000000)}`, // Random 9-digit number as a string
       device_name: `device_${deviceNameToken}`,
@@ -108,90 +113,139 @@ export default function CreateAccountDialog() {
   };
 
   const handleSignIn = async () => {
+    setSignInError(null);
+    console.log('Form Data at signin:', formData); // Debug log
+    
     try {
-      await dispatch(
+      const response = await dispatch(
         signinUser({
           username: result.username,
           password: result.password,
+          email: formData.email, // Use formData.email directly
           device_token: result.device_token,
           device_id: result.device_id,
           device_name: result.device_name,
         })
-      );
+      ).unwrap();
+
       toast.success('Login successful!');
       dispatch(closeDialogCreateAccount());
     } catch (err: any) {
-      toast.error(err.message || 'Login failed');
+      console.log('Sign in error:', err);
+
+      if (err.isUnconfirmed) {
+        dispatch(setEmailToVerify(formData.email));
+        setUnactivatedEmail(formData.email);
+        
+        // Request a new verification code
+        try {
+          await dispatch(resendCode({ email: formData.email })).unwrap();
+          toast.success('Your account is not verified yet. A new verification code has been sent to your email.');
+        } catch (resendError) {
+          console.error('Failed to send verification code:', resendError);
+          toast.error('Failed to send verification code. Please try again.');
+          return;
+        }
+
+        setSignInError(
+          'Your account needs to be verified. A verification code has been sent to your email.'
+        );
+        dispatch(closeDialogCreateAccount());
+        dispatch(openDialogVerifyEmail());
+      } else if (err.message?.errors?.username) {
+        // Handle nested username errors
+        setSignInError(err.message.errors.username[0]);
+      } else if (err.message?.errors) {
+        // Handle other nested errors
+        const firstError = Object.values(err.message.errors)[0];
+        setSignInError(Array.isArray(firstError) ? firstError[0] : String(firstError));
+      } else if (typeof err.message === 'string') {
+        // Handle simple string error message
+        setSignInError(err.message);
+      } else {
+        // Fallback error message
+        setSignInError('Invalid credentials. Please try again.');
+      }
     }
   };
 
   return (
-    <Dialog
-      open={isDialogOpen}
-      onOpenChange={(open) =>
-        dispatch(open ? openDialogCreateAccount() : closeDialogCreateAccount())
-      }
-    >
-      <DialogContent className="sm:max-w-[355px]">
-        <DialogHeader>
-          <Image src={login} alt="signin" width={162} height={96} />
-          <DialogTitle className="text-lg font-semibold mt-4">
-            Continue to your account
-          </DialogTitle>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-3">
-            <p className="text-xs font-medium text-gray-500">
-              Sign in or register with your email and password
-            </p>
-          </div>
-          <div className="space-y-2">
-            <Input
-              type="email"
-              name="email"
-              placeholder="Your@email.com"
-              value={formData.email}
-              onChange={handleChange}
-            />
-            {errors.email && (
-              <p className="text-red-500 text-xs">{errors.email}</p>
+    <>
+      <Dialog
+        open={isDialogOpen}
+        onOpenChange={(open) =>
+          dispatch(
+            open ? openDialogCreateAccount() : closeDialogCreateAccount()
+          )
+        }
+      >
+        <DialogContent className="sm:max-w-[355px]">
+          <DialogHeader>
+            <Image src={login} alt="signin" width={162} height={96} />
+            <DialogTitle className="text-lg font-semibold mt-4">
+              Continue to your account
+            </DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-3">
+              <p className="text-xs font-medium text-gray-500">
+                Sign in or register with your email and password
+              </p>
+            </div>
+            {signInError && (
+              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-2 rounded-md text-xs">
+                {signInError}
+              </div>
             )}
-          </div>
-          <div className="space-y-2">
-            <Input
-              type="password"
-              name="password"
-              placeholder="Your password"
-              value={formData.password}
-              onChange={handleChange}
-            />
-            {errors.password && (
-              <p className="text-red-500 text-xs">{errors.password}</p>
-            )}
-          </div>
-          <Button
-            variant={'active'}
-            className="text-xs w-full"
-            type="submit"
-            disabled={loading}
-            onClick={handleSignIn}
+            <div className="space-y-2">
+              <Input
+                type="email"
+                name="email"
+                placeholder="Your@email.com"
+                value={formData.email}
+                onChange={handleChange}
+              />
+              {errors.email && (
+                <p className="text-red-500 text-xs">{errors.email}</p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Input
+                type="password"
+                name="password"
+                placeholder="Your password"
+                value={formData.password}
+                onChange={handleChange}
+              />
+              {errors.password && (
+                <p className="text-red-500 text-xs">{errors.password}</p>
+              )}
+            </div>
+            <Button
+              variant={'active'}
+              className="text-xs w-full"
+              type="submit"
+              disabled={loading}
+              onClick={handleSignIn}
+            >
+              Continue
+            </Button>
+          </form>
+          <Link
+            href="#"
+            className="text-xs text-orange-500 underline underline-offset-2"
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(openDialogForgotPassword());
+              dispatch(closeDialogCreateAccount());
+            }}
           >
-            Continue
-          </Button>
-        </form>
-        <Link
-          href="#"
-          className="text-xs text-orange-500 underline underline-offset-2"
-          onClick={(e) => {
-            e.preventDefault();
-            dispatch(openDialogForgotPassword());
-            dispatch(closeDialogCreateAccount());
-          }}
-        >
-          Forgot your password?
-        </Link>
-      </DialogContent>
-      <ForgotPasswordDialogue />
-    </Dialog>
+            Forgot your password?
+          </Link>
+        </DialogContent>
+        <ForgotPasswordDialogue />
+      </Dialog>
+      {unactivatedEmail && <VerifyEmailDialog/>}
+    </>
   );
 }

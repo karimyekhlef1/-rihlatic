@@ -54,7 +54,10 @@ const signupSlice = createSlice({
       .addCase(signupUser.rejected, (state, action) => {
         state.loading = false;
         state.success = false;
-        state.error = action.payload as string;
+        // Handle both string and object error responses
+        const errorPayload = action.payload as any;
+        state.error = errorPayload?.message || 
+                     (typeof errorPayload === 'string' ? errorPayload : 'Signup failed');
         state.userData = {};
       });
   },
