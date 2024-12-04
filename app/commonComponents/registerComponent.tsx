@@ -26,6 +26,7 @@ import Image from 'next/image';
 import login from '@/public/images/login.png';
 import VerifyEmailDialog from './verifyEmailComponent';
 import { signupUser } from '@/lib/store/api/signup/signupSlice';
+import { setEmailToVerify } from '@/lib/store/custom/mainSlices/verificationSlice';
 
 interface FormData {
   email: string;
@@ -47,8 +48,9 @@ export default function RegisterDialog() {
   const [errors, setErrors] = useState<Partial<FormData>>({});
 
   const handleOpenDialogVerifyEmail = () => {
+    dispatch(setEmailToVerify(accountDetails.email));
     dispatch(openDialogVerifyEmail());
-    dispatch(closeDialogCreateAccount());
+    dispatch(closeDialogRegister());
   };
 
   const validateForm = () => {
@@ -90,8 +92,8 @@ export default function RegisterDialog() {
         );
 
         if (signupUser.fulfilled.match(resultAction)) {
-          // Registration successful
           handleOpenDialogVerifyEmail();
+          dispatch(resetAccountDetails());
         }
       } catch (error) {
         console.error('Registration failed:', error);
@@ -127,7 +129,11 @@ export default function RegisterDialog() {
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-          {signupError && <p className="text-red-500 text-xs">{signupError}</p>}
+          {signupError && (
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-2 rounded-md text-xs">
+              {signupError}
+            </div>
+          )}
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -191,7 +197,7 @@ export default function RegisterDialog() {
           .
         </p>
       </DialogContent>
-      <VerifyEmailDialog email={accountDetails.email} />
+      <VerifyEmailDialog />
     </Dialog>
   );
 }

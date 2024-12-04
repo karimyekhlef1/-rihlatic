@@ -27,15 +27,15 @@ import Image from 'next/image';
 import verify from '@/public/images/home/news.png';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import { clearEmailToVerify } from '@/lib/store/custom/mainSlices/verificationSlice';
 
-interface VerifyEmailDialogProps {
-  email: string;
-}
-
-export default function VerifyEmailDialog({ email }: VerifyEmailDialogProps) {
+export default function VerifyEmailDialog() {
   const dispatch = useDispatch<AppDispatch>();
   const [verificationCode, setVerificationCode] = useState('');
 
+  const emailToVerify = useSelector(
+    (state: RootState) => state.verification.emailToVerify
+  );
   const isDialogOpen = useSelector(
     (state: RootState) => state.dialog.isVerifyEmailOpen
   );
@@ -56,28 +56,31 @@ export default function VerifyEmailDialog({ email }: VerifyEmailDialogProps) {
   };
 
   const handleVerifyEmail = async () => {
-    if (verificationCode.length === 6) {
+    if (verificationCode.length === 6 && emailToVerify) {
       try {
         await dispatch(
           verifyEmail({
-            email: email,
+            email: emailToVerify,
             code: verificationCode,
           })
         ).unwrap();
+        toast.success('Account has been verified successfully.');
+        dispatch(clearEmailToVerify());
+        dispatch(closeDialogVerifyEmail());
       } catch (err) {
-        // Error is handled by the slice
-        console.error('Verification failed:', err);
+        toast.error('Verification failed. Please try again.');
       }
     }
-    toast('Account has been created.');
   };
 
   const handleResendCode = async () => {
-    try {
-      await dispatch(resendCode({ email: email }));
-      toast('Verification code has been resent.');
-    } catch (error) {
-      console.error('Resending code failed:', error);
+    if (emailToVerify) {
+      try {
+        await dispatch(resendCode({ email: emailToVerify }));
+        toast.success('Verification code has been resent.');
+      } catch (error) {
+        toast.error('Failed to resend code. Please try again.');
+      }
     }
   };
 
@@ -85,15 +88,23 @@ export default function VerifyEmailDialog({ email }: VerifyEmailDialogProps) {
   useEffect(() => {
     return () => {
       dispatch(clearVerifyEmailState());
+      dispatch(clearEmailToVerify());
     };
   }, [dispatch]);
+
+  if (!emailToVerify) {
+    return null;
+  }
 
   return (
     <Dialog
       open={isDialogOpen}
-      onOpenChange={(open) =>
-        dispatch(open ? openDialogVerifyEmail() : closeDialogVerifyEmail())
-      }
+      onOpenChange={(open) => {
+        if (!open) {
+          dispatch(clearEmailToVerify());
+        }
+        dispatch(open ? openDialogVerifyEmail() : closeDialogVerifyEmail());
+      }}
     >
       <DialogContent className="sm:max-w-[355px]">
         <DialogHeader>
@@ -103,7 +114,9 @@ export default function VerifyEmailDialog({ email }: VerifyEmailDialogProps) {
           </DialogTitle>
           <p className="text-xs font-medium text-gray-500">
             We sent a code to your email{' '}
-            <span className="text-xs font-medium text-orange-500">{email}</span>
+            <span className="text-xs font-medium text-orange-500">
+              {emailToVerify}
+            </span>
             . Please add it below to verify your email.
           </p>
         </DialogHeader>

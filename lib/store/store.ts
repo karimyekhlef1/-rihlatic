@@ -16,6 +16,7 @@ import calendarReducer from '@/lib/store/custom/commonSlices/calendarSlice';
 import carrierReducer from '@/lib/store/custom/searchSlices/carrierSlice';
 import excludedCountriesReducer from '@/lib/store/custom/searchSlices/excludedCountriesSlice';
 import LanguageSlice from '@/lib/store/custom/LanguageSlice';
+import verificationReducer from './custom/mainSlices/verificationSlice';
 
 // Home
 import homeSlice from '@/lib/store/api/home/homeSlice';
@@ -38,6 +39,7 @@ export const store = configureStore({
   reducer: {
     account: accountSlice,
     dialog: dialogReducer,
+    verification: verificationReducer,
     pagination: paginationReducer,
     booking: bookingReducer,
     paymentStep: paymentStepReducer,
