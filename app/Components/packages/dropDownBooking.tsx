@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 interface BookingOption {
   label: string;
@@ -20,6 +20,9 @@ export default function DropDownBookingComponent({
     null
   );
 
+  useEffect(()=>{
+
+  },[data])
   const handleSelect = (option: BookingOption) => {
     setSelectedOption(option);
     setIsOpen(false);

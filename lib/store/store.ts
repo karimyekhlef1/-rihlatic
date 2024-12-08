@@ -34,7 +34,8 @@ import resetPasswordSlice from '@/lib/store/api/resetPassword/resetPasswordSlice
 //
 import packagesSlice from '@/lib/store/api/packages/packagesSlice';
 import accountDetailsSlice from './custom/commonSlices/accountDetailsSlice';
-
+//
+import paymentPackageSlice from '@/lib/store/custom/packagesSlices/paymentPachageSlices'
 export const store = configureStore({
   reducer: {
     account: accountSlice,
@@ -56,6 +57,8 @@ export const store = configureStore({
     carriers: carrierReducer,
     excludedCountries: excludedCountriesReducer,
     langSlice: LanguageSlice,
+    //payment
+    paymentPackage :paymentPackageSlice,
 
     // ---------------------------
     // API REDUCERS

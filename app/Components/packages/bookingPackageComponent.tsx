@@ -10,6 +10,7 @@ import { extractData } from '@/app/hooks/useExtractData';
 import DropDownBookingComponent from './dropDownBooking';
 import Link from 'next/link';
 import RoomsDetailsBooking from './RoomsDetailsBooking';
+
 interface Room {
   name: string;
     id: Number;
@@ -34,6 +35,8 @@ export default function BookingPackageComponent({ data }: { data: Departure[] })
   const [selectedDeparture, setSelectedDeparture] = useState<Departure | undefined>();
   const [selectedOption, setSelectedOption] = useState<string | null>('test');
   const [roomNames , setRoomNames] =  useState<any>();
+  const [selectedRoom ,setSelectedRoom] = useState<Room | undefined>();
+  const [isOpen, setIsOpen] = useState<boolean>(false)
 
   useEffect (()=>{
     if (selectedDeparture) {
@@ -77,9 +80,16 @@ export default function BookingPackageComponent({ data }: { data: Departure[] })
       setSelectedDeparture(selected);
     }
   };
+  const handleSelectRoom = (selectedOption: { label: string; id: number }) => {
+    const selected = selectedDeparture?.pricing.rooms.find((item) => item.id === selectedOption.id);
+    if (selected) {
+      setSelectedRoom(selected);
+      setIsOpen(true)
+    }
+  };
   return (
     <div>
-      <RoomsDetailsBooking />
+      
       <Card className="w-[300px] rounded-xl">
         <CardContent className="px-0 py-8">  
           <div className="flex flex-col items-center"> 
@@ -139,23 +149,29 @@ export default function BookingPackageComponent({ data }: { data: Departure[] })
               />
                     {selectedDeparture ?
               <DropDownBookingComponent 
-                onSelect={setSelectedOption} 
+                onSelect={handleSelectRoom} 
                 data={roomNames} 
                 title='Kind of room' 
               />:null}
             </div>
             <Separator />
-            <div className="pt-4">
+            {/* <div className="pt-4">
               <Link href={'/payment'}>
                 <Button className="px-14" variant={'rihlatic'} disabled={!selectedDeparture || !selectedOption}
                 >
                   Book Now
                 </Button>
               </Link>
-            </div>
+            </div> */}
           </div>
         </CardContent>
       </Card> 
+      <RoomsDetailsBooking 
+      isOpen={isOpen} 
+      setIsOpen={() => setIsOpen(!isOpen)} 
+      selectedDeparture={selectedDeparture} 
+      selectedRoom={selectedRoom}
+      />
     </div>
   );
 }

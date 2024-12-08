@@ -22,32 +22,33 @@ const NumberOfPeople: React.FC<NumberOfPeopleProps> = ({
   min = 0,
 }) => {
   return (
-    <div className="flex justify-between items-center">
-      <div className="flex items-center space-x-2">
-        {icon && <span>{icon}</span>}
-        <span className="text-gray-700">{label}</span>
-      </div>
-
-      <div className="flex items-center">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onDecrement}
-          disabled={value == min}
-        >
-          <FiMinus />
-        </Button>
-        <span className="px-4">{value}</span>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onIncrement}
-          disabled={value >= max}
-        >
-          <FiPlus />
-        </Button>
-      </div>
+    <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+    <div className="flex items-center space-x-3">
+      {icon}
+      <span className="text-gray-700">{label}</span>
     </div>
+    <div className="flex items-center space-x-2">
+      <Button 
+        variant="outline" 
+        size="sm" 
+        onClick={onDecrement} 
+        disabled={value == min}
+        className="w-8 h-8 p-0"
+      >
+        -
+      </Button>
+      <span className="text-lg font-semibold w-8 text-center">{value}</span>
+      <Button 
+        variant="outline" 
+        size="sm" 
+        onClick={onIncrement} 
+        disabled={value == max}
+        className="w-8 h-8 p-0"
+      >
+        +
+      </Button>
+    </div>
+  </div>
   );
 };
 

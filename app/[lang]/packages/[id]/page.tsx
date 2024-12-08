@@ -29,12 +29,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { packagesFunc } from "@/lib/store/api/packages/packagesSlice";
 import Loading from "@/app/Components/home/Loading";
 import { PackageDetails } from "@/app/Types/package/packageDetails";
-
+import { setPackage } from "@/lib/store/custom/packagesSlices/paymentPachageSlices";
 export default function Details() {
   const dispatch = useDispatch<any>();
   const { loading, packagesData } = useSelector((state: any) => state.packages);
   const [packagesDetails, setPackageDetails] = useState<PackageDetails | undefined>(undefined);
-  const [packages, setPackage] = useState<any[]>([]);
+  const [packages, setPackages] = useState<any[]>([]);
   const { id } = useParams();
 
   useEffect(() => {
@@ -47,8 +47,9 @@ export default function Details() {
         })
       );
       setPackageDetails(result.payload.result.package);
+      dispatch(setPackage(result.payload.result.package) )
       const all =  await dispatch(packagesFunc({ include: 'departures' }));
-      setPackage(all.payload.result.packages)
+      setPackages(all.payload.result.packages)
     };
     getData();
   }, []);
