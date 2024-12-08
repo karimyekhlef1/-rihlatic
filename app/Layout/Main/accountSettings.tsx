@@ -12,7 +12,7 @@ export default withAuth(function AccountSettings() {
     <div className="flex overflow-x-auto flex-wrap flex-col items-center md:items-start md:flex-row md:justify-center pt-8 pb-20 bg-[#f8f8f8]">
       <div className="flex flex-col md:px-20">
         <h1 className="font-semibold">Account Settings</h1>
-        <p className="box-content font-medium sm:pb-5 text-[14px] w-[315px] h-[63px] text-gray-500">
+        <p className="box-content font-medium pb-5 text-[14px] w-[315px] h-[63px] text-gray-500">
           Set your preferred account details to ensure you always receive a
           personalized experience with us.
         </p>

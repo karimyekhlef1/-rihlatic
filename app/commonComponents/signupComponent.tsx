@@ -68,7 +68,7 @@ export default function SignUpDialog() {
             Sign-in
           </Button>
           <p className="text-left mt-2 text-xs text-gray-500">
-            If you don't have an account you can register a new one
+            If you don&apos;t have an account you can register a new one
           </p>
           <Button
             className="w-full mt-2 bg-white hover:bg-slate-100 text-orange-500 hover:text-orange-600 text-xs flex items-center justify-center"

@@ -34,26 +34,38 @@ export const signinUser = createAsyncThunk(
     try {
       const response = await signinService.loginUser(userData);
 
+      if (response.satuts === "Unconfirmed") {  // API returns 'satuts' (typo)
+        return thunkApi.rejectWithValue({
+          status: "Unconfirmed",  // We'll use correct spelling in our app
+          message: "Your account needs to be verified",
+          isUnconfirmed: true  // Adding a clear flag
+        });
+      }
+
       // Extract the token from the nested structure
       const token = response?.token;
       const user = response?.user;
 
       if (token) {
-
         storageUtils.setToken(token);
         storageUtils.setUser(user);
         const storedToken = storageUtils.getToken();
 
-
         return {
           user: user,
-          token: token,
+          token: token
         };
       } else {
-        return thunkApi.rejectWithValue('No token in response');
+        return thunkApi.rejectWithValue({
+          message: 'No token in response',
+          isUnconfirmed: false
+        });
       }
     } catch (error: any) {
-      return thunkApi.rejectWithValue(error.response?.data || 'Login failed');
+      return thunkApi.rejectWithValue({
+        message: error.response?.data || 'Login failed',
+        isUnconfirmed: false
+      });
     }
   }
 );
