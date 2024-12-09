@@ -122,19 +122,19 @@ export default function PassengerInformation({ titel, index, roomId }: Passenger
               <Input
                 id="firstName"
                 placeholder="First name"
-                value={passenger.first_name || ''}
+                value={passenger?.first_name || ''}
                 onChange={(e) => handleInputChange('first_name', e.target.value)}
               />
               <Input
                 id="lastName"
                 placeholder="Last name"
-                value={passenger.last_name || ''}
+                value={passenger?.last_name || ''}
                 onChange={(e) => handleInputChange('last_name', e.target.value)}
               />
             </div>
 
             <Select
-              value={passenger.sex || ''}
+              value={passenger?.sex || ''}
               onValueChange={(value) => handleInputChange('sex', value)}
             >
               <SelectTrigger id="sex">
@@ -150,15 +150,15 @@ export default function PassengerInformation({ titel, index, roomId }: Passenger
               <Popover>
                 <PopoverTrigger asChild>
                   <Button variant={'outline'} className={cn('w-full justify-start')}>
-                    {formatDob(passenger.birth_date)}
+                    {formatDob(passenger?.birth_date)}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent>
                   <Calendar
                     mode="single"
                     selected={
-                      passenger.birth_date
-                        ? parse(passenger.birth_date, 'yyyy-MM-dd', new Date())
+                      passenger?.birth_date
+                        ? parse(passenger?.birth_date, 'yyyy-MM-dd', new Date())
                         : undefined
                     }
                     onSelect={(date) =>
@@ -171,8 +171,8 @@ export default function PassengerInformation({ titel, index, roomId }: Passenger
               <Input
                 type="text"
                 placeholder="Passport Number"
-                value={passenger.passport_nbr || ''}
-                onChange={(e) => handleInputChange('passport_nbr', e.target.value)}
+                value={passenger?.passport_nbr || ''}
+                onChange={(e) => handleInputChange('passport_nbr', e.target?.value)}
               />
             </div>
           </form>
