@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import AdulteInformation from './AdulteInformation';
 import { useSelector } from 'react-redux';
-
+import { ScrollArea } from "@/components/ui/scroll-area";
 export default function RoomReservationInformation() {
   const rooms = useSelector((state: any) => state.paymentPackage.rooms);
   const currentStep = useSelector((state: any) => state.paymentPackage.currentStep);
@@ -10,22 +10,26 @@ export default function RoomReservationInformation() {
   if (!currentRoom) {
     return <p>No room found for this step.</p>; 
   }
-  const renderRoomInfo = (type: string, count: number) => {
+ 
+  const renderRoomInfo = (type: 'adults' | 'children' | 'infants', count: number) => {
     return Array.from({ length: count }, (_, index) => (
       <AdulteInformation
+        roomId = {currentRoom.roomType.id}
         key={`${type}-${index}`}
         titel={type}
-        index={index + 1}
+        index={index}
       />
     ));
   };
 
   return (
-    <div className="h-[90vh] overflow-y-auto ">
-      <h3>Room Reservation Information</h3>
-      {renderRoomInfo('Adult', currentRoom.adults)}
-      {renderRoomInfo('Child', currentRoom.children)}
-      {renderRoomInfo('Infant', currentRoom.infants)}
+    <div className="  w-full flex justify-center  ">
+    <ScrollArea className=" max-h-[80vh]  w-1/2   ">
+    
+      {renderRoomInfo('adults', currentRoom.adults)}
+      {renderRoomInfo('children', currentRoom.children)}
+      {renderRoomInfo('infants', currentRoom.infants)}
+    </ScrollArea>
     </div>
   );
 }
