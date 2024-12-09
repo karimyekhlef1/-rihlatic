@@ -21,7 +21,7 @@ const HomePage: React.FC = () => {
     useEffect(() => {
         const getData = async () => {
             const result = await dispatch(HomeFunc({ include: 'departures' }));
-            setHomeData(result.payload)
+            setHomeData(result.payload.result)
 
    
         };
@@ -33,17 +33,9 @@ const HomePage: React.FC = () => {
 
     }
 
-
-
-
-
-
-
 console.log("homeData",homeData)
     return (
         <div id="home-page">
-    
-    {/* <Loading/> */}
             <SearchSectionComponent />
             <ServiceSection  />
             <br />

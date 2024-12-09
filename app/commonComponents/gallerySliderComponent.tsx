@@ -14,139 +14,21 @@ import image1 from '@/public/images/packages/image_1.jpg';
 import image2 from '@/public/images/packages/image_2.jpg';
 import image3 from '@/public/images/packages/image_3.jpg';
 import PageTitleComponent from './pageTitleComponent';
+import useHandlingImagesForGallerySlider from '../hooks/useHandlingImagesForGallerySlider';
+// import { url } from 'inspector';
 
-// Sample image data (replace with your own images)
-const images: GalleryProps[] = [
-  {
-    title: 'Istanbul Group Trip , Turkey',
-    image: image1.src,
-    name: 'Turkey',
-    description:
-      'Non quo aperiam repellendus quas est est. Eos aut dolore aut ut sit nesciunt. Ex tempora quia. Sit nobis consequatur dolores incidunt.',
-    rating: 4.5,
-  },
-  {
-    title: 'Istanbul Group Trip , Turkey',
-    image: image1.src,
-    name: 'Turkey',
-    description:
-      'Non quo aperiam repellendus quas est est. Eos aut dolore aut ut sit nesciunt. Ex tempora quia. Sit nobis consequatur dolores incidunt.',
-    rating: 4.5,
-  },  {
-    title: 'Explore the city',
-    image: image2.src,
-    name: 'Istanbul city',
-    description:
-      'Vero eum voluptatem aliquid nostrum voluptatem. Vitae esse natus. Earum nihil deserunt eos quasi cupiditate. A inventore et molestiae natus.',
-    rating: 3,
-  }, {
-    title: 'Istanbul Group Trip , Turkey',
-    image: image1.src,
-    name: 'Turkey',
-    description:
-      'Non quo aperiam repellendus quas est est. Eos aut dolore aut ut sit nesciunt. Ex tempora quia. Sit nobis consequatur dolores incidunt.',
-    rating: 4.5,
-  },  {
-    title: 'Explore the city',
-    image: image2.src,
-    name: 'Istanbul city',
-    description:
-      'Vero eum voluptatem aliquid nostrum voluptatem. Vitae esse natus. Earum nihil deserunt eos quasi cupiditate. A inventore et molestiae natus.',
-    rating: 3,
-  }, {
-    title: 'Istanbul Group Trip , Turkey',
-    image: image1.src,
-    name: 'Turkey',
-    description:
-      'Non quo aperiam repellendus quas est est. Eos aut dolore aut ut sit nesciunt. Ex tempora quia. Sit nobis consequatur dolores incidunt.',
-    rating: 4.5,
-  }, {
-    title: 'Istanbul Group Trip , Turkey',
-    image: image1.src,
-    name: 'Turkey',
-    description:
-      'Non quo aperiam repellendus quas est est. Eos aut dolore aut ut sit nesciunt. Ex tempora quia. Sit nobis consequatur dolores incidunt.',
-    rating: 4.5,
-  },  {
-    title: 'Explore the city',
-    image: image2.src,
-    name: 'Istanbul city',
-    description:
-      'Vero eum voluptatem aliquid nostrum voluptatem. Vitae esse natus. Earum nihil deserunt eos quasi cupiditate. A inventore et molestiae natus.',
-    rating: 3,
-  }, {
-    title: 'Istanbul Group Trip , Turkey',
-    image: image1.src,
-    name: 'Turkey',
-    description:
-      'Non quo aperiam repellendus quas est est. Eos aut dolore aut ut sit nesciunt. Ex tempora quia. Sit nobis consequatur dolores incidunt.',
-    rating: 4.5,
-  },
-  {
-    title: 'Explore the city',
-    image: image2.src,
-    name: 'Istanbul city',
-    description:
-      'Vero eum voluptatem aliquid nostrum voluptatem. Vitae esse natus. Earum nihil deserunt eos quasi cupiditate. A inventore et molestiae natus.',
-    rating: 3,
-  },
-  {
-    title: 'Hotel in the woods',
-    image: image3.src,
-    name: 'Visit Turkey with friends',
-    description:
-      'Et quod quaerat dolorem quaerat architecto aliquam accusantium. Ex adipisci et doloremque autem quia quam. Quis eos molestiae at iure impedit.',
-    rating: 5,
-  },
-  {
-    title: 'Hotel in the woods',
-    image: image3.src,
-    name: 'Visit Turkey with friends',
-    description:
-      'Et quod quaerat dolorem quaerat architecto aliquam accusantium. Ex adipisci et doloremque autem quia quam. Quis eos molestiae at iure impedit.',
-    rating: 5,
-  },  {
-    title: 'Hotel in the woods',
-    image: image3.src,
-    name: 'Visit Turkey with friends',
-    description:
-      'Et quod quaerat dolorem quaerat architecto aliquam accusantium. Ex adipisci et doloremque autem quia quam. Quis eos molestiae at iure impedit.',
-    rating: 5,
-  },  {
-    title: 'Hotel in the woods',
-    image: image3.src,
-    name: 'Visit Turkey with friends',
-    description:
-      'Et quod quaerat dolorem quaerat architecto aliquam accusantium. Ex adipisci et doloremque autem quia quam. Quis eos molestiae at iure impedit.',
-    rating: 5,
-  },  {
-    title: 'Hotel in the woods',
-    image: image3.src,
-    name: 'Visit Turkey with friends',
-    description:
-      'Et quod quaerat dolorem quaerat architecto aliquam accusantium. Ex adipisci et doloremque autem quia quam. Quis eos molestiae at iure impedit.',
-    rating: 5,
-  },  {
-    title: 'Hotel in the woods',
-    image: image3.src,
-    name: 'Visit Turkey with friends',
-    description:
-      'Et quod quaerat dolorem quaerat architecto aliquam accusantium. Ex adipisci et doloremque autem quia quam. Quis eos molestiae at iure impedit.',
-    rating: 5,
-  },  {
-    title: 'Hotel in the woods',
-    image: image3.src,
-    name: 'Visit Turkey with friends',
-    description:
-      'Et quod quaerat dolorem quaerat architecto aliquam accusantium. Ex adipisci et doloremque autem quia quam. Quis eos molestiae at iure impedit.',
-    rating: 5,
-  },
-];
+// const images: [] = [
+// url: image1.src,
+//     url: image1.src,
+//     url: image1.src,
 
-export default function ImageSlider() {
+
+// ];
+
+export default function ImageSlider({data}:any) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start' });
-
+  const { images, setGalleryImages } = useHandlingImagesForGallerySlider('packages', data);
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setCurrentIndex(emblaApi.selectedScrollSnap());
@@ -174,17 +56,18 @@ export default function ImageSlider() {
     const distance = Math.abs(index - currentIndex);
     return Math.max(1 - (distance * 0.2),0.05);
   };
+  console.log("images",images)
   return (
     <div className="px-4 py-12">
       <PageTitleComponent
-        title={images[currentIndex].title}
-        rating={images[currentIndex].rating}
-        adress={images[currentIndex].name}
+        title={data?.name}
+        rating={null}
+        adress={null}
       />
       <div className="relative">
         <Image
-          src={images[currentIndex].image}
-          alt={images[currentIndex].name}
+          src={images[currentIndex]}
+          alt={images[currentIndex]}
           width={1200}
           height={600}
           className="w-1/1 max-h-[600px] object-cover rounded-lg shadow-md"
@@ -196,8 +79,8 @@ export default function ImageSlider() {
                 <CarouselItem key={index} className="basis-1/8 pl-2">
                   <div className="p-1">
                     <Image
-                      src={image.image}
-                      alt={image.name}
+                      src={image}
+                      alt={image}
                       width={200}
                       height={200}
                       className={` w-[60px] h-[60px] sm:w-[100px] sm:h-[100px] object-cover rounded-md cursor-pointer ${

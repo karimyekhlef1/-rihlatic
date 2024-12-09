@@ -1,40 +1,104 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { CircleCheck } from 'lucide-react';
-import { DatePickerWithRange } from '@/app/commonComponents/datePicker';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/lib/store/store'; // Adjust this import path as needed
+import { RootState } from '@/lib/store/store';
 import { format, differenceInDays } from 'date-fns';
-
+import { extractData } from '@/app/hooks/useExtractData';
 import DropDownBookingComponent from './dropDownBooking';
 import Link from 'next/link';
+import RoomsDetailsBooking from './RoomsDetailsBooking';
 
-export default function BookingPackageComponent() {
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const { date } = useSelector((state: RootState) => state.datePicker);
-  const startDate = date?.from;
-  const endDate = date?.to;
+interface Room {
+  name: string;
+    id: Number;
+    type: string;
+    description: string;
+    capacity_adult: number;
+    capacity_child: number;
+    capacity_bebe: number;
+}
 
-  const calculateDuration = () => {
+interface Departure {
+  id: number;
+  price_ini?: number;
+  departure_date: Date;
+  return_date: Date;
+  pricing: {
+    rooms: Room[];
+  };
+}
+
+export default function BookingPackageComponent({ data }: { data: Departure[] }) {
+  const [selectedDeparture, setSelectedDeparture] = useState<Departure | undefined>();
+  const [selectedOption, setSelectedOption] = useState<string | null>('test');
+  const [roomNames , setRoomNames] =  useState<any>();
+  const [selectedRoom ,setSelectedRoom] = useState<Room | undefined>();
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+
+  useEffect (()=>{
+    if (selectedDeparture) {
+      const roomNames =selectedDeparture.pricing.rooms.map((room)=>({
+        label:room.name,
+        id:room.id
+      }))
+ setRoomNames(roomNames)
+    }
+  },[selectedDeparture])
+  const calculateDuration = (startDate:Date,endDate:Date) => {
     if (startDate && endDate) {
-      const nights = differenceInDays(endDate, startDate);
-      const days = nights + 1;
-      return `${nights} nights / ${days} days`;
+      try {
+        const nights = differenceInDays(new Date(endDate), new Date(startDate));
+        const days = nights + 1;
+        return `${nights} nights / ${days} days`;
+      } catch (error) {
+        console.error('Error calculating duration:', error);
+        return 'Invalid dates';
+      }
     }
     return 'Select dates';
   };
 
+  if(!data){
+    return <p> loading ...</p>
+
+  }
+  const price = selectedDeparture ? selectedDeparture.price_ini :data[0].price_ini ;
+  const startDate = selectedDeparture ? selectedDeparture.departure_date :data[0].departure_date;
+  const endDate =selectedDeparture ? selectedDeparture.return_date :data[0].return_date;
+
+  const departureDates = data.map((departure) => ({
+    label: `${format(new Date(departure.departure_date), 'dd-MMM-yyyy')}/${format(new Date(departure.return_date), 'dd-MMM-yyyy')}`,
+    id: departure.id,
+  }));
+
+  const handleSelectDeparture = (selectedOption: { label: string; id: number }) => {
+    const selected = data.find((item) => item.id === selectedOption.id);
+    if (selected) {
+      setSelectedDeparture(selected);
+    }
+  };
+  const handleSelectRoom = (selectedOption: { label: string; id: number }) => {
+    const selected = selectedDeparture?.pricing.rooms.find((item) => item.id === selectedOption.id);
+    if (selected) {
+      setSelectedRoom(selected);
+      setIsOpen(true)
+    }
+  };
   return (
     <div>
+      
       <Card className="w-[300px] rounded-xl">
-        <CardContent className="px-0 py-8">
-          <div className="flex flex-col items-center">
+        <CardContent className="px-0 py-8">  
+          <div className="flex flex-col items-center"> 
             <div className="flex flex-col items-center justify-center pb-4">
               <p className="text-xs">Starting from</p>
-              <p className="font-semibold text-lg">149000 DZD</p>
-            </div>
+              <p className="font-semibold text-lg">
+                {price ? `${price} DZD` : 'N/A'}
+              </p>
+            </div> 
             <Separator />
             <div className="flex flex-col pt-4 pb-[100px]">
               <div className="flex flex-row items-center">
@@ -44,7 +108,7 @@ export default function BookingPackageComponent() {
                   fill="#b4deff"
                 />
                 <p className="text-sm font-semibold pl-2">
-                  {calculateDuration()}
+                  {calculateDuration(startDate,endDate)}
                 </p>
               </div>
               <div className="flex flex-row items-center mt-2">
@@ -55,9 +119,9 @@ export default function BookingPackageComponent() {
                 />
                 <p className="text-sm font-semibold pl-2">
                   {startDate
-                    ? format(startDate, 'dd/MMM/yyyy')
+                    ? format(new Date(startDate), 'dd/MMM/yyyy')
                     : 'Select dates'}
-                  {endDate ? ` - ${format(endDate, 'dd/MMM/yyyy')}` : ''}
+                  {endDate ? ` - ${format(new Date(endDate), 'dd/MMM/yyyy')}` : ''}
                 </p>
               </div>
             </div>
@@ -71,26 +135,43 @@ export default function BookingPackageComponent() {
                   <p className="text-sm font-medium text-gray-500">
                     {selectedOption}
                   </p>
-                  <p className="font-semibold text-sm">149000 DZD</p>
+                  <p className="font-semibold text-sm">{price ? `${price} DZD` : 'N/A'}</p>
                 </div>
                 <Separator />
               </>
             )}
             <div className="flex flex-col gap-y-2 pb-4 pt-4">
-              <DropDownBookingComponent onSelect={setSelectedOption} />
-              <DatePickerWithRange />
+      
+              <DropDownBookingComponent 
+                onSelect={handleSelectDeparture} 
+                data={departureDates} 
+                title='Select a departure' 
+              />
+                    {selectedDeparture ?
+              <DropDownBookingComponent 
+                onSelect={handleSelectRoom} 
+                data={roomNames} 
+                title='Kind of room' 
+              />:null}
             </div>
             <Separator />
-            <div className="pt-4">
+            {/* <div className="pt-4">
               <Link href={'/payment'}>
-                <Button className="px-14" variant={'rihlatic'}>
+                <Button className="px-14" variant={'rihlatic'} disabled={!selectedDeparture || !selectedOption}
+                >
                   Book Now
                 </Button>
               </Link>
-            </div>
+            </div> */}
           </div>
         </CardContent>
-      </Card>
+      </Card> 
+      <RoomsDetailsBooking 
+      isOpen={isOpen} 
+      setIsOpen={() => setIsOpen(!isOpen)} 
+      selectedDeparture={selectedDeparture} 
+      selectedRoom={selectedRoom}
+      />
     </div>
   );
 }
