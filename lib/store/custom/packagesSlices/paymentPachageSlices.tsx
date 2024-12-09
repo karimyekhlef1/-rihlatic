@@ -1,19 +1,51 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+interface UpdatePassengerFieldPayload {
+  room_id: number;
+  type: 'adults' | 'children' | 'infants';
+  index: number;
+  field: string;
+  value: string | null;
+}
+
+interface Passenger {
+  id: number;
+  email: string;
+  phone: string;
+  first_name: string;
+  last_name: string;
+  sex: string;
+  passport_nbr: string;
+  passport_expire_at: string | null;
+  passport_scan: string | null;
+  birth_date: string;
+}
+
+interface RoomData {
+  room_id: number;
+  passengers: {
+    adults: Passenger[];
+    children: Passenger[];
+    infants: Passenger[];
+  };
+}
+
 interface PaymentPackageState {
   package: any;
   departure: any;
-  rooms: any[]; // Array of rooms
-  currentStep: number; // Current step in the process
-  steps: string[]; // Labels for the steps (one per room + a final verification step)
+  rooms: any[];
+  currentStep: number;
+  steps: string[];
+  RoomsData: RoomData[];
 }
 
 const initialState: PaymentPackageState = {
   package: null,
   departure: null,
   rooms: [],
-  currentStep: 1, // Start from the first step
-  steps: [], // This will be dynamically populated based on the number of rooms
+  currentStep: 1,
+  steps: [],
+  RoomsData: []
 };
 
 const paymentPackageSlice = createSlice({
@@ -28,25 +60,63 @@ const paymentPackageSlice = createSlice({
     },
     setRooms(state, action: PayloadAction<any[]>) {
       state.rooms = action.payload;
-
-      // Generate steps dynamically based on the number of rooms
       state.steps = action.payload.map((_, index) => `Réglage de la chambre: ${index + 1}`);
-      state.steps.push('Vérifier'); // Add a final verification step
+      state.steps.push('Vérifier');
     },
     setCurrentStep(state, action: PayloadAction<number>) {
-      state.currentStep = action.payload; // Update the current step
+      state.currentStep = action.payload;
     },
     nextStep(state) {
       if (state.currentStep < state.steps.length) {
-        state.currentStep += 1; // Move to the next step
+        state.currentStep += 1;
       }
     },
     previousStep(state) {
       if (state.currentStep > 1) {
-        state.currentStep -= 1; // Move to the previous step
+        state.currentStep -= 1;
       }
     },
-  },
+    updatePassengerFieldByIndex(state, action: PayloadAction<UpdatePassengerFieldPayload>) {
+      const { room_id, type, index, field, value } = action.payload;
+      
+      // Find room, create if not exists
+      let room = state.RoomsData.find(r => r.room_id === room_id);
+      if (!room) {
+        room = {
+          room_id,
+          passengers: {
+            adults: [],
+            children: [],
+            infants: []
+          }
+        };
+        state.RoomsData.push(room);
+      }
+
+      // Ensure passenger type array exists and has enough elements
+      const passengerTypeArray = room.passengers[type];
+      while (passengerTypeArray.length <= index) {
+        passengerTypeArray.push({
+          id: Date.now() + passengerTypeArray.length, // generate unique id
+          email: '',
+          phone: '',
+          first_name: '',
+          last_name: '',
+          sex: '',
+          passport_nbr: '',
+          passport_expire_at: null,
+          passport_scan: null,
+          birth_date: ''
+        });
+      }
+
+      // Update specific field
+      passengerTypeArray[index] = {
+        ...passengerTypeArray[index],
+        [field]: value
+      };
+    }
+  }
 });
 
 export const {
@@ -56,6 +126,7 @@ export const {
   setCurrentStep,
   nextStep,
   previousStep,
+  updatePassengerFieldByIndex
 } = paymentPackageSlice.actions;
 
 export default paymentPackageSlice.reducer;
