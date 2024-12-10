@@ -9,37 +9,58 @@ import PackagesComponent from '@/app/Components/packages/packagesComponent';
 import Loading from '@/app/Components/home/Loading';
 import { useSelector , useDispatch } from 'react-redux';
 import { packagesFunc } from '@/lib/store/api/packages/packagesSlice';
-export default function Packages() {
-  const { loading, homeData } = useSelector((state: any) => state.home);
-  const dispatch = useDispatch<any>();
-  const [packagesDate , setPackageData] = useState()
-  useEffect(() => {
-      const getData = async () => {
-          const result = await dispatch(packagesFunc({ include: 'departures' }));
-          setPackageData(result.payload.packages)
+import { extractData } from '@/app/hooks/useExtractData';
+import { usefilterPackages } from '@/app/hooks/useFilterPackages'; // Import the utility function
 
- 
-      };
-      getData();
+export default function Packages() {
+  const { loading, packagesData } = useSelector((state: any) => state.packages);
+  const dispatch = useDispatch<any>();
+  const [packages, setPackage] = useState<any[]>([]);
+  const [filteredPackages, setFilteredPackages] = useState<any[]>([]);
+  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const result = await dispatch(packagesFunc({ include: 'departures' }));
+      const fetchedPackages = result.payload.result.packages;
+      setPackage(fetchedPackages);
+      setFilteredPackages(fetchedPackages);
+    };
+    getData();
   }, []);
 
-  if (loading) {
-      return <Loading/>
+  // Use the utility function to filter packages
+  useEffect(() => {
+    const filtered = usefilterPackages(packages, selectedCountries, selectedCategories);
+    setFilteredPackages(filtered);
+  }, [selectedCountries, selectedCategories, packages]);
 
-  }
+  if(loading) return <Loading/>;
 
-// console.log("packagesDate",packagesDate)
+  const packageCategories = extractData(packages, (pkg) => `${pkg.category}99`);
+  const countryNames = extractData(packages, (pkg) =>
+    pkg.destinations.map((dest:any) => dest.country.name)
+  );
+
   return (
     <div className="flex md:flex-row flex-col">
       <div className="px-14 flex flex-col items-center pt-10 gap-y-8 md:pb-10">
-        <FilterComponent />
+        <FilterComponent 
+          packageCategories={packageCategories} 
+          countryNames={countryNames}
+          selectedCountries={selectedCountries}
+          selectedCategories={selectedCategories}
+          setSelectedCountries={setSelectedCountries}
+          setSelectedCategories={setSelectedCategories}
+        />
         <div className="hidden md:block">
           <AdComponent />
         </div>
       </div>
-      <div className="px-10 pt-10 gap-y-8 pb-10">
+      <div className="px-10 pt-10 gap-y-8 pb-10 w-full">
         <Provider store={store}>
-          <PackagesComponent data={packagesDate} />
+          <PackagesComponent data={filteredPackages} />
         </Provider>
       </div>
     </div>

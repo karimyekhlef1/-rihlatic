@@ -17,9 +17,9 @@ export default function SwiperComponent({swiper, list, Component, slidesPerView}
       <Swiper
         slidesPerView={slidesPerView || 1}
         spaceBetween={30}
-        pagination={{
-          type: 'fraction',
-        }}
+        // pagination={{
+        //   type: 'fraction',
+        // }}
         modules={[Pagination]}
         className="mySwiper mt-5"
         onBeforeInit={(sw) => {

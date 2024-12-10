@@ -16,6 +16,7 @@ import calendarReducer from '@/lib/store/custom/commonSlices/calendarSlice';
 import carrierReducer from '@/lib/store/custom/searchSlices/carrierSlice';
 import excludedCountriesReducer from '@/lib/store/custom/searchSlices/excludedCountriesSlice';
 import LanguageSlice from '@/lib/store/custom/LanguageSlice';
+import verificationReducer from './custom/mainSlices/verificationSlice';
 
 // Home
 import homeSlice from '@/lib/store/api/home/homeSlice';
@@ -33,11 +34,13 @@ import resetPasswordSlice from '@/lib/store/api/resetPassword/resetPasswordSlice
 //
 import packagesSlice from '@/lib/store/api/packages/packagesSlice';
 import accountDetailsSlice from './custom/commonSlices/accountDetailsSlice';
-
+//
+import paymentPackageSlice from '@/lib/store/custom/packagesSlices/paymentPachageSlices'
 export const store = configureStore({
   reducer: {
     account: accountSlice,
     dialog: dialogReducer,
+    verification: verificationReducer,
     pagination: paginationReducer,
     booking: bookingReducer,
     paymentStep: paymentStepReducer,
@@ -54,6 +57,8 @@ export const store = configureStore({
     carriers: carrierReducer,
     excludedCountries: excludedCountriesReducer,
     langSlice: LanguageSlice,
+    //payment
+    paymentPackage :paymentPackageSlice,
 
     // ---------------------------
     // API REDUCERS

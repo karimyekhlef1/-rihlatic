@@ -1,21 +1,70 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { FileUploadButton } from '@/components/ui/file-upload-button';
 import { useSelector } from 'react-redux';
-import Image from 'next/image';
 import { useDispatch } from 'react-redux';
-import { updateField ,AccountState} from '@/lib/store/custom/mainSlices/accountSlice';
-export default function ProfilePicture() {
-  const [preview, setPreview] = useState<string | null>(null);
-  const dispatch = useDispatch<any>();
-  const handleFileSelect = (file: File) => {
-    const previewUrl = URL.createObjectURL(file);
-    setPreview(previewUrl);
-    dispatch(updateField({ field: 'avatar', value: previewUrl }));
+import { AppDispatch } from '@/lib/store/store';
+import { fetchAccountData, updateAvatar } from '@/lib/store/api/account/accountSlice';
+import { toast } from 'sonner';
+
+interface User {
+  id: number;
+  email: string;
+  avatar: string;
+  username: string;
+  first_name: string | null;
+  last_name: string | null;
+}
+interface RootState {
+  account: {
+    loading: boolean;
+    accountData: User | null;
+    error: string | null;
   };
-  const accountState = useSelector((state: any) => state.account)
+}
+
+export default function ProfilePicture() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { accountData, loading, error } = useSelector((state: RootState) => state.account);
+
+  useEffect(() => {
+    dispatch(fetchAccountData());
+  }, [dispatch]);
+
+  const handleFileSelect = async (file: File) => {
+    // Check file size (1MB = 1024 * 1024 bytes)
+    if (file.size > 1024 * 1024) {
+      toast.error('File too large. Please select a file smaller than 1MB');
+      return;
+    }
+
+    // Check file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Invalid file type. Please select an image file');
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await dispatch(updateAvatar(formData)).unwrap();
+      
+      if (response.success === true) {
+        toast.success(response.message || 'Avatar updated successfully!');
+        // Refresh account data to get the new avatar
+        dispatch(fetchAccountData());
+      } else {
+        console.error('Invalid response:', response);
+        toast.error(response.message || 'Failed to update avatar');
+      }
+    } catch (err: any) {
+      console.error('Avatar upload error:', err);
+      const errorMessage = err?.response?.data?.message || err.message || 'Failed to update avatar';
+      toast.error(`Failed to update avatar: ${errorMessage}`);
+    }
+  };
 
   return (
     <div className="px-10">
@@ -30,8 +79,8 @@ export default function ProfilePicture() {
             <div>
               <Avatar className="hidden sm:block w-20 h-20">
                 <AvatarImage 
-                 src={preview || accountState.avatar}
-                 alt={accountState.firstName}/>
+                 src={accountData?.avatar}
+                 alt={accountData?.username}/>
                 <AvatarFallback></AvatarFallback>
               </Avatar>
             </div>
@@ -44,7 +93,6 @@ export default function ProfilePicture() {
                 <FileUploadButton
                   onFileSelect={handleFileSelect}
                   label="Upload"
-              
                 />
               </div>
             </div>

@@ -1,5 +1,5 @@
 interface PageTitleProps {
   title?: string;
-  rating: number;
-  adress: string;
+  rating: any;
+  adress: any;
 }

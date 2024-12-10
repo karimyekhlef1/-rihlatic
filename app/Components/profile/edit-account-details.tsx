@@ -18,65 +18,50 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-import { Dialog, DialogContent } from '@/components/ui/dialog';
-
+import { Dialog, DialogTitle, DialogContent } from '@/components/ui/dialog';
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  updateField,
-  resetForm,
-  AccountState,
-} from '@/lib/store/custom/mainSlices/accountSlice';
 import { setDialogOpen } from '@/lib/store/custom/mainSlices/dialogSlice';
 import type { RootState } from '@/lib/store/store';
-import { updateAccountFunc } from '@/lib/store/api/account/accountSlice';
+import { updateAccountDetails } from '@/lib/store/api/account/accountSlice';
+import { toast } from 'sonner';
+
 export default function EditAccountOwnerDetails() {
   const dispatch = useDispatch<any>();
-  const account = useSelector((state: RootState) => state.account);
-  const [localAccount, setLocalAccount] = useState<AccountState>(account);
   const { isOpen } = useSelector((state: RootState) => state.dialog);
+  const { loading } = useSelector((state: RootState) => state.account);
 
-  useEffect(() => {
-    setLocalAccount(account);
-  }, [account]);
+  // Add form state
+  const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    phone: '',
+    birthday: '',
+    passport_nbr: '',
+    passport_expire_at: '',
+    nationality: '',
+    sex: '',
+  });
 
-  const handleUpdatingField = (field: keyof AccountState, value: string) => {
-    dispatch(updateField({ field, value }));
-  };
-  const handleInputChange = (field: keyof AccountState, value: string) => {
-    setLocalAccount(prev => ({
+  // Handle input changes
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({
       ...prev,
       [field]: value
     }));
   };
 
-  const handleSave = () => {
-    const updateAccountData =async ( account :AccountState)=>{
-      try{
-        const result = await dispatch(updateAccountFunc(account ))
-        const user = result.payload.user;
-        Object.keys(user).forEach((field) => {
-          if (account.hasOwnProperty(field)) {
-            handleUpdatingField(field as keyof AccountState, user[field]);
-          }
-        });
-      } catch(error) {
-        console.log(error)
-
-      }
+  // Handle form submission
+  const handleSubmit = async () => {
+    try {
+      await dispatch(updateAccountDetails(formData)).unwrap();
+      dispatch(setDialogOpen(false)); // Close dialog on success
+      toast.success('Account details updated successfully');
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to update account details');
+      console.error('Failed to update account details:', error);
     }
-    updateAccountData(localAccount)
-    dispatch(setDialogOpen(false));
-
-  };
-
-  const handleCancel = () => {
-   
-    setLocalAccount(account);
-    // dispatch(resetForm());
-    dispatch(setDialogOpen(false));
-    // console.log("account",account)
-    // console.log("local",localAccount)
-
   };
 
   return (
@@ -85,6 +70,11 @@ export default function EditAccountOwnerDetails() {
       onOpenChange={(open) => dispatch(setDialogOpen(open))}
     >
       <DialogContent className="sm:max-w-[425px] md:max-w-2xl">
+      <VisuallyHidden.Root>
+            <DialogTitle className="hidden">
+            Edit account owner details
+            </DialogTitle>
+        </VisuallyHidden.Root>
         <Card className="w-full bg-white border-0 shadow-none">
           <CardHeader>
             <CardTitle className="text-2xl text-black">
@@ -101,10 +91,8 @@ export default function EditAccountOwnerDetails() {
                 <Label htmlFor="firstName">First name</Label>
                 <Input
                   id="first_name"
-                  value={localAccount.first_name}
-                  onChange={(e) =>
-                    handleInputChange('first_name', e.target.value)
-                  }
+                  value={formData.first_name}
+                  onChange={(e) => handleInputChange('first_name', e.target.value)}
                   placeholder="Enter first name"
                 />
               </div>
@@ -112,10 +100,8 @@ export default function EditAccountOwnerDetails() {
                 <Label htmlFor="lastName">Last name</Label>
                 <Input
                   id="last_name"
-                  value={localAccount.last_name}
-                  onChange={(e) =>
-                    handleInputChange('last_name', e.target.value)
-                  }
+                  value={formData.last_name}
+                  onChange={(e) => handleInputChange('last_name', e.target.value)}
                   placeholder="Enter last name"
                 />
               </div>
@@ -124,8 +110,8 @@ export default function EditAccountOwnerDetails() {
               <div className="grid gap-2">
                 <Label htmlFor="gender">Gender</Label>
                 <Select
-                  value={localAccount.sexe}
-                  onValueChange={(value) => handleInputChange('sexe', value)}
+                  value={formData.sex}
+                  onValueChange={(value) => handleInputChange('sex', value)}
                 >
                   <SelectTrigger id="sexe">
                     <SelectValue placeholder="Select gender" />
@@ -143,29 +129,25 @@ export default function EditAccountOwnerDetails() {
                 <Input
                   id="birthday"
                   type="date"
-                  value={localAccount.birthday}
-                  onChange={(e) =>
-                    handleInputChange('birthday', e.target.value)
-                  }
+                  value={formData.birthday}
+                  onChange={(e) => handleInputChange('birthday', e.target.value)}
                 />
               </div>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="nationality">Nationality</Label>
               <Select
-                value={localAccount.nationality}
-                onValueChange={(value) =>
-                  handleInputChange('nationality', value)
-                }
+                value={formData.nationality}
+                onValueChange={(value) => handleInputChange('nationality', value)}
               >
                 <SelectTrigger id="nationality">
                   <SelectValue placeholder="Select nationality" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Algerienne">Algerienne</SelectItem>
-                  <SelectItem value="fr">France</SelectItem>
-                  <SelectItem value="ca">Canada</SelectItem>
-                  <SelectItem value="us">United States</SelectItem>
+                  <SelectItem value="Algerienne">Algerian</SelectItem>
+                  <SelectItem value="fr">French</SelectItem>
+                  <SelectItem value="ca">Canadian</SelectItem>
+                  <SelectItem value="us">American</SelectItem>
                   {/* Add more nationalities as needed */}
                 </SelectContent>
               </Select>
@@ -177,10 +159,8 @@ export default function EditAccountOwnerDetails() {
                   <Label htmlFor="documentNumber">Passport or ID number</Label>
                   <Input
                     id="passport_nbr"
-                    value={localAccount.passport_nbr}
-                    onChange={(e) =>
-                      handleInputChange('passport_nbr', e.target.value)
-                    }
+                    value={formData.passport_nbr}
+                    onChange={(e) => handleInputChange('passport_nbr', e.target.value)}
                     placeholder="Enter document number"
                   />
                 </div>
@@ -191,10 +171,8 @@ export default function EditAccountOwnerDetails() {
                   <Input
                     id="passport_expire_at"
                     type="date"
-                    value={localAccount.passport_expire_at}
-                    onChange={(e) =>
-                      handleInputChange('passport_expire_at', e.target.value)
-                    }
+                    value={formData.passport_expire_at}
+                    onChange={(e) => handleInputChange('passport_expire_at', e.target.value)}
                   />
                 </div>
               </div>
@@ -207,7 +185,7 @@ export default function EditAccountOwnerDetails() {
                   <Input
                     id="email"
                     type="email"
-                    value={localAccount.email}
+                    value={formData.email}
                     onChange={(e) => handleInputChange('email', e.target.value)}
                     placeholder="Enter email"
                   />
@@ -217,7 +195,7 @@ export default function EditAccountOwnerDetails() {
                   <Input
                     id="phone"
                     type="tel"
-                    value={localAccount.phone}
+                    value={formData.phone}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
                     placeholder="Enter phone number"
                   />
@@ -230,15 +208,17 @@ export default function EditAccountOwnerDetails() {
               <Button
                 variant="outline"
                 className="w-1/3"
-                onClick={handleCancel}
+                onClick={() => dispatch(setDialogOpen(false))}
+                disabled={loading}
               >
                 Cancel
               </Button>
               <Button
                 className="w-2/3 bg-orange-600 hover:bg-orange-700"
-                onClick={handleSave}
+                onClick={handleSubmit}
+                disabled={loading}
               >
-                Save
+                {loading ? 'Saving...' : 'Save'}
               </Button>
             </div>
           </CardFooter>

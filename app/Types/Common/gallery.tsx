@@ -1,7 +1,7 @@
 export interface GalleryProps {
   title?: string;
   image: string;
-  name: string;
+  url: string;
   description: string;
   rating: number;
 }

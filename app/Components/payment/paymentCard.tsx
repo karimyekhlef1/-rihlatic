@@ -24,8 +24,9 @@ import { cn } from '@/lib/utils';
 import { format, parse } from 'date-fns';
 
 import { ScanLine, CalendarIcon, UserIcon, AlertCircle } from 'lucide-react';
-
+import { nextStep ,previousStep } from '@/lib/store/custom/packagesSlices/paymentPachageSlices';
 export default function PaymentCardComponent() {
+  
   const dispatch = useDispatch();
 
   // Select relevant state from Redux store
@@ -50,11 +51,11 @@ export default function PaymentCardComponent() {
 
   // Handle navigation between steps
   const handleNext = () => {
-    dispatch(setStep('payment'));
+    dispatch(nextStep());
   };
 
   const handleBack = () => {
-    dispatch(setStep('details'));
+    dispatch(previousStep());
   };
 
   return (

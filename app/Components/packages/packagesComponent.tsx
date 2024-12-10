@@ -91,6 +91,7 @@ export default function PackagesComponent({data}:any) {
           <li key={index} className="col-span-1 divide-y">
             <div>
               <TripComponent 
+              id={item.id}
               destinations ={item.destinations}
               url_featured_image ={item.url_featured_image}
               name={item.name}
