@@ -9,6 +9,7 @@ interface SearchInputProps {
   dir: string;
   placeholder: string;
   onSearch: (value: string) => void;
+  isOnePick?: boolean;
 }
 
 const SearchInputComponent: React.FC<SearchInputProps> = ({
@@ -86,7 +87,7 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({
 
   return (
     <div
-      className="rounded-lg relative transition-all"
+      className="relative transition-all"
       style={{
         width: '300px',
         transition: 'width 0.2s ease-in-out',
@@ -94,8 +95,7 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({
       ref={wrapperRef}
     >
       <div
-        className={`text-field-search flex items-center gap-3 p-2 bg-white rounded-lg relative
-                    ${isOpened ? 'border-[#FF8000] border-2 z-10' : 'border border-[#bac7d5]'}`}
+        className={`text-field-search flex items-center gap-3 p-2 bg-white rounded relative ${isOpened ? 'border-[#FF8000] border-2 z-10' : 'border border-[#bac7d5]'}`}
         onClick={clickHandler}
         style={{
           width: isOpened ? '350px' : '300px',

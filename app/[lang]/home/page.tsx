@@ -7,33 +7,27 @@ import FavSection from '@/app/Components/home/favSection';
 import OrganizeSection from '@/app/Components/home/organizeSection';
 import PopularSection from '@/app/Components/home/popularSection';
 import FlightsSection from '@/app/Components/home/flightsSection';
-import SearchSectionComponent from '@/app/Components/home/searchSectionComponent';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/lib/store/store';
 import { HomeFunc } from '@/lib/store/api/home/homeSlice';
 import Loading from '@/app/Components/home/Loading';
+import { RootState } from '@/lib/store/store';
+import SearchSectionComponent from '@/app/Components/home/searchSectionComponent';
 
 const HomePage: React.FC = () => {
 
-    const { loading, homeData } = useSelector((state: any) => state.home);
+    const { loading, homeData } = useSelector((state: RootState) => state.home);
     const dispatch = useDispatch<any>();
-    const [homeDate , setHomeData] = useState()
     useEffect(() => {
         const getData = async () => {
-            const result = await dispatch(HomeFunc({ include: 'departures' }));
-            setHomeData(result.payload.result)
-
-   
+            await dispatch(HomeFunc({ include: 'departures' }));   
         };
         getData();
     }, []);
 
     if (loading) {
-        return <Loading/>
-
+        return <Loading/>;
     }
 
-console.log("homeData",homeData)
     return (
         <div id="home-page">
             <SearchSectionComponent />
@@ -41,12 +35,10 @@ console.log("homeData",homeData)
             <br />
             <hr style={{border: '1px solid #e5e7eb40'}} />
             <DiscoverSection data={homeData?.discoverAlgeria}  />
-           <FavSection data={homeData?.favoriteDestinations} />
-             <OrganizeSection data={homeData?.organzidTrip}/>
+            <FavSection data={homeData?.favoriteDestinations} />
+            <OrganizeSection data={homeData?.organzidTrip}/>
             <PopularSection data={homeData?.popularFromAlgiers}/>
             <FlightsSection data={homeData?.popularFlights}  />
-            <br />
-            <br />
             <br />
             <br />
             <br />

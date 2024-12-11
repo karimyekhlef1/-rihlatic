@@ -1,13 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import searchBg from '@/public/images/home/search-bg.jpeg';
 import SearchCatBox from './searchCatBox';
-import SearchInputComponent from '@/app/commonComponents/searchInputComponent';
-import SearchSelectComponent from './searchSelectComponent';
-import { PiBagSimpleFill } from "react-icons/pi";
-import { GiGymBag } from "react-icons/gi";
-
+import VolSearchComponent from './engine/vol/volSearchComponent';
+import AccommodationComponent from './engine/accommodationComponent';
 
 const SearchSectionComponent: React.FC = () => {
+
+  const[selected, setSelected] = useState<number>(0);
+
+  const searchClick = (value: number) => {
+    switch (value) {
+      case 0:
+        return <VolSearchComponent />;
+      case 1:
+        return <AccommodationComponent />;
+      case 2:
+        return <VolSearchComponent />;
+      case 3:
+        return <VolSearchComponent />;
+      default:
+        return <VolSearchComponent />;
+    }
+  }
+
   return (
     <div
       className="bg-slate-800 text-white py-12"
@@ -25,59 +40,17 @@ const SearchSectionComponent: React.FC = () => {
           </p>
         </div>
         <div className="flex items-center justify-center gap-3 flex-wrap mt-5">
-          {['Vol', 'Packages', 'Hotels', 'Omras'].map((item, index) => (
-            <SearchCatBox key={index} item={item} />
+          {['Vol', 'Packages', 'Hotels', 'Omras'].map((item: string, index: number) => (
+            <SearchCatBox key={index} item={item} selected={selected} index={index} setSelected={setSelected} />
           ))}
         </div>
         <div className="main-search-box mt-14 p-5">
-          <div className="flex flex-col gap-2">
-            <div className="flex gap-3">
-              <SearchSelectComponent data={['Return', 'One Way']} />
-              <SearchSelectComponent data={['Economy', 'Premium Economy', 'Business', 'First Class']} />
-            </div>
-            <div className="flex justify-start gap-1 flex-wrap">
-              <div className="flex items-center gap-1">
-                <SearchInputComponent
-                  placeholder="City, airports or place"
-                  onSearch={(value) => console.log(value)}
-                  dir="From"
-                />
-                <SearchInputComponent
-                  placeholder="City, airports or place"
-                  onSearch={(value) => console.log(value)}
-                  dir="To"
-                />
-                <SearchInputComponent
-                  placeholder="Anytime"
-                  onSearch={(value) => console.log(value)}
-                  dir="Departure"
-                />
-                {/* <SearchInputComponent placeholder="Anytime" onSearch={(value) => console.log(value)} dir='Return' /> */}
-              </div>
-              <button
-                type="button"
-                className="rounded-md bg-[#FF8000] px-2 py-2.5 text-sm font-semibold text-white"
-              >
-                Exploire
-              </button>
-            </div>
-            <div className="flex items-center gap-2 mt-7">
-              <input
-                id="home-search-checkbox"
-                type="checkbox"
-                value=""
-                className="w-4 h-4 accent-[#FF8000] border-gray-300 rounded focus:ring-orange-500"
-              />
-              <label
-                htmlFor="home-search-checkbox"
-                className="text-md text-gray-400"
-              >
-                Check accommodation with{' '}
-                <span className="text-black font-bold">booking.com</span>
-              </label>
-            </div>
-          </div>
+          {
+            searchClick(selected)
+          }
+          <AccommodationComponent />
         </div>
+        
       </div>
     </div>
   );
