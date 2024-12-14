@@ -5,6 +5,7 @@ import './globals.css';
 import './index.scss';
 import { Providers } from '@/lib/Providers';
 import { Toaster } from '@/components/ui/sonner';
+import { store } from '@/lib/store/store';
 
 // const poppins = Poppins({
 //   subsets: ['latin'],
