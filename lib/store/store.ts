@@ -20,6 +20,7 @@ import verificationReducer from './custom/mainSlices/verificationSlice';
 
 // Home
 import homeSlice from '@/lib/store/api/home/homeSlice';
+
 // auth
 import accountSlice from '@/lib/store/api/account/accountSlice';
 import signupSlice from '@/lib/store/api/signup/signupSlice';
@@ -35,7 +36,11 @@ import resetPasswordSlice from '@/lib/store/api/resetPassword/resetPasswordSlice
 import packagesSlice from '@/lib/store/api/packages/packagesSlice';
 import accountDetailsSlice from './custom/commonSlices/accountDetailsSlice';
 //
-import paymentPackageSlice from '@/lib/store/custom/packagesSlices/paymentPachageSlices'
+import paymentPackageSlice from '@/lib/store/custom/packagesSlices/paymentPachageSlices';
+
+import volSearchSlice from '@/lib/store/engine/vol_search_slice';
+import packageSearchSlice from '@/lib/store/engine/package_search_slice';
+
 export const store = configureStore({
   reducer: {
     account: accountSlice,
@@ -59,6 +64,10 @@ export const store = configureStore({
     langSlice: LanguageSlice,
     //payment
     paymentPackage :paymentPackageSlice,
+
+    // Search Engine
+    volSearchSlice: volSearchSlice,
+    packageSearchSlice: packageSearchSlice,
 
     // ---------------------------
     // API REDUCERS
