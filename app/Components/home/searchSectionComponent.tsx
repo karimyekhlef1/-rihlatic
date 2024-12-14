@@ -3,6 +3,9 @@ import searchBg from '@/public/images/home/search-bg.jpeg';
 import SearchCatBox from './searchCatBox';
 import VolSearchComponent from './engine/vol/volSearchComponent';
 import AccommodationComponent from './engine/accommodationComponent';
+import OmrasSearchComponent from './engine/omras/omrasSearchComponent';
+import PackagesSearchComponent from './engine/packages/packagesSearchComponent';
+import HotelsSearchComponent from './engine/hotels/hotelsSearchComponent';
 
 const SearchSectionComponent: React.FC = () => {
 
@@ -13,11 +16,11 @@ const SearchSectionComponent: React.FC = () => {
       case 0:
         return <VolSearchComponent />;
       case 1:
-        return <AccommodationComponent />;
+        return <PackagesSearchComponent />;
       case 2:
-        return <VolSearchComponent />;
+        return <HotelsSearchComponent />;
       case 3:
-        return <VolSearchComponent />;
+        return <OmrasSearchComponent />;
       default:
         return <VolSearchComponent />;
     }
@@ -30,6 +33,7 @@ const SearchSectionComponent: React.FC = () => {
         backgroundImage: `url(${searchBg.src})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
+        minHeight: '50vh',
       }}
     >
       <div className="container">
@@ -44,7 +48,7 @@ const SearchSectionComponent: React.FC = () => {
             <SearchCatBox key={index} item={item} selected={selected} index={index} setSelected={setSelected} />
           ))}
         </div>
-        <div className="main-search-box mt-14 p-5">
+        <div className="main-search-box mt-3 p-5">
           {
             searchClick(selected)
           }

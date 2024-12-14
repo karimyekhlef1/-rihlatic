@@ -19,7 +19,8 @@ const HomePage: React.FC = () => {
     const dispatch = useDispatch<any>();
     useEffect(() => {
         const getData = async () => {
-            await dispatch(HomeFunc({ include: 'departures' }));   
+            const act = await dispatch(HomeFunc({ include: 'departures' }));   
+            console.log(act);
         };
         getData();
     }, []);

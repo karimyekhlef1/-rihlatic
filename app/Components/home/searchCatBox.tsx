@@ -9,7 +9,7 @@ interface SearchCatBoxProps {
 
 const SearchCatBox: React.FC<SearchCatBoxProps> = ({ item, index, selected, setSelected }) => {
     return (
-        <div className={`rounded-2xl cursor-pointer transition-colors flex items-center justify-center font-semibold border-2 ${selected === index ? 'border-[#FF8000] text-[#FF8000]' : 'border-[white] text-gray-500 font-thin'} home-search-category-box`}
+        <div className={`rounded-2xl cursor-pointer transition-colors flex items-center justify-center font-semibold border-2 ${selected === index ? 'border-[#FF8000] text-[#FF8000]' : 'border-[white] text-gray-500 font-normal'} home-search-category-box`}
             onClick={() => setSelected(index)}
         >
             <span>{item}</span>

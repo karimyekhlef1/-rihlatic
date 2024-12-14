@@ -42,7 +42,6 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    // onSearch(value);
     setIsOpened(!isOpened);
   };
 
@@ -90,7 +89,7 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({
       className="relative transition-all"
       style={{
         width: '300px',
-        transition: 'width 0.2s ease-in-out',
+        transition: 'width 0.05s ease-in-out',
       }}
       ref={wrapperRef}
     >
@@ -99,7 +98,7 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({
         onClick={clickHandler}
         style={{
           width: isOpened ? '350px' : '300px',
-          transition: 'width 0.2s ease-in-out',
+          transition: 'width 0.05s ease-in-out',
         }}
       >
         <div className="flex items-center gap-2">

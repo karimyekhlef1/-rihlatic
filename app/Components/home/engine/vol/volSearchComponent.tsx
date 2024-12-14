@@ -39,8 +39,6 @@ const VolSearchComponent: React.FC = () => {
 
     const removeDestination = (index: number) => {
         if (destinations.length === 1) return;
-        console.log(destinations[index].id);
-        console.log(destinations);
         setDestinations((prev) => {
             return prev.filter((dest: any) => dest.id !== destinations[index].id);
         });
