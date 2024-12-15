@@ -11,7 +11,7 @@ export default function Hotels() {
   return (
     <div className="flex md:flex-row flex-col">
       <div className="px-14 flex flex-col items-center pt-10 gap-y-8 md:pb-10">
-        <FilterComponent />
+        {/* <FilterComponent /> */}
         <div className="hidden md:block">
           <AdComponent />
         </div>

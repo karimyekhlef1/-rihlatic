@@ -88,10 +88,12 @@ const paymentPackageSlice = createSlice({
     },
     setDeparture(state, action: PayloadAction<any>) {
       state.departure = action.payload;
+      state.currentStep = 1; // Reset currentStep when departure changes
       saveStateToLocalStorage(state);
     },
     setRooms(state, action: PayloadAction<any[]>) {
       state.rooms = action.payload;
+      state.currentStep = 1; // Reset currentStep when rooms change
       state.steps = action.payload.map((_, index) => `Réglage de la chambre: ${index + 1}`);
       state.steps.push('Vérifier');
       saveStateToLocalStorage(state);

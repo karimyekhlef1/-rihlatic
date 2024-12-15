@@ -11,10 +11,9 @@ const PopularDestinationComponent = ({ data }: { data: DestinationData }) => {
     const boxStyle = (image: string) => ({
         backgroundImage: `url(${image})`,
         backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
+        backgroundSize: "cover", // Proper styling for the background
         height: '325px',
-        width: "100%",
-        objectFit: "cover",
+        width: "100%", // Removed `objectFit` as it's not applicable
     });
 
     const dropFilter = {
