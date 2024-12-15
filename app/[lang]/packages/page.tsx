@@ -38,7 +38,7 @@ export default function Packages() {
 
   if(loading) return <Loading/>;
 
-  const packageCategories = extractData(packages, (pkg) => `${pkg.category}99`);
+  const packageCategories = extractData(packages, (pkg) => `${pkg.category}`);
   const countryNames = extractData(packages, (pkg) =>
     pkg.destinations.map((dest:any) => dest.country.name)
   );
