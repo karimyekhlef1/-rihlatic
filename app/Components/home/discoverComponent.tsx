@@ -2,22 +2,20 @@ import { DiscoverProps } from '@/app/Types/home/discover';
 import React from 'react';
 
 const DiscoverComponent: React.FC<DiscoverProps> = ({ image, name, establishment }) => {
-    
     const boxStyle = {
         backgroundImage: `url(${image})`,
-        backgroundRepeat: "no-repeat", 
+        backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         backgroundColor: "rgba(0, 0, 0, 0.5)",
-        height: '300px', 
-        width: "100%", 
-        objectFit: "cover",
-    }
+        height: '300px',
+        width: "100%",
+    };
 
     const layoutStyle = {
         backgroundColor: "rgba(0, 0, 0, 0.6)",
         width: '100%',
         height: '100%',
-    }
+    };
 
     return (
         <div className="flex flex-col rounded-2xl relative" style={boxStyle}>
@@ -29,6 +27,5 @@ const DiscoverComponent: React.FC<DiscoverProps> = ({ image, name, establishment
         </div>
     );
 };
-
 
 export default DiscoverComponent;

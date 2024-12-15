@@ -10,27 +10,8 @@ import { extractData } from '@/app/hooks/useExtractData';
 import DropDownBookingComponent from './dropDownBooking';
 import Link from 'next/link';
 import RoomsDetailsBooking from './RoomsDetailsBooking';
-
-interface Room {
-  name: string;
-    id: Number;
-    type: string;
-    description: string;
-    capacity_adult: number;
-    capacity_child: number;
-    capacity_bebe: number;
-}
-
-interface Departure {
-  id: number;
-  price_ini?: number;
-  departure_date: Date;
-  return_date: Date;
-  pricing: {
-    rooms: Room[];
-  };
-}
-
+import { Room } from '@/app/Types/package/packageDetails';
+import { Departure } from '@/app/Types/package/packageDetails';
 export default function BookingPackageComponent({ data }: { data: Departure[] }) {
   const [selectedDeparture, setSelectedDeparture] = useState<Departure | undefined>();
   const [selectedOption, setSelectedOption] = useState<string | null>('test');
@@ -65,10 +46,13 @@ export default function BookingPackageComponent({ data }: { data: Departure[] })
     return <p> loading ...</p>
 
   }
-  const price = selectedDeparture ? selectedDeparture.price_ini :data[0].price_ini ;
-  const startDate = selectedDeparture ? selectedDeparture.departure_date :data[0].departure_date;
-  const endDate =selectedDeparture ? selectedDeparture.return_date :data[0].return_date;
-
+ 
+  const currentDeparture = selectedDeparture || data[0];
+  
+  const price = currentDeparture?.price_ini ?? 0;
+  const startDate = currentDeparture?.departure_date;
+  const endDate = currentDeparture?.return_date;
+  
   const departureDates = data.map((departure) => ({
     label: `${format(new Date(departure.departure_date), 'dd-MMM-yyyy')}/${format(new Date(departure.return_date), 'dd-MMM-yyyy')}`,
     id: departure.id,

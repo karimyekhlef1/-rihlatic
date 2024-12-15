@@ -15,7 +15,7 @@ const dispatch = useDispatch()
       };
     
   return (
-    <div className="flex justify-between max-w-[840px] mx-auto">
+    <div className="flex justify-between w-1/2  mx-auto my-4">
     <Button variant="outline" onClick={handleBack} className="px-16">
       Back
     </Button>

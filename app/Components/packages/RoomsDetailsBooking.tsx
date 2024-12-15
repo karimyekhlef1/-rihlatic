@@ -14,9 +14,10 @@ import { MdChildCare } from "react-icons/md";
 import { TfiUser } from "react-icons/tfi";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
-import { setDeparture ,setRooms } from "@/lib/store/custom/packagesSlices/paymentPachageSlices";
+import { setDeparture ,setRooms , clearStoredState} from "@/lib/store/custom/packagesSlices/paymentPachageSlices";
 import { set } from "date-fns";
 import { useRouter } from "next/navigation";
+
 interface RoomsDetailsBookingProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
@@ -54,6 +55,8 @@ const RoomsDetailsBooking = ({
 
   useEffect(() => {
     if (selectedDeparture) {
+      // dispatch(clearStoredState())
+      dispatch(setDeparture(selectedDeparture))
       setRoomOptions(selectedDeparture.pricing.rooms);
     }
     if (selectedRoom) {
@@ -88,8 +91,16 @@ const RoomsDetailsBooking = ({
     updatedRooms[index].adults = selectedRoomType?.capacity_adult || 0;
     updatedRooms[index].children = selectedRoomType?.capacity_child || 0;
     updatedRooms[index].infants = selectedRoomType?.capacity_bebe || 0;
+
+    
+    
+
   
     setCreatedRooms(updatedRooms);
+
+    // dispatch(setRooms(updatedRooms))
+
+    
   };
   const handleGuestChange = (
     index: number,

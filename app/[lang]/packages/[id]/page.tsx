@@ -30,6 +30,8 @@ import { packagesFunc } from "@/lib/store/api/packages/packagesSlice";
 import Loading from "@/app/Components/home/Loading";
 import { PackageDetails } from "@/app/Types/package/packageDetails";
 import { setPackage } from "@/lib/store/custom/packagesSlices/paymentPachageSlices";
+import { Departure } from '@/app/Types/package/packageDetails';
+
 export default function Details() {
   const dispatch = useDispatch<any>();
   const { loading, packagesData } = useSelector((state: any) => state.packages);
@@ -118,7 +120,7 @@ export default function Details() {
           </div>
           <div className="md:hidden lg:flex lg:flex-col items-center pt-4 sm:pt-16 gap-y-8">
             <Provider store={store}>
-              <BookingPackageComponent data={packagesDetails?.departures} />
+              <BookingPackageComponent data={packagesDetails?.departures ?? []}  />
             </Provider>
             <div className="pt-6 sm:pt-0">
               <AdComponent />
@@ -127,7 +129,7 @@ export default function Details() {
         </div>
         <div className="hidden lg:hidden md:flex md:pt-8 md:gap-x-8 md:justify-center md:items-center">
           <Provider store={store}>
-            <BookingPackageComponent  data={packagesDetails?.departures} />
+            <BookingPackageComponent  data={packagesDetails?.departures ?? []} />
           </Provider>
           <div className="pt-6 sm:pt-0">
             <AdComponent />
