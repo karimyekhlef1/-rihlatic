@@ -5,7 +5,7 @@ const navbarItems: NavbarItem[] = [
   { name: 'Packages', route: '/packages', isSelected: false },
   { name: 'Hotels', route: '/hotels', isSelected: false },
   { name: 'Vols', route: '/vols', isSelected: false },
-  { name: 'Omras', route: '/omrats', isSelected: false },
+  { name: 'Omras', route: '/omras', isSelected: false },
 ];
 
 export default navbarItems;
