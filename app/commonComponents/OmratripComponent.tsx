@@ -1,31 +1,29 @@
-import React from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { RiMapPin2Line } from "react-icons/ri";
-import TripTagComponent from "./tripTagComponent";
 import { FaStar, FaHeart } from "react-icons/fa";
 import { BsFillPeopleFill } from "react-icons/bs";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { IoIosInformationCircle } from "react-icons/io";
 
-interface TripComponentProps {
-  id: number;
+interface OmraTripComponentProps {
+  id: string;
   name: string;
   url_featured_image: string;
   category: string;
-  omraDepartures_count: number;
-  omraDepartures: any[];
-  destinations: any[];
+  omraDepartures_count?: number;
+  omraDepartures?: any[];
+  destinations?: any[];
 }
 
-const TripComponent: React.FC<TripComponentProps> = ({
+export default function OmraTripComponent({
   id,
-  destinations,
-  url_featured_image,
   name,
+  url_featured_image,
   category,
   omraDepartures_count,
   omraDepartures,
-}) => {
+  destinations,
+}: OmraTripComponentProps) {
   const router = useRouter();
   const firstDeparture =
     omraDepartures && omraDepartures.length > 0 ? omraDepartures[0] : null;
@@ -33,10 +31,10 @@ const TripComponent: React.FC<TripComponentProps> = ({
     destinations && destinations.length > 0 ? destinations[0] : null;
 
   return (
-    <div className="bg-white rounded-2xl overflow-hidden shadow hover:shadow-lg transition-shadow w-9/12">
+    <div className="bg-white rounded-2xl overflow-hidden shadow hover:shadow-lg transition-shadow w-full">
       <div className="relative">
         <Image
-          src={url_featured_image}
+          src={url_featured_image || "/placeholder.jpg"}
           alt={name}
           width={500}
           height={300}
@@ -66,15 +64,15 @@ const TripComponent: React.FC<TripComponentProps> = ({
         <div className="flex flex-wrap gap-3 mb-4">
           {firstDeparture && (
             <>
-              <span className="inline-flex items-center gap-1.5 bg-orange-500 text-white px-4 py-1.5 rounded-full text-xs font-normal">
+              <span className="inline-flex items-center gap-1.5 bg-orange-500 text-white px-4 py-1.5 rounded-full text-sm font-normal">
                 {omraDepartures_count} Départs
                 <IoIosInformationCircle color={"white"} size={15} />
               </span>
-              <span className="inline-flex items-center gap-1.5 text-xs text-orange-500 bg-orange-50 px-4 py-1.5 rounded-full font-normal border border-orange-400">
+              <span className="inline-flex items-center gap-1.5 text-sm text-orange-500 bg-orange-50 px-4 py-1.5 rounded-full font-normal border border-orange-400">
                 {firstDeparture.total_days} nuits
                 <IoIosInformationCircle size={15} />
               </span>
-              <span className="inline-flex items-center gap-1.5 text-xs text-orange-500 bg-white px-4 py-1.5 rounded-full font-normal border border-orange-400">
+              <span className="inline-flex items-center gap-1.5 text-sm text-orange-500 bg-white px-4 py-1.5 rounded-full font-normal border border-orange-400">
                 <BsFillPeopleFill /> {firstDeparture.remainder_seats} places
                 <IoIosInformationCircle size={15} />
               </span>
@@ -99,12 +97,11 @@ const TripComponent: React.FC<TripComponentProps> = ({
                 <FaStar />
                 <FaStar className="text-gray-300" />
               </div>
-              <span className="text-sm text-gray-500 ml-2">28,411</span>
             </div>
           </div>
         )}
         <button
-          onClick={() => router.push(`/packages/${id}`)}
+          onClick={() => router.push(`/omras/${id}`)}
           className="w-full bg-orange-500 text-white py-3 rounded-xl hover:bg-orange-600 transition-colors font-medium text-base"
         >
           Voir les détails
@@ -112,6 +109,4 @@ const TripComponent: React.FC<TripComponentProps> = ({
       </div>
     </div>
   );
-};
-
-export default TripComponent;
+}

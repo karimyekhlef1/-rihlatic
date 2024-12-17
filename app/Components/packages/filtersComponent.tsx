@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { Checkbox } from '@/components/ui/checkbox';
+import { useState } from "react";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/accordion';
+} from "@/components/ui/accordion";
 
 interface FilterComponentProps {
   packageCategories: string[];
@@ -39,7 +39,6 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
         : [...prev, category]
     );
   };
-
 
   return (
     <div className="p-4">
@@ -105,7 +104,12 @@ interface CheckboxItemProps {
   onChange: () => void;
 }
 
-const CheckboxItem: React.FC<CheckboxItemProps> = ({ id, label, checked, onChange }) => (
+const CheckboxItem: React.FC<CheckboxItemProps> = ({
+  id,
+  label,
+  checked,
+  onChange,
+}) => (
   <div className="flex items-center space-x-2 py-1">
     <Checkbox id={id} checked={checked} onCheckedChange={onChange} />
     <label

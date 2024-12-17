@@ -41,6 +41,8 @@ import paymentPackageSlice from '@/lib/store/custom/packagesSlices/paymentPachag
 import volSearchSlice from '@/lib/store/engine/vol_search_slice';
 import packageSearchSlice from '@/lib/store/engine/package_search_slice';
 
+import omraSlice from '@/lib/store/api/omras/omrasSlice';
+
 export const store = configureStore({
   reducer: {
     account: accountSlice,
@@ -91,6 +93,8 @@ export const store = configureStore({
     home: homeSlice,
     //packages
     packages: packagesSlice,
+    // Omras
+    omras: omraSlice,
   },
   // we can delete this later it's just to supress serializableCheck warnings
   middleware: (getDefaultMiddleware) =>
