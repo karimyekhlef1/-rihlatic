@@ -5,6 +5,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.textarabic {
+  font-family: var(--font-rubik);
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

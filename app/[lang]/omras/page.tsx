@@ -66,7 +66,7 @@ export default function Omras() {
   const currentOmras = filteredOmras.slice(startIndex, endIndex);
 
   return (
-    <div className="flex md:flex-row flex-col">
+    <div className="textarabic flex md:flex-row flex-col">
       <div className="w-full md:w-1/4 px-4 md:px-8">
         <div className="sticky top-0 pt-10">
           <FilterComponent

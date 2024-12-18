@@ -1,28 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import image1 from '@/public/images/packages/image_1.jpg';
-import image2 from '@/public/images/packages/image_2.jpg';
-import image3 from '@/public/images/packages/image_3.jpg';
-import { set } from 'date-fns';
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
 
 export default function TravelProgram({ data }: any) {
   const [activeDay, setActiveDay] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
-  const [schedule , setSchedule] = useState<any[]>([]);
-  useEffect(()=>{
-    if(data){
+  const [schedule, setSchedule] = useState<any[]>([]);
+  useEffect(() => {
+    if (data) {
       const allSchedule = data.flatMap((item: any) => item.schedule || []);
-      setSchedule(allSchedule)
+      setSchedule(allSchedule);
     }
-  },[data])
+  }, [data]);
 
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024);
     };
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   const handleDayClick = (day: any) => {
@@ -30,45 +26,44 @@ export default function TravelProgram({ data }: any) {
       setActiveDay(activeDay === day ? null : day);
     }
   };
-  console.log("schedule",schedule)
+  console.log("schedule", schedule);
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6">
       <div
-        className={`flex flex-col sm:flex-row gap-4 sm:gap-2 ${isMobile ? '' : '[&:hover>div]:w-full sm:[&:hover>div]:w-40 [&>div:hover]:w-full sm:[&>div:hover]:w-[30rem]'}`}
+        className={`flex flex-col sm:flex-row gap-4 sm:gap-2 ${isMobile ? "" : "[&:hover>div]:w-full sm:[&:hover>div]:w-40 [&>div:hover]:w-full sm:[&>div:hover]:w-[30rem]"}`}
       >
         {schedule.map((item, index) => (
-       
           <div
             key={index}
             className={`group relative shadow-sm shadow-black/30 h-64 sm:h-96 w-full sm:w-40 ${
-              isMobile && activeDay === index ? 'w-full' : ''
-            } ${!isMobile ? 'hover:w-full sm:hover:w-[30rem]' : ''} cursor-pointer rounded-xl overflow-hidden transition-all duration-200`}
+              isMobile && activeDay === index ? "w-full" : ""
+            } ${!isMobile ? "hover:w-full sm:hover:w-[30rem]" : ""} cursor-pointer rounded-xl overflow-hidden transition-all duration-200`}
             onClick={() => handleDayClick(index)}
           >
             <Image
-              className={`h-full w-full object-cover ${isMobile && activeDay === index ? 'scale-150' : ''} ${!isMobile ? 'group-hover:scale-150' : ''} transition-all`}
+              className={`h-full w-full object-cover ${isMobile && activeDay === index ? "scale-150" : ""} ${!isMobile ? "group-hover:scale-150" : ""} transition-all`}
               src={item.url}
-              alt={`Day ${item.url} image`}
-              width='100'
-               height='100'
+              alt={`Jour ${item.url} image`}
+              width="100"
+              height="100"
             />
             <div
-              className={`${isMobile && activeDay === index ? 'visible' : 'invisible'} ${!isMobile ? 'group-hover:visible' : ''} absolute inset-0 bg-gradient-to-b from-orange-500/20 to-black`}
+              className={`${isMobile && activeDay === index ? "visible" : "invisible"} ${!isMobile ? "group-hover:visible" : ""} absolute inset-0 bg-gradient-to-b from-orange-500/20 to-black`}
             >
               <div className="absolute inset-x-5 bottom-4">
                 <div className="flex gap-3 text-white">
                   <p
-                    className={` ${isMobile ? 'font-semibold' : 'text-lg font-bold'} text-gray-100`}
+                    className={` ${isMobile ? "font-semibold" : "text-lg font-bold"} text-gray-100`}
                   >
-                 { item.day}
+                    {item.day}
                   </p>
                 </div>
                 <div>
                   <p
-                    className={` ${isMobile ? 'text-sm font-normal' : 'text-lg font-norml'} text-gray-100`}
+                    className={` ${isMobile ? "text-sm font-normal" : "text-lg font-norml"} text-gray-100`}
                   >
-                    Libre tour in Istanbul (explore the city on your own).
+                    {item.title || "Title"}
                   </p>
                 </div>
               </div>
