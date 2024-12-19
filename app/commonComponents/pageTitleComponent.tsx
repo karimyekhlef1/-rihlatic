@@ -9,7 +9,7 @@ const PageTitleComponent: React.FC<PageTitleProps> = ({
   return (
     <div className="flex flex-col pb-3">
       <div className="flex flex-row items-center">
-        <h2 className="textarabic text-xl text-nowrap font-bold text-orange-500">
+        <h2 className="textarabic text-xl text-wrap font-bold text-orange-500">
           {title}
         </h2>
         <div className="pl-2">{rating && <StarRating rating={rating} />}</div>
