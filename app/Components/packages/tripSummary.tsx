@@ -9,6 +9,8 @@ import {
   Info,
   Plane,
   CircleAlert,
+  Briefcase,
+  Luggage,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import airlineLogo from "@/public/images/airalgerie.svg";
@@ -170,7 +172,7 @@ export default function TripSummaryComponent({ flightInfo }: TripSummaryProps) {
                       <div className="grid grid-cols-2 gap-1 sm:gap-2 text-[10px] sm:text-sm">
                         <div className="flex items-center">
                           <Plane
-                            size={12}
+                            size={15}
                             className="mr-1 sm:mr-2"
                             fill="black"
                           />
@@ -182,7 +184,7 @@ export default function TripSummaryComponent({ flightInfo }: TripSummaryProps) {
                           {flightInfo.airline}
                         </p>
                         <div className="flex items-center">
-                          <Info size={12} className="mr-1 sm:mr-2" />
+                          <Info size={15} className="mr-1 sm:mr-2" />
                           <p className="font-normal text-[10px] sm:text-xs">
                             Flight no
                           </p>
@@ -217,13 +219,39 @@ export default function TripSummaryComponent({ flightInfo }: TripSummaryProps) {
                           {flightInfo.seatRecline}
                         </p>
                         <div className="flex items-center">
-                          <Wifi size={12} className="mr-1 sm:mr-2" />
+                          <Wifi size={15} className="mr-1 sm:mr-2" />
                           <p className="font-normal text-[10px] sm:text-xs">
                             Wi-Fi on board
                           </p>
                         </div>
                         <p className="font-semibold text-[10px] sm:text-xs">
                           {flightInfo.wifiOnBoard ? "Yes" : "No"}
+                        </p>
+                      </div>
+                    </div>
+                    {/* Luggage info */}
+                    <div>
+                      <h4 className="font-semibold text-xs sm:text-sm mb-1 sm:mb-2">
+                        Luggage info
+                      </h4>
+                      <div className="grid grid-cols-2 gap-1 sm:gap-2 text-[10px] sm:text-sm">
+                        <div className="flex items-center">
+                          <Briefcase size={15} className="mr-1 sm:mr-2" />
+                          <p className="font-normal text-[10px] sm:text-xs">
+                            Hand luggage
+                          </p>
+                        </div>
+                        <p className="font-semibold text-[10px] sm:text-xs">
+                          {flightInfo.handLuggage} KG
+                        </p>
+                        <div className="flex items-center">
+                          <Luggage size={15} className="mr-1 sm:mr-2" />
+                          <p className="font-normal text-[10px] sm:text-xs">
+                            Checked luggage
+                          </p>
+                        </div>
+                        <p className="font-semibold text-[10px] sm:text-xs">
+                          {flightInfo.checkedLuggage} KG
                         </p>
                       </div>
                     </div>

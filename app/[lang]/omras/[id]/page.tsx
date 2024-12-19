@@ -187,6 +187,12 @@ export default function OmraDetails() {
                           seatRecline: "Standard",
                           wifiOnBoard: false,
                           nextdayDeparture: false,
+                          handLuggage:
+                            omraDetails.omraDepartures[0].flight.bounds[0]
+                              .segments[0].hand_luggage,
+                          checkedLuggage:
+                            omraDetails.omraDepartures[0].flight.bounds[0]
+                              .segments[0].hold_luggage,
                         }}
                       />
                     )}
@@ -234,6 +240,12 @@ export default function OmraDetails() {
                           seatRecline: "Standard",
                           wifiOnBoard: false,
                           nextdayDeparture: false,
+                          handLuggage:
+                            omraDetails.omraDepartures[0].flight.bounds[0]
+                              .segments[0].hand_luggage,
+                          checkedLuggage:
+                            omraDetails.omraDepartures[0].flight.bounds[0]
+                              .segments[0].hold_luggage,
                         }}
                       />
                     )}
