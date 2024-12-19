@@ -14,11 +14,8 @@ import {
   Luggage,
   CircleAlert,
   CalendarDays,
-  MapPin,
 } from "lucide-react";
 import AdComponent from "@/app/commonComponents/adComponent";
-import TravelProgram from "@/app/Components/packages/travelProgram";
-import HotelsComponent from "@/app/Components/packages/hotelsComponent";
 import BookingPackageComponent from "@/app/Components/packages/bookingPackageComponent";
 import ImportantNote from "@/app/Components/packages/importantNote";
 import OrganizeSection from "@/app/Components/home/organizeSection";
@@ -27,11 +24,11 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getOmraDetails } from "@/lib/store/api/omras/omrasSlice";
 import Loading from "@/app/Components/home/Loading";
-import { Button } from "@/components/ui/button";
 import PricingTable from "@/app/commonComponents/pricing-table";
 import TripSummaryComponent from "@/app/Components/packages/tripSummary";
-import { outboundFlights } from "@/app/Data/flightInfos";
-import HotelDetails from "@/app/Components/packages/hotelDetails";
+import OmraTravelProgram from "@/app/Components/packages/OmratravelProgram";
+import OmraHotelDetails from "@/app/Components/packages/OmrahotelDetails";
+import OmraHotelsComponent from "@/app/Components/packages/OmrahotelsComponent";
 
 export default function OmraDetails() {
   const dispatch = useDispatch<any>();
@@ -257,7 +254,7 @@ export default function OmraDetails() {
                       <div key={index}>
                         <ContentComponent
                           dynamicContent={
-                            <HotelsComponent data={item.hotel_stay?.[0]} />
+                            <OmraHotelsComponent data={item.hotel_stay?.[0]} />
                           }
                         />
                       </div>
@@ -268,7 +265,12 @@ export default function OmraDetails() {
 
               <TitleComponent title={"Hôtel Details"} label={""} />
               <ContentComponent
-                dynamicContent={<HotelDetails data={["", ""]} />}
+                dynamicContent={
+                  <OmraHotelDetails
+                    includes={omraDetails?.omraDepartures?.[0]?.includes}
+                    excludes={omraDetails?.omraDepartures?.[0]?.excludes}
+                  />
+                }
               />
 
               {/* Travel Program */}
@@ -280,7 +282,9 @@ export default function OmraDetails() {
                 />
                 <ContentComponent
                   dynamicContent={
-                    <TravelProgram data={omraDetails?.omraDepartures} />
+                    <OmraTravelProgram
+                      schedule={omraDetails?.omraDepartures?.[0]?.schedule}
+                    />
                   }
                 />
               </div>
@@ -292,7 +296,7 @@ export default function OmraDetails() {
                   icon={<CircleAlert size={20} color="orange" />}
                   label={""}
                 />
-                <div className="textarabic">
+                <div className="textarabic rtl">
                   <ContentComponent
                     dynamicContent={
                       <ImportantNote content={omraDetails?.note} />
