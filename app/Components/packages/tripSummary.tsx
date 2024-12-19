@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import { useState, useEffect } from "react";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   ChevronDown,
   ChevronUp,
@@ -9,16 +9,16 @@ import {
   Info,
   Plane,
   CircleAlert,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import airlineLogo from '@/public/images/airalgerie.svg';
-import AirlineCompanyComponent from './airlineCompany';
-import { FaPlane, FaCircle } from 'react-icons/fa';
-import { FlightInfo } from '@/app/Types/Common/flightInfo';
-import FlightDuration from '@/app/commonComponents/flightDuration';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import airlineLogo from "@/public/images/airalgerie.svg";
+import AirlineCompanyComponent from "./airlineCompany";
+import { FaPlane, FaCircle } from "react-icons/fa";
+import { FlightInfo } from "@/app/Types/Common/flightInfo";
+import FlightDuration from "@/app/commonComponents/flightDuration";
 
 interface TripSummaryProps {
-  flightInfo: FlightInfo;
+  flightInfo: any;
 }
 
 export default function TripSummaryComponent({ flightInfo }: TripSummaryProps) {
@@ -28,7 +28,7 @@ export default function TripSummaryComponent({ flightInfo }: TripSummaryProps) {
   // Effect to update content height when expanded state changes
   useEffect(() => {
     if (isExpanded) {
-      const content = document.getElementById('expandable-content');
+      const content = document.getElementById("expandable-content");
       if (content) {
         setContentHeight(content.scrollHeight);
       }
@@ -53,8 +53,8 @@ export default function TripSummaryComponent({ flightInfo }: TripSummaryProps) {
       <div
         className={`flex flex-col items-center pt-2 ${
           flightInfo.nextdayDeparture
-            ? 'bg-orange-100 rounded-lg border-l-4 border-l-orange-500'
-            : ''
+            ? "bg-orange-100 rounded-lg border-l-4 border-l-orange-500"
+            : ""
         }`}
       >
         {flightInfo.nextdayDeparture && (
@@ -109,19 +109,24 @@ export default function TripSummaryComponent({ flightInfo }: TripSummaryProps) {
               <div className="w-full sm:w-2/3 sm:pl-4 md:pl-8 lg:pl-28 flex flex-col">
                 <div className="mb-2 sm:mb-4">
                   <p className="text-xs sm:text-sm font-semibold">
-                    {flightInfo.departureAirport}
+                    {flightInfo.departureCity}
                   </p>
                   <p className="text-[10px] sm:text-xs text-gray-500">
-                    {flightInfo.departureAirportName}
+                    {flightInfo.departureAirport}
                   </p>
                 </div>
 
                 {/* Airline info and expand/collapse button */}
                 <div className="mb-2 sm:mb-4 flex items-center justify-between">
-                  <AirlineCompanyComponent
-                    logo={airlineLogo}
-                    name={flightInfo.airline}
-                  />
+                  <div className="flex items-center">
+                    <AirlineCompanyComponent
+                      logo={airlineLogo}
+                      name={flightInfo.airline}
+                    />
+                    <span className="ml-2 text-xs text-gray-600">
+                      {flightInfo.flightNumber}
+                    </span>
+                  </div>
                   <Button
                     variant="ghost2"
                     size="sm"
@@ -136,12 +141,21 @@ export default function TripSummaryComponent({ flightInfo }: TripSummaryProps) {
                   </Button>
                 </div>
 
+                <div className="mt-auto">
+                  <p className="text-xs sm:text-sm font-semibold">
+                    {flightInfo.arrivalCity}
+                  </p>
+                  <p className="text-[10px] sm:text-xs text-gray-500">
+                    {flightInfo.arrivalAirport}
+                  </p>
+                </div>
+
                 {/* Expandable content section */}
                 <div
                   style={{
-                    maxHeight: isExpanded ? `${contentHeight}px` : '0',
-                    overflow: 'hidden',
-                    transition: 'max-height 0.4s ease-in-out',
+                    maxHeight: isExpanded ? `${contentHeight}px` : "0",
+                    overflow: "hidden",
+                    transition: "max-height 0.4s ease-in-out",
                   }}
                 >
                   <div
@@ -209,21 +223,11 @@ export default function TripSummaryComponent({ flightInfo }: TripSummaryProps) {
                           </p>
                         </div>
                         <p className="font-semibold text-[10px] sm:text-xs">
-                          {flightInfo.wifiOnBoard ? 'Yes' : 'No'}
+                          {flightInfo.wifiOnBoard ? "Yes" : "No"}
                         </p>
                       </div>
                     </div>
                   </div>
-                </div>
-
-                {/* Arrival airport */}
-                <div className="mt-2 sm:mt-auto">
-                  <p className="text-xs sm:text-sm font-semibold">
-                    {flightInfo.arrivalAirport}
-                  </p>
-                  <p className="text-[10px] sm:text-xs text-gray-500">
-                    {flightInfo.arrivalAirportName}
-                  </p>
                 </div>
               </div>
             </div>

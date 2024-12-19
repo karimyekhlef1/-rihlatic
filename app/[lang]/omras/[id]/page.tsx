@@ -146,7 +146,100 @@ export default function OmraDetails() {
               <ContentComponent
                 dynamicContent={
                   <Provider store={store}>
-                    <TripSummaryComponent flightInfo={outboundFlights[0]} />
+                    {/* Outbound Flight */}
+                    {omraDetails?.omraDepartures?.[0]?.flight?.bounds?.[0] && (
+                      <TripSummaryComponent
+                        flightInfo={{
+                          from: omraDetails.omraDepartures[0].flight.bounds[0]
+                            .segments[0].departure_airport.city,
+                          to: omraDetails.omraDepartures[0].flight.bounds[0]
+                            .segments[0].arrival_airport.city,
+                          duration: `${omraDetails.omraDepartures[0].flight.bounds[0].duration.hours}h ${omraDetails.omraDepartures[0].flight.bounds[0].duration.minutes}m`,
+                          departureTime:
+                            omraDetails.omraDepartures[0].flight.bounds[0].departure_date
+                              .split(" ")[1]
+                              .substring(0, 5),
+                          departureDate:
+                            omraDetails.omraDepartures[0].departure_date,
+                          arrivalTime:
+                            omraDetails.omraDepartures[0].flight.bounds[0].arrival_date
+                              .split(" ")[1]
+                              .substring(0, 5),
+                          arrivalDate:
+                            omraDetails.omraDepartures[0].departure_date,
+                          departureCity:
+                            omraDetails.omraDepartures[0].flight.bounds[0]
+                              .segments[0].departure_airport.city,
+                          departureAirport:
+                            omraDetails.omraDepartures[0].flight.bounds[0]
+                              .segments[0].departure_airport.name,
+                          arrivalCity:
+                            omraDetails.omraDepartures[0].flight.bounds[0]
+                              .segments[0].arrival_airport.city,
+                          arrivalAirport:
+                            omraDetails.omraDepartures[0].flight.bounds[0]
+                              .segments[0].arrival_airport.name,
+                          airline:
+                            omraDetails.omraDepartures[0].flight.bounds[0]
+                              .operating_carrier.name,
+                          flightNumber:
+                            omraDetails.omraDepartures[0].flight.bounds[0]
+                              .segments[0].flight_or_train_number,
+                          seatPitch: "Standard",
+                          seatWidth: "Standard",
+                          seatRecline: "Standard",
+                          wifiOnBoard: false,
+                          nextdayDeparture: false,
+                        }}
+                      />
+                    )}
+                    {/* Return Flight */}
+                    {omraDetails?.omraDepartures?.[0]?.flight?.bounds?.[1] && (
+                      <TripSummaryComponent
+                        flightInfo={{
+                          from: omraDetails.omraDepartures[0].flight.bounds[1]
+                            .segments[0].departure_airport.city,
+                          to: omraDetails.omraDepartures[0].flight.bounds[1]
+                            .segments[0].arrival_airport.city,
+                          duration: `${omraDetails.omraDepartures[0].flight.bounds[1].duration.hours}h ${omraDetails.omraDepartures[0].flight.bounds[1].duration.minutes}m`,
+                          departureTime:
+                            omraDetails.omraDepartures[0].flight.bounds[1].departure_date
+                              .split(" ")[1]
+                              .substring(0, 5),
+                          departureDate:
+                            omraDetails.omraDepartures[0].return_date,
+                          arrivalTime:
+                            omraDetails.omraDepartures[0].flight.bounds[1].arrival_date
+                              .split(" ")[1]
+                              .substring(0, 5),
+                          arrivalDate:
+                            omraDetails.omraDepartures[0].return_date,
+                          departureCity:
+                            omraDetails.omraDepartures[0].flight.bounds[1]
+                              .segments[0].departure_airport.city,
+                          departureAirport:
+                            omraDetails.omraDepartures[0].flight.bounds[1]
+                              .segments[0].departure_airport.name,
+                          arrivalCity:
+                            omraDetails.omraDepartures[0].flight.bounds[1]
+                              .segments[0].arrival_airport.city,
+                          arrivalAirport:
+                            omraDetails.omraDepartures[0].flight.bounds[1]
+                              .segments[0].arrival_airport.name,
+                          airline:
+                            omraDetails.omraDepartures[0].flight.bounds[1]
+                              .operating_carrier.name,
+                          flightNumber:
+                            omraDetails.omraDepartures[0].flight.bounds[1]
+                              .segments[0].flight_or_train_number,
+                          seatPitch: "Standard",
+                          seatWidth: "Standard",
+                          seatRecline: "Standard",
+                          wifiOnBoard: false,
+                          nextdayDeparture: false,
+                        }}
+                      />
+                    )}
                   </Provider>
                 }
               />
