@@ -16,7 +16,6 @@ import {
   CalendarDays,
 } from "lucide-react";
 import AdComponent from "@/app/commonComponents/adComponent";
-import BookingPackageComponent from "@/app/Components/packages/bookingPackageComponent";
 import ImportantNote from "@/app/Components/packages/importantNote";
 import OrganizeSection from "@/app/Components/home/organizeSection";
 import { useParams } from "next/navigation";
@@ -29,6 +28,7 @@ import TripSummaryComponent from "@/app/Components/packages/tripSummary";
 import OmraTravelProgram from "@/app/Components/packages/OmratravelProgram";
 import OmraHotelDetails from "@/app/Components/packages/OmrahotelDetails";
 import OmraHotelsComponent from "@/app/Components/packages/OmrahotelsComponent";
+import BookingOmraComponent from "@/app/Components/packages/bookingOmraComponent";
 
 export default function OmraDetails() {
   const dispatch = useDispatch<any>();
@@ -322,9 +322,7 @@ export default function OmraDetails() {
           {/* Booking Section - Desktop */}
           <div className="md:hidden lg:flex lg:flex-col items-center pt-4 sm:pt-16 gap-y-8">
             <Provider store={store}>
-              <BookingPackageComponent
-                data={omraDetails?.omraDepartures ?? []}
-              />
+              <BookingOmraComponent data={omraDetails?.omraDepartures} />
             </Provider>
             <div className="pt-6 sm:pt-0">
               <AdComponent />
@@ -335,7 +333,7 @@ export default function OmraDetails() {
         {/* Booking Section - Tablet */}
         <div className="hidden lg:hidden md:flex md:pt-8 md:gap-x-8 md:justify-center md:items-center">
           <Provider store={store}>
-            <BookingPackageComponent data={omraDetails?.omraDepartures ?? []} />
+            <BookingOmraComponent data={omraDetails?.omraDepartures} />
           </Provider>
           <div className="pt-6 sm:pt-0">
             <AdComponent />
