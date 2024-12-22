@@ -80,13 +80,13 @@ const TripComponent: React.FC<TripComponentProps> = ({
         <div className="name">
           <p className="text-base sm:text-lg font-semibold mt-2">{name}</p>
         </div>
-        <div className="hotel flex items-center gap-2">
+        {/* <div className="hotel flex items-center gap-2">
           <FaStar style={{ color: "#FFE500" }} />
           {destinations.length > 0 && departures[0]?.hotel_stay[0].rate}
           <p className="text-xs sm:text-sm mt-2">
             {destinations?.length > 0 && departures[0]?.hotel_stay[0].name}
           </p>
-        </div>
+        </div> */}
         <div className="pricing">
           <p className="text-base sm:text-lg font-semibold mt-2">
             <span className="text-gray-600">From </span>
