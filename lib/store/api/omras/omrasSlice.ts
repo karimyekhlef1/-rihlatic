@@ -38,15 +38,6 @@ export const storeOmraReservation = createAsyncThunk('omraStoreReservation/slice
     }
 });
 
-export const cancelOmraReservation = createAsyncThunk('omraCancelReservation/slice', async (data:any, thunkApi) => {
-    try {
-        const response = await omrasService.cancelOmraReservation(data);
-        return response;
-    } catch (error: any) {
-        return thunkApi.rejectWithValue(error.response.data);
-    }
-});
-
 export const cancelOmraPenalty = createAsyncThunk('omraCancelPenalty/slice', async (data:any, thunkApi) => {
     try {
         const response = await omrasService.cancelOmraPenalty(data);
@@ -91,16 +82,6 @@ const OmraSlice = createSlice({
                 state.omraData = action.payload;
             })
             .addCase(getOmraReservationDetails.rejected, (state, _) => {
-                state.loading = false;
-                state.omraData = {};
-            }).addCase(cancelOmraReservation.pending, (state) => {
-                state.loading = true;
-            })
-            .addCase(cancelOmraReservation.fulfilled, (state, action) => {
-                state.loading = false;
-                state.omraData = action.payload;
-            })
-            .addCase(cancelOmraReservation.rejected, (state, _) => {
                 state.loading = false;
                 state.omraData = {};
             }).addCase(cancelOmraPenalty.pending, (state) => {
