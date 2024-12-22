@@ -32,8 +32,6 @@ export const packages_endpoint = BASE_URL + "/front/packages";
 export const omra_endpoint = BASE_URL + "/front/omra";
 // Omras Bookings
 export const omras_bookings_endpoint = BASE_URL + "/front/omras/bookings";
-//Omra Cancel
-export const omra_cancel_endpoint = BASE_URL + "/front/omras/bookings/cancel";
 //Omra Cancel Penalty
 export const omra_cancelPenalty_endpoint =
   BASE_URL + "/front/omras/bookings/cancel/cancelPenalty";

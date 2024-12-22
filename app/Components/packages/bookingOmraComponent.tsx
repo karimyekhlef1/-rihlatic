@@ -4,8 +4,10 @@ import { Separator } from "@/components/ui/separator";
 import { CircleCheck, ArrowRight } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { useState } from "react";
 
 import Link from "next/link";
+import DepartureDialog from "@/app/Components/packages/departure-dialog";
 
 export default function BookingPackageComponent(data: any) {
   const departure_date = new Date(data?.data?.[0]?.departure_date);
@@ -16,6 +18,9 @@ export default function BookingPackageComponent(data: any) {
   const formattedReturn_date = format(return_date, "dd-MMMM-yyyy", {
     locale: fr,
   });
+
+  const [isDepartureDialogOpen, setIsDepartureDialogOpen] = useState(false);
+  const [isDepartureSelected, setIsDepartureSelected] = useState(false);
 
   return (
     <div>
@@ -37,7 +42,8 @@ export default function BookingPackageComponent(data: any) {
                   fill="#b4deff"
                 />
                 <p className="text-xs text-gray-700 font-medium pl-2">
-                  {data?.data?.[0]?.total_days} nights /{" "}
+                  {data?.data?.[0]?.total_days} nights{" "}
+                  <span className="text-xs text-gray-700 font-bold">/</span>{" "}
                   {data?.data?.[0]?.total_days + 1} days
                 </p>
               </div>
@@ -55,11 +61,19 @@ export default function BookingPackageComponent(data: any) {
               </div>
             </div>
             <div className="pb-4">
-              <Link href={"*"}>
-                <Button className="px-14" variant={"rihlatic"}>
-                  Select departure
-                </Button>
-              </Link>
+              <Button
+                className="px-14"
+                variant={"rihlatic"}
+                onClick={() => setIsDepartureDialogOpen(true)}
+              >
+                {isDepartureSelected ? "Modify departure" : "Select departure"}
+              </Button>
+              <DepartureDialog
+                open={isDepartureDialogOpen}
+                onOpenChange={setIsDepartureDialogOpen}
+                onSelect={() => setIsDepartureSelected(true)}
+                onDelete={() => setIsDepartureSelected(false)}
+              />
             </div>
             <Separator className="w-[90%]" />
             <div className="pt-4">
