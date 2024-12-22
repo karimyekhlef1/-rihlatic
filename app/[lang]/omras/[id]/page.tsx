@@ -29,6 +29,7 @@ import OmraTravelProgram from "@/app/Components/packages/OmratravelProgram";
 import OmraHotelDetails from "@/app/Components/packages/OmrahotelDetails";
 import OmraHotelsComponent from "@/app/Components/packages/OmrahotelsComponent";
 import BookingOmraComponent from "@/app/Components/packages/bookingOmraComponent";
+import OmraTripComponent from "@/app/commonComponents/OmratripComponent";
 
 export default function OmraDetails() {
   const dispatch = useDispatch<any>();
@@ -344,7 +345,7 @@ export default function OmraDetails() {
       {/* Related Omras */}
       <div className="container textarabic">
         <div className="w-100" id="home-page">
-          <OrganizeSection data={omras} />
+          <OrganizeSection data={omras} comp={OmraTripComponent} />
         </div>
       </div>
     </div>
