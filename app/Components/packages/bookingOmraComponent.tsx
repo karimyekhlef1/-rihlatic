@@ -8,6 +8,7 @@ import { useState } from "react";
 
 import Link from "next/link";
 import DepartureDialog from "@/app/Components/packages/departure-dialog";
+import { RoomDialog } from "@/app/Components/packages/room-dialog";
 
 export default function BookingPackageComponent(data: any) {
   const departure_date = new Date(data?.data?.[0]?.departure_date);
@@ -21,6 +22,13 @@ export default function BookingPackageComponent(data: any) {
 
   const [isDepartureDialogOpen, setIsDepartureDialogOpen] = useState(false);
   const [isDepartureSelected, setIsDepartureSelected] = useState(false);
+  const [isRoomDialogOpen, setIsRoomDialogOpen] = useState(false);
+
+  const handleBookNowClick = () => {
+    if (isDepartureSelected) {
+      setIsRoomDialogOpen(true);
+    }
+  };
 
   return (
     <div>
@@ -77,15 +85,22 @@ export default function BookingPackageComponent(data: any) {
             </div>
             <Separator className="w-[90%]" />
             <div className="pt-4">
-              <Link href={"/omras/payment"}>
-                <Button className="px-20" variant={"rihlatic"}>
-                  Book Now
-                </Button>
-              </Link>
+              <Button
+                className="px-20"
+                variant={"rihlatic"}
+                disabled={!isDepartureSelected}
+                onClick={handleBookNowClick}
+              >
+                Book Now
+              </Button>
             </div>
           </div>
         </CardContent>
       </Card>
+      <RoomDialog
+        open={isRoomDialogOpen}
+        onOpenChange={setIsRoomDialogOpen}
+      />
     </div>
   );
 }
