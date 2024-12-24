@@ -12,7 +12,7 @@ import { HomeFunc } from '@/lib/store/api/home/homeSlice';
 import Loading from '@/app/Components/home/Loading';
 import { RootState } from '@/lib/store/store';
 import SearchSectionComponent from '@/app/Components/home/searchSectionComponent';
-
+import TripComponent from '@/app/commonComponents/tripComponent';
 const HomePage: React.FC = () => {
 
     const { loading, homeData } = useSelector((state: RootState) => state.home);
@@ -37,7 +37,7 @@ const HomePage: React.FC = () => {
             <hr style={{border: '1px solid #e5e7eb40'}} />
             <DiscoverSection data={homeData?.discoverAlgeria}  />
             <FavSection data={homeData?.favoriteDestinations} />
-            <OrganizeSection data={homeData?.organzidTrip}/>
+            <OrganizeSection data={homeData?.organzidTrip} comp ={TripComponent}/>
             <PopularSection data={homeData?.popularFromAlgiers}/>
             <FlightsSection data={homeData?.popularFlights}  />
             <br />

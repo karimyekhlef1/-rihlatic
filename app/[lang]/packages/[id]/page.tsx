@@ -30,15 +30,12 @@ import { packagesFunc } from "@/lib/store/api/packages/packagesSlice";
 import Loading from "@/app/Components/home/Loading";
 import { PackageDetails } from "@/app/Types/package/packageDetails";
 import { setPackage } from "@/lib/store/custom/packagesSlices/paymentPachageSlices";
-import { Departure } from "@/app/Types/package/packageDetails";
+import { Departure } from '@/app/Types/package/packageDetails';
 import TripComponent from "@/app/commonComponents/tripComponent";
-
 export default function Details() {
   const dispatch = useDispatch<any>();
   const { loading, packagesData } = useSelector((state: any) => state.packages);
-  const [packagesDetails, setPackageDetails] = useState<
-    PackageDetails | undefined
-  >(undefined);
+  const [packagesDetails, setPackageDetails] = useState<PackageDetails | undefined>(undefined);
   const [packages, setPackages] = useState<any[]>([]);
   const { id } = useParams();
 
@@ -52,9 +49,9 @@ export default function Details() {
         })
       );
       setPackageDetails(result.payload.result.package);
-      dispatch(setPackage(result.payload.result.package));
-      const all = await dispatch(packagesFunc({ include: "departures" }));
-      setPackages(all.payload.result.packages);
+      dispatch(setPackage(result.payload.result.package) )
+      const all =  await dispatch(packagesFunc({ include: 'departures' }));
+      setPackages(all.payload.result.packages)
     };
     getData();
   }, []);
@@ -87,7 +84,7 @@ export default function Details() {
                 }
               />
 
-              {/* <TitleComponent
+              <TitleComponent
                 title={"Hôtel(s)"}
                 icon={<Bed size={20} />}
                 label={""}
@@ -95,30 +92,21 @@ export default function Details() {
               {packagesDetails?.departures.map((item, index) => (
                 <div key={index}>
                   <ContentComponent
-                    dynamicContent={
-                      <HotelsComponent data={item.hotel_stay[0]} />
-                    }
+                    dynamicContent={<HotelsComponent data={item.hotel_stay[0]} />}
                   />
                 </div>
-              ))} */}
+              ))}
 
               <TitleComponent title={"Hôtel Details"} label={""} />
-              <ContentComponent
-                dynamicContent={
-                  <HotelDetails data={packagesDetails?.departures} />
-                }
-              />
-
+              <ContentComponent dynamicContent={<HotelDetails data={packagesDetails?.departures}/>} />
+        
+        
               <TitleComponent
                 title={"Travel program"}
                 icon={<Luggage size={20} />}
                 label={""}
               />
-              <ContentComponent
-                dynamicContent={
-                  <TravelProgram data={packagesDetails?.departures} />
-                }
-              />
+              <ContentComponent dynamicContent={<TravelProgram data={packagesDetails?.departures} />} />
 
               <TitleComponent
                 title={"important note"}
@@ -126,17 +114,13 @@ export default function Details() {
                 label={""}
               />
               <ContentComponent
-                dynamicContent={
-                  <ImportantNote content={packagesDetails?.note} />
-                }
+                dynamicContent={<ImportantNote content={packagesDetails?.note} />}
               />
             </div>
           </div>
           <div className="md:hidden lg:flex lg:flex-col items-center pt-4 sm:pt-16 gap-y-8">
             <Provider store={store}>
-              <BookingPackageComponent
-                data={packagesDetails?.departures ?? []}
-              />
+              <BookingPackageComponent data={packagesDetails?.departures ?? []}  />
             </Provider>
             <div className="pt-6 sm:pt-0">
               <AdComponent />
@@ -145,7 +129,7 @@ export default function Details() {
         </div>
         <div className="hidden lg:hidden md:flex md:pt-8 md:gap-x-8 md:justify-center md:items-center">
           <Provider store={store}>
-            <BookingPackageComponent data={packagesDetails?.departures ?? []} />
+            <BookingPackageComponent  data={packagesDetails?.departures ?? []} />
           </Provider>
           <div className="pt-6 sm:pt-0">
             <AdComponent />
@@ -154,7 +138,7 @@ export default function Details() {
       </div>
       <div className="container">
         <div className="w-100" id="home-page">
-          <OrganizeSection data={packages} comp={TripComponent} />
+        <OrganizeSection data={packages}  comp={TripComponent} />
         </div>
       </div>
     </div>
