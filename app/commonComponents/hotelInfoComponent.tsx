@@ -7,22 +7,41 @@ import { BsFillPeopleFill } from 'react-icons/bs';
 import Image from 'next/image';
 import hotelImage from '@/public/images/home/four.jpeg';
 import Link from 'next/link';
-
-interface TripComponentProps {
-  text: string;
-  rank?: number; // Add this prop for the rank
+interface HotelInfoComponentProps {
+data: {
+  supplier: string;
+  supplier_logo: string;
+  number: string;
+  ref: string;
+  feature_image: string;
+  rate: number;
+  highestRate: number;
+  name: string;
+  address: string;
+  rating: number;
+  reviews: number;
+  localisation: {
+    longitude: number;
+    latitude: number;
+  };
+  promotion: {
+    name: string | null;
+    date: string | null;
+  };
+};
 }
-
-const HotelInfoComponent: React.FC<TripComponentProps> = ({ text, rank }) => {
+const HotelInfoComponent: React.FC<HotelInfoComponentProps> = ({ data }) => {
   return (
     <div className="tripComponent rounded-3xl shadow-lg my-3 max-w-sm mx-auto sm:max-w-md md:max-w-lg lg:max-w-xl">
       <div className="image relative">
         <Image
-          src={hotelImage}
+          width={500}
+          height={300}
+          src={data.feature_image}
           alt="trip"
           className="h-48 sm:h-52 md:h-60 w-full object-cover rounded-t-2xl"
         />
-        {rank && (
+        {data.rating && (
           <div
             className="absolute top-2 right-2 bg-white/20 rounded-full p-2 flex items-center justify-center"
             style={{
@@ -33,31 +52,29 @@ const HotelInfoComponent: React.FC<TripComponentProps> = ({ text, rank }) => {
             }}
           >
             <FaStar className="text-[#ffe500] mr-1" size={12} />
-            <span className="text-xs text-[#ffe500] font-semibold">{rank}</span>
+            <span className="text-xs text-[#ffe500] font-semibold">{data.rating}</span>
           </div>
         )}
       </div>
       <div className="info p-3 sm:p-4">
         <div className="name">
           <p className="text-base sm:text-lg font-semibold mt-2">
-            {'Concorde El Salam SPORT'}
+            {data.name}
           </p>
         </div>
         <div className="hotel flex items-center gap-2">
           <p className="text-xs text-gray-600 text-wrap w-[300px] sm:text-sm mt-2">
-            {
-              'WHITE KNIGHT BEACH PO BOX 91 SHARM EL SHEIK, Egypt 16 km from the city center'
-            }
+           {data.address}
           </p>
         </div>
         <div className="pricing">
           <p className="text-base sm:text-md font-semibold mt-2">
             <span className="text-gray-600">From </span>
-            {' 1000 DZD'}
+            {data.rate} DZD
           </p>
         </div>
         <div>
-          <p className="text-xs text-gray-500 py-4">0 Avis</p>
+          <p className="text-xs text-gray-500 py-4">{ data.reviews} Avis</p>
         </div>
         <Link href="/hotels/details">
           <div className="flex justify-center">

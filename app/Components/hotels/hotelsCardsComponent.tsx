@@ -20,10 +20,31 @@ import HotelInfoComponent from '@/app/commonComponents/hotelInfoComponent';
 export default function HotelsCardsComponent() {
   // Sample data
   const fakeList = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7,
-    8, 9, 10, 11,
+    {
+      supplier: "MYGO",
+      supplier_logo: "https://b2b.mygo.pro/images_dir/v2019/mygo-logo.svg",
+      number: "34957280852",
+      ref: "155168",
+      feature_image: "https://pictures.netstorming.net/common/hotels/155168/original/0.jpg",
+      rate: 88387,
+      highestRate: 107104,
+      name: "LES MIMOSAS",
+      address: "Avenue Habib Bourguiba, 8110",
+      rating: 3,
+      reviews: 0,
+      localisation: {
+          longitude: 0,
+          latitude: 0
+      },
+      promotion: {
+          name: null,
+          date: null
+      }
+  }
   ];
 
+
+  
   const totalItems = fakeList.length;
 
   // Constants for pagination
@@ -88,7 +109,7 @@ export default function HotelsCardsComponent() {
         {currentItems.map((item, index) => (
           <li key={index} className="col-span-1 divide-y">
             <div>
-              <HotelInfoComponent rank={5} text={`Voyage ${item}`} />
+              <HotelInfoComponent data={item} />
             </div>
           </li>
         ))}
