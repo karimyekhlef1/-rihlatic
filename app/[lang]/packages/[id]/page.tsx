@@ -59,7 +59,7 @@ export default function Details() {
 
   return (
     <div className="flex flex-col items-center overflow-x-clip">
-      <GallerySlider data={packagesDetails} />
+      <GallerySlider data={packagesDetails} page={"package"} />
       <div className="fluid-container">
         <div className="flex flex-col md:flex-row md:items-start items-center gap-4 pt-5">
           <div className="flex flex-col">

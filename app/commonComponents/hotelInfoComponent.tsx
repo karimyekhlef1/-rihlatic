@@ -3,33 +3,34 @@ import { RiMapPin2Line } from 'react-icons/ri';
 import TripTagComponent from './tripTagComponent';
 import { FaStar, FaStarHalf } from 'react-icons/fa';
 import { BsFillPeopleFill } from 'react-icons/bs';
-
 import Image from 'next/image';
 import hotelImage from '@/public/images/home/four.jpeg';
 import Link from 'next/link';
+
 interface HotelInfoComponentProps {
-data: {
-  supplier: string;
-  supplier_logo: string;
-  number: string;
-  ref: string;
-  feature_image: string;
-  rate: number;
-  highestRate: number;
-  name: string;
-  address: string;
-  rating: number;
-  reviews: number;
-  localisation: {
-    longitude: number;
-    latitude: number;
+  data: {
+    supplier: string;
+    supplier_logo: string;
+    number: string;
+    ref: string;
+    feature_image: string;
+    rate: number;
+    highestRate: number;
+    name: string;
+    address: string;
+    rating: number;
+    reviews: number;
+    localisation: {
+      longitude: number;
+      latitude: number;
+    };
+    promotion: {
+      name: string | null;
+      date: string | null;
+    };
   };
-  promotion: {
-    name: string | null;
-    date: string | null;
-  };
-};
 }
+
 const HotelInfoComponent: React.FC<HotelInfoComponentProps> = ({ data }) => {
   return (
     <div className="tripComponent rounded-3xl shadow-lg my-3 max-w-sm mx-auto sm:max-w-md md:max-w-lg lg:max-w-xl">
@@ -64,7 +65,7 @@ const HotelInfoComponent: React.FC<HotelInfoComponentProps> = ({ data }) => {
         </div>
         <div className="hotel flex items-center gap-2">
           <p className="text-xs text-gray-600 text-wrap w-[300px] sm:text-sm mt-2">
-           {data.address}
+            {data.address}
           </p>
         </div>
         <div className="pricing">
@@ -74,9 +75,16 @@ const HotelInfoComponent: React.FC<HotelInfoComponentProps> = ({ data }) => {
           </p>
         </div>
         <div>
-          <p className="text-xs text-gray-500 py-4">{ data.reviews} Avis</p>
+          <p className="text-xs text-gray-500 py-4">{data.reviews} Avis</p>
         </div>
-        <Link href="/hotels/details">
+        <Link
+          href={{
+            pathname: `hotels/${data.ref}`,
+            query: {
+              supplier: 'CNG'
+            }
+          }}
+        >
           <div className="flex justify-center">
             <button className="btn w-[90%] rounded-xl text-[#FF8000] bg-[#FF800033] mt-2 text-xs py-3">
               {'Details'}
