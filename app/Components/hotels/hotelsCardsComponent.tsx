@@ -21,12 +21,12 @@ export default function HotelsCardsComponent() {
   // Sample data
   const fakeList = [
     {
-      supplier: "MYGO",
+      supplier: "CNG",
       supplier_logo: "https://b2b.mygo.pro/images_dir/v2019/mygo-logo.svg",
       number: "34957280852",
       ref: "155168",
       feature_image: "https://pictures.netstorming.net/common/hotels/155168/original/0.jpg",
-      rate: 88387,
+      rate: 1183,
       highestRate: 107104,
       name: "LES MIMOSAS",
       address: "Avenue Habib Bourguiba, 8110",
@@ -40,7 +40,29 @@ export default function HotelsCardsComponent() {
           name: null,
           date: null
       }
-  }
+  },
+  {
+      supplier: "MYGO",
+      supplier_logo: "https://b2b.mygo.pro/images_dir/v2019/mygo-logo.svg",
+      number: "35050113422",
+      ref: "105466",
+      feature_image: "https://pictures.netstorming.net/common/hotels/105466/original/0.jpg",
+      rate: 73113,
+      highestRate: 122558,
+      name: "DAR ISMAIL",
+      address: "Zone Touristique Tabarka , Tabarka 8110",
+      rating: 5,
+      reviews: 0,
+      localisation: {
+          longitude: 0,
+          latitude: 0
+      },
+      promotion: {
+          name: null,
+          date: null
+      }
+  },
+  
   ];
 
 

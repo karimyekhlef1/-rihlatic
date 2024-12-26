@@ -19,7 +19,7 @@ import { getHotelsDetails } from '@/lib/store/api/hotels/hotelsSlice';
 import { useEffect , useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import Loading from '@/app/Components/home/Loading';
-import { HotelDetails } from '@/app/Types/hotel/HotelDetails';
+import { HotelDetails , Room } from '@/app/Types/hotel/HotelDetails';
 const body={
   "supplier":"CNG",
   "checkin": "2025-01-01",
@@ -35,7 +35,7 @@ const body={
           "id":null
       }       
   }, 
-  "hotel" : "911",
+  "hotel" : "1183",
   "room" :{
       "0":{
       "adult" : 1,
@@ -49,8 +49,7 @@ const body={
       "count" : 1 ,
       "Age" : null
       }
-  }
-
+  },
 }
 
 
@@ -79,8 +78,8 @@ export default function Details() {
   return (
     <div className="flex flex-col items-center overflow-x-clip">
       <GallerySlider data={hotelDetails} page={"hotel"} />
-      <div className="fluid-container ">
-        <div className="flex flex-col md:flex-row md:items-start items-center gap-4 pt-5">
+      <div className="fluid-container">
+        <div className="flex flex-col md:flex-row md:items-start items-center gap-4 pt-5 ">
           <div className="flex flex-col">
             <div className="flex flex-col">
               <TitleComponent
@@ -95,20 +94,20 @@ export default function Details() {
                 icon={<Sparkles size={20} />}
                 label={''}
               />
-              <ContentComponent dynamicContent={<PopularFacilities data={hotelDetails?.facilities} />} />
+              <ContentComponent dynamicContent={<PopularFacilities data={hotelDetails?.facilities || undefined} />} />
 
               <TitleComponent
                 title={'Rooms Availability'}
                 icon={<Bed size={20} />}
                 label={''}
               />
-              {[...Array(3)].map((_, index) => (
-                <RoomsCard key={index} />
+              {hotelDetails?.rooms.map((room:Room, index:number) => (
+                <RoomsCard key={room.room_id} data={room} />
               ))}
             </div>
           </div>
           <div className="md:hidden lg:flex lg:flex-col items-center pt-4 sm:pt-16 gap-y-8 space-y-8 sm:space-y-0">
-            <MapComponent />
+            <MapComponent  data ={hotelDetails}/>
             <Provider store={store}>
               <BookingHotelComponent />
             </Provider>
