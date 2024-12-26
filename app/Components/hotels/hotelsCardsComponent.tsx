@@ -16,58 +16,11 @@ import {
 } from '@/components/ui/pagination';
 
 import HotelInfoComponent from '@/app/commonComponents/hotelInfoComponent';
-
-export default function HotelsCardsComponent() {
-  // Sample data
-  const fakeList = [
-    {
-      supplier: "CNG",
-      supplier_logo: "https://b2b.mygo.pro/images_dir/v2019/mygo-logo.svg",
-      number: "34957280852",
-      ref: "155168",
-      feature_image: "https://pictures.netstorming.net/common/hotels/155168/original/0.jpg",
-      rate: 1183,
-      highestRate: 107104,
-      name: "LES MIMOSAS",
-      address: "Avenue Habib Bourguiba, 8110",
-      rating: 3,
-      reviews: 0,
-      localisation: {
-          longitude: 0,
-          latitude: 0
-      },
-      promotion: {
-          name: null,
-          date: null
-      }
-  },
-  {
-      supplier: "MYGO",
-      supplier_logo: "https://b2b.mygo.pro/images_dir/v2019/mygo-logo.svg",
-      number: "35050113422",
-      ref: "105466",
-      feature_image: "https://pictures.netstorming.net/common/hotels/105466/original/0.jpg",
-      rate: 73113,
-      highestRate: 122558,
-      name: "DAR ISMAIL",
-      address: "Zone Touristique Tabarka , Tabarka 8110",
-      rating: 5,
-      reviews: 0,
-      localisation: {
-          longitude: 0,
-          latitude: 0
-      },
-      promotion: {
-          name: null,
-          date: null
-      }
-  },
-  
-  ];
+import { HotelDetails } from '@/app/Types/hotel/HotelDetails';
 
 
-  
-  const totalItems = fakeList.length;
+export default function HotelsCardsComponent({data}:any) {
+  const totalItems = data.length;
 
   // Constants for pagination
   const [itemsPerPage, setItemsPerPage] = useState(9);
@@ -102,7 +55,7 @@ export default function HotelsCardsComponent() {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = fakeList.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
   // Handle page changes
   const handlePageChange = (page: number) => {
@@ -128,7 +81,7 @@ export default function HotelsCardsComponent() {
         role="list"
         className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
       >
-        {currentItems.map((item, index) => (
+        {currentItems.map((item:any, index:number) => (
           <li key={index} className="col-span-1 divide-y">
             <div>
               <HotelInfoComponent data={item} />

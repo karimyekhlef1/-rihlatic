@@ -42,7 +42,7 @@ const HotelInfoComponent: React.FC<HotelInfoComponentProps> = ({ data }) => {
           alt="trip"
           className="h-48 sm:h-52 md:h-60 w-full object-cover rounded-t-2xl"
         />
-        {data.rating && (
+        {data.rating >0 ? (
           <div
             className="absolute top-2 right-2 bg-white/20 rounded-full p-2 flex items-center justify-center"
             style={{
@@ -55,7 +55,7 @@ const HotelInfoComponent: React.FC<HotelInfoComponentProps> = ({ data }) => {
             <FaStar className="text-[#ffe500] mr-1" size={12} />
             <span className="text-xs text-[#ffe500] font-semibold">{data.rating}</span>
           </div>
-        )}
+        ): null}
       </div>
       <div className="info p-3 sm:p-4">
         <div className="name">

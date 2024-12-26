@@ -69,4 +69,24 @@ export interface HotelDetails {
     date_from: string;
     percentage: string;
   }
-  
+  export interface HotelType {
+    supplier: string;
+    supplier_logo: string;
+    number: string;
+    ref: string;
+    feature_image: string;
+    rate: number;
+    highestRate: number;
+    name: string;
+    address: string;
+    rating: number;
+    reviews: number;
+    localisation: {
+      longitude: number;
+      latitude: number;
+    };
+    promotion: {
+      name: string | null;
+      date: string | null;
+    };
+  }
