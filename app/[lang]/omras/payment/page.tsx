@@ -1,35 +1,24 @@
-'use client';
+"use client";
 
-import PaymentTitleComponent from '@/app/Components/payment/paymentTitle';
-import PaymentCardComponent from '@/app/Components/payment/paymentCard';
-import PaymentProgressComponent from '@/app/Components/payment/paymentProgress';
-import Loading from '@/app/Components/home/Loading';
-import { useSelector } from 'react-redux';
-import RoomReservationInformation from '@/app/Components/packages/RoomReservationInformation';
-import ChangePaymentSteps from '@/app/Components/packages/ChangePaymentSteps';
-export default function PaymentPage() {
+import PaymentTitleComponent from "@/app/Components/payment/paymentTitle";
 
-  const departure = useSelector((state: any) => state.paymentPackage.departure);
-  const rooms = useSelector((state: any) => state.paymentPackage.rooms);
-   const pkg =  useSelector((state: any) => state.paymentPackage.package);
+import RoomReservationInformation from "@/app/Components/packages/RoomReservationInformation";
+import ChangePaymentSteps from "@/app/Components/packages/ChangePaymentSteps";
+import OmraPaymentProgress from "@/app/Components/omra/OmraPaymentProgress";
 
-  if (!departure || !rooms || !pkg) {
-    return <Loading />;
-  }
-
-
+export default function OmraPaymentPage() {
   return (
     <div className="flex flex-col items-center justify-start min-h-screen pt-16">
       <PaymentTitleComponent
-        location={pkg.name}
-        month="August"
-        startDate={departure.departure_date}
-        endDate={departure.return_date}
+        location={"location"}
+        month={"month"}
+        startDate={"startDate"}
+        endDate={"startDate"}
       />
-      <PaymentProgressComponent />
+      <OmraPaymentProgress />
       <RoomReservationInformation />
 
-      <ChangePaymentSteps/>
+      <ChangePaymentSteps />
     </div>
   );
 }

@@ -42,6 +42,7 @@ import volSearchSlice from '@/lib/store/engine/vol_search_slice';
 import packageSearchSlice from '@/lib/store/engine/package_search_slice';
 
 import omraSlice from '@/lib/store/api/omras/omrasSlice';
+import omraReservationSlice from './custom/commonSlices/omraReservationSlice';
 
 export const store = configureStore({
   reducer: {
@@ -65,7 +66,7 @@ export const store = configureStore({
     excludedCountries: excludedCountriesReducer,
     langSlice: LanguageSlice,
     //payment
-    paymentPackage :paymentPackageSlice,
+    paymentPackage: paymentPackageSlice,
 
     // Search Engine
     volSearchSlice: volSearchSlice,
@@ -95,6 +96,7 @@ export const store = configureStore({
     packages: packagesSlice,
     // Omras
     omras: omraSlice,
+    omreaReservationInfos: omraReservationSlice,
   },
   // we can delete this later it's just to supress serializableCheck warnings
   middleware: (getDefaultMiddleware) =>

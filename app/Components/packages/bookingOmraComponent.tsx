@@ -99,7 +99,7 @@ export default function BookingPackageComponent(data: any) {
       </Card>
       <RoomDialog
         open={isRoomDialogOpen}
-        onOpenChange={setIsRoomDialogOpen}
+        onOpenChange={(open) => setIsRoomDialogOpen(open)}
       />
     </div>
   );
