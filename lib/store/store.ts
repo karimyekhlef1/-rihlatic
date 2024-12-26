@@ -42,7 +42,9 @@ import volSearchSlice from '@/lib/store/engine/vol_search_slice';
 import packageSearchSlice from '@/lib/store/engine/package_search_slice';
 
 import omraSlice from '@/lib/store/api/omras/omrasSlice';
-
+//hotels
+import HotelSlice from '@/lib/store/api/hotels/hotelsSlice'
+import HotelStateSlice from '@/lib/store/custom/hotelSlices/HotelStateSlice'
 export const store = configureStore({
   reducer: {
     account: accountSlice,
@@ -95,6 +97,9 @@ export const store = configureStore({
     packages: packagesSlice,
     // Omras
     omras: omraSlice,
+    //hotels
+    hotels:HotelSlice,
+    hotelState:HotelStateSlice
   },
   // we can delete this later it's just to supress serializableCheck warnings
   middleware: (getDefaultMiddleware) =>
