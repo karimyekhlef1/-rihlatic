@@ -5,7 +5,7 @@ import { store } from "@/lib/store/store";
 
 import ContentComponent from "@/app/commonComponents/contentComponent";
 import TitleComponent from "@/app/commonComponents/titleComponent";
-import GallerySlider from "@/app/commonComponents/gallerySliderComponent";
+import GallerySlider from "@/app/commonComponents/OmraGallerySliderComponent";
 
 import {
   AlignLeft,
