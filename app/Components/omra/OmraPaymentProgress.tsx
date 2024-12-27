@@ -1,17 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store/store";
-import {
-  CheckIcon,
-  ClipboardListIcon,
-  CreditCardIcon,
-  CircleCheck,
-} from "lucide-react";
+import { ClipboardListIcon, CircleCheck } from "lucide-react";
 
-export default function PaymentProgressComponent() {
-  const steps = useSelector((state: RootState) => state.paymentPackage.steps);
+export default function OmraPaymentProgressComponent() {
+  const steps = useSelector((state: RootState) => state.paymentOmra.steps);
   const currentStep = useSelector(
-    (state: RootState) => state.paymentPackage.currentStep
+    (state: RootState) => state.paymentOmra.currentStep
   );
 
   return (
