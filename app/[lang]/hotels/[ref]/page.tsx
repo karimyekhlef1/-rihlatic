@@ -15,16 +15,71 @@ import MapComponent from '@/app/Components/hotels/mapComponent';
 import BookingHotelComponent from '@/app/Components/hotels/bookHotel';
 import PopularFacilities from '@/app/Components/hotels/popularFacilities';
 import OrganizeSection from '@/app/Components/home/organizeSection';
+import { getHotelsDetails } from '@/lib/store/api/hotels/hotelsSlice';
+import { useEffect , useState } from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import Loading from '@/app/Components/home/Loading';
+import { HotelDetails , Room } from '@/app/Types/hotel/HotelDetails';
+const body={
+  "supplier":"CNG",
+  "checkin": "2025-01-01",
+  "checkout": "2025-01-05",
+  "city":{
+      "mygo":{
+          "id" : "TABR"
+      },
+      "cng":{
+          "id":"109"
+      } ,
+      "hb":{
+          "id":null
+      }       
+  }, 
+  "hotel" : "1183",
+  "room" :{
+      "0":{
+      "adult" : 1,
+      "children" : 0,
+      "count" : 1 ,
+      "Age" : null
+      },
+      "1":
+      {"adult" : 1,
+      "children" : 0,
+      "count" : 1 ,
+      "Age" : null
+      }
+  },
+}
 
-const content =
-  'This is just a place holder. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Asperiores voluptate tempora reprehenderit natus in debitis voluptatibus non dolor itaque repellat? Rem dicta corrupti facere id eum nihil magni excepturi officia. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Asperiores voluptate tempora reprehenderit natus in debitis voluptatibus non dolor itaque repellat? Rem dicta corrupti facere id eum nihil magni excepturi officia.';
 
 export default function Details() {
+  const dispatch = useDispatch<any>();
+  const { loading, hotelData } = useSelector((state: any) => state.hotels);
+   const [hotelDetails, setHotelDetails] = useState<HotelDetails | undefined>(undefined);
+ 
+
+
+
+   useEffect(() => {
+      const getData = async () => {
+        const result = await dispatch(getHotelsDetails(body));
+        console.log("hotel", result.payload.result.hotel)
+        setHotelDetails(result.payload.result.hotel);
+        // dispatch(setPackage(result.payload.result.package) )
+    
+      };
+      getData();
+    }, []);
+
+
+    if (loading) return <Loading />;
+
   return (
     <div className="flex flex-col items-center overflow-x-clip">
-      <GallerySlider />
+      <GallerySlider data={hotelDetails} page={"hotel"} />
       <div className="fluid-container">
-        <div className="flex flex-col md:flex-row md:items-start items-center gap-4 pt-5">
+        <div className="flex flex-col md:flex-row md:items-start items-center gap-4 pt-5 ">
           <div className="flex flex-col">
             <div className="flex flex-col">
               <TitleComponent
@@ -32,27 +87,27 @@ export default function Details() {
                 icon={<Hotel size={20} />}
                 label={''}
               />
-              <ContentComponent content={content} />
+              <ContentComponent htmlContent={hotelDetails?.infos.description} />
 
               <TitleComponent
                 title={'Most popular facilities'}
                 icon={<Sparkles size={20} />}
                 label={''}
               />
-              <ContentComponent dynamicContent={<PopularFacilities />} />
+              <ContentComponent dynamicContent={<PopularFacilities data={hotelDetails?.facilities || undefined} />} />
 
               <TitleComponent
                 title={'Rooms Availability'}
                 icon={<Bed size={20} />}
                 label={''}
               />
-              {[...Array(3)].map((_, index) => (
-                <RoomsCard key={index} />
+              {hotelDetails?.rooms.map((room:Room, index:number) => (
+                <RoomsCard key={room.room_id} data={room} />
               ))}
             </div>
           </div>
           <div className="md:hidden lg:flex lg:flex-col items-center pt-4 sm:pt-16 gap-y-8 space-y-8 sm:space-y-0">
-            <MapComponent />
+            <MapComponent  data ={hotelDetails}/>
             <Provider store={store}>
               <BookingHotelComponent />
             </Provider>

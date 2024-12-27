@@ -5,8 +5,13 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 
+import { LuBaby } from "react-icons/lu";
+import { MdChildCare } from "react-icons/md";
+import { TfiUser } from "react-icons/tfi";
+
 import imgage1 from '@/public/images/home/four.jpeg';
-export default function RoomsCard() {
+import { Room } from '@/app/Types/hotel/HotelDetails';
+export default function RoomsCard({data}:any) {
   return (
     <div className="px-4 pt-4">
       <Card className="w-full overflow-hidden">
@@ -22,7 +27,7 @@ export default function RoomsCard() {
               <div>
                 <div className="flex flex-row mb-4">
                   <h2 className="text-xl font-bold text-nowrap mr-8">
-                    Single Room
+                   {`${data?.room_name}`}
                   </h2>
                   <div className="flex flex-row space-x-2">
                     <Button
@@ -31,7 +36,7 @@ export default function RoomsCard() {
                       size="sm"
                     >
                       <UserRound size={10} />
-                      <span className="pl-1 text-[10px]">x1</span>
+                      <span className="pl-1 text-[10px]">{`x${data.adults}`}</span>
                     </Button>{' '}
                     <Button
                       variant="outline"
@@ -39,21 +44,21 @@ export default function RoomsCard() {
                       size="sm"
                     >
                       <UserRound size={10} />
-                      <span className="pl-1 text-[10px]">x1</span>
+                      <span className="pl-1 text-[10px]">{`x${data.children}`}</span>
                     </Button>
                   </div>
                 </div>
                 <ul className="space-y-2 mb-4 text-sm sm:text-md">
                   <li className="flex items-center">
-                    <Checkbox id="item1" className="mr-2" />
+                    {/* <Checkbox id="item1" className="mr-2" /> */}
                     <label htmlFor="item1">Checkbox item 1</label>
                   </li>
                   <li className="flex items-center">
-                    <Checkbox id="item2" className="mr-2" />
+                    {/* <Checkbox id="item2" className="mr-2" /> */}
                     <label htmlFor="item2">Checkbox item 2</label>
                   </li>
                   <li className="flex items-center">
-                    <Checkbox id="item3" className="mr-2" />
+                    {/* <Checkbox id="item3" className="mr-2" /> */}
                     <label htmlFor="item3">Checkbox item 3</label>
                   </li>
                 </ul>
@@ -71,7 +76,7 @@ export default function RoomsCard() {
                   htmlFor="book"
                   className="block text-lg sm:text-2xl font-bold"
                 >
-                  97 263 DZD 
+                  {`${data.boardings.rate} DZD `}
                 </label>
                 <span className="text-xs sm:text-sm text-gray-600">
                   4 nuits
