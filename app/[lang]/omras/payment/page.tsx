@@ -1,35 +1,43 @@
-'use client';
+"use client";
 
-import PaymentTitleComponent from '@/app/Components/payment/paymentTitle';
-import PaymentCardComponent from '@/app/Components/payment/paymentCard';
-import PaymentProgressComponent from '@/app/Components/payment/paymentProgress';
-import Loading from '@/app/Components/home/Loading';
-import { useSelector } from 'react-redux';
-import RoomReservationInformation from '@/app/Components/packages/RoomReservationInformation';
-import ChangePaymentSteps from '@/app/Components/packages/ChangePaymentSteps';
-export default function PaymentPage() {
+import PaymentTitleComponent from "@/app/Components/payment/paymentTitle";
+import OmraPaymentProgressComponent from "@/app/Components/omra/omraPaymentProgress";
+import OmraRoomReservationInformation from "@/app/Components/packages/OmraRoomReservationInformation";
+import ChangeOmraPaymentSteps from "@/app/Components/packages/ChangeOmraPaymentSteps";
 
-  const departure = useSelector((state: any) => state.paymentPackage.departure);
-  const rooms = useSelector((state: any) => state.paymentPackage.rooms);
-   const pkg =  useSelector((state: any) => state.paymentPackage.package);
+import { useSelector } from "react-redux";
 
-  if (!departure || !rooms || !pkg) {
-    return <Loading />;
-  }
-
+/**
+ * The OmraPaymentPage component renders the payment page for an Omra (Umrah) package.
+ *
+ * It displays the package details, payment progress, room reservation information, and a button to change the payment steps.
+ *
+ * @returns The JSX element for the OmraPaymentPage component.
+ */
+export default function OmraPaymentPage() {
+  const omraData = useSelector((state: any) => state.omras.omraData);
+  const location = omraData?.result?.omra[0]?.destinations[0].country.full_name;
+  const departureDate =
+    omraData?.result?.omra[0]?.omraDepartures[0].departure_date;
+  const returnDate = omraData?.result?.omra[0]?.omraDepartures[0].return_date;
+  const month = departureDate
+    ? new Date(departureDate).toLocaleString("en-US", { month: "long" })
+    : "";
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen pt-16">
       <PaymentTitleComponent
-        location={pkg.name}
-        month="August"
-        startDate={departure.departure_date}
-        endDate={departure.return_date}
+        location={location}
+        month={month}
+        startDate={departureDate}
+        endDate={returnDate}
       />
-      <PaymentProgressComponent />
-      <RoomReservationInformation />
 
-      <ChangePaymentSteps/>
+      <OmraPaymentProgressComponent />
+
+      <OmraRoomReservationInformation />
+
+      <ChangeOmraPaymentSteps />
     </div>
   );
 }

@@ -37,14 +37,19 @@ import packagesSlice from '@/lib/store/api/packages/packagesSlice';
 import accountDetailsSlice from './custom/commonSlices/accountDetailsSlice';
 //
 import paymentPackageSlice from '@/lib/store/custom/packagesSlices/paymentPachageSlices';
+import paymentOmraSlice from '@/lib/store/custom/omraSlices/paymentOmraSlice';
 
 import volSearchSlice from '@/lib/store/engine/vol_search_slice';
 import packageSearchSlice from '@/lib/store/engine/package_search_slice';
 
 import omraSlice from '@/lib/store/api/omras/omrasSlice';
+import omrasReducer from '@/lib/store/api/omras/omrasSlice';
+import omraReservationSlice from './custom/commonSlices/omraReservationSlice';
+
 //hotels
 import HotelSlice from '@/lib/store/api/hotels/hotelsSlice'
 import HotelStateSlice from '@/lib/store/custom/hotelSlices/HotelStateSlice'
+
 export const store = configureStore({
   reducer: {
     account: accountSlice,
@@ -67,7 +72,8 @@ export const store = configureStore({
     excludedCountries: excludedCountriesReducer,
     langSlice: LanguageSlice,
     //payment
-    paymentPackage :paymentPackageSlice,
+    paymentPackage: paymentPackageSlice,
+    paymentOmra: paymentOmraSlice,
 
     // Search Engine
     volSearchSlice: volSearchSlice,
@@ -97,6 +103,8 @@ export const store = configureStore({
     packages: packagesSlice,
     // Omras
     omras: omraSlice,
+    omrasSlice: omrasReducer,
+    omreaReservationInfos: omraReservationSlice,
     //hotels
     hotels:HotelSlice,
     hotelState:HotelStateSlice
