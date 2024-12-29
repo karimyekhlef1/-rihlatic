@@ -20,48 +20,57 @@ import { useEffect , useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import Loading from '@/app/Components/home/Loading';
 import { HotelDetails , Room } from '@/app/Types/hotel/HotelDetails';
-const body={
-  "supplier":"CNG",
-  "checkin": "2025-01-01",
-  "checkout": "2025-01-05",
-  "city":{
-      "mygo":{
-          "id" : "TABR"
-      },
-      "cng":{
-          "id":"109"
-      } ,
-      "hb":{
-          "id":null
-      }       
-  }, 
-  "hotel" : "1183",
-  "room" :{
-      "0":{
-      "adult" : 1,
-      "children" : 0,
-      "count" : 1 ,
-      "Age" : null
-      },
-      "1":
-      {"adult" : 1,
-      "children" : 0,
-      "count" : 1 ,
-      "Age" : null
-      }
-  },
-}
+import { useParams ,useSearchParams} from 'next/navigation';
 
 
 export default function Details() {
+  const params = useParams()
+  const searchParams = useSearchParams();
   const dispatch = useDispatch<any>();
   const { loading, hotelData } = useSelector((state: any) => state.hotels);
-   const [hotelDetails, setHotelDetails] = useState<HotelDetails | undefined>(undefined);
- 
+  const [hotelDetails, setHotelDetails] = useState<HotelDetails | undefined>(undefined);
+  const [selectedRooms,setSelectedRooms]=useState<Room[]>([])
 
-
+  
 
    useEffect(() => {
+   
+    const ref= params.ref.toString()
+    const supplier = searchParams.get('supplier')
+  
+    const body={
+      "supplier":supplier,
+      "checkin": "2025-01-01",
+      "checkout": "2025-01-05",
+      "city":{
+          "mygo":{
+              "id" : "TABR"
+          },
+          "cng":{
+              "id":"109"
+          } ,
+          "hb":{
+              "id":null
+          }       
+      }, 
+      "hotel" : ref,
+      "room" :{
+          "0":{
+          "adult" : 1,
+          "children" : 0,
+          "count" : 1 ,
+          "Age" : null
+          },
+          "1":
+          {"adult" : 1,
+          "children" : 0,
+          "count" : 1 ,
+          "Age" : null
+          }
+      },
+    }
+
+
       const getData = async () => {
         const result = await dispatch(getHotelsDetails(body));
         console.log("hotel", result.payload.result.hotel)
@@ -71,7 +80,16 @@ export default function Details() {
       };
       getData();
     }, []);
-
+    const handelSelectedRoom = (room: any, isChecked: boolean) => {
+      setSelectedRooms((prevSelectedRooms) => {
+        if (isChecked) {
+          return [...prevSelectedRooms, room];
+        } else {
+          return prevSelectedRooms.filter((selectedRoom) => selectedRoom.room_id !== room.room_id);
+        }
+      });
+    };
+    
 
     if (loading) return <Loading />;
 
@@ -102,21 +120,21 @@ export default function Details() {
                 label={''}
               />
               {hotelDetails?.rooms.map((room:Room, index:number) => (
-                <RoomsCard key={room.room_id} data={room} />
+                <RoomsCard key={room.room_id} data={room} onSelect = {handelSelectedRoom} />
               ))}
             </div>
           </div>
           <div className="md:hidden lg:flex lg:flex-col items-center pt-4 sm:pt-16 gap-y-8 space-y-8 sm:space-y-0">
             <MapComponent  data ={hotelDetails}/>
             <Provider store={store}>
-              <BookingHotelComponent />
+              <BookingHotelComponent selectedRooms={selectedRooms} />
             </Provider>
           </div>
         </div>
         <div className="hidden lg:hidden md:flex md:pt-8 md:gap-x-8 md:justify-center md:items-center">
           <MapComponent />
           <Provider store={store}>
-            <BookingHotelComponent />
+            <BookingHotelComponent  selectedRooms={selectedRooms}/>
           </Provider>
         </div>
       </div>

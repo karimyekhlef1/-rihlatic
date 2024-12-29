@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { CircleCheck } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import { useSelector , useDispatch } from 'react-redux';
 import { RootState } from '@/lib/store/store';
 import { format, differenceInDays } from 'date-fns';
 import { extractData } from '@/app/hooks/useExtractData';
@@ -12,7 +12,9 @@ import Link from 'next/link';
 import RoomsDetailsBooking from './RoomsDetailsBooking';
 import { Room } from '@/app/Types/package/packageDetails';
 import { Departure } from '@/app/Types/package/packageDetails';
+import { clearStoredState } from '@/lib/store/custom/packagesSlices/paymentPachageSlices';
 export default function BookingPackageComponent({ data }: { data: Departure[] }) {
+  const dispatch = useDispatch<any>();
   const [selectedDeparture, setSelectedDeparture] = useState<Departure | undefined>();
   const [selectedOption, setSelectedOption] = useState<string | null>('test');
   const [roomNames , setRoomNames] =  useState<any>();
@@ -59,12 +61,14 @@ export default function BookingPackageComponent({ data }: { data: Departure[] })
   }));
 
   const handleSelectDeparture = (selectedOption: { label: string; id: number }) => {
+    // dispatch(clearStoredState())
     const selected = data.find((item) => item.id === selectedOption.id);
     if (selected) {
       setSelectedDeparture(selected);
     }
   };
   const handleSelectRoom = (selectedOption: { label: string; id: number }) => {
+    //dispatch(clearStoredState())
     const selected = selectedDeparture?.pricing.rooms.find((item) => item.id === selectedOption.id);
     if (selected) {
       setSelectedRoom(selected);
@@ -110,7 +114,7 @@ export default function BookingPackageComponent({ data }: { data: Departure[] })
               </div>
             </div>
             <Separator />
-            {selectedOption && (
+            {/* {selectedOption && (
               <>
                 <p className="text-sm font-semibold pt-4">
                   Checkout Calculation
@@ -123,7 +127,7 @@ export default function BookingPackageComponent({ data }: { data: Departure[] })
                 </div>
                 <Separator />
               </>
-            )}
+            )} */}
             <div className="flex flex-col gap-y-2 pb-4 pt-4">
       
               <DropDownBookingComponent 
@@ -138,7 +142,7 @@ export default function BookingPackageComponent({ data }: { data: Departure[] })
                 title='Kind of room' 
               />:null}
             </div>
-            <Separator />
+            {/* <Separator /> */}
             {/* <div className="pt-4">
               <Link href={'/payment'}>
                 <Button className="px-14" variant={'rihlatic'} disabled={!selectedDeparture || !selectedOption}
