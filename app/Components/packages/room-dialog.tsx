@@ -28,6 +28,7 @@ import {
   Room as StoreRoom,
   resetReservation,
 } from "@/lib/store/custom/commonSlices/omraReservationSlice";
+import { resetStep } from "@/lib/store/custom/omraSlices/paymentOmraSlice";
 import { RootState } from "@/lib/store/store";
 import { store } from "@/lib/store/store";
 
@@ -190,6 +191,9 @@ export function RoomDialog({ open, onOpenChange }: RoomDialogProps) {
   const saveRoomsAndProceed = async () => {
     // Reset any existing reservation data
     dispatch(resetReservation());
+    
+    // Reset payment step to 1
+    dispatch(resetStep());
     
     console.log("Current rooms to save:", rooms);
     

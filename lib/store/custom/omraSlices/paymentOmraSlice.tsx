@@ -21,7 +21,10 @@ const loadStateFromLocalStorage = (): PaymentOmraState => {
   try {
     const serializedState = localStorage.getItem(STORAGE_KEY);
     if (serializedState === null) return createInitialState();
-    return JSON.parse(serializedState);
+    // Always start from step 1 when loading from storage
+    const state = JSON.parse(serializedState);
+    state.currentStep = 1;
+    return state;
   } catch (err) {
     console.error("Failed to load state from localStorage", err);
     return createInitialState();
@@ -47,11 +50,14 @@ const paymentOmraSlice = createSlice({
   reducers: {
     setOmra(state, action: PayloadAction<any>) {
       state.omra = action.payload;
+      // Reset step when setting new omra
+      state.currentStep = 1;
       saveStateToLocalStorage(state);
     },
     setDeparture(state, action: PayloadAction<any>) {
       state.departure = action.payload;
-      state.currentStep = 1; // Reset currentStep when departure changes
+      // Reset step when setting new departure
+      state.currentStep = 1;
       saveStateToLocalStorage(state);
     },
     setCurrentStep(state, action: PayloadAction<number>) {
@@ -72,6 +78,10 @@ const paymentOmraSlice = createSlice({
       Object.assign(state, createInitialState());
       localStorage.removeItem(STORAGE_KEY);
     },
+    resetStep(state) {
+      state.currentStep = 1;
+      saveStateToLocalStorage(state);
+    },
   },
 });
 
@@ -82,6 +92,7 @@ export const {
   nextStep,
   previousStep,
   clearStoredState,
+  resetStep,
 } = paymentOmraSlice.actions;
 
 export default paymentOmraSlice.reducer;
