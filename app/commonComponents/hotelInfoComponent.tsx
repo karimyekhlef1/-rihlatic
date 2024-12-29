@@ -81,7 +81,7 @@ const HotelInfoComponent: React.FC<HotelInfoComponentProps> = ({ data }) => {
           href={{
             pathname: `hotels/${data.ref}`,
             query: {
-              supplier: 'CNG'
+              supplier: data.supplier
             }
           }}
         >

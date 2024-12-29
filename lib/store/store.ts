@@ -46,6 +46,9 @@ import omraSlice from '@/lib/store/api/omras/omrasSlice';
 import omrasReducer from '@/lib/store/api/omras/omrasSlice';
 import omraReservationSlice from './custom/commonSlices/omraReservationSlice';
 
+//
+import HotelStateSlice from './custom/hotelSlices/HotelStateSlice'
+import HotelSlice from './api/hotels/hotelsSlice'
 export const store = configureStore({
   reducer: {
     account: accountSlice,
@@ -101,6 +104,10 @@ export const store = configureStore({
     omras: omraSlice,
     omrasSlice: omrasReducer,
     omreaReservationInfos: omraReservationSlice,
+
+    //hotel
+    hotelState:HotelStateSlice,
+    hotels:HotelSlice
   },
   // we can delete this later it's just to supress serializableCheck warnings
   middleware: (getDefaultMiddleware) =>
