@@ -1,7 +1,7 @@
 "use client";
 
 import PaymentTitleComponent from "@/app/Components/payment/paymentTitle";
-import OmraPaymentProgressComponent from "@/app/Components/omra/omraPaymentProgress";
+import OmraPaymentProgressComponent from "@/app/Components/omra/OmraPaymentProgress";
 import OmraRoomReservationInformation from "@/app/Components/packages/OmraRoomReservationInformation";
 import ChangeOmraPaymentSteps from "@/app/Components/packages/ChangeOmraPaymentSteps";
 
