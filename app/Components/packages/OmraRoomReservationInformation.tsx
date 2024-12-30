@@ -116,9 +116,12 @@ export default function OmraRoomReservationInformation() {
           storeOmraReservation(bookingData)
         ).unwrap();
 
+        console.log('API Response from storeOmraReservation:', response);
+
         if (response.success) {
           // After successful booking, fetch the updated omra details
-          await dispatch(getOmraDetails({ id: omra_departure_id })).unwrap();
+          const omraDetails = await dispatch(getOmraDetails({ id: omra_departure_id })).unwrap();
+          console.log('Updated Omra Details from getOmraDetails:', omraDetails);
           toast.success("Booking completed successfully!");
         } else {
           toast.error(
