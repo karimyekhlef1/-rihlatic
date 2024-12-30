@@ -1,21 +1,26 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { User } from 'lucide-react';
+import { useDispatch, useSelector } from "react-redux";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { User } from "lucide-react";
 import {
   incrementAdults,
   decrementAdults,
   incrementChildren,
   decrementChildren,
-} from '@/lib/store/custom/hotelSlices/bookingSlice';
-import { RootState } from '@/lib/store/store';
-import { DatePickerWithRange } from '@/app/commonComponents/datePicker';
+} from "@/lib/store/custom/hotelSlices/bookingSlice";
+import { RootState } from "@/lib/store/store";
+import { DatePickerWithRange } from "@/app/commonComponents/datePicker";
+import { format, differenceInDays } from "date-fns";
+import Link from "next/link";
+import { Room } from "@/app/Types/hotel/HotelDetails";
 
-import { format, differenceInDays } from 'date-fns';
-import Link from 'next/link';
-
-export default function BookingHotelComponent() {
+interface BookingHotelComponentProps {
+  selectedRooms: Room[];
+}
+export default function BookingHotelComponent({
+  selectedRooms,
+}: BookingHotelComponentProps) {
   const dispatch = useDispatch();
   const { adults, children } = useSelector((state: RootState) => state.booking);
 
@@ -29,7 +34,7 @@ export default function BookingHotelComponent() {
       const days = nights + 1;
       return `${nights} nights / ${days} days`;
     }
-    return 'Select dates';
+    return "Select dates";
   };
   return (
     <div>
@@ -37,18 +42,22 @@ export default function BookingHotelComponent() {
         <CardContent className="px-0 py-8">
           <div className="flex flex-col items-center">
             <div className="flex flex-col items-center justify-center pb-4">
-              <p className="text-xs">Starting from</p>
-              <p className="font-semibold text-lg">19000 DZD</p>
-              <div className="flex flex-row">
+              <p className="text-xs">Total</p>
+              <p className="font-semibold text-lg">
+                {selectedRooms[0]
+                  ? `${selectedRooms[0]?.boardings?.rate} DZD`
+                  : null}
+              </p>{" "}
+              {/* <div className="flex flex-row">
                 <User size={15} className="text-gray-500" />
                 <p className="text-xs text-gray-500">
                   {adults + children}{' '}
                   {adults + children === 1 ? 'person' : 'persons'}
                 </p>
-              </div>
+              </div> */}
             </div>
-            <Separator />
-            <div className="flex flex-col w-full px-4 py-4">
+            {/* <Separator /> */}
+            {/* <div className="flex flex-col w-full px-4 py-4">
               <div className="text-sm font-semibold mb-2 text-gray-500">
                 ROOM 1
               </div>
@@ -96,21 +105,22 @@ export default function BookingHotelComponent() {
                   </Button>
                 </div>
               </div>
-            </div>
-            <div className="flex flex-col gap-y-2 pt-4 pb-4">
-              <Button className="px-14" variant={'unactive'}>
+            </div> */}
+            {/* <div className="flex flex-col gap-y-2 pt-4 pb-4">
+              <Button className="px-14" variant={"unactive"}>
                 Add room
               </Button>
-            </div>
+            </div> */}
             <Separator />
             <div className="flex flex-col items-center gap-y-2 pt-4">
               <p className="text-xs text-gray-500">{calculateDuration()}</p>
-              <DatePickerWithRange />
-              <Link href={'/payment'}>
+              {/* <DatePickerWithRange /> */}
+              <Link href={"/payment"}>
                 <Button
-                  size={'sm'}
-                  variant={'rihlatic'}
+                  size={"sm"}
+                  variant={"rihlatic"}
                   className="h-[40px] w-[250px]"
+                  disabled={selectedRooms.length == 0}
                 >
                   Book Now
                 </Button>

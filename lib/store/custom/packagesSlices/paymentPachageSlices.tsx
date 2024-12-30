@@ -92,13 +92,16 @@ const paymentPackageSlice = createSlice({
       saveStateToLocalStorage(state);
     },
     setRooms(state, action: PayloadAction<any[]>) {
-      state.rooms = action.payload;
-      state.currentStep = 1; // Reset currentStep when rooms change
-      state.steps = action.payload.map((_, index) => `Réglage de la chambre: ${index + 1}`);
-      state.steps.push('Vérifier');
+     
+      const filteredRooms = action.payload.filter(room => room.roomType !== null);
+      state.rooms = filteredRooms; 
+      state.currentStep = 1; 
+      state.steps = filteredRooms.map((_, index) => `Réglage de la chambre: ${index + 1}`);
+      state.steps.push('Vérifier'); 
+      
       saveStateToLocalStorage(state);
     },
-    setCurrentStep(state, action: PayloadAction<number>) {
+      setCurrentStep(state, action: PayloadAction<number>) {
       state.currentStep = action.payload;
       saveStateToLocalStorage(state);
     },
@@ -151,9 +154,11 @@ const paymentPackageSlice = createSlice({
     },
     // Optional: Clear localStorage
     clearStoredState(state) {
+      state.RoomsData = []; 
       localStorage.removeItem(STORAGE_KEY);
       return createInitialState();
     }
+    
   }
 });
 

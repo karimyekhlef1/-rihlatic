@@ -1,6 +1,6 @@
 "use client";
 
-import React ,{useCallback, useState} from "react";
+import React ,{useCallback, useEffect, useState} from "react";
 import {
   Accordion,
   AccordionContent,
@@ -13,7 +13,10 @@ import { useSelector ,useDispatch } from "react-redux";
 import { setFilterRating ,setFilterRangePrice} from "@/lib/store/custom/hotelSlices/HotelStateSlice";
 export default function FilterComponentHotels() {
   const dispatch = useDispatch<any>();
-  const { maxMinRangePrice } = useSelector((state: any) => state.hotelState);
+  const { maxMinRangePrice ,filterRangePrice, filterRating } = useSelector((state: any) => state.hotelState);
+  useEffect(()=>{
+
+  },[maxMinRangePrice ,filterRangePrice, filterRating])
   
   const handleStarChange = (value:number) => {
     dispatch(setFilterRating(value))
