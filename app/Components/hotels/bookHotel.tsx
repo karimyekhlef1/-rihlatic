@@ -16,10 +16,10 @@ import Link from "next/link";
 import { Room } from "@/app/Types/hotel/HotelDetails";
 
 interface BookingHotelComponentProps {
-  selectedRooms: Room[];
+  selectedRoom: Room | undefined;
 }
 export default function BookingHotelComponent({
-  selectedRooms,
+  selectedRoom,
 }: BookingHotelComponentProps) {
   const dispatch = useDispatch();
   const { adults, children } = useSelector((state: RootState) => state.booking);
@@ -44,8 +44,8 @@ export default function BookingHotelComponent({
             <div className="flex flex-col items-center justify-center pb-4">
               <p className="text-xs">Total</p>
               <p className="font-semibold text-lg">
-                {selectedRooms[0]
-                  ? `${selectedRooms[0]?.boardings?.rate} DZD`
+                {selectedRoom
+                  ? `${selectedRoom?.rate || selectedRoom?.boardings?.rate} DZD`
                   : null}
               </p>{" "}
               {/* <div className="flex flex-row">
@@ -120,7 +120,7 @@ export default function BookingHotelComponent({
                   size={"sm"}
                   variant={"rihlatic"}
                   className="h-[40px] w-[250px]"
-                  disabled={selectedRooms.length == 0}
+                  disabled={selectedRoom ? false : true}
                 >
                   Book Now
                 </Button>

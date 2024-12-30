@@ -117,4 +117,6 @@ promotion: {
       name: null,
       date: null
   }
-},]
+},
+
+]

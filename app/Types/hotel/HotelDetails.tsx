@@ -34,6 +34,7 @@ export interface HotelDetails {
   }
   
   export interface Room {
+    rate:string | number;
     room_id: string;
     room_name: string;
     adults: string;
