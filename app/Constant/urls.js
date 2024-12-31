@@ -1,6 +1,9 @@
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://api.dsonetech.com/api";
 
+// ENGINE
+export const engine_get_destinations_endpoint = BASE_URL + "/front/destinations";
+
 // Home
 export const home_endpoint = BASE_URL + "/home";
 // Account & Profile settings
