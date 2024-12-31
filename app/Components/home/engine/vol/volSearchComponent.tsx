@@ -3,11 +3,12 @@ import SearchInputComponent from '@/app/commonComponents/searchInputComponent';
 import SearchSelectComponent from '../../searchSelectComponent';
 import PassengersComponent from './passangersComponent';
 import VolPackageComponent from './volPackageComponent';
-import { setVolMethod, setVolType, volEngineMethods, volEngineTypes } from '@/lib/store/engine/vol_search_slice';
+import { setDateRange, setVolMethod, setVolType, volEngineMethods, volEngineTypes } from '@/lib/store/engine/vol_search_slice';
 import { useDispatch, useSelector } from 'react-redux';
 import DatePickerComponent from '@/app/commonComponents/datePickerComponent';
 import { HiTrash } from 'react-icons/hi';
 import { Button } from '@/components/ui/button';
+import { DateRange } from 'react-day-picker';
 
 
 const VolSearchComponent: React.FC = () => {
@@ -16,6 +17,7 @@ const VolSearchComponent: React.FC = () => {
 
     const volType = useSelector((state: { volSearchSlice: { volType: string } }) => state.volSearchSlice?.volType);
     const volPackage = useSelector((state: { volSearchSlice: { volPackage: any } }) => state.volSearchSlice?.volPackage);
+    const dateRange = useSelector((state: { volSearchSlice: { dateRange: DateRange } }) => state.volSearchSlice?.dateRange);
 
     const setVolTypeFunc = (value: string) => {
         dispatch(setVolType(value));
@@ -78,7 +80,7 @@ const VolSearchComponent: React.FC = () => {
                                     onSearch={(value) => console.log(value)}
                                     dir="To"
                                 />
-                                <DatePickerComponent isOnePick={isOnePick()} />
+                                <DatePickerComponent isOnePick={isOnePick()} dateRange={dateRange} setDateRange={(value: DateRange) => dispatch(setDateRange(value))} />
                             </div>
                             <button
                                 type="button"

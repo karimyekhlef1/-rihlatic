@@ -12,18 +12,25 @@ import { Calendar } from '@/components/ui/calendar';
 import { DateRange } from 'react-day-picker';
 import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
+import { useDispatch } from 'react-redux';
 
 interface SearchInputProps {
   isOnePick?: boolean;
+  dateRange?: DateRange | undefined;
+  setDateRange?: (dateRange: DateRange) => any;
 }
 
 const DatePickerComponent: React.FC<SearchInputProps> = ({
   isOnePick,
+  dateRange,
+  setDateRange,
 }) => {
-  const dateRange = {
-    from: new Date(),
-    to: new Date(),
-  };
+  // const dateRange = {
+  //   from: new Date(),
+  //   to: new Date(),
+  // };
+
+  const dispatch = useDispatch<any>();  
 
   return (
     <div className="grid gap-2">
@@ -40,13 +47,13 @@ const DatePickerComponent: React.FC<SearchInputProps> = ({
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
             {!isOnePick ? (
-              dateRange.to ? (
+              dateRange?.to ? (
                 <>
-                  {format(dateRange.from, 'LLL dd, y')} -{' '}
-                  {format(dateRange.to, 'LLL dd, y')}
+                  {format(dateRange?.from || new Date(), 'LLL dd, y')} -{' '}
+                  {format(dateRange?.to || new Date(), 'LLL dd, y')}
                 </>
               ) : (
-                format(dateRange.from, 'LLL dd, y')
+                format(dateRange?.from || new Date(), 'LLL dd, y')
               )
             ) : (
               <span>Pick a date</span>
@@ -60,14 +67,12 @@ const DatePickerComponent: React.FC<SearchInputProps> = ({
           <Calendar
             initialFocus
             mode="range"
-            defaultMonth={dateRange?.from}
+            // defaultMonth={dateRange?.from}
             selected={dateRange}
             onSelect={(newDateRange: DateRange | undefined) => {
-              // if (isOnePick) {
-              //   dispatch(setDateRange(newDateRange));
-              // } else {
-              //   dispatch(setDateRange(newDateRange));
-              // }
+              if (newDateRange) {
+                setDateRange && setDateRange(newDateRange);
+              }
             }}
             numberOfMonths={2}
           />
