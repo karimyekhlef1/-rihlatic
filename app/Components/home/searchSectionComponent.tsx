@@ -36,23 +36,23 @@ const SearchSectionComponent: React.FC = () => {
         minHeight: '50vh',
       }}
     >
-      <div className="container">
+      <div className="md:container md:mx-auto px-4">
         <div className="pt-5">
           <p className="text-3xl font-extrabold">YOU FLY FOR LESS</p>
           <p className="text-md">
             Book cheap flights other sites simply can’t find.
           </p>
         </div>
-        <div className="flex items-center justify-center gap-3 flex-wrap mt-5">
+        <div className="flex items-center justify-center gap-1 flex-wrap mt-5">
           {['Vol', 'Packages', 'Hotels', 'Omras'].map((item: string, index: number) => (
             <SearchCatBox key={index} item={item} selected={selected} index={index} setSelected={setSelected} />
           ))}
         </div>
-        <div className="main-search-box mt-3 p-5">
+        <div className="main-search-box mt-3 p-3 sm:p-5">
           {
             searchClick(selected)
           }
-          <AccommodationComponent />
+          {/* <AccommodationComponent /> */}
         </div>
         
       </div>
