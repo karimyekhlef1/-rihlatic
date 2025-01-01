@@ -39,8 +39,12 @@ import accountDetailsSlice from './custom/commonSlices/accountDetailsSlice';
 import paymentPackageSlice from '@/lib/store/custom/packagesSlices/paymentPachageSlices';
 import paymentOmraSlice from '@/lib/store/custom/omraSlices/paymentOmraSlice';
 
+// Engine
 import volSearchSlice from '@/lib/store/engine/vol_search_slice';
 import packageSearchSlice from '@/lib/store/engine/package_search_slice';
+
+// Engine Api
+import getDestinationSlice from '@/lib/store/api/engine/destinationsSlice';
 
 import omraSlice from '@/lib/store/api/omras/omrasSlice';
 import omrasReducer from '@/lib/store/api/omras/omrasSlice';
@@ -51,6 +55,10 @@ import HotelStateSlice from './custom/hotelSlices/HotelStateSlice'
 import HotelSlice from './api/hotels/hotelsSlice'
 export const store = configureStore({
   reducer: {
+
+    // Engine
+    getDestinations: getDestinationSlice,
+
     account: accountSlice,
     dialog: dialogReducer,
     verification: verificationReducer,
