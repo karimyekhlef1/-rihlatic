@@ -17,6 +17,10 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
+import { useDispatch } from "react-redux";
+
+import { setOmraDepartureId } from "@/lib/store/custom/commonSlices/omraReservationSlice";
+import { store } from "@/lib/store/store";
 
 interface Departure {
   id: number;
@@ -42,7 +46,8 @@ export default function DepartureDialog({
 }: DepartureDialogProps) {
   const [departures, setDepartures] = useState<Departure[]>([
     {
-      id: 1,
+      // Only ID working in the API is 4 at the moment
+      id: 4,
       date: "15-janvier-2025",
       duration: "14 nuits / 15 jours",
       seats: 9,
@@ -51,7 +56,10 @@ export default function DepartureDialog({
     },
   ]);
 
+  const dispatch = useDispatch();
+
   const handleSelect = (id: number) => {
+    dispatch(setOmraDepartureId(id));
     setDepartures(
       departures.map((dep) =>
         dep.id === id ? { ...dep, selected: !dep.selected } : dep
@@ -59,6 +67,11 @@ export default function DepartureDialog({
     );
     onSelect();
     onOpenChange(false);
+
+    // Log the ID of the selected departure state from the store directly
+    const omraDepartureId =
+      store.getState().omreaReservationInfos.omra_departure_id;
+    console.log("Omra departure ID state:", omraDepartureId);
   };
 
   const handleDelete = (id: number) => {

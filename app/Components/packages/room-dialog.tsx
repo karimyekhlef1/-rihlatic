@@ -23,10 +23,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setOmraDepartureId,
   addRoom as addRoomToStore,
   Room as StoreRoom,
   resetReservation,
+  setOmraDepartureId,
 } from "@/lib/store/custom/commonSlices/omraReservationSlice";
 import { resetStep } from "@/lib/store/custom/omraSlices/paymentOmraSlice";
 import { RootState } from "@/lib/store/store";
@@ -189,18 +189,18 @@ export function RoomDialog({ open, onOpenChange }: RoomDialogProps) {
   };
 
   const saveRoomsAndProceed = async () => {
-    // Reset any existing reservation data
+    // Store the current omra_departure_id before resetting
+    const currentOmraDepartureId = reservationState.omra_departure_id;
+    
+    // Reset the reservation state
     dispatch(resetReservation());
     
-    // Reset payment step to 1
-    dispatch(resetStep());
-    
-    console.log("Current rooms to save:", rooms);
-    
-    // Set omra departure ID first
-    dispatch(setOmraDepartureId(4));
-    
-    // Add rooms one by one
+    // Restore the omra_departure_id
+    if (currentOmraDepartureId) {
+      dispatch(setOmraDepartureId(currentOmraDepartureId));
+    }
+
+    // Add rooms to store
     for (const room of rooms) {
       const storeRoom: StoreRoom = {
         room_id: room.room_id,
@@ -213,8 +213,8 @@ export function RoomDialog({ open, onOpenChange }: RoomDialogProps) {
     }
 
     // Wait for a moment to ensure state updates are processed
-    await new Promise(resolve => setTimeout(resolve, 0));
-    
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
     // Log the final state from the store directly
     const finalState = store.getState().omreaReservationInfos;
     console.log("Final reservation state:", finalState);

@@ -3,11 +3,12 @@ import SearchInputComponent from '@/app/commonComponents/searchInputComponent';
 import SearchSelectComponent from '../../searchSelectComponent';
 import PassengersComponent from './passangersComponent';
 import VolPackageComponent from './volPackageComponent';
-import { setVolMethod, setVolType, volEngineMethods, volEngineTypes } from '@/lib/store/engine/vol_search_slice';
+import { setDateRange, setVolMethod, setVolType, volEngineMethods, volEngineTypes } from '@/lib/store/engine/vol_search_slice';
 import { useDispatch, useSelector } from 'react-redux';
 import DatePickerComponent from '@/app/commonComponents/datePickerComponent';
 import { HiTrash } from 'react-icons/hi';
 import { Button } from '@/components/ui/button';
+import { DateRange } from 'react-day-picker';
 
 
 const VolSearchComponent: React.FC = () => {
@@ -16,6 +17,7 @@ const VolSearchComponent: React.FC = () => {
 
     const volType = useSelector((state: { volSearchSlice: { volType: string } }) => state.volSearchSlice?.volType);
     const volPackage = useSelector((state: { volSearchSlice: { volPackage: any } }) => state.volSearchSlice?.volPackage);
+    const dateRange = useSelector((state: { volSearchSlice: { dateRange: DateRange } }) => state.volSearchSlice?.dateRange);
 
     const setVolTypeFunc = (value: string) => {
         dispatch(setVolType(value));
@@ -57,7 +59,7 @@ const VolSearchComponent: React.FC = () => {
 
     return (
         <div className="flex flex-col gap-2">
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
                 <SearchSelectComponent data={volEngineTypes} setSelected={setVolTypeFunc} />
                 <SearchSelectComponent data={volEngineMethods} setSelected={setMethodFunc} />
                 <PassengersComponent />
@@ -67,22 +69,24 @@ const VolSearchComponent: React.FC = () => {
                 {
                     volType !== 'Multi Destinations' ? (
                         <>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center flex-wrap gap-2">
                                 <SearchInputComponent
                                     placeholder="City, airports or place"
                                     onSearch={(value) => console.log(value)}
                                     dir="From"
+                                    type={1}
                                 />
                                 <SearchInputComponent
                                     placeholder="City, airports or place"
                                     onSearch={(value) => console.log(value)}
                                     dir="To"
+                                    type={1}
                                 />
-                                <DatePickerComponent isOnePick={isOnePick()} />
+                                <DatePickerComponent isOnePick={isOnePick()} dateRange={dateRange} setDateRange={(value: DateRange) => dispatch(setDateRange(value))} />
                             </div>
                             <button
                                 type="button"
-                                className="rounded bg-[#FF8000] px-2 py-2.5 text-sm font-semibold text-white"
+                                className="rounded bg-[#FF8000] px-2 py-2.5 text-sm font-semibold text-white w-full sm:w-24"
                             >
                                 Exploire
                             </button>
@@ -91,19 +95,21 @@ const VolSearchComponent: React.FC = () => {
                         <>
                             {
                                 destinations.map((dest: any, i: number) => (
-                                    <div className="flex items-center gap-2" key={dest.id}>
+                                    <div className="flex flex-wrap items-center gap-2" key={dest.id}>
                                         <SearchInputComponent
                                             placeholder="City, airports or place"
                                             onSearch={(value) => console.log(value)}
                                             dir="From"
+                                            type={1}
                                         />
                                         <SearchInputComponent
                                             placeholder="City, airports or place"
                                             onSearch={(value) => console.log(value)}
                                             dir="To"
+                                            type={1}
                                         />
                                         <DatePickerComponent isOnePick={true} />
-                                        <div className='flex items-center gap-2 bg-red-500 h-full p-3 rounded' onClick={() => removeDestination(i)}>
+                                        <div className='flex items-center gap-2 bg-red-500 p-3 h-8 rounded' onClick={() => removeDestination(i)}>
                                             <HiTrash className='text-[#FFF] cursor-pointer' />
                                         </div>
                                     </div>

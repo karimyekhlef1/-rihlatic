@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { DateRange } from 'react-day-picker';
 
 interface VolSearchState {
+    dateRange: DateRange;
     volType: string;
     volMethod: string;
     volPassanger: volPassanger;
@@ -28,6 +30,10 @@ export const volEngineTypes = ['One Way', 'Return', 'Multi Destinations'];
 export const volEngineMethods = ['Not Specified', 'Economy', 'Premium Economy', 'Business', 'First Class'];
 
 const initialState: VolSearchState = {
+    dateRange: {
+        from: new Date(),
+        to: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+    },
     volType: volEngineTypes[0],
     volMethod: volEngineMethods[0],
     volPassanger: {
@@ -67,9 +73,12 @@ const volSearchSlice = createSlice({
         setVolError: (state, action: PayloadAction<string>) => {
             state.volError = action.payload;
         },
+        setDateRange: (state, action: PayloadAction<DateRange>) => {
+            state.dateRange = action.payload;
+        }
     },
 });
 
-export const { setVolType, setVolMethod, setVolPassanger, setVolPackage, setVolError } = volSearchSlice.actions;
+export const { setVolType, setVolMethod, setVolPassanger, setVolPackage, setDateRange, setVolError } = volSearchSlice.actions;
 
 export default volSearchSlice.reducer;
