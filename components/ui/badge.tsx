@@ -15,11 +15,11 @@ const badgeVariants = cva(
         destructive:
           "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
-        confirmed:
+        Accepted:
           "text-emerald-800 border border-emerald-400 bg-emerald-50 hover:bg-emerald-100",
         reserved:
           "text-orange-800 border border-orange-400 bg-orange-50 hover:bg-orange-100",
-        canceled:
+        cancelled:
           "text-red-800 border border-red-400 bg-red-50 hover:bg-red-100",
         rihlatic: "text-[#27d765] border-[#27d765] bg-[#eafbf0]",
       },
