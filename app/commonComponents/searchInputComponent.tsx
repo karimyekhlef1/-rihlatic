@@ -6,15 +6,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/lib/store/store';
 import { GetDestinations } from '@/lib/store/api/engine/destinationsSlice';
 import { id } from 'date-fns/locale';
+import DestinationComponent from '../Components/home/engine/destinationComponent';
 
 interface SearchInputProps {
   dir: string;
   placeholder: string;
   onSearch: (value: string) => void;
   isOnePick?: boolean;
+  type: number;
 }
 
-const SearchInputComponent: React.FC<SearchInputProps> = ({ placeholder, onSearch, dir }) => {
+const SearchInputComponent: React.FC<SearchInputProps> = ({ placeholder, onSearch, dir, type }) => {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -62,8 +64,13 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({ placeholder, onSearc
 
   const getSearchData = async () => {
     try {
-      await dispatch(GetDestinations(searchValue));
-    } catch (e) {
+      const data = {
+        search: searchValue,
+        type: type,
+      };
+      const act = await dispatch(GetDestinations(data));
+      console.log(act)
+    } catch (e) { 
       console.log(e);
     }
   }
@@ -147,21 +154,22 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({ placeholder, onSearc
         >
           <ul>
             {destinations?.map((item: any, index: number) => (
-              <li
-                key={index}
-                className="hover:bg-slate-100 hover:cursor-pointer"
-                onClick={() => { searchClick(item.name); setIsPicked(true) }}
-              >
-                <div className="w-full flex justify-between items-center p-3">
-                  <div className="flex items-center gap-3">
-                    <FaCity />
-                    <span className="truncate text-sm">{item.name}</span>
-                  </div>
-                  <div className="search-add-icon">
-                    <FiPlus />
-                  </div>
-                </div>
-              </li>
+              <DestinationComponent key={index} item={item} searchClick={searchClick} setIsPicked={setIsPicked} type={type} />
+              // <li
+              //   key={index}
+              //   className="hover:bg-slate-100 hover:cursor-pointer"
+              //   onClick={() => { searchClick(item.name); setIsPicked(true) }}
+              // >
+              //   <div className="w-full flex justify-between items-center p-3">
+              //     <div className="flex items-center gap-3">
+              //       <FaCity />
+              //       <span className="truncate text-sm">{item.name}</span>
+              //     </div>
+              //     <div className="search-add-icon">
+              //       <FiPlus />
+              //     </div>
+              //   </div>
+              // </li>
             ))}
           </ul>
         </div>)

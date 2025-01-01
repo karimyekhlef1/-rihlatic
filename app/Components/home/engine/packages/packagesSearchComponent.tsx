@@ -18,6 +18,7 @@ const PackagesSearchComponent: React.FC = () => {
                         placeholder="City, airports or place"
                         onSearch={(value) => console.log(value)}
                         dir="To"
+                        type={2}
                     />
                     <DatePickerComponent isOnePick={false} />
                     <button

@@ -74,11 +74,13 @@ const VolSearchComponent: React.FC = () => {
                                     placeholder="City, airports or place"
                                     onSearch={(value) => console.log(value)}
                                     dir="From"
+                                    type={1}
                                 />
                                 <SearchInputComponent
                                     placeholder="City, airports or place"
                                     onSearch={(value) => console.log(value)}
                                     dir="To"
+                                    type={1}
                                 />
                                 <DatePickerComponent isOnePick={isOnePick()} dateRange={dateRange} setDateRange={(value: DateRange) => dispatch(setDateRange(value))} />
                             </div>
@@ -98,11 +100,13 @@ const VolSearchComponent: React.FC = () => {
                                             placeholder="City, airports or place"
                                             onSearch={(value) => console.log(value)}
                                             dir="From"
+                                            type={1}
                                         />
                                         <SearchInputComponent
                                             placeholder="City, airports or place"
                                             onSearch={(value) => console.log(value)}
                                             dir="To"
+                                            type={1}
                                         />
                                         <DatePickerComponent isOnePick={true} />
                                         <div className='flex items-center gap-2 bg-red-500 h-full p-3 rounded' onClick={() => removeDestination(i)}>

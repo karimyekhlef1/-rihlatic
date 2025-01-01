@@ -13,6 +13,7 @@ const OmrasSearchComponent: React.FC = () => {
                         placeholder="City, airports or place"
                         onSearch={(value) => console.log(value)}
                         dir="To"
+                        type={4}
                     />
                     <DatePickerComponent isOnePick={false} />
                     <button

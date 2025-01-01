@@ -11,10 +11,16 @@ const initialState: DestinationsState = {
   destinations: [],
 };
 
+var type = 1;
+
 export const GetDestinations = createAsyncThunk(
   'get/destinations',
-  async (value: string, thunkApi) => {
+  async (value: any, thunkApi) => {
     try {
+      type = value.type;
+      console.log("---------------------");
+      console.log(type);
+      console.log("---------------------");
       const response = await engineService.get(value);
       return response;
     } catch (error: any) {
@@ -35,7 +41,16 @@ const getDestinationsSlice = createSlice({
       })
       .addCase(GetDestinations.fulfilled, (state, action) => {
         state.loadingDestinations = false;
-        state.destinations = action.payload.result.destinations;
+        // Vol
+        type === 1 && (state.destinations = action.payload.result.airports);
+
+        // Packages
+        type === 2 && (state.destinations = action.payload.result.destinations);
+
+        // Hotels
+
+        // Omras
+        type === 4 && (state.destinations = action.payload.result.omra);
       })
       .addCase(GetDestinations.rejected, (state, _) => {
         state.loadingDestinations = false;

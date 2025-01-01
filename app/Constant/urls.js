@@ -2,7 +2,9 @@ const BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://api.dsonetech.com/api";
 
 // ENGINE
+export const engine_get_vols_endpoint = BASE_URL + "/front/airports";
 export const engine_get_destinations_endpoint = BASE_URL + "/front/destinations";
+export const engine_get_omras_endpoint = BASE_URL + "/front/omra";
 
 // Home
 export const home_endpoint = BASE_URL + "/home";
