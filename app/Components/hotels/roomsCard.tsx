@@ -1,3 +1,5 @@
+"use client"
+import React , {useState} from 'react';
 import Image from 'next/image';
 import { UserRound } from 'lucide-react';
 
@@ -14,13 +16,17 @@ import { Room } from '@/app/Types/hotel/HotelDetails';
 interface RoomsCardProps {
   data: Room;
   onSelect: (room: Room, isChecked: boolean) => void;
+  selectedRoom:Room | undefined
 }
-export default function RoomsCard({ data, onSelect }: RoomsCardProps) {
-  const handleSelect = (isChecked: any) => {
-    onSelect(data,isChecked);
-  }
+export default function RoomsCard({ data, onSelect,selectedRoom }: RoomsCardProps) {
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleSelect = (checked: any) => {
+    setIsChecked(checked);
+    onSelect(data, checked);
+  };
   return (
-    <div className="px-4 pt-4">
+    <div className="px-4 pt-4 ">
       <Card className="w-full overflow-hidden">
         <CardContent className="p-0">
           <div className="flex flex-col md:flex-row">
@@ -32,7 +38,7 @@ export default function RoomsCard({ data, onSelect }: RoomsCardProps) {
             {/* Information column - 1/3 width on medium screens and above */}
             <div className="w-full md:w-1/3 p-4 flex flex-col justify-between">
               <div>
-                <div className="flex flex-row mb-4">
+                <div className="flex flex-col mb-4">
                   <h2 className="text-xl font-bold text-nowrap mr-8">
                    {`${data?.room_name}`}
                   </h2>
@@ -55,20 +61,7 @@ export default function RoomsCard({ data, onSelect }: RoomsCardProps) {
                     </Button>
                   </div>
                 </div>
-                <ul className="space-y-2 mb-4 text-sm sm:text-md">
-                  <li className="flex items-center">
-                    {/* <Checkbox id="item1" className="mr-2" /> */}
-                    <label htmlFor="item1">Checkbox item 1</label>
-                  </li>
-                  <li className="flex items-center">
-                    {/* <Checkbox id="item2" className="mr-2" /> */}
-                    <label htmlFor="item2">Checkbox item 2</label>
-                  </li>
-                  <li className="flex items-center">
-                    {/* <Checkbox id="item3" className="mr-2" /> */}
-                    <label htmlFor="item3">Checkbox item 3</label>
-                  </li>
-                </ul>
+  
               </div>
               <p className="text-xs sm:text-sm text-nowrap text-green-500">
                 Annulation gratuite avant le 24/09/2024
@@ -81,12 +74,14 @@ export default function RoomsCard({ data, onSelect }: RoomsCardProps) {
                 <Checkbox 
                 id="book" 
                 className="w-6 h-6 mb-2"
-                onCheckedChange={(isChecked) => handleSelect(isChecked)}                />
+                onCheckedChange={(isChecked) => handleSelect(isChecked)}
+                disabled={selectedRoom ? !isChecked : false }
+                />
                 <label
                   htmlFor="book"
                   className="block text-lg sm:text-2xl font-bold"
                 >
-                  {`${data.boardings.rate} DZD `}
+                  {`${data.rate || data.boardings.rate} DZD `}
                 </label>
                 <span className="text-xs sm:text-sm text-gray-600">
                   4 nuits
