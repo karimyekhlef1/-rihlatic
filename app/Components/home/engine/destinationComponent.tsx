@@ -23,7 +23,7 @@ const DestinationComponent: React.FC<DestinationComponentProps> = ({ item, searc
                             type === 1 && (
                                 <div className="flex flex-col">
                                     <span className="truncate fw-bold">{item.city}</span>
-                                    <span className="truncate text-xs text-gray-500">{item.name}</span>
+                                    <span className="block text-ellipsis truncate text-xs text-gray-500">{item.name}</span>
                                 </div>
                             )
                         }

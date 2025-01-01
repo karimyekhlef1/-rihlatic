@@ -59,7 +59,7 @@ const VolSearchComponent: React.FC = () => {
 
     return (
         <div className="flex flex-col gap-2">
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
                 <SearchSelectComponent data={volEngineTypes} setSelected={setVolTypeFunc} />
                 <SearchSelectComponent data={volEngineMethods} setSelected={setMethodFunc} />
                 <PassengersComponent />
@@ -69,7 +69,7 @@ const VolSearchComponent: React.FC = () => {
                 {
                     volType !== 'Multi Destinations' ? (
                         <>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center flex-wrap gap-2">
                                 <SearchInputComponent
                                     placeholder="City, airports or place"
                                     onSearch={(value) => console.log(value)}
@@ -86,7 +86,7 @@ const VolSearchComponent: React.FC = () => {
                             </div>
                             <button
                                 type="button"
-                                className="rounded bg-[#FF8000] px-2 py-2.5 text-sm font-semibold text-white"
+                                className="rounded bg-[#FF8000] px-2 py-2.5 text-sm font-semibold text-white w-full sm:w-24"
                             >
                                 Exploire
                             </button>
@@ -95,7 +95,7 @@ const VolSearchComponent: React.FC = () => {
                         <>
                             {
                                 destinations.map((dest: any, i: number) => (
-                                    <div className="flex items-center gap-2" key={dest.id}>
+                                    <div className="flex flex-wrap items-center gap-2" key={dest.id}>
                                         <SearchInputComponent
                                             placeholder="City, airports or place"
                                             onSearch={(value) => console.log(value)}
@@ -109,7 +109,7 @@ const VolSearchComponent: React.FC = () => {
                                             type={1}
                                         />
                                         <DatePickerComponent isOnePick={true} />
-                                        <div className='flex items-center gap-2 bg-red-500 h-full p-3 rounded' onClick={() => removeDestination(i)}>
+                                        <div className='flex items-center gap-2 bg-red-500 p-3 h-8 rounded' onClick={() => removeDestination(i)}>
                                             <HiTrash className='text-[#FFF] cursor-pointer' />
                                         </div>
                                     </div>

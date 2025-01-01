@@ -25,22 +25,18 @@ const DatePickerComponent: React.FC<SearchInputProps> = ({
   dateRange,
   setDateRange,
 }) => {
-  // const dateRange = {
-  //   from: new Date(),
-  //   to: new Date(),
-  // };
-
+  
   const dispatch = useDispatch<any>();  
 
   return (
-    <div className="grid gap-2">
+    <div className="w-full sm:w-[500px]">
       <Popover>
         <PopoverTrigger asChild>
           <Button
             id="date"
             variant={'search'}
             className={cn(
-              'w-[545px] h-[43px] justify-start text-left font-normal rounded',
+              'w-full sm:w-[500px] h-[42px] justify-start text-left font-normal rounded',
               !dateRange && 'text-muted-foreground',
               'focus:z-[1] focus:border-orange-500 focus:text-orange-500 focus:border-2'
             )}
@@ -59,11 +55,11 @@ const DatePickerComponent: React.FC<SearchInputProps> = ({
               <span>Pick a date</span>
             )}
             <div className="text-sm text-gray-400 pl-8">
-              {isOnePick ? '( Start date )' : '( Start date - End date )'}
+              {isOnePick ? '( Start )' : '( Start-End )'}
             </div>
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent className="w-full p-0" align="start">
           <Calendar
             initialFocus
             mode="range"
