@@ -8,9 +8,11 @@ export default function RoomReservationInformation() {
   const rooms = useSelector((state: any) => state.paymentPackage.rooms);
   const currentStep = useSelector((state: any) => state.paymentPackage.currentStep);
   const currentRoom = rooms.find((room:any, index: number) => index === currentStep - 1);
+
   if (!currentRoom) {
     return <FnishBooking />
   }
+  
   const renderRoomInfo = (type: 'adults' | 'children' | 'infants', count: number) => {
     return Array.from({ length: count }, (_, index) => (
       <AdulteInformation
