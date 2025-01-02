@@ -35,7 +35,7 @@ export const resend_code_endpoint = BASE_URL + "/front/email/resend_code";
 // Packages
 export const packages_endpoint = BASE_URL + "/front/packages";
 export const package_bookings_endpoint = BASE_URL + "/front/package/bookings";
-export const package_cancelPenalty_endpoint = "/front/package/bookings/cancelPenalty/"
+export const package_cancelPenalty_endpoint = BASE_URL + "/front/package/bookings/cancelPenalty/"
 // Omra
 export const omra_endpoint = BASE_URL + "/front/omra";
 // Omras Bookings
