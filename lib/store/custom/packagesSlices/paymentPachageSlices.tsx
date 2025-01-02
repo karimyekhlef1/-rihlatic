@@ -152,9 +152,13 @@ const paymentPackageSlice = createSlice({
       
       saveStateToLocalStorage(state);
     },
-    // Optional: Clear localStorage
-    clearStoredState(state) {
-      state.RoomsData = []; 
+    reStateRoomData(state){
+      localStorage.removeItem(STORAGE_KEY)
+      state.RoomsData=[] ;
+    },
+
+
+    clearStoredState(state) {      
       localStorage.removeItem(STORAGE_KEY);
       return createInitialState();
     }
@@ -170,7 +174,8 @@ export const {
   nextStep,
   previousStep,
   updatePassengerFieldByIndex,
-  clearStoredState
+  clearStoredState,
+  reStateRoomData
 } = paymentPackageSlice.actions;
 
 export default paymentPackageSlice.reducer;

@@ -1,18 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { CircleCheck } from 'lucide-react';
-import { useSelector , useDispatch } from 'react-redux';
-import { RootState } from '@/lib/store/store';
+import { useDispatch } from 'react-redux';
 import { format, differenceInDays } from 'date-fns';
-import { extractData } from '@/app/hooks/useExtractData';
 import DropDownBookingComponent from './dropDownBooking';
-import Link from 'next/link';
 import RoomsDetailsBooking from './RoomsDetailsBooking';
 import { Room } from '@/app/Types/package/packageDetails';
 import { Departure } from '@/app/Types/package/packageDetails';
-import { clearStoredState } from '@/lib/store/custom/packagesSlices/paymentPachageSlices';
+import { reStateRoomData } from '@/lib/store/custom/packagesSlices/paymentPachageSlices';
 export default function BookingPackageComponent({ data }: { data: Departure[] }) {
   const dispatch = useDispatch<any>();
   const [selectedDeparture, setSelectedDeparture] = useState<Departure | undefined>();
@@ -61,14 +57,14 @@ export default function BookingPackageComponent({ data }: { data: Departure[] })
   }));
 
   const handleSelectDeparture = (selectedOption: { label: string; id: number }) => {
-    // dispatch(clearStoredState())
+    dispatch(reStateRoomData())
     const selected = data.find((item) => item.id === selectedOption.id);
     if (selected) {
       setSelectedDeparture(selected);
     }
   };
   const handleSelectRoom = (selectedOption: { label: string; id: number }) => {
-    //dispatch(clearStoredState())
+    dispatch(reStateRoomData())
     const selected = selectedDeparture?.pricing.rooms.find((item) => item.id === selectedOption.id);
     if (selected) {
       setSelectedRoom(selected);

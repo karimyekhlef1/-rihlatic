@@ -132,7 +132,7 @@ export default function PassengerInformation({ titel, index, roomId }: Passenger
                 onChange={(e) => handleInputChange('last_name', e.target.value)}
               />
             </div>
-
+            <div className="grid grid-cols-2 gap-4">
             <Select
               value={passenger?.sex || ''}
               onValueChange={(value) => handleInputChange('sex', value)}
@@ -146,8 +146,19 @@ export default function PassengerInformation({ titel, index, roomId }: Passenger
               </SelectContent>
             </Select>
 
-            <div className="grid grid-cols-2 gap-4">
-              <Popover>
+      <div className="flex flex-col space-y-2">
+                
+                <Input
+                  type="date"
+                  placeholder="Select birth date"
+                  value={passenger?.birth_date || ""}
+                  onChange={(e) => handleInputChange( 'birth_date', e.target.value)}
+                  
+                />
+              </div>
+
+
+            {/* <Popover>
                 <PopoverTrigger asChild>
                   <Button variant={'outline'} className={cn('w-full justify-start')}>
                     {formatDob(passenger?.birth_date)}
@@ -155,19 +166,53 @@ export default function PassengerInformation({ titel, index, roomId }: Passenger
                 </PopoverTrigger>
                 <PopoverContent>
                   <Calendar
+                  showOutsideDays={false}
                     mode="single"
                     selected={
                       passenger?.birth_date
-                        ? parse(passenger?.birth_date, 'yyyy-MM-dd', new Date())
-                        : undefined
+                        ? undefined 
+                        : parse(passenger?.birth_date, 'yyyy-MM-dd', new Date())
                     }
                     onSelect={(date) =>
                       handleInputChange('birth_date', date ? format(date, 'yyyy-MM-dd') : null)
                     }
+           
+            
+                  />
+                </PopoverContent>
+              </Popover> */}
+
+
+
+            </div>
+
+          
+
+            <div  className="grid grid-cols-2 gap-4">
+              <div > 
+        
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant={'outline'} className={cn('w-full justify-start')}>
+                    {formatDob(passenger?.passport_expire_at)}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <Calendar
+
+                    mode="single"
+                    selected={
+                      passenger?.passport_expire_at
+                        ?  parse(passenger?.passport_expire_at, 'yyyy-MM-dd', new Date())  
+                        : undefined
+                    }
+                    onSelect={(date) =>
+                      handleInputChange('passport_expire_at', date ? format(date, 'yyyy-MM-dd') : null)
+                    }
                   />
                 </PopoverContent>
               </Popover>
-
+              </div>
               <Input
                 type="text"
                 placeholder="Passport Number"
