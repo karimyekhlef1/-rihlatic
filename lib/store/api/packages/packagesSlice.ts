@@ -34,18 +34,18 @@ export const getPackagesReservationDetails = createAsyncThunk(
     }
   }
 );
-export const storePackageReservation = createAsyncThunk(
-  "packageStoreReservation/slice",
-  async (data: any, thunkApi) => {
+
+export const cancelPackagePenalty = createAsyncThunk(
+  "cancelPackagePenalty/slice",
+  async (id: any, thunkApi) => {
     try {
-      const response = await packagesService.storePackageReservation(data);
+      const response = await packagesService.cancelPackagePenalty(id);
       return response;
     } catch (error: any) {
       return thunkApi.rejectWithValue(error.response.data);
     }
   }
 );
-
 const packagesSlice = createSlice({
   name: "slice/packages",
   initialState,
@@ -74,14 +74,14 @@ const packagesSlice = createSlice({
         state.loading = false;
         state.packagesData = {};
       })
-      .addCase(storePackageReservation.pending, (state) => {
+      .addCase(cancelPackagePenalty.pending, (state) => {
         state.loading = true;
       })
-      .addCase(storePackageReservation.fulfilled, (state, action) => {
+      .addCase(cancelPackagePenalty.fulfilled, (state, action) => {
         state.loading = false;
         state.packagesData = action.payload;
       })
-      .addCase(storePackageReservation.rejected, (state, _) => {
+      .addCase(cancelPackagePenalty.rejected, (state, _) => {
         state.loading = false;
         state.packagesData = {};
       });

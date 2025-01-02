@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { AppDispatch } from "@/lib/store/store";
 import { getPackagesReservationDetails } from "@/lib/store/api/packages/packagesSlice";
-import { get } from "http";
+import { cancelPackagePenalty } from "@/lib/store/api/packages/packagesSlice";
 
 interface User {
   id: number;
@@ -143,10 +143,27 @@ export default function PackagesTable() {
     return statusMap[status.toLowerCase()] || "default";
   };
 
-  const cancelWithPenalty = (id: number) => {
-    // Will be implemented later
-  };
+  const cancelWithPenalty = async (id: number) => {
+    if (!id) {
+      console.error("No reservation ID found:", id);
+      return;
+    }
+    try{
 
+       await dispatch(cancelPackagePenalty(id)).unwrap();
+       setReservations(prev => 
+        prev.map(res => 
+          res.id === id 
+            ? { ...res, status: 'cancelled' } 
+            : res 
+        )
+      );
+    }catch(error){
+      console.log(error)
+
+    }
+  }
+    
   return (
     <div className="overflow-x-auto">
       <Card>
@@ -226,6 +243,7 @@ export default function PackagesTable() {
                         <ChevronDown className="h-4 w-4" />
                       )}
                       <Trash2
+                        // display={reservation.status =="Cancelled"? true : false}
                         className="h-4 w-4 text-red-500 hover:text-red-700 ml-2"
                         onClick={(e) => {
                           e.stopPropagation();
