@@ -242,7 +242,11 @@ export default function FlightsTable() {
                               reservation.bookingDetails[0].passenger
                             )
                           : "No passengers"}
-                        <ChevronDown className="inline ml-1 h-4 w-4" />
+                        {expandedPassengers === reservation.id ? (
+                          <ChevronUp className="inline ml-1 h-4 w-4" />
+                        ) : (
+                          <ChevronDown className="inline ml-1 h-4 w-4" />
+                        )}
                       </TableCell>
                       <TableCell className="font-medium text-xs hidden md:table-cell">
                         {reservation.departure?.itinerary || "N/A"}
