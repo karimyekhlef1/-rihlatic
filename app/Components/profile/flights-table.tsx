@@ -20,6 +20,7 @@ import {
   cancelOmraPenalty,
 } from "@/lib/store/api/omras/omrasSlice";
 import { AppDispatch } from "@/lib/store/store";
+import { toast } from "sonner";
 
 interface User {
   id: number;
@@ -145,6 +146,14 @@ export default function FlightsTable() {
         return;
       }
 
+      // Check if reservation is already cancelled
+      if (reservation.status.toLowerCase() === 'cancelled') {
+        toast.error("This reservation is already cancelled", {
+          description: `Reservation #${reservation.reference} cannot be cancelled again.`
+        });
+        return;
+      }
+
       // Optimistically update UI
       setReservations(prev => 
         prev.map(res => 
@@ -165,10 +174,16 @@ export default function FlightsTable() {
         })).unwrap();
         
         console.log('Successfully cancelled reservation. Refreshing data...');
+        toast.success("Reservation Cancelled", {
+          description: `Successfully cancelled reservation #${reservation.reference}`
+        });
         // Fetch fresh data after cancellation
         await fetchReservations();
       } catch (error) {
         console.error('Cancel API error:', error);
+        toast.error("Failed to cancel reservation", {
+          description: "There was an error cancelling your reservation. Please try again."
+        });
         // Revert optimistic update on error
         await fetchReservations();
         return;
@@ -179,6 +194,9 @@ export default function FlightsTable() {
         message: error?.message,
         status: error?.response?.status,
         data: error?.response?.data
+      });
+      toast.error("Error", {
+        description: "An unexpected error occurred. Please try again."
       });
       // Revert optimistic update on error
       await fetchReservations();
