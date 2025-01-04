@@ -8,6 +8,8 @@ interface User {
   email: string;
   avatar: string;
   // we can add other user properties as needed
+  first_name: string;
+  last_name: string;
 }
 interface SinginState {
   loading: boolean;
@@ -47,14 +49,27 @@ export const signinUser = createAsyncThunk(
       const user = response?.user;
 
       if (token) {
-        storageUtils.setToken(token);
-        storageUtils.setUser(user);
-        const storedToken = storageUtils.getToken();
-
-        return {
-          user: user,
+        // Log the response to see the structure
+        console.log('API Response:', response);
+        
+        // Make sure we're extracting all user fields
+        const userData = {
+          user: {
+            id: user?.id,
+            username: user?.username,
+            email: user?.email,
+            avatar: user?.avatar,
+            first_name: user?.first_name || user?.firstName,  // Handle both cases
+            last_name: user?.last_name || user?.lastName,     // Handle both cases
+          },
           token: token
         };
+
+        storageUtils.setToken(token);
+        storageUtils.setUser(userData.user);
+        const storedToken = storageUtils.getToken();
+
+        return userData;
       } else {
         return thunkApi.rejectWithValue({
           message: 'No token in response',

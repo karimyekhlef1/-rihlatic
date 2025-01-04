@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   Disclosure,
   DisclosureButton,
@@ -7,26 +7,26 @@ import {
   MenuButton,
   MenuItem,
   MenuItems,
-} from '@headlessui/react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { CircleUserRound } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+} from "@headlessui/react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { CircleUserRound } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-import Image from 'next/image';
-import logo from '@/public/images/logo.svg';
-import { env } from 'process';
-import LinkNav from './linkNav';
-import navbarItems from '@/app/Data/navbar';
-import { NavbarItem } from '@/app/Types/Common/navLink';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '@/lib/store/store';
-import { openDialogSignUp } from '@/lib/store/custom/mainSlices/dialogSlice';
-import SignUpDialog from '@/app/commonComponents/signupComponent';
-import { useRouter } from 'next/navigation';
-import { storageUtils } from '@/utils/localStorage';
-import { logoutUser } from '@/lib/store/api/logout/logoutSlice';
-import { clearSinginState } from '@/lib/store/api/signin/signinSlice';
-import { toast } from 'sonner';
+import Image from "next/image";
+import logo from "@/public/images/logo.svg";
+import { env } from "process";
+import LinkNav from "./linkNav";
+import navbarItems from "@/app/Data/navbar";
+import { NavbarItem } from "@/app/Types/Common/navLink";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/lib/store/store";
+import { openDialogSignUp } from "@/lib/store/custom/mainSlices/dialogSlice";
+import SignUpDialog from "@/app/commonComponents/signupComponent";
+import { useRouter } from "next/navigation";
+import { storageUtils } from "@/utils/localStorage";
+import { logoutUser } from "@/lib/store/api/logout/logoutSlice";
+import { clearSinginState } from "@/lib/store/api/signin/signinSlice";
+import { toast } from "sonner";
 
 export default function Navbar() {
   const dispatch = useDispatch<AppDispatch>();
@@ -49,24 +49,24 @@ export default function Navbar() {
       const token = storageUtils.getToken();
 
       if (!token) {
-        console.log('No token found, redirecting...');
+        console.log("No token found, redirecting...");
         storageUtils.clearAuth();
         dispatch(clearSinginState());
-        router.push('/');
+        router.push("/");
         return;
       }
 
       const result = await dispatch(logoutUser(token)).unwrap();
-      console.log('Logout successful:', result);
-      toast.success('Logout successful!');
+      console.log("Logout successful:", result);
+      toast.success("Logout successful!");
 
-      router.push('/');
+      router.push("/");
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
       // Optionally clear token on error if you want to force logout
       storageUtils.clearAuth();
       dispatch(clearSinginState());
-      router.push('/');
+      router.push("/");
     }
   };
 
@@ -92,7 +92,7 @@ export default function Navbar() {
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex flex-shrink-0 items-center">
               <Image
-                alt={env.NEXT_APP_NAME || ''}
+                alt={env.NEXT_APP_NAME || ""}
                 src={logo.src}
                 width={60}
                 height={60}
@@ -129,7 +129,9 @@ export default function Navbar() {
                         width={50}
                       />
                       <span className="text-black font-medium">
-                        {userData?.user.username || 'User'}
+                        {`${userData?.user.first_name} ${userData?.user.last_name}` ||
+                          userData?.user.username ||
+                          "User"}
                       </span>
                     </div>
                   </MenuButton>
@@ -159,7 +161,7 @@ export default function Navbar() {
               </Menu>
             ) : (
               // Sign in button for non-logged in users
-              <Button variant={'login'} onClick={handleOpenDialogSignUp}>
+              <Button variant={"login"} onClick={handleOpenDialogSignUp}>
                 <CircleUserRound className="h-5 w-5 mr-2" />
                 Sign-in
               </Button>
@@ -176,7 +178,7 @@ export default function Navbar() {
                 key={index}
                 as="a"
                 href={item.route}
-                className={`block py-2 pl-3 pr-4 text-base font-medium ${item.isSelected ? 'border-l-4 bg-indigo-50  border-indigo-500 text-indigo-700' : ''}`}
+                className={`block py-2 pl-3 pr-4 text-base font-medium ${item.isSelected ? "border-l-4 bg-indigo-50  border-indigo-500 text-indigo-700" : ""}`}
               >
                 {item.name}
               </DisclosureButton>
