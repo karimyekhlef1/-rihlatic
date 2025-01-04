@@ -23,13 +23,13 @@ import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { useDispatch, useSelector } from 'react-redux';
 import { setDialogOpen } from '@/lib/store/custom/mainSlices/dialogSlice';
 import type { RootState } from '@/lib/store/store';
-import { updateAccountDetails } from '@/lib/store/api/account/accountSlice';
+import { updateAccountDetails, fetchAccountData } from '@/lib/store/api/account/accountSlice';
 import { toast } from 'sonner';
 
 export default function EditAccountOwnerDetails() {
   const dispatch = useDispatch<any>();
   const { isOpen } = useSelector((state: RootState) => state.dialog);
-  const { loading } = useSelector((state: RootState) => state.account);
+  const { loading, accountData } = useSelector((state: RootState) => state.account);
 
   // Add form state
   const [formData, setFormData] = useState({
@@ -43,6 +43,30 @@ export default function EditAccountOwnerDetails() {
     nationality: '',
     sex: '',
   });
+
+  // Fetch account data when dialog opens
+  useEffect(() => {
+    if (isOpen) {
+      dispatch(fetchAccountData());
+    }
+  }, [isOpen, dispatch]);
+
+  // Update form data when account data is fetched
+  useEffect(() => {
+    if (accountData) {
+      setFormData({
+        first_name: accountData.first_name || '',
+        last_name: accountData.last_name || '',
+        email: accountData.email || '',
+        phone: accountData.phone || '',
+        birthday: accountData.birthday || '',
+        passport_nbr: accountData.passport_nbr || '',
+        passport_expire_at: accountData.passport_expire_at || '',
+        nationality: accountData.nationality || '',
+        sex: accountData.sex || '',
+      });
+    }
+  }, [accountData]);
 
   // Handle input changes
   const handleInputChange = (field: string, value: string) => {
