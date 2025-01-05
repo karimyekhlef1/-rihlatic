@@ -22,7 +22,8 @@ export const remindPassword = createAsyncThunk(
       const response = await remindPasswordService.remindPassword(userData);
       return response;
     } catch (error: any) {
-      return thunkApi.rejectWithValue(error.response.data);
+      // Return a more user-friendly error message
+      return thunkApi.rejectWithValue(error.message || 'Failed to send verification code');
     }
   }
 );

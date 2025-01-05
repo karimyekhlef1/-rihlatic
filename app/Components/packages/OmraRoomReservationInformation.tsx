@@ -1,12 +1,27 @@
 "use client";
+
 import PassengerInformation from "./PassengerInformation";
 import { useSelector, useDispatch } from "react-redux";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RootState } from "@/lib/store/store";
 import { toast } from "sonner";
-import { storeOmraReservation, getOmraDetails } from "@/lib/store/api/omras/omrasSlice";
+import {
+  storeOmraReservation,
+  getOmraDetails,
+} from "@/lib/store/api/omras/omrasSlice";
 import { AppDispatch } from "@/lib/store/store";
 import { Passenger } from "@/lib/store/custom/commonSlices/omraReservationSlice";
+
+// Helper function to transform passenger data to match API expectations
+const transformPassengerData = (passenger: any) => {
+  if (!passenger) return passenger;
+  
+  return {
+    ...passenger,
+    birth_date: passenger.birthday, // Transform birthday to birth_date
+    // Add any other field transformations here if needed
+  };
+};
 
 export default function OmraRoomReservationInformation() {
   const { rooms, status, omra_departure_id } = useSelector(
@@ -47,117 +62,102 @@ export default function OmraRoomReservationInformation() {
     ));
   };
 
+  const validateReservationData = () => {
+    // Basic validation to ensure all required data is present
+    if (!omra_departure_id) {
+      throw new Error("No departure ID selected");
+    }
+
+    for (const room of rooms) {
+      // Validate required room fields
+      if (!room.room_id || !room.type || !room.reservation_type) {
+        throw new Error("Missing required room information");
+      }
+
+      // Validate passengers
+      if (!room.passengers.adults?.length) {
+        throw new Error("Each room must have at least one adult passenger");
+      }
+
+      // Validate passenger information
+      const allPassengers = [
+        ...room.passengers.adults,
+        ...(room.passengers.children || []),
+        ...(room.passengers.children_without_bed || []),
+        ...(room.passengers.infants || []),
+      ];
+
+      for (const passenger of allPassengers) {
+        if (!passenger.first_name || !passenger.last_name) {
+          throw new Error("All passengers must have first and last names");
+        }
+        if (!passenger.passport_nbr || !passenger.passport_expire_at) {
+          throw new Error(
+            "All passengers must have valid passport information"
+          );
+        }
+        // Use type assertion since we know the field exists in our form
+        const passengerWithBirthday = passenger as { birthday?: string };
+        if (!passengerWithBirthday.birthday) {
+          throw new Error("Birth date is required for all passengers");
+        }
+      }
+    }
+
+    // Transform the booking data
+    const transformedData = {
+      omra_departure_id,
+      rooms: rooms.map((room) => ({
+        room_id: room.room_id,
+        type: room.type,
+        reservation_type: room.reservation_type,
+        passengers: {
+          adults: room.passengers.adults.map(transformPassengerData),
+          ...(room.passengers.children?.length && {
+            children: room.passengers.children.map(transformPassengerData),
+          }),
+          ...(room.passengers.children_without_bed?.length && {
+            children_without_bed: room.passengers.children_without_bed.map(
+              transformPassengerData
+            ),
+          }),
+          ...(room.passengers.infants?.length && {
+            infants: room.passengers.infants.map(transformPassengerData),
+          }),
+        },
+      })),
+    };
+
+    return transformedData;
+  };
+
   const handleVerifyAndComplete = async () => {
     if (status === "idle") {
       try {
-        if (!omra_departure_id) {
-          toast.error(
-            "No departure ID selected. Please select a departure first."
-          );
-          return;
-        }
+        // Validate and transform the data
+        const bookingData = validateReservationData();
 
-        // Log detailed room information for debugging
+        // Log the transformed data for debugging
         console.log(
-          "Room details before transform:",
-          rooms.map((room) => ({
-            type: room.type,
-            reservation_type: room.reservation_type,
-            occupancy: {
-              adults: room.passengers.adults.length,
-              children: room.passengers.children.length,
-              children_without_bed: room.passengers.children_without_bed.length,
-              infants: room.passengers.infants.length,
-            },
-          }))
+          "Transformed booking data:",
+          JSON.stringify(bookingData, null, 2)
         );
 
-        // Transform the booking data based on room type
-        const transformedRooms = rooms.map((room) => {
-          const basePassengers: {
-            adults: Passenger[];
-            children?: Passenger[];
-            children_without_bed?: Passenger[];
-            infants?: Passenger[];
-          } = {
-            adults: room.passengers.adults,
-          };
-
-          // For non-single rooms, include child-related arrays only if they have items
-          if (room.type !== "single") {
-            if (room.passengers.children?.length > 0) {
-              basePassengers.children = room.passengers.children;
-            }
-            if (room.passengers.children_without_bed?.length > 0) {
-              basePassengers.children_without_bed =
-                room.passengers.children_without_bed;
-            }
-            if (room.passengers.infants?.length > 0) {
-              basePassengers.infants = room.passengers.infants;
-            }
-          }
-
-          return {
-            room_id: room.room_id,
-            type: room.type,
-            reservation_type: room.reservation_type,
-            passengers: basePassengers,
-          };
-        });
-
-        const bookingData = {
-          omra_departure_id,
-          rooms: transformedRooms,
-        };
-
-        console.log("Final booking data after transform:", bookingData);
-
+        // Store the reservation
         const response = await dispatch(
           storeOmraReservation(bookingData)
         ).unwrap();
 
-        console.log('API Response from storeOmraReservation:', response);
-
         if (response.success) {
-          // After successful booking, fetch the updated omra details
-          const omraDetails = await dispatch(getOmraDetails({ id: omra_departure_id })).unwrap();
-          console.log('Updated Omra Details from getOmraDetails:', omraDetails);
+          // Fetch updated Omra details
+          await dispatch(getOmraDetails(omra_departure_id));
           toast.success("Booking completed successfully!");
         } else {
-          toast.error(
-            response.message || "Failed to complete booking. Please try again."
-          );
+          toast.error(response.message || "Failed to complete booking");
         }
       } catch (error: any) {
-        console.error("Booking error details:", {
-          error: error,
-          response: error?.response,
-          data: error?.response?.data,
-          message: error?.message,
-        });
-
-        // Extract and format validation errors
-        const validationErrors = error?.response?.data?.errors;
-        if (validationErrors) {
-          const errorMessages = Object.entries(validationErrors)
-            .map(([key, messages]: [string, any]) => {
-              const messageList = Array.isArray(messages)
-                ? messages
-                : [messages];
-              return `${key}: ${messageList.join(", ")}`;
-            })
-            .join("; ");
-
-          toast.error(
-            errorMessages || "Validation failed. Please check your input."
-          );
-        } else {
-          const errorMessage =
-            error?.response?.data?.message ||
-            error?.message ||
-            "An error occurred while saving your booking.";
-          toast.error(errorMessage);
-        }
+        console.error("Booking error:", error);
+        toast.error(error.message || "Failed to complete booking");
       }
     }
   };
