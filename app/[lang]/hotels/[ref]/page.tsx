@@ -36,8 +36,8 @@ export default function Details() {
 
     const body = {
       supplier,
-      checkin: '2025-01-01',
-      checkout: '2025-01-05',
+      checkin: '2025-01-10',
+      checkout: '2025-01-15',
       city: {
         mygo: { id: 'TABR' },
         cng: { id: '109' },

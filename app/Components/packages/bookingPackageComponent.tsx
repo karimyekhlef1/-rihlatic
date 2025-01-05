@@ -9,6 +9,7 @@ import RoomsDetailsBooking from './RoomsDetailsBooking';
 import { Room } from '@/app/Types/package/packageDetails';
 import { Departure } from '@/app/Types/package/packageDetails';
 import { reStateRoomData } from '@/lib/store/custom/packagesSlices/paymentPachageSlices';
+import PopularFacilitiesPackage from './PopularFacilitiesPackage';
 export default function BookingPackageComponent({ data }: { data: Departure[] }) {
   const dispatch = useDispatch<any>();
   const [selectedDeparture, setSelectedDeparture] = useState<Departure | undefined>();
@@ -17,6 +18,7 @@ export default function BookingPackageComponent({ data }: { data: Departure[] })
   const [selectedRoom ,setSelectedRoom] = useState<Room | undefined>();
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
+  console.log("selectedDeparture",selectedDeparture)
   useEffect (()=>{
     if (selectedDeparture) {
       const roomNames =selectedDeparture.pricing.rooms.map((room)=>({
@@ -84,6 +86,17 @@ export default function BookingPackageComponent({ data }: { data: Departure[] })
               </p>
             </div> 
             <Separator />
+
+
+   {     currentDeparture && <PopularFacilitiesPackage
+        visa={currentDeparture.visa}
+        vol={currentDeparture.vol }
+        hotel={currentDeparture.hotel}
+        transfer={currentDeparture.transfer}
+        excursion={currentDeparture.excursion}
+        cruise={currentDeparture.cruise}
+      />}
+            <Separator />
             <div className="flex flex-col pt-4 pb-[100px]">
               <div className="flex flex-row items-center">
                 <CircleCheck
@@ -110,6 +123,7 @@ export default function BookingPackageComponent({ data }: { data: Departure[] })
               </div>
             </div>
             <Separator />
+
             {/* {selectedOption && (
               <>
                 <p className="text-sm font-semibold pt-4">
