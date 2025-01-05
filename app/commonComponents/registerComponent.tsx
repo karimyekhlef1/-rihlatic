@@ -27,83 +27,60 @@ import login from '@/public/images/login.png';
 import VerifyEmailDialog from './verifyEmailComponent';
 import { signupUser } from '@/lib/store/api/signup/signupSlice';
 import { setEmailToVerify } from '@/lib/store/custom/mainSlices/verificationSlice';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signUpSchema } from '@/lib/schemas/authSchemas';
+import type { z } from 'zod';
 
-interface FormData {
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
+interface FormData extends z.infer<typeof signUpSchema> {}
 
 export default function RegisterDialog() {
   const dispatch = useDispatch<AppDispatch>();
-  const accountDetails = useSelector(
-    (state: RootState) => state.accountDetails
-  );
   const isDialogOpen = useSelector(
     (state: RootState) => state.dialog.isRegisterOpen
   );
   const signupStatus = useSelector((state: RootState) => state.signUp.loading);
   const signupError = useSelector((state: RootState) => state.signUp.error);
 
-  const [errors, setErrors] = useState<Partial<FormData>>({});
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    watch
+  } = useForm<FormData>({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      confirmPassword: ''
+    }
+  });
 
-  const handleOpenDialogVerifyEmail = () => {
-    dispatch(setEmailToVerify(accountDetails.email));
+  const handleOpenDialogVerifyEmail = (email: string) => {
+    dispatch(setEmailToVerify(email));
     dispatch(openDialogVerifyEmail());
     dispatch(closeDialogRegister());
   };
 
-  const validateForm = () => {
-    const newErrors: Partial<FormData> = {};
+  const onSubmit = async (data: FormData) => {
+    try {
+      const resultAction = await dispatch(
+        signupUser({
+          username: data.email.split('@')[0],
+          email: data.email,
+          password: data.password,
+          password_confirmation: data.confirmPassword,
+        })
+      );
 
-    if (!accountDetails.email) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(accountDetails.email)) {
-      newErrors.email = 'Email is invalid';
-    }
-
-    if (!accountDetails.password) {
-      newErrors.password = 'Password is required';
-    } else if (accountDetails.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
-    }
-
-    if (!accountDetails.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
-    } else if (accountDetails.password !== accountDetails.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (validateForm()) {
-      try {
-        const resultAction = await dispatch(
-          signupUser({
-            username: accountDetails.email.split('@')[0],
-            email: accountDetails.email,
-            password: accountDetails.password,
-            password_confirmation: accountDetails.confirmPassword,
-          })
-        );
-
-        if (signupUser.fulfilled.match(resultAction)) {
-          handleOpenDialogVerifyEmail();
-          dispatch(resetAccountDetails());
-        }
-      } catch (error) {
-        console.error('Registration failed:', error);
+      if (signupUser.fulfilled.match(resultAction)) {
+        handleOpenDialogVerifyEmail(data.email);
+        reset();
       }
+    } catch (error) {
+      console.error('Registration failed:', error);
     }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    dispatch(updateAccountDetails({ field: name as keyof FormData, value }));
   };
 
   return (
@@ -111,7 +88,7 @@ export default function RegisterDialog() {
       open={isDialogOpen}
       onOpenChange={(open) => {
         if (!open) {
-          dispatch(resetAccountDetails()); // Reset form when dialog is closed
+          reset();
         }
         dispatch(open ? openDialogRegister() : closeDialogRegister());
       }}
@@ -128,7 +105,7 @@ export default function RegisterDialog() {
           </p>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
           {signupError && (
             <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-2 rounded-md text-xs">
               {signupError}
@@ -138,42 +115,36 @@ export default function RegisterDialog() {
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
-              name="email"
               type="email"
               placeholder="Enter your email"
-              value={accountDetails.email}
-              onChange={handleChange}
+              {...register('email')}
             />
             {errors.email && (
-              <p className="text-red-500 text-xs">{errors.email}</p>
+              <p className="text-red-500 text-xs">{errors.email.message}</p>
             )}
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
-              name="password"
               type="password"
               placeholder="Create a password"
-              value={accountDetails.password}
-              onChange={handleChange}
+              {...register('password')}
             />
             {errors.password && (
-              <p className="text-red-500 text-xs">{errors.password}</p>
+              <p className="text-red-500 text-xs">{errors.password.message}</p>
             )}
           </div>
           <div className="space-y-2">
             <Label htmlFor="confirmPassword">Confirm Password</Label>
             <Input
               id="confirmPassword"
-              name="confirmPassword"
               type="password"
               placeholder="Confirm your password"
-              value={accountDetails.confirmPassword}
-              onChange={handleChange}
+              {...register('confirmPassword')}
             />
             {errors.confirmPassword && (
-              <p className="text-red-500 text-xs">{errors.confirmPassword}</p>
+              <p className="text-red-500 text-xs">{errors.confirmPassword.message}</p>
             )}
           </div>
           <Button
