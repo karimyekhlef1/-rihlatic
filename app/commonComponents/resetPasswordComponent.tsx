@@ -29,12 +29,13 @@ import { toast } from 'sonner';
 import Link from 'next/link';
 import { resendCode } from '@/lib/store/api/resendCode/resendCodeSlice';
 
-interface FormData {
-  email: string;
-  code: string;
-  password: string;
-  password_confirmation: string;
-}
+// Import Zod validation
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { resetPasswordSchema } from '@/lib/schemas/passwordSchemas';
+import type { z } from 'zod';
+
+type FormData = z.infer<typeof resetPasswordSchema>;
 
 export default function ResetPasswordDialogue() {
   const dispatch = useDispatch<AppDispatch>();
@@ -42,102 +43,63 @@ export default function ResetPasswordDialogue() {
     (state: RootState) => state.dialog.isResetPasswordOpen
   );
 
-  const { loading, success, error } = useSelector(
+  const { loading, error } = useSelector(
     (state: RootState) => state.resetPassword
   );
 
-  const [formData, setFormData] = useState<FormData>({
-    email: '',
-    code: '',
-    password: '',
-    password_confirmation: '',
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    getValues
+  } = useForm<FormData>({
+    resolver: zodResolver(resetPasswordSchema),
+    defaultValues: {
+      email: '',
+      code: '',
+      password: '',
+      password_confirmation: ''
+    }
   });
 
-  const [errors, setErrors] = useState<Partial<FormData>>({});
-
-  const validateForm = () => {
-    const newErrors: Partial<FormData> = {};
-
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+  const onSubmit = async (data: FormData) => {
+    try {
+      await dispatch(resetPassword(data)).unwrap();
+      toast.success('Password reset successfully');
+      dispatch(closeDialogResetPassword());
+      reset();
+    } catch (error: any) {
+      console.error('Password reset failed:', error);
+      toast.error(error?.message || 'Failed to reset password. Please try again.');
     }
-
-    if (!formData.code) {
-      newErrors.code = 'Code is required';
-    } else if (formData.code.length !== 6) {
-      newErrors.code = 'Code must be 6 characters';
-    }
-
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    }
-
-    if (!formData.password_confirmation) {
-      newErrors.password_confirmation = 'Password confirmation is required';
-    } else if (formData.password !== formData.password_confirmation) {
-      newErrors.password_confirmation = 'Passwords do not match';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (validateForm()) {
-      try {
-        await dispatch(resetPassword(formData));
-        toast.success('Password reset successfully');
-        dispatch(closeDialogResetPassword());
-      } catch (error) {
-        toast.error('Failed to reset password');
-      }
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    if (name === 'code' && value.length > 6) return; // Limit code to 6 characters
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
   };
 
   const handleResendCode = async () => {
-    try {
-      await dispatch(resendCode({ email: formData.email }));
-      toast('Verification code has been resent.');
-    } catch (error) {
-      console.error('Resending code failed:', error);
+    const email = getValues('email');
+    if (!email) {
+      toast.error('Please enter your email first');
+      return;
     }
-  };
-
-  const handleResetPassword = async () => {
+    
     try {
-      await dispatch(
-        resetPassword({
-          email: formData.email,
-          code: formData.code,
-          password: formData.password,
-          password_confirmation: formData.password_confirmation,
-        })
-      );
-      toast('Your password has been changed successfully!');
-      dispatch(closeDialogResetPassword());
-    } catch (error) {
-      console.error('Password changing failed:', error);
+      await dispatch(resendCode({ email })).unwrap();
+      toast.success('Verification code has been resent.');
+    } catch (error: any) {
+      console.error('Resending code failed:', error);
+      toast.error(error?.message || 'Failed to resend code. Please try again.');
     }
   };
 
   return (
     <Dialog
       open={isDialogOpen}
-      onOpenChange={(open) =>
+      onOpenChange={(open) => {
+        if (!open) {
+          reset();
+        }
         dispatch(open ? openDialogResetPassword() : closeDialogResetPassword())
-      }
+      }}
     >
       <DialogContent className="sm:max-w-[355px]">
         <DialogHeader>
@@ -150,20 +112,18 @@ export default function ResetPasswordDialogue() {
             </div>
           </div>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <p className="text-xs font-medium text-gray-500">
               Enter your email
             </p>
             <Input
               type="email"
-              name="email"
               placeholder="Your@email.com"
-              value={formData.email}
-              onChange={handleChange}
+              {...register('email')}
             />
             {errors.email && (
-              <p className="text-red-500 text-xs">{errors.email}</p>
+              <p className="text-red-500 text-xs">{errors.email.message}</p>
             )}
           </div>
 
@@ -171,14 +131,12 @@ export default function ResetPasswordDialogue() {
             <p className="text-xs font-medium text-gray-500">Enter your code</p>
             <Input
               type="text"
-              name="code"
               maxLength={6}
               placeholder="Enter 6-digit code"
-              value={formData.code}
-              onChange={handleChange}
+              {...register('code')}
             />
             {errors.code && (
-              <p className="text-red-500 text-xs">{errors.code}</p>
+              <p className="text-red-500 text-xs">{errors.code.message}</p>
             )}
           </div>
 
@@ -188,13 +146,11 @@ export default function ResetPasswordDialogue() {
             </p>
             <Input
               type="password"
-              name="password"
               placeholder="New password"
-              value={formData.password}
-              onChange={handleChange}
+              {...register('password')}
             />
             {errors.password && (
-              <p className="text-red-500 text-xs">{errors.password}</p>
+              <p className="text-red-500 text-xs">{errors.password.message}</p>
             )}
           </div>
 
@@ -204,14 +160,12 @@ export default function ResetPasswordDialogue() {
             </p>
             <Input
               type="password"
-              name="password_confirmation"
               placeholder="Confirm new password"
-              value={formData.password_confirmation}
-              onChange={handleChange}
+              {...register('password_confirmation')}
             />
             {errors.password_confirmation && (
               <p className="text-red-500 text-xs">
-                {errors.password_confirmation}
+                {errors.password_confirmation.message}
               </p>
             )}
           </div>
@@ -219,7 +173,10 @@ export default function ResetPasswordDialogue() {
           <Link
             href="#"
             className="text-xs text-orange-500 underline underline-offset-2"
-            onClick={handleResendCode}
+            onClick={(e) => {
+              e.preventDefault();
+              handleResendCode();
+            }}
           >
             Resend code
           </Link>
@@ -230,7 +187,6 @@ export default function ResetPasswordDialogue() {
               className="text-xs w-full"
               type="submit"
               disabled={loading}
-              onClick={handleResetPassword}
             >
               Confirm
             </Button>
