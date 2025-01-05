@@ -30,4 +30,6 @@ export interface PackageDetails {
     transfer:boolean;
     excursion:boolean;
     cruise:boolean;
+    includes:string[]
+    excludes:string[]
   }

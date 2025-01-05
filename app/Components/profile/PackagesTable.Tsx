@@ -14,13 +14,14 @@ import {
 } from "@/components/ui/table";
 
 import { Badge, type BadgeProps } from "@/components/ui/badge";
-import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, Trash2 ,Eye } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { AppDispatch } from "@/lib/store/store";
 import { getPackagesReservationDetails } from "@/lib/store/api/packages/packagesSlice";
 import { cancelPackagePenalty } from "@/lib/store/api/packages/packagesSlice";
+import Link from "next/link";
 
 interface User {
   id: number;
@@ -71,6 +72,7 @@ interface Reservation {
   status: string;
   activities: Activity[];
   bookingDetails: BookingDetail[];
+  payment_status:string
 }
 
 export default function PackagesTable() {
@@ -141,6 +143,15 @@ export default function PackagesTable() {
       cancelled: "cancelled",
     };
     return statusMap[status.toLowerCase()] || "default";
+  }; 
+
+
+  const getStatusVariantPayment = (status: string) => {
+    const statusMap: { [key: string]: BadgeProps["variant"] } = {
+      accepted: "Accepted",
+      cancelled: "cancelled",
+    };
+    return statusMap[status.toLowerCase()] || "default";
   };
 
   const cancelWithPenalty = async (id: number) => {
@@ -188,8 +199,12 @@ export default function PackagesTable() {
                 <TableHead className="text-black font-bold hidden sm:table-cell">
                   Return
                 </TableHead>
+            
                 <TableHead className="text-black font-bold hidden md:table-cell">
                   Price
+                </TableHead>
+                <TableHead className="text-black font-bold hidden md:table-cell">
+                  Paiement
                 </TableHead>
                 <TableHead className="text-black font-bold">Status</TableHead>
                 <TableHead className="text-black font-bold">Actions</TableHead>
@@ -228,6 +243,12 @@ export default function PackagesTable() {
                     <TableCell className="font-medium text-xs hidden md:table-cell">
                       {reservation.total_price} DZD
                     </TableCell>
+                    <TableCell className="font-medium text-xs hidden md:table-cell">
+
+                      <Badge variant={getStatusVariantPayment(reservation.payment_status==="Paid"?"accepted":"cancelled")}>
+                        {reservation.payment_status }
+                      </Badge>
+                    </TableCell>
                     <TableCell className="font-medium text-xs">
                       <Badge variant={getStatusVariant(reservation.status)}>
                         {reservation.status || "Confirmed"}
@@ -235,14 +256,23 @@ export default function PackagesTable() {
                     </TableCell>
                     <TableCell
                       className="flex items-center gap-2 font-medium text-xs cursor-pointer hover:bg-gray-50"
-                      onClick={() => toggleActivities(reservation.id)}
+                      // onClick={() => toggleActivities(reservation.id)}
                     >
-                      {expandedActivities === reservation.id ? (
+                      {/* {expandedActivities === reservation.id ? (
                         <ChevronUp className="h-4 w-4" />
                       ) : (
                         <ChevronDown className="h-4 w-4" />
-                      )}
-                      <Trash2
+                      )} */}
+                      <Link href={`packages/${reservation.id}`}  >
+                      <Eye
+                        // display={reservation.status =="Cancelled"? true : false}
+                        className="h-4 w-4 text-green-500 hover:text-green-700 ml-2"
+                        // onClick={(e) => console.log(" show details booking") }
+                   
+                      />
+                      </Link>
+                     
+                                            <Trash2
                         // display={reservation.status =="Cancelled"? true : false}
                         className="h-4 w-4 text-red-500 hover:text-red-700 ml-2"
                         onClick={(e) => {
