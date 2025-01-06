@@ -22,17 +22,22 @@ import {
   resendCode,
   clearResendCodeState,
 } from '@/lib/store/api/resendCode/resendCodeSlice';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import Image from 'next/image';
 import verify from '@/public/images/home/news.png';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { clearEmailToVerify } from '@/lib/store/custom/mainSlices/verificationSlice';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { verifyEmailSchema } from '@/lib/schemas/authSchemas';
+import type { z } from 'zod';
+
+type VerifyEmailFormData = z.infer<typeof verifyEmailSchema>;
 
 export default function VerifyEmailDialog() {
   const dispatch = useDispatch<AppDispatch>();
-  const [verificationCode, setVerificationCode] = useState('');
-
+  
   const emailToVerify = useSelector(
     (state: RootState) => state.verification.emailToVerify
   );
@@ -40,33 +45,45 @@ export default function VerifyEmailDialog() {
     (state: RootState) => state.dialog.isVerifyEmailOpen
   );
 
-  const { loading, success, error } = useSelector(
+  const { loading, error } = useSelector(
     (state: RootState) => state.verifyEmail
   );
 
   const {
     loading: resendCodeLoading,
-    success: resendCodeSuccess,
     error: resendCodeError,
   } = useSelector((state: RootState) => state.resendCode);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm<VerifyEmailFormData>({
+    resolver: zodResolver(verifyEmailSchema),
+    defaultValues: {
+      code: ''
+    }
+  });
 
   const handleOpenRegister = () => {
     dispatch(openDialogRegister());
     dispatch(closeDialogVerifyEmail());
   };
 
-  const handleVerifyEmail = async () => {
-    if (verificationCode.length === 6 && emailToVerify) {
+  const onSubmit = async (data: VerifyEmailFormData) => {
+    if (emailToVerify) {
       try {
         await dispatch(
           verifyEmail({
             email: emailToVerify,
-            code: verificationCode,
+            code: data.code,
           })
         ).unwrap();
         toast.success('Account has been verified successfully.');
         dispatch(clearEmailToVerify());
         dispatch(closeDialogVerifyEmail());
+        reset();
       } catch (err) {
         toast.error('Verification failed. Please try again.');
       }
@@ -102,6 +119,7 @@ export default function VerifyEmailDialog() {
       onOpenChange={(open) => {
         if (!open) {
           dispatch(clearEmailToVerify());
+          reset();
         }
         dispatch(open ? openDialogVerifyEmail() : closeDialogVerifyEmail());
       }}
@@ -120,39 +138,46 @@ export default function VerifyEmailDialog() {
             . Please add it below to verify your email.
           </p>
         </DialogHeader>
-        <Input
-          type="text"
-          placeholder="Enter 6-character code"
-          value={verificationCode}
-          onChange={(e) => setVerificationCode(e.target.value)}
-          maxLength={6}
-        />
-        {error && <p className="text-xs text-red-500">{error}</p>}
-        <Link
-          href="#"
-          className="text-xs text-orange-500 underline underline-offset-2"
-          onClick={handleResendCode}
-        >
-          Resend code
-        </Link>
-        <div className="flex flex-col gap-y-2">
-          <Button
-            variant={'active'}
-            className="text-xs"
-            onClick={handleVerifyEmail}
-            disabled={loading || verificationCode.length !== 6}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div className="space-y-2">
+            <Input
+              type="text"
+              placeholder="Enter 6-character code"
+              {...register('code')}
+              maxLength={6}
+            />
+            {errors.code && (
+              <p className="text-xs text-red-500">{errors.code.message}</p>
+            )}
+          </div>
+          {error && <p className="text-xs text-red-500">{error}</p>}
+          <Link
+            href="#"
+            className="text-xs text-orange-500 underline underline-offset-2"
+            onClick={handleResendCode}
           >
-            {loading ? 'Verifying...' : 'Continue'}
-          </Button>
-          <Button
-            variant={'secondary'}
-            className="text-xs"
-            onClick={handleOpenRegister}
-            disabled={loading}
-          >
-            Back
-          </Button>
-        </div>
+            Resend code
+          </Link>
+          <div className="flex flex-col gap-y-2">
+            <Button
+              type="submit"
+              variant={'active'}
+              className="text-xs"
+              disabled={loading}
+            >
+              {loading ? 'Verifying...' : 'Continue'}
+            </Button>
+            <Button
+              type="button"
+              variant={'secondary'}
+              className="text-xs"
+              onClick={handleOpenRegister}
+              disabled={loading}
+            >
+              Back
+            </Button>
+          </div>
+        </form>
       </DialogContent>
     </Dialog>
   );

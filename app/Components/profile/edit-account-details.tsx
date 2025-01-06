@@ -1,4 +1,6 @@
-import React, {useState , useEffect } from 'react';
+'use client';
+
+import React, { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -26,22 +28,38 @@ import type { RootState } from '@/lib/store/store';
 import { updateAccountDetails, fetchAccountData } from '@/lib/store/api/account/accountSlice';
 import { toast } from 'sonner';
 
+// Import Zod validation
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { accountDetailsSchema } from '@/lib/schemas/profileSchemas';
+import type { z } from 'zod';
+
+type FormData = z.infer<typeof accountDetailsSchema>;
+
 export default function EditAccountOwnerDetails() {
   const dispatch = useDispatch<any>();
   const { isOpen } = useSelector((state: RootState) => state.dialog);
   const { loading, accountData } = useSelector((state: RootState) => state.account);
 
-  // Add form state
-  const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    phone: '',
-    birthday: '',
-    passport_nbr: '',
-    passport_expire_at: '',
-    nationality: '',
-    sex: '',
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setValue
+  } = useForm<FormData>({
+    resolver: zodResolver(accountDetailsSchema),
+    defaultValues: {
+      first_name: '',
+      last_name: '',
+      email: '',
+      phone: '',
+      birthday: '',
+      passport_nbr: '',
+      passport_expire_at: '',
+      nationality: '',
+      sex: '',
+    }
   });
 
   // Fetch account data when dialog opens
@@ -54,36 +72,22 @@ export default function EditAccountOwnerDetails() {
   // Update form data when account data is fetched
   useEffect(() => {
     if (accountData) {
-      setFormData({
-        first_name: accountData.first_name || '',
-        last_name: accountData.last_name || '',
-        email: accountData.email || '',
-        phone: accountData.phone || '',
-        birthday: accountData.birthday || '',
-        passport_nbr: accountData.passport_nbr || '',
-        passport_expire_at: accountData.passport_expire_at || '',
-        nationality: accountData.nationality || '',
-        sex: accountData.sex || '',
+      Object.keys(accountData).forEach((key) => {
+        if (key in accountDetailsSchema.shape) {
+          setValue(key as keyof FormData, accountData[key] || '');
+        }
       });
     }
-  }, [accountData]);
+  }, [accountData, setValue]);
 
-  // Handle input changes
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
-
-  // Handle form submission
-  const handleSubmit = async () => {
+  const onSubmit = async (data: FormData) => {
     try {
-      await dispatch(updateAccountDetails(formData)).unwrap();
-      dispatch(setDialogOpen(false)); // Close dialog on success
+      await dispatch(updateAccountDetails(data)).unwrap();
+      dispatch(setDialogOpen(false));
       toast.success('Account details updated successfully');
     } catch (error: any) {
-      toast.error(error.message || 'Failed to update account details');
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to update account details';
+      toast.error(errorMessage);
       console.error('Failed to update account details:', error);
     }
   };
@@ -91,161 +95,154 @@ export default function EditAccountOwnerDetails() {
   return (
     <Dialog
       open={isOpen}
-      onOpenChange={(open) => dispatch(setDialogOpen(open))}
+      onOpenChange={(open) => {
+        if (!open) {
+          reset();
+        }
+        dispatch(setDialogOpen(open));
+      }}
     >
       <DialogContent className="sm:max-w-[425px] md:max-w-2xl">
-      <VisuallyHidden.Root>
-            <DialogTitle className="hidden">
-            Edit account owner details
-            </DialogTitle>
+        <VisuallyHidden.Root>
+          <DialogTitle className="hidden">Edit account owner details</DialogTitle>
         </VisuallyHidden.Root>
         <Card className="w-full bg-white border-0 shadow-none">
           <CardHeader>
-            <CardTitle className="text-2xl text-black">
-              Edit account owner details
-            </CardTitle>
+            <CardTitle className="text-2xl text-black">Account Details</CardTitle>
             <CardDescription>
-              Enter all details exactly as they appear in the passport/ID for
-              our check-in service with the airlines.
+              Update your account information
             </CardDescription>
           </CardHeader>
-          <CardContent className="grid gap-6">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="firstName">First name</Label>
-                <Input
-                  id="first_name"
-                  value={formData.first_name}
-                  onChange={(e) => handleInputChange('first_name', e.target.value)}
-                  placeholder="Enter first name"
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="lastName">Last name</Label>
-                <Input
-                  id="last_name"
-                  value={formData.last_name}
-                  onChange={(e) => handleInputChange('last_name', e.target.value)}
-                  placeholder="Enter last name"
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="gender">Gender</Label>
-                <Select
-                  value={formData.sex}
-                  onValueChange={(value) => handleInputChange('sex', value)}
-                >
-                  <SelectTrigger id="sexe">
-                    <SelectValue placeholder="Select gender" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Male">Male</SelectItem>
-                    <SelectItem value="Female">Female</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="birthdate" className="text-gray-700">
-                  Date of birth
-                </Label>
-                <Input
-                  id="birthday"
-                  type="date"
-                  value={formData.birthday}
-                  onChange={(e) => handleInputChange('birthday', e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="nationality">Nationality</Label>
-              <Select
-                value={formData.nationality}
-                onValueChange={(value) => handleInputChange('nationality', value)}
-              >
-                <SelectTrigger id="nationality">
-                  <SelectValue placeholder="Select nationality" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Algerienne">Algerian</SelectItem>
-                  <SelectItem value="fr">French</SelectItem>
-                  <SelectItem value="ca">Canadian</SelectItem>
-                  <SelectItem value="us">American</SelectItem>
-                  {/* Add more nationalities as needed */}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <h3 className="mb-2 font-semibold">Travel document (optional)</h3>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <CardContent className="grid gap-6">
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="documentNumber">Passport or ID number</Label>
+                  <Label htmlFor="first_name">First Name</Label>
                   <Input
-                    id="passport_nbr"
-                    value={formData.passport_nbr}
-                    onChange={(e) => handleInputChange('passport_nbr', e.target.value)}
-                    placeholder="Enter document number"
+                    id="first_name"
+                    {...register('first_name')}
                   />
+                  {errors.first_name && (
+                    <p className="text-red-500 text-xs">{errors.first_name.message}</p>
+                  )}
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="documentExpiration">
-                    Passport or ID expiration
-                  </Label>
+                  <Label htmlFor="last_name">Last Name</Label>
+                  <Input
+                    id="last_name"
+                    {...register('last_name')}
+                  />
+                  {errors.last_name && (
+                    <p className="text-red-500 text-xs">{errors.last_name.message}</p>
+                  )}
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  {...register('email')}
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-xs">{errors.email.message}</p>
+                )}
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input
+                  id="phone"
+                  {...register('phone')}
+                />
+                {errors.phone && (
+                  <p className="text-red-500 text-xs">{errors.phone.message}</p>
+                )}
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="birthday">Birthday</Label>
+                  <Input
+                    id="birthday"
+                    type="date"
+                    {...register('birthday')}
+                  />
+                  {errors.birthday && (
+                    <p className="text-red-500 text-xs">{errors.birthday.message}</p>
+                  )}
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="sex">Gender</Label>
+                  <Select
+                    onValueChange={(value: "" | "male" | "female") => setValue('sex', value)}
+                    defaultValue={accountData?.sex || ''}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select gender" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {errors.sex && (
+                    <p className="text-red-500 text-xs">{errors.sex.message}</p>
+                  )}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="passport_nbr">Passport Number</Label>
+                  <Input
+                    id="passport_nbr"
+                    {...register('passport_nbr')}
+                  />
+                  {errors.passport_nbr && (
+                    <p className="text-red-500 text-xs">{errors.passport_nbr.message}</p>
+                  )}
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="passport_expire_at">Passport Expiry Date</Label>
                   <Input
                     id="passport_expire_at"
                     type="date"
-                    value={formData.passport_expire_at}
-                    onChange={(e) => handleInputChange('passport_expire_at', e.target.value)}
+                    {...register('passport_expire_at')}
                   />
+                  {errors.passport_expire_at && (
+                    <p className="text-red-500 text-xs">{errors.passport_expire_at.message}</p>
+                  )}
                 </div>
               </div>
-            </div>
-            <div>
-              <h3 className="mb-2 font-semibold">Contact details (optional)</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
-                    placeholder="Enter email"
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="phone">Phone number</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
-                    placeholder="Enter phone number"
-                  />
-                </div>
+              <div className="grid gap-2">
+                <Label htmlFor="nationality">Nationality</Label>
+                <Input
+                  id="nationality"
+                  {...register('nationality')}
+                />
+                {errors.nationality && (
+                  <p className="text-red-500 text-xs">{errors.nationality.message}</p>
+                )}
               </div>
-            </div>
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <div className="flex w-full gap-4">
-              <Button
-                variant="outline"
-                className="w-1/3"
-                onClick={() => dispatch(setDialogOpen(false))}
-                disabled={loading}
-              >
-                Cancel
-              </Button>
-              <Button
-                className="w-2/3 bg-orange-600 hover:bg-orange-700"
-                onClick={handleSubmit}
-                disabled={loading}
-              >
-                {loading ? 'Saving...' : 'Save'}
-              </Button>
-            </div>
-          </CardFooter>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <div className="flex w-full gap-4">
+                <Button
+                  variant="outline"
+                  className="w-1/2"
+                  onClick={() => dispatch(setDialogOpen(false))}
+                  type="button"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  className="w-1/2 bg-orange-600 hover:bg-orange-700"
+                  type="submit"
+                  disabled={loading}
+                >
+                  {loading ? 'Saving...' : 'Save changes'}
+                </Button>
+              </div>
+            </CardFooter>
+          </form>
         </Card>
       </DialogContent>
     </Dialog>

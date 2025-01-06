@@ -42,6 +42,8 @@ import paymentOmraSlice from '@/lib/store/custom/omraSlices/paymentOmraSlice';
 // Engine
 import volSearchSlice from '@/lib/store/engine/vol_search_slice';
 import packageSearchSlice from '@/lib/store/engine/package_search_slice';
+import hotelSearchSlice from '@/lib/store/engine/hotel_search_slice';
+import omraSearchSlice from '@/lib/store/engine/omra_search_slice';
 
 // Engine Api
 import getDestinationSlice from '@/lib/store/api/engine/destinationsSlice';
@@ -85,6 +87,8 @@ export const store = configureStore({
     // Search Engine
     volSearchSlice: volSearchSlice,
     packageSearchSlice: packageSearchSlice,
+    hotelSearchSlice: hotelSearchSlice,
+    omraSearchSlice: omraSearchSlice,
 
     // ---------------------------
     // API REDUCERS

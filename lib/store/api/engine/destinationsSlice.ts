@@ -18,9 +18,6 @@ export const GetDestinations = createAsyncThunk(
   async (value: any, thunkApi) => {
     try {
       type = value.type;
-      console.log("---------------------");
-      console.log(type);
-      console.log("---------------------");
       const response = await engineService.get(value);
       return response;
     } catch (error: any) {

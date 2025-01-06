@@ -28,9 +28,13 @@ import logo from '@/public/images/logo.svg';
 import { toast } from 'sonner';
 import ResetPasswordDialogue from './resetPasswordComponent';
 
-interface FormData {
-  email: string;
-}
+// Import Zod validation
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { forgotPasswordSchema } from '@/lib/schemas/passwordSchemas';
+import type { z } from 'zod';
+
+type FormData = z.infer<typeof forgotPasswordSchema>;
 
 export default function ForgotPasswordDialogue() {
   const dispatch = useDispatch<AppDispatch>();
@@ -38,65 +42,46 @@ export default function ForgotPasswordDialogue() {
     (state: RootState) => state.dialog.isForgotPasswordOpen
   );
 
-  const { loading, success, error } = useSelector(
+  const { loading, error } = useSelector(
     (state: RootState) => state.remindPassword
   );
 
-  const [formData, setFormData] = useState<FormData>({
-    email: '',
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm<FormData>({
+    resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: {
+      email: ''
+    }
   });
 
-  const [email, setEmail] = useState('');
-
-  const [errors, setErrors] = useState<Partial<FormData>>({});
-
-  const validateForm = () => {
-    const newErrors: Partial<FormData> = {};
-
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (validateForm()) {
-      console.log('Email submitted:', formData.email);
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSendCode = async () => {
+  const onSubmit = async (data: FormData) => {
     try {
-      await dispatch(remindPassword({ email: formData.email }));
-      toast(`Verification code has been sent to ${formData.email}.`);
+      await dispatch(remindPassword({ email: data.email })).unwrap();
+      toast.success('Verification code has been sent to your email');
       dispatch(openDialogResetPassword());
       dispatch(closeDialogForgotPassword());
-    } catch (error) {
+      reset();
+    } catch (error: any) {
       console.error('Sending verification code failed:', error);
+      toast.error(error?.message || 'Failed to send verification code. Please try again.');
     }
   };
 
   return (
     <Dialog
       open={isDialogOpen}
-      onOpenChange={(open) =>
+      onOpenChange={(open) => {
+        if (!open) {
+          reset();
+        }
         dispatch(
           open ? openDialogForgotPassword() : closeDialogForgotPassword()
         )
-      }
+      }}
     >
       <DialogContent className="sm:max-w-[355px]">
         <DialogHeader>
@@ -109,7 +94,7 @@ export default function ForgotPasswordDialogue() {
             </div>
           </div>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-3">
             <p className="text-xs font-medium text-gray-500">
               Please provide your email
@@ -118,20 +103,18 @@ export default function ForgotPasswordDialogue() {
           <div className="space-y-2">
             <Input
               type="email"
-              name="email"
               placeholder="Your@email.com"
-              value={formData.email}
-              onChange={handleChange}
+              {...register('email')}
             />
             {errors.email && (
-              <p className="text-red-500 text-xs">{errors.email}</p>
+              <p className="text-red-500 text-xs">{errors.email.message}</p>
             )}
           </div>
           <Button
             variant={'active'}
             className="text-xs w-full"
             type="submit"
-            onClick={handleSendCode}
+            disabled={loading}
           >
             Send
           </Button>

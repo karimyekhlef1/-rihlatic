@@ -5,6 +5,7 @@ import { FaChildren } from "react-icons/fa6";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { useDispatch } from 'react-redux';
 import { setVolPassanger } from '@/lib/store/engine/vol_search_slice';
+import { setHotelRooms } from '@/lib/store/engine/hotel_search_slice';
 
 const HotelRoomsComponent = () => {
 
@@ -61,7 +62,7 @@ const HotelRoomsComponent = () => {
             return updatedRooms;
         });
     
-        dispatch(setVolPassanger(pdata));
+        dispatch(setHotelRooms(pdata));
     };
     
 

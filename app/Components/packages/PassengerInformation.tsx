@@ -1,5 +1,6 @@
 "use client";
-import React, { useMemo, useEffect } from "react";
+
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +16,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RootState } from "@/lib/store/store";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { passengerSchema } from "@/lib/schemas/omraSchemas";
+import type { z } from "zod";
+import { toast } from "sonner";
 
 type PassengerType = "adults" | "children" | "children_without_bed" | "infants";
 type PassengerInformationProps = {
@@ -24,6 +30,8 @@ type PassengerInformationProps = {
   readOnly?: boolean;
   passengerData?: any;
 };
+
+type FormData = z.infer<typeof passengerSchema>;
 
 export default function PassengerInformation({
   title,
@@ -41,124 +49,114 @@ export default function PassengerInformation({
 
   const currentPassenger = passengerData || passenger;
 
-  const allRoomsData = useSelector(
-    (state: RootState) => state.omreaReservationInfos
-  );
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    trigger,
+  } = useForm<FormData>({
+    resolver: zodResolver(passengerSchema),
+    defaultValues: currentPassenger || {},
+    mode: "onChange"
+  });
 
-  // Log data whenever it changes
   useEffect(() => {
-    console.log("Current Passenger Data:", currentPassenger);
-    console.log("All Rooms Data:", allRoomsData);
-  }, [currentPassenger, allRoomsData]);
+    if (currentPassenger) {
+      Object.entries(currentPassenger).forEach(([key, value]) => {
+        setValue(key as keyof FormData, value as string);
+      });
+    }
+  }, [currentPassenger, setValue]);
 
-  const handleInputChange = (field: string, value: string | null) => {
+  const handleInputChange = async (field: keyof FormData, value: string) => {
     if (readOnly) return;
-    dispatch(
-      updatePassenger({
-        roomIndex,
-        passengerType: title,
-        passengerIndex: index,
-        passengerData: {
-          [field]: value,
-        },
-      })
-    );
-  };
 
-  const formatDate = useMemo(
-    () => (dateString: string | null) => {
-      if (!dateString) return "Select Date";
-      const date = parse(dateString, "yyyy-MM-dd", new Date());
-      return format(date, "dd MMM yyyy");
-    },
-    []
-  );
+    setValue(field, value);
+    const isValid = await trigger(field);
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const base64 = e.target?.result as string;
-        handleInputChange("passport_scan", base64);
-      };
-      reader.readAsDataURL(file);
+    if (isValid) {
+      dispatch(
+        updatePassenger({
+          roomIndex,
+          passengerType: title,
+          passengerIndex: index,
+          passengerData: {
+            [field]: value,
+          },
+        })
+      );
     }
   };
 
-  const handleDateInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    field: string
-  ) => {
-    const inputValue = e.target.value;
-    handleInputChange(field, inputValue);
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file size (1MB = 1024 * 1024 bytes)
+    if (file.size > 1024 * 1024) {
+      toast.error("File too large. Please select a file smaller than 1MB");
+      return;
+    }
+
+    // Validate file type
+    if (!file.type.startsWith("image/") && !file.type.startsWith("application/pdf")) {
+      toast.error("Invalid file type. Please select an image or PDF file");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const base64 = e.target?.result as string;
+      await handleInputChange("passport_scan", base64);
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
     <div>
-      <Card className={`w-full max-w-[840px] mx-auto mb-4 ${readOnly ? 'opacity-90' : ''}`}>
+      <Card className={`w-full max-w-[840px] mx-auto mb-4 ${readOnly ? "opacity-90" : ""}`}>
         <CardContent>
           <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-            <div className="flex flex-col space-y-2 mt-4 mb-6">
-              <div className="text-lg font-semibold">
-                {title[0].toUpperCase() + title.substring(1).replace(/_/g, " ")}{" "}
-                {index + 1}
-              </div>
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-semibold capitalize">
+                {title.replace("_", " ")} #{index + 1}
+              </h2>
             </div>
-
+            <Separator className="my-4" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col space-y-2">
-                <label className="text-sm font-medium text-gray-700">Email Address</label>
+              <div>
+                <label className="text-sm font-medium">First Name</label>
                 <Input
-                  placeholder="Enter email address"
-                  type="email"
-                  value={currentPassenger?.email || ""}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
-                  disabled={readOnly}
-                />
-              </div>
-              <div className="flex flex-col space-y-2">
-                <label className="text-sm font-medium text-gray-700">Phone Number</label>
-                <Input
-                  placeholder="Enter phone number"
-                  type="tel"
-                  value={currentPassenger?.phone || ""}
-                  onChange={(e) => handleInputChange("phone", e.target.value)}
-                  disabled={readOnly}
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col space-y-2">
-                <label className="text-sm font-medium text-gray-700">First Name</label>
-                <Input
-                  placeholder="Enter first name"
-                  value={currentPassenger?.first_name || ""}
+                  {...register("first_name")}
                   onChange={(e) => handleInputChange("first_name", e.target.value)}
                   disabled={readOnly}
+                  className="mt-1"
                 />
+                {errors.first_name && (
+                  <p className="text-red-500 text-xs mt-1">{errors.first_name.message}</p>
+                )}
               </div>
-              <div className="flex flex-col space-y-2">
-                <label className="text-sm font-medium text-gray-700">Last Name</label>
+              <div>
+                <label className="text-sm font-medium">Last Name</label>
                 <Input
-                  placeholder="Enter last name"
-                  value={currentPassenger?.last_name || ""}
+                  {...register("last_name")}
                   onChange={(e) => handleInputChange("last_name", e.target.value)}
                   disabled={readOnly}
+                  className="mt-1"
                 />
+                {errors.last_name && (
+                  <p className="text-red-500 text-xs mt-1">{errors.last_name.message}</p>
+                )}
               </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col space-y-2">
-                <label className="text-sm font-medium text-gray-700">Gender</label>
+              <div>
+                <label className="text-sm font-medium">Gender</label>
                 <Select
-                  value={currentPassenger?.sex || ""}
-                  onValueChange={(value) => handleInputChange("sex", value)}
                   disabled={readOnly}
+                  onValueChange={(value: "male" | "female") => handleInputChange("sex", value)}
+                  defaultValue={currentPassenger?.sex || ""}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="mt-1">
                     <SelectValue placeholder="Select gender" />
                   </SelectTrigger>
                   <SelectContent>
@@ -166,66 +164,98 @@ export default function PassengerInformation({
                     <SelectItem value="female">Female</SelectItem>
                   </SelectContent>
                 </Select>
+                {errors.sex && (
+                  <p className="text-red-500 text-xs mt-1">{errors.sex.message}</p>
+                )}
               </div>
-            </div>
-
-            <Separator />
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col space-y-2">
-                <label className="text-sm font-medium text-gray-700">Passport Number</label>
+              <div>
+                <label className="text-sm font-medium">Nationality</label>
                 <Input
-                  placeholder="Enter passport number"
-                  value={currentPassenger?.passport_nbr || ""}
+                  {...register("nationality")}
+                  onChange={(e) => handleInputChange("nationality", e.target.value)}
+                  disabled={readOnly}
+                  className="mt-1"
+                />
+                {errors.nationality && (
+                  <p className="text-red-500 text-xs mt-1">{errors.nationality.message}</p>
+                )}
+              </div>
+              <div>
+                <label className="text-sm font-medium">Date of Birth</label>
+                <Input
+                  {...register("birthday")}
+                  type="date"
+                  onChange={(e) => handleInputChange("birthday", e.target.value)}
+                  disabled={readOnly}
+                  className="mt-1"
+                />
+                {errors.birthday && (
+                  <p className="text-red-500 text-xs mt-1">{errors.birthday.message}</p>
+                )}
+              </div>
+              <div>
+                <label className="text-sm font-medium">Phone Number</label>
+                <Input
+                  {...register("phone")}
+                  onChange={(e) => handleInputChange("phone", e.target.value)}
+                  disabled={readOnly}
+                  className="mt-1"
+                />
+                {errors.phone && (
+                  <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>
+                )}
+              </div>
+              <div>
+                <label className="text-sm font-medium">Email</label>
+                <Input
+                  {...register("email")}
+                  type="email"
+                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  disabled={readOnly}
+                  className="mt-1"
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+                )}
+              </div>
+              <div>
+                <label className="text-sm font-medium">Passport Number</label>
+                <Input
+                  {...register("passport_nbr")}
                   onChange={(e) => handleInputChange("passport_nbr", e.target.value)}
                   disabled={readOnly}
+                  className="mt-1"
                 />
+                {errors.passport_nbr && (
+                  <p className="text-red-500 text-xs mt-1">{errors.passport_nbr.message}</p>
+                )}
               </div>
-              <div className="flex flex-col space-y-2">
-                <label className="text-sm font-medium text-gray-700">Passport Expiry Date</label>
+              <div>
+                <label className="text-sm font-medium">Passport Expiry Date</label>
                 <Input
+                  {...register("passport_expire_at")}
                   type="date"
-                  placeholder="Select expiry date"
-                  value={currentPassenger?.passport_expire_at || ""}
-                  onChange={(e) => handleDateInputChange(e, "passport_expire_at")}
+                  onChange={(e) => handleInputChange("passport_expire_at", e.target.value)}
                   disabled={readOnly}
+                  className="mt-1"
                 />
+                {errors.passport_expire_at && (
+                  <p className="text-red-500 text-xs mt-1">{errors.passport_expire_at.message}</p>
+                )}
               </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col space-y-2">
-                <label className="text-sm font-medium text-gray-700">Date of Birth</label>
+              <div>
+                <label className="text-sm font-medium">Passport Scan</label>
                 <Input
-                  type="date"
-                  placeholder="Select birth date"
-                  value={currentPassenger?.birth_date || ""}
-                  onChange={(e) => handleDateInputChange(e, "birth_date")}
+                  type="file"
+                  accept="image/*,application/pdf"
+                  onChange={handleFileUpload}
                   disabled={readOnly}
+                  className="mt-1"
                 />
+                {currentPassenger?.passport_scan && (
+                  <p className="text-green-500 text-xs mt-1">Passport scan uploaded</p>
+                )}
               </div>
-              {!readOnly && (
-                <div className="flex flex-col space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Passport Scan</label>
-                  <div className="flex items-center gap-2">
-                    <Input
-                      type="file"
-                      accept="image/*,.pdf"
-                      onChange={handleFileUpload}
-                      disabled={readOnly}
-                    />
-                    {currentPassenger?.passport_scan && (
-                      <Button
-                        variant="outline"
-                        onClick={() => handleInputChange("passport_scan", null)}
-                        disabled={readOnly}
-                      >
-                        Clear
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              )}
             </div>
           </form>
         </CardContent>
