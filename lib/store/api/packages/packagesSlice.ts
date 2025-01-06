@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 // import homeService from '../../../services/home/home_service';
 import packagesService from "../../../services/packages/packages_services";
+
 interface packagesState {
   loading: boolean;
   packagesData: any;
@@ -46,6 +47,19 @@ export const cancelPackagePenalty = createAsyncThunk(
     }
   }
 );
+
+export const storePackageReservation = createAsyncThunk(
+  "storePackageReservation/slice",
+  async (params: any, thunkApi) => {
+    try {
+      const response = await packagesService.storePackageReservation(params);
+      return response;
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const packagesSlice = createSlice({
   name: "slice/packages",
   initialState,
@@ -82,6 +96,17 @@ const packagesSlice = createSlice({
         state.packagesData = action.payload;
       })
       .addCase(cancelPackagePenalty.rejected, (state, _) => {
+        state.loading = false;
+        state.packagesData = {};
+      })
+      .addCase(storePackageReservation.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(storePackageReservation.fulfilled, (state, action) => {
+        state.loading = false;
+        state.packagesData = action.payload;
+      })
+      .addCase(storePackageReservation.rejected, (state, _) => {
         state.loading = false;
         state.packagesData = {};
       });
