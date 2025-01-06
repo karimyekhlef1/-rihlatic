@@ -2,15 +2,21 @@ import React from 'react';
 import SearchInputComponent from '@/app/commonComponents/searchInputComponent';
 import DatePickerComponent from '@/app/commonComponents/datePickerComponent';
 import SearchSelectComponent from '../../searchSelectComponent';
-import { packageEngineTypes } from '@/lib/store/engine/package_search_slice';
+import { packageEngineTypes, setDateRange } from '@/lib/store/engine/package_search_slice';
+import { DateRange } from 'react-day-picker';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const PackagesSearchComponent: React.FC = () => {
 
-    const dateRange: any = {
-        startDate: new Date(),
-        endDate: new Date(),
-    };
+    // const dateRange: any = {
+    //     startDate: new Date(),
+    //     endDate: new Date(),
+    // };
+
+    const dateRange = useSelector((state: { packageSearchSlice: { dateRange: DateRange } }) => state.packageSearchSlice?.dateRange);
+
+    const dispatch = useDispatch<any>();
 
     return (
         <div className="flex flex-col gap-2">
@@ -25,7 +31,7 @@ const PackagesSearchComponent: React.FC = () => {
                         dir="To"
                         type={2}
                     />
-                    <DatePickerComponent isOnePick={false} dateRange={dateRange} />
+                    <DatePickerComponent isOnePick={false} dateRange={dateRange} setDateRange={(value: DateRange) => dispatch(setDateRange(value))} />
                     <button
                         type="button"
                         className="rounded bg-[#FF8000] px-2 py-2.5 text-sm font-semibold text-white w-full sm:w-24"
