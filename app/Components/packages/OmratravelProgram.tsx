@@ -43,7 +43,7 @@ export default function OmraTravelProgram({ schedule }: TravelProgramProps) {
       <div
         className={`flex flex-col sm:flex-row gap-4 sm:gap-2 ${isMobile ? "" : "[&:hover>div]:w-full sm:[&:hover>div]:w-40 [&>div:hover]:w-full sm:[&:div:hover]:w-[30rem]"}`}
       >
-        {schedule.map((item, index) => (
+        {schedule?.map((item, index) => (
           <div
             key={item.id}
             className={`group relative shadow-sm shadow-black/30 h-64 sm:h-96 w-full sm:w-40 ${
