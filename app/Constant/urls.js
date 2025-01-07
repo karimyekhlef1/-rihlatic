@@ -6,7 +6,8 @@ export const engine_get_vols_endpoint = BASE_URL + "/front/airports";
 export const engine_get_destinations_endpoint =
   BASE_URL + "/front/destinations";
 export const engine_get_omras_endpoint = BASE_URL + "/front/omra";
-export const engine_get_hotels_endpoint = BASE_URL + "/front/hotel/selected_city";
+export const engine_get_hotels_endpoint =
+  BASE_URL + "/front/hotel/selected_city";
 
 // Home
 export const home_endpoint = BASE_URL + "/home";
@@ -36,7 +37,8 @@ export const resend_code_endpoint = BASE_URL + "/front/email/resend_code";
 // Packages
 export const packages_endpoint = BASE_URL + "/front/packages";
 export const package_bookings_endpoint = BASE_URL + "/front/package/bookings";
-export const package_cancelPenalty_endpoint = BASE_URL + "/front/package/bookings/cancelPenalty/"
+export const package_cancelPenalty_endpoint =
+  BASE_URL + "/front/package/bookings/cancelPenalty/";
 // Omra
 export const omra_endpoint = BASE_URL + "/front/omra";
 // Omras Bookings
@@ -46,3 +48,8 @@ export const omra_cancelPenalty_endpoint =
   BASE_URL + "/front/omras/bookings/cancelPenalty/:id";
 //hotels
 export const hotel_details = BASE_URL + "/front/hotel_details";
+// Flights
+export const flights_search_endpoint = BASE_URL + "/front/flights_search";
+// Airports
+export const airports_endpoint =
+  BASE_URL + "/front/airports?filter[search]=czl";

@@ -55,12 +55,14 @@ import omraReservationSlice from './custom/commonSlices/omraReservationSlice';
 //
 import HotelStateSlice from './custom/hotelSlices/HotelStateSlice'
 import HotelSlice from './api/hotels/hotelsSlice'
+import volsReducer from '@/lib/store/api/vols/volsSlice';
+
 export const store = configureStore({
   reducer: {
 
     // Engine
     getDestinations: getDestinationSlice,
-
+    
     account: accountSlice,
     dialog: dialogReducer,
     verification: verificationReducer,
@@ -83,21 +85,21 @@ export const store = configureStore({
     //payment
     paymentPackage: paymentPackageSlice,
     paymentOmra: paymentOmraSlice,
-
+    
     // Search Engine
     volSearchSlice: volSearchSlice,
     packageSearchSlice: packageSearchSlice,
     hotelSearchSlice: hotelSearchSlice,
     omraSearchSlice: omraSearchSlice,
-
+    
     // ---------------------------
     // API REDUCERS
     // ---------------------------
-
+    
     // Account
     authAccount: accountSlice,
     accountDetails: accountDetailsSlice,
-
+    
     // Auth
     signUp: signupSlice,
     signIn: signinSlice,
@@ -107,7 +109,7 @@ export const store = configureStore({
     checkUserStatus: checkUserStatusSlice,
     remindPassword: remindPasswordSlice,
     resetPassword: resetPasswordSlice,
-
+    
     // Home
     home: homeSlice,
     //packages
@@ -116,10 +118,13 @@ export const store = configureStore({
     omras: omraSlice,
     omrasSlice: omrasReducer,
     omreaReservationInfos: omraReservationSlice,
-
+    
     //hotel
     hotelState:HotelStateSlice,
-    hotels:HotelSlice
+    hotels:HotelSlice,
+    
+    // vols
+    vols: volsReducer,
   },
   // we can delete this later it's just to supress serializableCheck warnings
   middleware: (getDefaultMiddleware) =>
