@@ -30,6 +30,7 @@ import OmraHotelDetails from "@/app/Components/packages/OmrahotelDetails";
 import OmraHotelsComponent from "@/app/Components/packages/OmrahotelsComponent";
 import BookingOmraComponent from "@/app/Components/packages/bookingOmraComponent";
 import OmraTripComponent from "@/app/commonComponents/OmratripComponent";
+import { calculateDuration } from "@/app/utils/timeUtils";
 
 export default function OmraDetails() {
   const dispatch = useDispatch<any>();
@@ -152,7 +153,12 @@ export default function OmraDetails() {
                             .segments[0].departure_airport.city,
                           to: omraDetails.omraDepartures[0].flight.bounds[0]
                             .segments[0].arrival_airport.city,
-                          duration: `${omraDetails.omraDepartures[0].flight.bounds[0].duration.hours}h ${omraDetails.omraDepartures[0].flight.bounds[0].duration.minutes}m`,
+                          duration: (() => {
+                            const dep = omraDetails.omraDepartures[0].flight.bounds[0].departure_date.split(" ")[1].substring(0, 5);
+                            const arr = omraDetails.omraDepartures[0].flight.bounds[0].arrival_date.split(" ")[1].substring(0, 5);
+                            const { hours, minutes } = calculateDuration(dep, arr);
+                            return `${hours}h ${minutes}m`;
+                          })(),
                           departureTime:
                             omraDetails.omraDepartures[0].flight.bounds[0].departure_date
                               .split(" ")[1]
@@ -205,7 +211,12 @@ export default function OmraDetails() {
                             .segments[0].departure_airport.city,
                           to: omraDetails.omraDepartures[0].flight.bounds[1]
                             .segments[0].arrival_airport.city,
-                          duration: `${omraDetails.omraDepartures[0].flight.bounds[1].duration.hours}h ${omraDetails.omraDepartures[0].flight.bounds[1].duration.minutes}m`,
+                          duration: (() => {
+                            const dep = omraDetails.omraDepartures[0].flight.bounds[1].departure_date.split(" ")[1].substring(0, 5);
+                            const arr = omraDetails.omraDepartures[0].flight.bounds[1].arrival_date.split(" ")[1].substring(0, 5);
+                            const { hours, minutes } = calculateDuration(dep, arr);
+                            return `${hours}h ${minutes}m`;
+                          })(),
                           departureTime:
                             omraDetails.omraDepartures[0].flight.bounds[1].departure_date
                               .split(" ")[1]
