@@ -1,135 +1,157 @@
-import React, { useEffect, useRef, useState } from 'react';
-import 'tailwindcss/tailwind.css';
-import { FaUserFriends } from "react-icons/fa";
-import { FaChildren } from "react-icons/fa6";
-import { FaBaby } from "react-icons/fa";
-import { FaBabyCarriage } from "react-icons/fa6";
-import { PiStudentBold } from "react-icons/pi";
-import { FaUserTie } from "react-icons/fa6";
-import { RiArrowDropDownLine } from "react-icons/ri";
-import { useDispatch, useSelector } from 'react-redux';
-import { setVolPassanger } from '@/lib/store/engine/vol_search_slice';
+import React, { useState } from "react";
+import { Users, Baby, GraduationCap, UserCog, Blocks } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { setVolPassanger } from "@/lib/store/engine/vol_search_slice";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 
 const PassengersComponent = () => {
+  const dispatch = useDispatch<any>();
 
-    const dispatch = useDispatch<any>();
+  const [pdata, setPdata] = useState<any>({
+    adults: 1,
+    children: 0,
+    infants: 0,
+    infantsSeat: 0,
+    students: 0,
+    thirdAge: 0,
+  });
 
-    const [pdata, setPdata] = useState<any>({
-        adults: 1,
-        children: 0,
-        infants: 0,
-        infantsSeat: 0,
-        students: 0,
-        thirdAge: 0,
+  const updatePassengers = (field: keyof typeof pdata, increment: boolean) => {
+    setPdata((prev: any) => {
+      let newValue = increment ? prev[field] + 1 : prev[field] - 1;
+
+      // Validation rules
+      if (field === "adults" && newValue < 1) return prev; // Adults must be at least 1
+      if (newValue < 0 || newValue > 9) return prev; // General bounds
+
+      const newData = { ...prev, [field]: newValue };
+      dispatch(setVolPassanger(newData));
+      return newData;
     });
+  };
 
-    const [show, setShow] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
+  const totalPassengers = (Object.values(pdata) as number[]).reduce(
+    (a, b) => a + b,
+    0
+  );
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setShow(false);
-            }
-        };
+  const passengerTypes = [
+    {
+      field: "adults",
+      label: "Adults",
+      subtext: "Ages 11 or above",
+      Icon: Users,
+    },
+    {
+      field: "children",
+      label: "Children",
+      subtext: "Ages 2-11",
+      Icon: Blocks,
+    },
+    {
+      field: "infants",
+      label: "Infants",
+      subtext: "Under 2 years",
+      Icon: Baby,
+    },
+    {
+      field: "infantsSeat",
+      label: "Infants with seat",
+      subtext: "Under 2 years",
+      Icon: Baby,
+    },
+    {
+      field: "students",
+      label: "Students",
+      subtext: "Student travelers",
+      Icon: GraduationCap,
+    },
+    {
+      field: "thirdAge",
+      label: "Third Age",
+      subtext: "Senior travelers",
+      Icon: UserCog,
+    },
+  ];
 
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    const increment = (field: keyof typeof pdata) => {
-        setPdata((prev: any) => {
-            if (prev[field] < 9) {
-                return { ...prev, [field]: prev[field] + 1 };
-            }
-            return prev;
-        });
-        dispatch(setVolPassanger(pdata));
-    };
-
-    const decrement = (field: keyof typeof pdata) => {
-        setPdata((prev: any) => {
-            if (field === "adults" && prev[field] === 1) return prev; // Adults must be at least 1
-            if (prev[field] > 0) {
-                return { ...prev, [field]: prev[field] - 1 };
-            }
-            return prev;
-        });
-        dispatch(setVolPassanger(pdata));
-    };
-
-    const toggle = () => {
-        setShow(!show);
-    };
-
-    return (
-        <div className="passengers-holder relative z-40">
-            <button
-                className="passengers-btn rounded-lg p-2 text-sm font-semibold text-gray-700 flex items-center gap-2 hover:bg-blue-50"
-                onClick={toggle}
-            >
-                <FaUserFriends className="text-sm" />
-                <span className="ml-2 text-sm">{pdata.adults + pdata.children + pdata.infants + pdata.infantsSeat + pdata.students + pdata.thirdAge}</span>
-                <RiArrowDropDownLine className='text-2xl' />
-            </button>
-            {show && (
-                <div
-                    className="p-4 bg-white rounded-lg shadow-md absolute top-0 left-0"
-                    ref={dropdownRef}
-                    style={{ width: "350px" }}
-                >
-                    <h2 className="text-sm font-bold mb-4 text-black">Passengers</h2>
-                    {[
-                        { field: "adults", label: "Adults", subtext: "Ages 11 or above", icon: FaUserFriends },
-                        { field: "children", label: "Children", subtext: "Ages 2-11", icon: FaChildren },
-                        { field: "infants", label: "Infants", subtext: "Under 2 years", icon: FaBaby },
-                        { field: "infantsSeat", label: "Infants with seat", subtext: "Under 2 years", icon: FaBabyCarriage },
-                        { field: "students", label: "Students", subtext: "Student travelers", icon: PiStudentBold },
-                        { field: "thirdAge", label: "Third Age", subtext: "Senior travelers", icon: FaUserTie },
-                    ].map(({ field, label, subtext }) => (
-                        <div className="flex justify-between gap-2 mt-1" key={field}>
-                            <div className="icon-text-holder flex gap-2">
-                                <div className="flex items-center p-2">
-                                    {
-                                        field === "adults" ? <FaUserFriends style={{ color: "black", fontSize: "25px" }} /> :
-                                            field === "children" ? <FaChildren style={{ color: "black", fontSize: "25px" }} /> :
-                                                field === "infants" ? <FaBaby style={{ color: "black", fontSize: "25px" }} /> :
-                                                    field === "infantsSeat" ? <FaBabyCarriage style={{ color: "black", fontSize: "25px" }} /> :
-                                                        field === "students" ? <PiStudentBold style={{ color: "black", fontSize: "25px" }} /> :
-                                                            field === "thirdAge" ? <FaUserTie style={{ color: "black", fontSize: "25px" }} /> : null
-                                    }
-                                </div>
-                                <div className="flex flex-col">
-                                    <p className="m-0 text-sm text-black">{label}</p>
-                                    <p className="m-0 text-sm text-gray-500 w-full">{subtext}</p>
-                                </div>
-                            </div>
-                            <div className="add-delete-btns flex items-center">
-                                <button
-                                    className={`px-2 py-1 rounded w-7 h-7 ${pdata[field] === (field === "adults" ? 1 : 0) ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-gray-200 text-black"}`}
-                                    onClick={() => decrement(field as keyof typeof pdata)}
-                                    disabled={pdata[field] === (field === "adults" ? 1 : 0)}
-                                >
-                                    -
-                                </button>
-                                <span className="mx-4 text-black w-3">{pdata[field]}</span>
-                                <button
-                                    className={`px-2 py-1 rounded w-7 h-7 ${pdata[field] === 9 ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-gray-200 text-black"}`}
-                                    onClick={() => increment(field as keyof typeof pdata)}
-                                    disabled={pdata[field] === 9}
-                                >
-                                    +
-                                </button>
-                            </div>
-                        </div>
-                    ))}
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          size="sm"
+          className={cn(
+            "w-[120px] h-9 justify-start text-xs bg-white border-gray-200",
+            totalPassengers > 1 && "border-[#FF8000] bg-orange-50"
+          )}
+        >
+          <div className="flex items-center gap-2">
+            <Users className="h-3.5 w-3.5 text-gray-500" />
+            <span className="text-xs">{totalPassengers}</span>
+          </div>
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[280px] p-3" align="start">
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Users className="h-4 w-4 text-gray-500" />
+            <h4 className="font-medium text-xs">Passengers</h4>
+          </div>
+          <Separator className="my-2" />
+          <div className="space-y-4">
+            {passengerTypes.map(({ field, label, subtext, Icon }) => (
+              <div key={field} className="flex items-center justify-between">
+                <div className="flex gap-3 items-center">
+                  <Icon className="h-4 w-4 text-gray-500" />
+                  <div>
+                    <p className="text-xs font-medium">{label}</p>
+                    <p className="text-xs text-gray-500">{subtext}</p>
+                  </div>
                 </div>
-            )}
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className={cn(
+                      "h-7 w-7",
+                      pdata[field] === (field === "adults" ? 1 : 0) &&
+                        "opacity-50 cursor-not-allowed"
+                    )}
+                    onClick={() => updatePassengers(field, false)}
+                    disabled={pdata[field] === (field === "adults" ? 1 : 0)}
+                  >
+                    <span className="text-xs">-</span>
+                  </Button>
+                  <span className="w-4 text-center text-xs">
+                    {pdata[field]}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className={cn(
+                      "h-7 w-7",
+                      pdata[field] === 9 && "opacity-50 cursor-not-allowed"
+                    )}
+                    onClick={() => updatePassengers(field, true)}
+                    disabled={pdata[field] === 9}
+                  >
+                    <span className="text-xs">+</span>
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-    );
+      </PopoverContent>
+    </Popover>
+  );
 };
 
 export default PassengersComponent;
