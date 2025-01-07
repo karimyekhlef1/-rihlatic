@@ -12,7 +12,7 @@ import {
 } from "@/lib/store/engine/vol_search_slice";
 import { useDispatch, useSelector } from "react-redux";
 import DatePickerComponent from "@/app/commonComponents/datePickerComponent";
-import { HiTrash } from "react-icons/hi";
+import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DateRange } from "react-day-picker";
 
@@ -111,12 +111,13 @@ const VolSearchComponent: React.FC = () => {
                 }
               />
             </div>
-            <button
+            <Button
+              variant="active"
               type="button"
-              className="rounded bg-[#FF8000] px-2 py-2.5 text-sm font-semibold text-white w-full sm:w-24"
+              className="rounded px-2 py-2.5 text-sm font-semibold w-full sm:w-28 sm:h-9"
             >
               Search
-            </button>
+            </Button>
           </>
         ) : (
           <>
@@ -136,10 +137,10 @@ const VolSearchComponent: React.FC = () => {
                 />
                 <DatePickerComponent isOnePick={true} />
                 <div
-                  className="flex items-center gap-2 bg-red-500 p-3 h-8 rounded"
+                  className="flex items-center gap-2 bg-red-50 hover:bg-red-100 p-4 h-9 rounded"
                   onClick={() => removeDestination(i)}
                 >
-                  <HiTrash className="text-[#FFF] cursor-pointer" />
+                  <Trash2 className="text-red-500 h-4 w-4 cursor-pointer" />
                 </div>
               </div>
             ))}
@@ -149,18 +150,20 @@ const VolSearchComponent: React.FC = () => {
       {volType === "Multi Destinations" && (
         <div className="flex justify-between flex-wrap gap-2 mt-3">
           <Button
-            variant="search"
-            className="text-gray-600 border rounded bg-transparent hover:bg-gray-200"
+            variant="outline"
+            size="sm"
+            className="text-gray-500 text-sm border rounded bg-transparent hover:bg-gray-200"
             onClick={addDestination}
           >
             Add Destination
           </Button>
-          <button
+          <Button
+            variant="active"
             type="button"
-            className="rounded bg-[#FF8000] px-8 py-2.5 text-sm font-semibold text-white min-w-20"
+            className="rounded px-2 py-2.5 text-sm font-semibold w-full sm:w-28 sm:h-9"
           >
-            Exploire
-          </button>
+            Search
+          </Button>
         </div>
       )}
     </div>

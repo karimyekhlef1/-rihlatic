@@ -1,12 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { FaCity, FaTimes } from 'react-icons/fa';
-import { FiPlus } from 'react-icons/fi';
-import { DatePickerHome } from './datePickerHome';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/lib/store/store';
-import { GetDestinations } from '@/lib/store/api/engine/destinationsSlice';
-import { id } from 'date-fns/locale';
-import DestinationComponent from '../Components/home/engine/destinationComponent';
+import React, { useEffect, useRef, useState } from "react";
+import { Building2, X, Plus, Loader2 } from "lucide-react";
+import { DatePickerHome } from "./datePickerHome";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/lib/store/store";
+import { GetDestinations } from "@/lib/store/api/engine/destinationsSlice";
+import { id } from "date-fns/locale";
+import DestinationComponent from "../Components/home/engine/destinationComponent";
+import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 
 interface SearchInputProps {
   dir: string;
@@ -16,8 +19,12 @@ interface SearchInputProps {
   type: number;
 }
 
-const SearchInputComponent: React.FC<SearchInputProps> = ({ placeholder, onSearch, dir, type }) => {
-
+const SearchInputComponent: React.FC<SearchInputProps> = ({
+  placeholder,
+  onSearch,
+  dir,
+  type,
+}) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setSearchValue(value);
@@ -31,14 +38,16 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({ placeholder, onSearc
       }
     }
   };
-  
-  const [searchValue, setSearchValue] = useState<string>('');
+
+  const [searchValue, setSearchValue] = useState<string>("");
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [isOpened, setIsOpened] = useState<boolean>(false);
   const [isPicked, setIsPicked] = useState<boolean>(false);
 
   const dispatch = useDispatch<any>();
-  const { loadingDestinations, destinations } = useSelector((state: RootState) => state.getDestinations);
+  const { loadingDestinations, destinations } = useSelector(
+    (state: RootState) => state.getDestinations
+  );
 
   const searchClick = (value: string) => {
     setSearchValue(value);
@@ -56,9 +65,9 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({ placeholder, onSearc
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -69,63 +78,61 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({ placeholder, onSearc
         type: type,
       };
       const act = await dispatch(GetDestinations(data));
-      console.log(act)
-    } catch (e) { 
+      console.log(act);
+    } catch (e) {
       console.log(e);
     }
-  }
+  };
 
   useEffect(() => {
     getSearchData();
   }, [searchValue]);
 
-  // if (dir === 'Departure') {
-  //   return (
-  //     <Provider store={store}>
-  //       <DatePickerHome />
-  //     </Provider>
-  //   );
-  // }
-
   return (
     <div
       className="relative transition-all"
       style={{
-        // width: '300px',
-        transition: 'width 0.05s ease-in-out',
+        transition: "width 0.05s ease-in-out",
       }}
       ref={wrapperRef}
     >
       <div
-        className={`text-field-search flex items-center gap-3 p-2 bg-white rounded relative ${isOpened ? 'border-[#FF8000] border-2 z-10' : 'border border-[#bac7d5]'}`}
+        className={cn(
+          "flex items-center gap-3 p-2 bg-white rounded relative",
+          isOpened
+            ? "ring-2 ring-[#FF8000] ring-offset-0 z-10"
+            : "border border-gray-200",
+          "transition-all duration-150"
+        )}
         onClick={clickHandler}
-        style={{
-          // width: isOpened ? '350px' : '300px',
-          transition: 'width 0.05s ease-in-out',
-        }}
       >
-        <div className="flex items-center gap-2">
-          <label htmlFor="InputField" className="text-[#A7A8AB] text-sm">
-            {dir}
-          </label>
-          {(isPicked) && (
-            <div
-              className={`flex items-center gap-3 rounded text-white text-xs p-1 flex-shrink-0 min-w-fit ${dir === 'From' ? 'bg-[#48c299]' : 'bg-[#f9971e]'} `}
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-gray-400 text-xs font-medium">{dir}</span>
+          {isPicked && (
+            <Badge
+              variant="outline"
+              className={cn(
+                "flex items-center gap-2 text-xs font-normal",
+                dir === "From"
+                  ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-50"
+                  : "bg-orange-50 text-orange-700 hover:bg-orange-50"
+              )}
             >
-              <span>{searchValue}</span>
-              <div
-                className={`cross ${dir === 'From' ? 'bg-teal-700' : 'bg-amber-700'} roubded p-[2px]`}
-                onClick={() => {setSearchValue(''); setIsPicked(false); }}
-              >
-                <FaTimes />
-              </div>
-            </div>
+              {searchValue}
+              <X
+                className="h-3 w-3 cursor-pointer"
+                onClick={() => {
+                  setSearchValue("");
+                  setIsPicked(false);
+                }}
+              />
+            </Badge>
           )}
         </div>
         {!isPicked && (
-          <input
+          <Input
             type="text"
-            className={`text-base text-gray-700 outline-none placeholder:text-[#64656A]`}
+            className="border-0 p-0 text-xs focus-visible:ring-0 h-auto placeholder:text-gray-400"
             placeholder={placeholder}
             onChange={handleInputChange}
             id="InputField"
@@ -133,46 +140,28 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({ placeholder, onSearc
         )}
       </div>
       {isOpened && (
-        loadingDestinations ? (
-          <div className="absolute top-[-10px] right-[-10px] left-[-10px] bg-white shadow-xl rounded-md text-gray-900 pt-16">
-            <ul>
-              <li>
-                <div className="w-full flex justify-between items-center p-3">
-                  <div className="flex items-center gap-3">
-                    <FaCity />
-                    <span className="truncate text-sm">Loading...</span>
-                  </div>
+        <Card className="absolute top-[-10px] right-[-10px] left-[-10px] bg-white pt-16 border-gray-200">
+          <ul className="p-0">
+            {loadingDestinations ? (
+              <li className="px-3 py-2">
+                <div className="w-full flex items-center gap-2 text-gray-500">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span className="truncate text-xs">Loading...</span>
                 </div>
               </li>
-            </ul>
-          </div>
-        ) : (<div
-          className="absolute top-[-10px] right-[-10px] left-[-10px] bg-white shadow-xl rounded-md text-gray-900 pt-16"
-          style={
-            isOpened ? { display: 'block', zIndex: 1 } : { display: 'none' }
-          }
-        >
-          <ul>
-            {destinations?.map((item: any, index: number) => (
-              <DestinationComponent key={index} item={item} searchClick={searchClick} setIsPicked={setIsPicked} type={type} />
-              // <li
-              //   key={index}
-              //   className="hover:bg-slate-100 hover:cursor-pointer"
-              //   onClick={() => { searchClick(item.name); setIsPicked(true) }}
-              // >
-              //   <div className="w-full flex justify-between items-center p-3">
-              //     <div className="flex items-center gap-3">
-              //       <FaCity />
-              //       <span className="truncate text-sm">{item.name}</span>
-              //     </div>
-              //     <div className="search-add-icon">
-              //       <FiPlus />
-              //     </div>
-              //   </div>
-              // </li>
-            ))}
+            ) : (
+              destinations?.map((item: any, index: number) => (
+                <DestinationComponent
+                  key={index}
+                  item={item}
+                  searchClick={searchClick}
+                  setIsPicked={setIsPicked}
+                  type={type}
+                />
+              ))
+            )}
           </ul>
-        </div>)
+        </Card>
       )}
     </div>
   );

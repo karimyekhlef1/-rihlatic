@@ -1,14 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react';
-import 'tailwindcss/tailwind.css';
-import { BiSolidPackage } from "react-icons/bi";
-import { RiArrowDropDownLine } from "react-icons/ri";
+import React, { useState } from 'react';
+import { Package, Settings } from "lucide-react";
 import { useDispatch, useSelector } from 'react-redux';
 import { setVolPackage } from '@/lib/store/engine/vol_search_slice';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 
 const VolPackageComponent: React.FC = () => {
-
     const dispatch = useDispatch<any>();
-
     const volType = useSelector((state: { volSearchSlice: { volType: string } }) => state.volSearchSlice?.volType);
 
     const [pdata, setPdata] = useState<any>({
@@ -18,73 +24,78 @@ const VolPackageComponent: React.FC = () => {
         openReturn: false,
     });
 
-    const [show, setShow] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setShow(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-    
     const setData = (field: keyof typeof pdata) => {
         setPdata((prev: any) => {
-            return { ...prev, [field]: !prev[field] };
+            const newData = { ...prev, [field]: !prev[field] };
+            dispatch(setVolPackage(newData));
+            return newData;
         });
-        dispatch(setVolPackage(pdata));
     }
 
-    const toggle = () => {
-        setShow(!show);
-    };
+    const options = [
+        { field: "uniquePackage", label: "Unique Package", isShown: true },
+        { field: "refundable", label: "Refundable", isShown: true },
+        { field: "directFlight", label: "Direct Flight", isShown: true },
+        { field: "openReturn", label: "Open Return", isShown: volType === 'Return' },
+    ];
+
+    const activeOptionsCount = Object.values(pdata).filter(Boolean).length;
 
     return (
-        <div className="passengers-holder relative z-30">
-            <button
-                className="passengers-btn rounded-lg p-2 text-sm font-semibold text-gray-700 flex items-center gap-2 hover:bg-blue-50"
-                onClick={toggle}
-            >
-                <BiSolidPackage className='text-sm' />
-                <RiArrowDropDownLine className='text-2xl' />
-            </button>
-            {show && (
-                <div
-                    className="p-4 bg-white rounded-lg shadow-md absolute top-0 left-0"
-                    ref={dropdownRef}
-                    style={{ width: "300px" }}
+        <Popover>
+            <PopoverTrigger asChild>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    className={cn(
+                        "w-[200px] h-9 justify-start text-xs bg-white border-gray-200",
+                        activeOptionsCount > 0 && "border-[#FF8000] bg-orange-50"
+                    )}
                 >
-                    {[
-                        { field: "uniquePackage", label: "Unique Package", isShown: true },
-                        { field: "refundable", label: "Refundable", isShown: true },
-                        { field: "directFlight", label: "Direct Flight", isShown: true },
-                        { field: "openReturn", label: "Open Return", isShown: volType === 'Return' },
-                    ].map(({ field, label, isShown }) => (
-                        <>
-                            {
-                                isShown && (
-                                    <div className="flex justify-between gap-2 mt-1" key={field}>
-                                        <div className="icon-text-holder flex gap-2">
-                                            <div className="flex gap-2">
-                                                <input type="checkbox" name="" id={label} checked={pdata[field]} onChange={() => setData(field)} />
-                                                <label htmlFor={label} className='text-gray-800 text-sm'>{label}</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )
-                            }
-                        </>
-                    ))}
+                    <div className="flex items-center gap-2">
+                        {activeOptionsCount > 0 ? (
+                            <Settings className="h-3.5 w-3.5 text-[#FF8000]" />
+                        ) : (
+                            <Package className="h-3.5 w-3.5 text-gray-500" />
+                        )}
+                        <span className="text-xs">
+                            {activeOptionsCount > 0
+                                ? `${activeOptionsCount} Option${activeOptionsCount !== 1 ? 's' : ''} Selected`
+                                : "Flight Options"}
+                        </span>
+                    </div>
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[220px] p-3" align="start">
+                <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                        <Package className="h-4 w-4 text-gray-500" />
+                        <h4 className="font-medium text-xs">Flight Options</h4>
+                    </div>
+                    <Separator className="my-2" />
+                    <div className="space-y-2">
+                        {options.map(({ field, label, isShown }) => (
+                            isShown && (
+                                <div key={field} className="flex items-center space-x-2">
+                                    <Checkbox
+                                        id={field}
+                                        checked={pdata[field]}
+                                        onCheckedChange={() => setData(field)}
+                                        className="h-4 w-4 rounded-sm data-[state=checked]:bg-[#FF8000] data-[state=checked]:border-[#FF8000]"
+                                    />
+                                    <Label 
+                                        htmlFor={field} 
+                                        className="text-xs font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                    >
+                                        {label}
+                                    </Label>
+                                </div>
+                            )
+                        ))}
+                    </div>
                 </div>
-            )}
-        </div>
+            </PopoverContent>
+        </Popover>
     );
 };
 
