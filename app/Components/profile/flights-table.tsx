@@ -21,6 +21,8 @@ import {
 } from "@/lib/store/api/omras/omrasSlice";
 import { AppDispatch } from "@/lib/store/store";
 import { toast } from "sonner";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationFirst, PaginationPrevious, PaginationNext, PaginationLast } from "@/components/ui/pagination";
+import cn from "classnames";
 
 interface User {
   id: number;
@@ -82,6 +84,14 @@ export default function FlightsTable() {
   );
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+  const totalPages = Math.ceil(reservations.length / itemsPerPage);
+  
+  const paginatedReservations = reservations.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const fetchReservations = async () => {
     try {
@@ -242,7 +252,7 @@ export default function FlightsTable() {
                   </TableCell>
                 </TableRow>
               ) : (
-                reservations.map((reservation) => (
+                paginatedReservations.map((reservation) => (
                   <>
                     <TableRow key={reservation.id}>
                       <TableCell className="font-medium text-xs">
@@ -345,6 +355,64 @@ export default function FlightsTable() {
               )}
             </TableBody>
           </Table>
+          {totalPages > 1 && (
+            <div className="mt-4">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationFirst
+                      onClick={() => setCurrentPage(1)}
+                      className={cn(
+                        "hover:bg-orange-100 transition-colors",
+                        currentPage === 1 && "pointer-events-none opacity-50"
+                      )}
+                    />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                      className={cn(
+                        "hover:bg-orange-100 transition-colors",
+                        currentPage === 1 && "pointer-events-none opacity-50"
+                      )}
+                    />
+                  </PaginationItem>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <PaginationItem key={page}>
+                      <PaginationLink
+                        onClick={() => setCurrentPage(page)}
+                        isActive={currentPage === page}
+                        className={cn(
+                          "hover:bg-orange-100 transition-colors",
+                          currentPage === page && "bg-orange-500 text-white hover:bg-orange-600"
+                        )}
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                      className={cn(
+                        "hover:bg-orange-100 transition-colors",
+                        currentPage === totalPages && "pointer-events-none opacity-50"
+                      )}
+                    />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLast
+                      onClick={() => setCurrentPage(totalPages)}
+                      className={cn(
+                        "hover:bg-orange-100 transition-colors",
+                        currentPage === totalPages && "pointer-events-none opacity-50"
+                      )}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
