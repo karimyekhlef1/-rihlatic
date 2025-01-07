@@ -45,6 +45,7 @@ const getDestinationsSlice = createSlice({
         type === 2 && (state.destinations = action.payload.result.destinations);
 
         // Hotels
+        type === 3 && (state.destinations = action.payload.result.selectedCities);
 
         // Omras
         type === 4 && (state.destinations = action.payload.result.omra);

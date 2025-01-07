@@ -6,6 +6,7 @@ export const engine_get_vols_endpoint = BASE_URL + "/front/airports";
 export const engine_get_destinations_endpoint =
   BASE_URL + "/front/destinations";
 export const engine_get_omras_endpoint = BASE_URL + "/front/omra";
+export const engine_get_hotels_endpoint = BASE_URL + "/front/hotel/selected_city";
 
 // Home
 export const home_endpoint = BASE_URL + "/home";
