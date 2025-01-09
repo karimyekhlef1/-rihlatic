@@ -1,12 +1,12 @@
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import FlightInfos from './flightInfos';
-import FlightSeparator from './flightSeparator';
-import FlightInfoFooter from './flightInfoFooter';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import FlightInfos from "./flightInfos";
+import FlightSeparator from "./flightSeparator";
+import FlightInfoFooter from "./flightInfoFooter";
 
-import { useDispatch } from 'react-redux';
-import { openDialogDetail } from '@/lib/store/custom/mainSlices/dialogSlice';
-import TripDetails from './tripDetails';
+import { useDispatch } from "react-redux";
+import { openDialogDetail } from "@/lib/store/custom/mainSlices/dialogSlice";
+import TripDetails from "./tripDetails";
 
 export default function ResultCard() {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ export default function ResultCard() {
   };
 
   return (
-    <div className="w-full max-w-sm sm:max-w-4xl mx-auto sm:pt-4 sm:px-0">
+    <div className="w-full max-w-sm sm:max-w-4xl mx-auto sm:px-0">
       <div className="flex flex-col sm:flex-row w-full transition-all duration-300 ease-in-out sm:hover:drop-shadow-md">
         <Card className="flex-grow rounded-t-xl sm:rounded-t-xl sm:border-r-0 sm:mb-0 border-b-0 sm:border-b">
           <CardContent className="p-4">
@@ -43,7 +43,7 @@ export default function ResultCard() {
             </div>
             <Button
               className="w-full mt-4 text-sm"
-              variant={'active'}
+              variant={"active"}
               onClick={handleOpenDialog}
             >
               Select
