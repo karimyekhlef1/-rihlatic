@@ -22,7 +22,7 @@ export default function ReservationSummary({
   imageUrl = "http://localhost:3000/_next/image?url=https%3A%2F%2Fapi.dsonetech.com%2Fstorage%2Fpackages%2FfeaturedImages%2F10_2024_670d141267cd9.jpg&w=1200&q=75",
   roomDetails,
   currency = "DZD"
-}: ReservationDetailsProps) {
+}: any) {
   return (
     <Card className="max-w-md p-4 space-y-4 pt-5">
       {/* Header */}

@@ -11,9 +11,13 @@ import { useSelector , useDispatch } from 'react-redux';
 import { packagesFunc } from '@/lib/store/api/packages/packagesSlice';
 import { extractData } from '@/app/hooks/useExtractData';
 import { usefilterPackages } from '@/app/hooks/useFilterPackages'; // Import the utility function
-
+import PackagesSearchComponent from '@/app/Components/home/engine/packages/packagesSearchComponent';
+import SmalLoading from '@/app/commonComponents/SmalLoading';
 export default function Packages() {
-  const { loading, packagesData } = useSelector((state: any) => state.packages);
+  const {loading, packagesData} = useSelector((state: any) => state.packages);
+  const {loadingDestinations,destinations}= useSelector((state: any) => state.getDestinations); 
+  const {dateRange,packageType}= useSelector((state: any) => state.packageSearchSlice); 
+  
   const dispatch = useDispatch<any>();
   const [packages, setPackage] = useState<any[]>([]);
   const [filteredPackages, setFilteredPackages] = useState<any[]>([]);
@@ -22,13 +26,13 @@ export default function Packages() {
 
   useEffect(() => {
     const getData = async () => {
-      const result = await dispatch(packagesFunc({ include: 'departures' }));
+      const result = await dispatch(packagesFunc({ include: 'departures','filter[destinationId]':destinations.id?destinations.id:"" }));
       const fetchedPackages = result.payload.result.packages;
       setPackage(fetchedPackages);
       setFilteredPackages(fetchedPackages);
     };
     getData();
-  }, []);
+  }, [destinations.id,dispatch]);
 
   // Use the utility function to filter packages
   useEffect(() => {
@@ -43,7 +47,18 @@ export default function Packages() {
     pkg.destinations.map((dest:any) => dest.country.name)
   );
 
+  
+
   return (
+    <div className=''>
+
+
+      <div className="flex justify-center py-4 mt-2 bg-white">
+      <PackagesSearchComponent />
+    
+      </div>
+
+
     <div className="flex md:flex-row flex-col">
       <div className="px-14 flex flex-col items-center pt-10 gap-y-8 md:pb-10">
         <FilterComponent 
@@ -64,5 +79,7 @@ export default function Packages() {
         </Provider>
       </div>
     </div>
+    </div>
+
   );
 }

@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 
 interface ContentProps {
-  htmlContent?: string;
+  htmlContent?: string ;
   content?: string;
   dynamicContent?: React.ReactNode;
 }

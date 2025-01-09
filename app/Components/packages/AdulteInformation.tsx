@@ -77,7 +77,7 @@ export default function PassengerInformation({ titel, index, roomId }: Passenger
               </div>
             </div>
 
-            <div className="flex flex-row gap-x-4 pb-4">
+        {titel=="adults" && index==0  ?  <div className="flex flex-row gap-x-4 pb-4">
               <Input
                 id="email"
                 type="email"
@@ -92,7 +92,7 @@ export default function PassengerInformation({ titel, index, roomId }: Passenger
                 value={passenger?.phone || ''}
                 onChange={(e) => handleInputChange('phone', e.target.value)}
               />
-            </div>
+            </div>:null}
             <Separator />
 
             <div className="relative">
