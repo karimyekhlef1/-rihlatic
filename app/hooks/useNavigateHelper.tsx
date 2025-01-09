@@ -1,14 +1,19 @@
-"use client";
-
 import { useRouter } from "next/navigation";
 
-export const useNavigateHelper = () => {
-    const router = useRouter();
+interface UseNavigateHelperProps {
+  onSearch?: () => Promise<void>; // Mark `onSearch` as optional
+}
 
-     const handleClickExplore = (redirect: string) => {
-        router.push(redirect);
-    };
+export const useNavigateHelper = ({ onSearch }: UseNavigateHelperProps) => {
+  const router = useRouter();
 
-    return { handleClickExplore };
+  const handleClickExplore = async (redirect: string) => {
+    if (onSearch) {
+        console.log("---yes-p[-")
+       onSearch(); 
+    }
+    router.push(redirect); // Navigate after search
+  };
 
+  return { handleClickExplore };
 };
