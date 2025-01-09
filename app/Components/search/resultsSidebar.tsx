@@ -1,23 +1,23 @@
-import { useState, useEffect } from 'react';
-import { RootState } from '@/lib/store/store';
-import { useSelector, useDispatch } from 'react-redux';
+import { useState, useEffect } from "react";
+import { RootState } from "@/lib/store/store";
+import { useSelector, useDispatch } from "react-redux";
 
 import {
   incrementCabin,
   decrementCabin,
   incrementChecked,
   decrementChecked,
-} from '@/lib/store/custom/searchSlices/baggageSlice';
+} from "@/lib/store/custom/searchSlices/baggageSlice";
 
-import BaggageItem from './baggageItem';
-import SidebarSection from './sidebarSection';
-import { Luggage, Briefcase, Filter } from 'lucide-react';
-import Stops from './stops';
-import Connections from './connections';
-import AirlineCarrierSelector from './carriers';
-import BookingOptions from './bookingOptions';
-import TravelHacks from './travelHacks';
-import ExcludedCountriesSelector from './excludeCountries';
+import BaggageItem from "./baggageItem";
+import SidebarSection from "./sidebarSection";
+import { Luggage, Briefcase, Filter } from "lucide-react";
+import Stops from "./stops";
+import Connections from "./connections";
+import AirlineCarrierSelector from "./carriers";
+import BookingOptions from "./bookingOptions";
+import TravelHacks from "./travelHacks";
+import ExcludedCountriesSelector from "./excludeCountries";
 
 import {
   Sheet,
@@ -25,8 +25,11 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import Hours from "./hours";
+import Airplanes from "./airplanes";
+import Price from "./price";
 
 export default function ResultsSidebar() {
   const dispatch = useDispatch();
@@ -41,14 +44,14 @@ export default function ResultsSidebar() {
     };
 
     checkIsMobile();
-    window.addEventListener('resize', checkIsMobile);
+    window.addEventListener("resize", checkIsMobile);
 
-    return () => window.removeEventListener('resize', checkIsMobile);
+    return () => window.removeEventListener("resize", checkIsMobile);
   }, []);
 
   const sidebarContent = (
     <>
-      <SidebarSection title="Bags">
+      {/* <SidebarSection title="Bags">
         <BaggageItem
           icon={<Luggage size={20} className="mr-2" />}
           type="Cabin baggage"
@@ -63,18 +66,26 @@ export default function ResultsSidebar() {
           onIncrement={() => dispatch(incrementChecked())}
           onDecrement={() => dispatch(decrementChecked())}
         />
+      </SidebarSection> */}
+      <SidebarSection title="Hours">
+        <Hours />
       </SidebarSection>
-
       <SidebarSection title="Stops">
         <Stops />
       </SidebarSection>
-      <SidebarSection title="Connections">
+      {/* <SidebarSection title="Connections">
         <Connections />
-      </SidebarSection>
+      </SidebarSection> */}
       <SidebarSection title="Carriers">
         <AirlineCarrierSelector />
       </SidebarSection>
-      <SidebarSection title="Booking options">
+      <SidebarSection title="Airplanes">
+        <Airplanes />
+      </SidebarSection>
+      <SidebarSection title="Price">
+        <Price />
+      </SidebarSection>
+      {/* <SidebarSection title="Booking options">
         <BookingOptions />
       </SidebarSection>
       <SidebarSection title="★ Travel hacks">
@@ -82,7 +93,7 @@ export default function ResultsSidebar() {
       </SidebarSection>
       <SidebarSection title="Exclude countries">
         <ExcludedCountriesSelector />
-      </SidebarSection>
+      </SidebarSection> */}
     </>
   );
 
@@ -98,7 +109,7 @@ export default function ResultsSidebar() {
               </span>
             </Button>
           </SheetTrigger>
-          <SheetContent side={'left'}>{sidebarContent}</SheetContent>
+          <SheetContent side={"left"}>{sidebarContent}</SheetContent>
         </Sheet>
       ) : (
         sidebarContent

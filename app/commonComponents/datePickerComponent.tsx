@@ -1,18 +1,18 @@
-import React from 'react';
+import React from "react";
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from "@/components/ui/popover";
 
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import { DateRange } from 'react-day-picker';
-import { CalendarIcon } from 'lucide-react';
-import { format } from 'date-fns';
-import { useDispatch } from 'react-redux';
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { DateRange } from "react-day-picker";
+import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { useDispatch } from "react-redux";
 
 interface SearchInputProps {
   isOnePick?: boolean;
@@ -25,37 +25,41 @@ const DatePickerComponent: React.FC<SearchInputProps> = ({
   dateRange,
   setDateRange,
 }) => {
-  
-  const dispatch = useDispatch<any>();  
+  const dispatch = useDispatch<any>();
 
   return (
-    <div className="w-full sm:w-[500px]">
+    <div className="relative">
       <Popover>
         <PopoverTrigger asChild>
           <Button
-            id="date"
-            variant={'search'}
+            variant="outline"
+            size="sm"
             className={cn(
-              'w-full sm:w-[500px] h-[42px] justify-start text-left font-normal rounded',
-              !dateRange && 'text-muted-foreground',
-              'focus:z-[1] focus:border-orange-500 focus:text-orange-500 focus:border-2'
+              "w-[400px] h-9 justify-start text-xs bg-white border-gray-200",
+              !dateRange && "border-[#FF8000] bg-orange-50"
             )}
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {!isOnePick ? (
-              dateRange?.to ? (
-                <>
-                  {format(dateRange?.from || new Date(), 'LLL dd, y')} -{' '}
-                  {format(dateRange?.to || new Date(), 'LLL dd, y')}
-                </>
-              ) : (
-                format(dateRange?.from || new Date(), 'LLL dd, y')
-              )
-            ) : (
-              <span>Pick a date</span>
-            )}
-            <div className="text-sm text-gray-400 pl-8">
-              {isOnePick ? '( Start )' : '( Start-End )'}
+            <div className="flex items-center gap-2">
+              <CalendarIcon className="h-3.5 w-3.5 text-gray-500" />
+              <div className="flex flex-col items-start">
+                <span className="text-xs">
+                  {!isOnePick ? (
+                    dateRange?.to ? (
+                      <>
+                        {format(dateRange?.from || new Date(), "LLL dd, y")} -{" "}
+                        {format(dateRange?.to || new Date(), "LLL dd, y")}
+                      </>
+                    ) : (
+                      format(dateRange?.from || new Date(), "LLL dd, y")
+                    )
+                  ) : (
+                    "Pick a date"
+                  )}
+                </span>
+                <span className="text-[10px] text-gray-400">
+                  {isOnePick ? "Start" : "Start - End"}
+                </span>
+              </div>
             </div>
           </Button>
         </PopoverTrigger>
