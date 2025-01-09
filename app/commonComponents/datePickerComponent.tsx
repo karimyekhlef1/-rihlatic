@@ -43,14 +43,18 @@ const DatePickerComponent: React.FC<SearchInputProps> = ({
               <CalendarIcon className="h-3.5 w-3.5 text-gray-500" />
               <div className="flex flex-col items-start">
                 <span className="text-xs">
-                  {!isOnePick ? (
-                    dateRange?.to ? (
-                      <>
-                        {format(dateRange?.from || new Date(), "LLL dd, y")} -{" "}
-                        {format(dateRange?.to || new Date(), "LLL dd, y")}
-                      </>
+                  {dateRange?.from ? (
+                    isOnePick ? (
+                      format(dateRange.from, "LLL dd, y")
                     ) : (
-                      format(dateRange?.from || new Date(), "LLL dd, y")
+                      dateRange.to ? (
+                        <>
+                          {format(dateRange.from, "LLL dd, y")} -{" "}
+                          {format(dateRange.to, "LLL dd, y")}
+                        </>
+                      ) : (
+                        format(dateRange.from, "LLL dd, y")
+                      )
                     )
                   ) : (
                     "Pick a date"
@@ -64,18 +68,31 @@ const DatePickerComponent: React.FC<SearchInputProps> = ({
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0" align="start">
-          <Calendar
-            initialFocus
-            mode="range"
-            // defaultMonth={dateRange?.from}
-            selected={dateRange}
-            onSelect={(newDateRange: DateRange | undefined) => {
-              if (newDateRange) {
-                setDateRange && setDateRange(newDateRange);
-              }
-            }}
-            numberOfMonths={2}
-          />
+          {isOnePick ? (
+            <Calendar
+              initialFocus
+              mode="single"
+              selected={dateRange?.from}
+              onSelect={(date) => {
+                if (date) {
+                  setDateRange?.({ from: date, to: date });
+                }
+              }}
+              numberOfMonths={2}
+            />
+          ) : (
+            <Calendar
+              initialFocus
+              mode="range"
+              selected={dateRange}
+              onSelect={(newDateRange) => {
+                if (newDateRange) {
+                  setDateRange?.(newDateRange);
+                }
+              }}
+              numberOfMonths={2}
+            />
+          )}
         </PopoverContent>
       </Popover>
     </div>

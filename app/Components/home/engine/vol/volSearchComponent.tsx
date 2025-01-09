@@ -41,17 +41,33 @@ const VolSearchComponent: React.FC = () => {
   };
 
   const isOnePick = () => {
-    return !(volType === "Return" && volPackage?.openReturn);
+    return volType === "One Way";
   };
 
   const [destinations, setDestinations] = useState([
-    { id: "", from: "", to: "", date: "" },
+    { 
+      id: "", 
+      from: "", 
+      to: "", 
+      date: { 
+        from: new Date(),
+        to: volType === "One Way" ? new Date() : new Date(Date.now() + 2 * 24 * 60 * 60 * 1000)
+      } as DateRange 
+    },
   ]);
 
   const addDestination = () => {
     setDestinations([
       ...destinations,
-      { id: generateId(), from: "", to: "", date: "" },
+      { 
+        id: generateId(), 
+        from: "", 
+        to: "", 
+        date: { 
+          from: new Date(),
+          to: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000)
+        } as DateRange 
+      },
     ]);
   };
 
@@ -66,7 +82,7 @@ const VolSearchComponent: React.FC = () => {
     return Math.random().toString(36).substr(2, 9);
   };
 
-  const updateDestination = (index: number, field: string, value: string) => {
+  const updateDestination = (index: number, field: string, value: any) => {
     const updatedDestinations = destinations.map((dest, i) =>
       i === index ? { ...dest, [field]: value } : dest
     );
@@ -135,7 +151,13 @@ const VolSearchComponent: React.FC = () => {
                   dir="To"
                   type={1}
                 />
-                <DatePickerComponent isOnePick={true} />
+                <DatePickerComponent 
+                  isOnePick={false}
+                  dateRange={dest.date}
+                  setDateRange={(value: DateRange) => {
+                    updateDestination(i, "date", value);
+                  }}
+                />
                 <div
                   className="flex items-center gap-2 bg-red-50 hover:bg-red-100 p-4 h-9 rounded"
                   onClick={() => removeDestination(i)}
