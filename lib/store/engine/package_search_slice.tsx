@@ -6,7 +6,9 @@ interface PackageSearchState {
     packageType: string;
     dateRange: DateRange;
     volError: string;
-    selectedDestinationId:number | null
+    selectedDestinationId:number | null,
+    selectedDestinationName:string | null,
+  
 }
 
 export const packageEngineTypes = ['All', 'Oorganized trip', 'Circuit', 'Personalized trip', 'Omra', 'Cruise'];
@@ -18,6 +20,7 @@ const initialState: PackageSearchState = {
         to: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
     },
     selectedDestinationId:null,
+    selectedDestinationName:null,
     volError: '',
 };
 
@@ -31,12 +34,16 @@ const PackageSearchSlice = createSlice({
         setSelectedDestinationId: (state, action: PayloadAction<number | null>) => {
             state.selectedDestinationId = action.payload;
         },
+        setSelectedDestinationName: (state, action: PayloadAction<string | null>) => {
+            state.selectedDestinationName = action.payload;
+        },
+  
         setDateRange: (state, action: PayloadAction<DateRange>) => {
             state.dateRange = action.payload;
         }
     },
 });
 
-export const { setPackageType, setDateRange , setSelectedDestinationId } = PackageSearchSlice.actions;
+export const { setPackageType, setDateRange , setSelectedDestinationId , setSelectedDestinationName } = PackageSearchSlice.actions;
 
 export default PackageSearchSlice.reducer;
