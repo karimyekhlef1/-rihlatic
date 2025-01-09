@@ -18,24 +18,27 @@ export default function FlightsResults() {
           <div className="w-1/2">
             <ResultsSidebar />
           </div>
-          <div className="w-1/2">
+          {/* <div className="w-1/2">
             <TravelOptions />
-          </div>
+          </div> */}
         </div>
 
         {/* Desktop sidebar */}
         <div className="hidden sm:flex flex-col w-[250px]">
           <div className="hidden lg:block">
-            <AlertPrices />
+            {/* <AlertPrices /> */}
+            <h2 className="text-xs font-semibold text-gray-500">
+              {`Nous avons trouvé NBR vols pour vous`}
+            </h2>
           </div>
           <ResultsSidebar />
         </div>
 
         {/* Main content */}
         <div className="flex flex-col w-full space-y-4 sm:space-y-0 sm:w-[650px]">
-          <div className="hidden sm:block">
+          {/* <div className="hidden sm:block">
             <TravelOptions2 />
-          </div>
+          </div> */}
           {[1, 2, 3, 4].map((index) => (
             <ResultCard key={index} />
           ))}
