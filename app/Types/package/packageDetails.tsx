@@ -23,5 +23,13 @@ export interface PackageDetails {
     pricing: {
       rooms: Room[];
     };
-    hotel_stay:any
+    hotel_stay:any;
+    visa:boolean;
+    vol:boolean;
+    hotel:boolean;
+    transfer:boolean;
+    excursion:boolean;
+    cruise:boolean;
+    includes:string[]
+    excludes:string[]
   }

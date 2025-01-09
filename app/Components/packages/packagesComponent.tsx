@@ -23,7 +23,7 @@ export default function PackagesComponent({data}:any) {
   //   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7,
   //   8, 9, 10, 11,
   // ];
-  console.log("PackagesComponent",PackagesComponent)
+  //console.log("PackagesComponent",PackagesComponent)
 
   const totalItems = data?.length;
 
@@ -79,7 +79,7 @@ export default function PackagesComponent({data}:any) {
 
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   };
-  console.log("currentItems",currentItems)
+  //console.log("currentItems",currentItems)
 
   return (
     <div>

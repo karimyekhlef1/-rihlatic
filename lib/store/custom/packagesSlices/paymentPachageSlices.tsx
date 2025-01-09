@@ -7,6 +7,7 @@ interface UpdatePassengerFieldPayload {
   index: number;
   field: string;
   value: string | null;
+ 
 }
 
 interface Passenger {
@@ -38,6 +39,7 @@ interface PaymentPackageState {
   currentStep: number;
   steps: string[];
   RoomsData: RoomData[];
+  cardToken:string
 }
 
 // Local storage key
@@ -50,7 +52,8 @@ const createInitialState = (): PaymentPackageState => ({
   rooms: [],
   currentStep: 1,
   steps: [],
-  RoomsData: []
+  RoomsData: [],
+  cardToken : ""
 });
 
 // Function to load state from localStorage
@@ -156,6 +159,10 @@ const paymentPackageSlice = createSlice({
       localStorage.removeItem(STORAGE_KEY)
       state.RoomsData=[] ;
     },
+    setCardToken(state , action: PayloadAction<any>){
+      state.cardToken= action.payload
+  
+    },
 
 
     clearStoredState(state) {      
@@ -175,7 +182,8 @@ export const {
   previousStep,
   updatePassengerFieldByIndex,
   clearStoredState,
-  reStateRoomData
+  reStateRoomData,
+  setCardToken
 } = paymentPackageSlice.actions;
 
 export default paymentPackageSlice.reducer;

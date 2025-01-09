@@ -1,0 +1,54 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import DepartureInfoInBooking from "@/app/Components/packages/DepartureInfoInBooking";
+import { useSelector, useDispatch } from "react-redux";
+import { getPackagesReservationDetails } from "@/lib/store/api/packages/packagesSlice";
+import Loading from "@/app/Components/home/Loading";
+import BookingDetailsPricing from "@/app/Components/packages/BookingDetailsPricing";
+import { AppDispatch } from "@/lib/store/store";
+
+interface BookingDetails {
+  departure: any; // Type this according to your data structure
+  // Add other properties as needed
+}
+
+// Changed component name from 'page' to 'PackageReservationPage'
+export default function PackageReservationPage() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading, packagesData } = useSelector((state: any) => state.packages);
+  const { id } = useParams();
+  const [bookinPackagesDetails, setBookinPackageDetails] = useState<BookingDetails | undefined>(undefined);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const result = await dispatch(
+          getPackagesReservationDetails({
+            id,
+            include: "departure,departure.package,departure.flight",
+          })
+        );
+        setBookinPackageDetails(result.payload.result.booking);
+      } catch (error) {
+        console.error("Error fetching booking details:", error);
+      }
+    };
+    
+    if (id) {
+      getData();
+    }
+  }, [id]); // Added proper dependency array
+
+  if (loading) return <Loading />;
+
+  return (
+    <div className="bg-[#F8F8F8] flex justify-center">
+      <div>
+        <DepartureInfoInBooking departure={bookinPackagesDetails?.departure} />
+      </div>
+      <BookingDetailsPricing data={bookinPackagesDetails} />
+    </div>
+  );
+}
