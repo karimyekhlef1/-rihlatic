@@ -15,6 +15,7 @@ import DatePickerComponent from "@/app/commonComponents/datePickerComponent";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DateRange } from "react-day-picker";
+import { searchFlights } from "@/lib/store/api/vols/volsSlice";
 
 const VolSearchComponent: React.FC = () => {
   const dispatch = useDispatch<any>();
@@ -45,28 +46,31 @@ const VolSearchComponent: React.FC = () => {
   };
 
   const [destinations, setDestinations] = useState([
-    { 
-      id: "", 
-      from: "", 
-      to: "", 
-      date: { 
+    {
+      id: "",
+      from: "",
+      to: "",
+      date: {
         from: new Date(),
-        to: volType === "One Way" ? new Date() : new Date(Date.now() + 2 * 24 * 60 * 60 * 1000)
-      } as DateRange 
+        to:
+          volType === "One Way"
+            ? new Date()
+            : new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+      } as DateRange,
     },
   ]);
 
   const addDestination = () => {
     setDestinations([
       ...destinations,
-      { 
-        id: generateId(), 
-        from: "", 
-        to: "", 
-        date: { 
+      {
+        id: generateId(),
+        from: "",
+        to: "",
+        date: {
           from: new Date(),
-          to: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000)
-        } as DateRange 
+          to: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+        } as DateRange,
       },
     ]);
   };
@@ -89,6 +93,65 @@ const VolSearchComponent: React.FC = () => {
     setDestinations(updatedDestinations);
   };
 
+  const handleFromAirportSelect = (value: string, index: number = 0) => {
+    console.log('volSearchComponent - From airport selected:', value);
+    if (value) {
+      updateDestination(index, "from", value.toUpperCase());
+    }
+  };
+
+  const handleToAirportSelect = (value: string, index: number = 0) => {
+    console.log('volSearchComponent - To airport selected:', value);
+    if (value) {
+      updateDestination(index, "to", value.toUpperCase());
+    }
+  };
+
+  const handleSearch = () => {
+    console.log('volSearchComponent - Current destinations state:', destinations);
+    
+    // Validate required fields
+    if (!destinations[0].from || !destinations[0].to) {
+      console.error("Please select both departure and arrival airports");
+      return;
+    }
+
+    // Validate airport code format
+    const isValidAirportCode = (code: string) => /^[A-Z]{3}$/.test(code);
+    if (!isValidAirportCode(destinations[0].from) || !isValidAirportCode(destinations[0].to)) {
+      console.error("Invalid airport codes. Expected IATA format (e.g., PAR, ALG)");
+      return;
+    }
+
+    const searchParams = {
+      flightType: volType === "One Way" ? "ONE_WAY" : "ROUND_TRIP",
+      flightClass: "NN", // default to non-specified
+      quantityAdults: volPackage.adults || 1,
+      quantityChild: volPackage.children || 0,
+      quantityInfant: volPackage.infants || 0,
+      quantityInfantWithSeat: 0,
+      quantityStudent: 0,
+      quantityYouth: 0,
+      quantitySenior: 0,
+      departureId: destinations[0].from.toUpperCase(),
+      arrivalId: destinations[0].to.toUpperCase(),
+      departureDate: dateRange?.from
+        ? dateRange.from.toISOString().split("T")[0]
+        : null,
+      arrivalDate:
+        !isOnePick() && dateRange?.to
+          ? dateRange.to.toISOString().split("T")[0]
+          : null,
+      flightRefundable: false,
+      flightWithBaggage: false,
+      directFlightsOnly: false,
+      openReturn: false,
+    };
+
+    console.log('volSearchComponent - Search params:', searchParams);
+    dispatch(searchFlights(searchParams));
+  };
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-wrap gap-3">
@@ -105,68 +168,55 @@ const VolSearchComponent: React.FC = () => {
       </div>
       <div className="flex justify-start gap-2 flex-wrap">
         {volType !== "Multi Destinations" ? (
-          <>
-            <div className="flex items-center flex-wrap gap-2">
+          <div className="flex items-center flex-wrap gap-2">
+            <SearchInputComponent
+              placeholder="City, airports or place"
+              onSearch={(value) => handleFromAirportSelect(value)}
+              dir="From"
+              type={1}
+            />
+            <SearchInputComponent
+              placeholder="City, airports or place"
+              onSearch={(value) => handleToAirportSelect(value)}
+              dir="To"
+              type={1}
+            />
+            <DatePickerComponent
+              isOnePick={isOnePick()}
+              dateRange={dateRange}
+              setDateRange={(value: DateRange) => dispatch(setDateRange(value))}
+            />
+          </div>
+        ) : (
+          destinations.map((dest: any, i: number) => (
+            <div className="flex flex-wrap items-center gap-2" key={dest.id}>
               <SearchInputComponent
                 placeholder="City, airports or place"
-                onSearch={(value) => console.log(value)}
+                onSearch={(value) => handleFromAirportSelect(value, i)}
                 dir="From"
                 type={1}
               />
               <SearchInputComponent
                 placeholder="City, airports or place"
-                onSearch={(value) => console.log(value)}
+                onSearch={(value) => handleToAirportSelect(value, i)}
                 dir="To"
                 type={1}
               />
               <DatePickerComponent
-                isOnePick={isOnePick()}
-                dateRange={dateRange}
-                setDateRange={(value: DateRange) =>
-                  dispatch(setDateRange(value))
-                }
+                isOnePick={false}
+                dateRange={dest.date}
+                setDateRange={(value: DateRange) => {
+                  updateDestination(i, "date", value);
+                }}
               />
-            </div>
-            <Button
-              variant="active"
-              type="button"
-              className="rounded px-2 py-2.5 text-sm font-semibold w-full sm:w-28 sm:h-9"
-            >
-              Search
-            </Button>
-          </>
-        ) : (
-          <>
-            {destinations.map((dest: any, i: number) => (
-              <div className="flex flex-wrap items-center gap-2" key={dest.id}>
-                <SearchInputComponent
-                  placeholder="City, airports or place"
-                  onSearch={(value) => console.log(value)}
-                  dir="From"
-                  type={1}
-                />
-                <SearchInputComponent
-                  placeholder="City, airports or place"
-                  onSearch={(value) => console.log(value)}
-                  dir="To"
-                  type={1}
-                />
-                <DatePickerComponent 
-                  isOnePick={false}
-                  dateRange={dest.date}
-                  setDateRange={(value: DateRange) => {
-                    updateDestination(i, "date", value);
-                  }}
-                />
-                <div
-                  className="flex items-center gap-2 bg-red-50 hover:bg-red-100 p-4 h-9 rounded"
-                  onClick={() => removeDestination(i)}
-                >
-                  <Trash2 className="text-red-500 h-4 w-4 cursor-pointer" />
-                </div>
+              <div
+                className="flex items-center gap-2 bg-red-50 hover:bg-red-100 p-4 h-9 rounded"
+                onClick={() => removeDestination(i)}
+              >
+                <Trash2 className="text-red-500 h-4 w-4 cursor-pointer" />
               </div>
-            ))}
-          </>
+            </div>
+          ))
         )}
       </div>
       {volType === "Multi Destinations" && (
@@ -188,6 +238,14 @@ const VolSearchComponent: React.FC = () => {
           </Button>
         </div>
       )}
+      <Button
+        onClick={handleSearch}
+        variant="active"
+        type="button"
+        className="rounded px-2 py-2.5 text-sm font-semibold w-full sm:w-28 sm:h-9"
+      >
+        Search Flights
+      </Button>
     </div>
   );
 };
