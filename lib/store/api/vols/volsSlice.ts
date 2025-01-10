@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import volsService from '@/lib/services/vols/vols_package';
 import { setCarriers } from '@/lib/store/custom/searchSlices/carrierSlice';
+import { setAirplaneTypes } from '@/lib/store/custom/searchSlices/airplaneSlice';
 
 interface VolsState {
     loading: boolean;
@@ -42,6 +43,39 @@ const extractUniqueCarriers = (flights: any[]) => {
     return Array.from(carriersMap.values());
 };
 
+const getAirplaneName = (code: string): string => {
+    // This is a simplified mapping. In a real application, you might want to fetch this from an API or database
+    const airplaneMap: { [key: string]: string } = {
+        '73H': 'Boeing 737-800',
+        '320': 'Airbus A320',
+        '321': 'Airbus A321',
+        '738': 'Boeing 737-800',
+        '319': 'Airbus A319',
+        // Add more mappings as needed
+    };
+    return airplaneMap[code] || code;
+};
+
+const extractUniqueAirplaneTypes = (flights: any[]) => {
+    const airplaneTypesMap = new Map();
+    
+    flights.forEach(flight => {
+        flight.segments.forEach((segment: any[]) => {
+            segment.forEach(leg => {
+                if (leg.equipmentType) {
+                    const code = leg.equipmentType;
+                    airplaneTypesMap.set(code, {
+                        code,
+                        name: `${getAirplaneName(code)} (${code})`
+                    });
+                }
+            });
+        });
+    });
+    
+    return Array.from(airplaneTypesMap.values());
+};
+
 export const searchFlights = createAsyncThunk('flights/search', async (params: any, thunkApi) => {
     try {
         console.log('volsSlice - Search params received:', params);
@@ -67,6 +101,9 @@ export const searchFlights = createAsyncThunk('flights/search', async (params: a
             // Extract and set carriers
             const carriers = extractUniqueCarriers(flights);
             thunkApi.dispatch(setCarriers(carriers));
+            // Extract and set airplane types
+            const airplaneTypes = extractUniqueAirplaneTypes(flights);
+            thunkApi.dispatch(setAirplaneTypes(airplaneTypes));
             return flights;
         }
         console.error('volsSlice - API error:', response.message);
