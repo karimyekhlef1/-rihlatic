@@ -1,27 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const carriers = [
-  'A.P.G. Distribution System',
-  'Aegean',
-  'Aer Lingus',
-  'Aerolineas Argentinas',
-  'Afriqiyah Airways',
-  'Air Algerie',
-  'Air Arabia',
-  'Air Astana',
-  'Air Austral',
-  'Air Baltic',
-];
+interface Carrier {
+  code: string;
+  name: string;
+  logo?: string;
+}
 
 interface CarrierState {
-  carriers: string[];
+  carriers: Carrier[];
   searchTerm: string;
   selectedCarriers: string[];
   showAll: boolean;
 }
 
 const initialState: CarrierState = {
-  carriers,
+  carriers: [],
   searchTerm: '',
   selectedCarriers: [],
   showAll: false,
@@ -31,24 +24,29 @@ const carrierSlice = createSlice({
   name: 'carriers',
   initialState,
   reducers: {
+    setCarriers: (state, action: PayloadAction<Carrier[]>) => {
+      console.log('Setting carriers:', action.payload);
+      state.carriers = action.payload;
+      state.selectedCarriers = action.payload.map(carrier => carrier.code);
+    },
     setSearchTerm: (state, action: PayloadAction<string>) => {
       state.searchTerm = action.payload;
     },
     toggleCarrier: (state, action: PayloadAction<string>) => {
-      const carrier = action.payload;
-      if (state.selectedCarriers.includes(carrier)) {
+      const carrierCode = action.payload;
+      if (state.selectedCarriers.includes(carrierCode)) {
         state.selectedCarriers = state.selectedCarriers.filter(
-          (c) => c !== carrier
+          (code) => code !== carrierCode
         );
       } else {
-        state.selectedCarriers.push(carrier);
+        state.selectedCarriers.push(carrierCode);
       }
     },
     toggleSelectAll: (state) => {
       state.selectedCarriers =
         state.selectedCarriers.length === state.carriers.length
           ? []
-          : [...state.carriers];
+          : state.carriers.map(carrier => carrier.code);
     },
     toggleShowAll: (state) => {
       state.showAll = !state.showAll;
@@ -56,6 +54,7 @@ const carrierSlice = createSlice({
   },
 });
 
-export const { setSearchTerm, toggleCarrier, toggleSelectAll, toggleShowAll } =
+export const { setCarriers, setSearchTerm, toggleCarrier, toggleSelectAll, toggleShowAll } =
   carrierSlice.actions;
+
 export default carrierSlice.reducer;
