@@ -18,6 +18,7 @@ import excludedCountriesReducer from '@/lib/store/custom/searchSlices/excludedCo
 import LanguageSlice from '@/lib/store/custom/LanguageSlice';
 import verificationReducer from './custom/mainSlices/verificationSlice';
 import airplaneReducer from './custom/searchSlices/airplaneSlice';
+import priceReducer from './custom/searchSlices/priceSlice';
 
 // Home
 import homeSlice from '@/lib/store/api/home/homeSlice';
@@ -127,6 +128,7 @@ export const store = configureStore({
     
     // vols
     vols: volsReducer,
+    price: priceReducer,
   },
   // we can delete this later it's just to supress serializableCheck warnings
   middleware: (getDefaultMiddleware) =>

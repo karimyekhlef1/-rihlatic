@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import volsService from '@/lib/services/vols/vols_package';
 import { setCarriers } from '@/lib/store/custom/searchSlices/carrierSlice';
 import { setAirplaneTypes } from '@/lib/store/custom/searchSlices/airplaneSlice';
+import { setPriceRange } from '@/lib/store/custom/searchSlices/priceSlice';
 
 interface VolsState {
     loading: boolean;
@@ -76,6 +77,14 @@ const extractUniqueAirplaneTypes = (flights: any[]) => {
     return Array.from(airplaneTypesMap.values());
 };
 
+const extractPriceRange = (flights: any[]) => {
+    const prices = flights.map(flight => flight.price);
+    return {
+        min: Math.min(...prices),
+        max: Math.max(...prices)
+    };
+};
+
 export const searchFlights = createAsyncThunk('flights/search', async (params: any, thunkApi) => {
     try {
         console.log('volsSlice - Search params received:', params);
@@ -104,6 +113,9 @@ export const searchFlights = createAsyncThunk('flights/search', async (params: a
             // Extract and set airplane types
             const airplaneTypes = extractUniqueAirplaneTypes(flights);
             thunkApi.dispatch(setAirplaneTypes(airplaneTypes));
+            // Extract and set price range
+            const priceRange = extractPriceRange(flights);
+            thunkApi.dispatch(setPriceRange(priceRange));
             return flights;
         }
         console.error('volsSlice - API error:', response.message);

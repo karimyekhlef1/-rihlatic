@@ -94,22 +94,25 @@ const VolSearchComponent: React.FC = () => {
   };
 
   const handleFromAirportSelect = (value: string, index: number = 0) => {
-    console.log('volSearchComponent - From airport selected:', value);
+    console.log("volSearchComponent - From airport selected:", value);
     if (value) {
       updateDestination(index, "from", value.toUpperCase());
     }
   };
 
   const handleToAirportSelect = (value: string, index: number = 0) => {
-    console.log('volSearchComponent - To airport selected:', value);
+    console.log("volSearchComponent - To airport selected:", value);
     if (value) {
       updateDestination(index, "to", value.toUpperCase());
     }
   };
 
   const handleSearch = () => {
-    console.log('volSearchComponent - Current destinations state:', destinations);
-    
+    console.log(
+      "volSearchComponent - Current destinations state:",
+      destinations
+    );
+
     // Validate required fields
     if (!destinations[0].from || !destinations[0].to) {
       console.error("Please select both departure and arrival airports");
@@ -118,8 +121,13 @@ const VolSearchComponent: React.FC = () => {
 
     // Validate airport code format
     const isValidAirportCode = (code: string) => /^[A-Z]{3}$/.test(code);
-    if (!isValidAirportCode(destinations[0].from) || !isValidAirportCode(destinations[0].to)) {
-      console.error("Invalid airport codes. Expected IATA format (e.g., PAR, ALG)");
+    if (
+      !isValidAirportCode(destinations[0].from) ||
+      !isValidAirportCode(destinations[0].to)
+    ) {
+      console.error(
+        "Invalid airport codes. Expected IATA format (e.g., PAR, ALG)"
+      );
       return;
     }
 
@@ -148,7 +156,7 @@ const VolSearchComponent: React.FC = () => {
       openReturn: false,
     };
 
-    console.log('volSearchComponent - Search params:', searchParams);
+    console.log("volSearchComponent - Search params:", searchParams);
     dispatch(searchFlights(searchParams));
   };
 
@@ -186,6 +194,14 @@ const VolSearchComponent: React.FC = () => {
               dateRange={dateRange}
               setDateRange={(value: DateRange) => dispatch(setDateRange(value))}
             />
+            <Button
+              onClick={handleSearch}
+              variant="active"
+              type="button"
+              className="rounded px-4 h-9 text-sm font-semibold w-28"
+            >
+              Search
+            </Button>
           </div>
         ) : (
           destinations.map((dest: any, i: number) => (
@@ -229,23 +245,8 @@ const VolSearchComponent: React.FC = () => {
           >
             Add Destination
           </Button>
-          <Button
-            variant="active"
-            type="button"
-            className="rounded px-2 py-2.5 text-sm font-semibold w-full sm:w-28 sm:h-9"
-          >
-            Search
-          </Button>
         </div>
       )}
-      <Button
-        onClick={handleSearch}
-        variant="active"
-        type="button"
-        className="rounded px-2 py-2.5 text-sm font-semibold w-full sm:w-28 sm:h-9"
-      >
-        Search Flights
-      </Button>
     </div>
   );
 };
