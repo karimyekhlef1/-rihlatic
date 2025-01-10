@@ -11,6 +11,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Search } from 'lucide-react';
+import Image from 'next/image';
 
 export default function AirlineCarrierSelector() {
   const dispatch = useDispatch();
@@ -18,21 +19,33 @@ export default function AirlineCarrierSelector() {
     (state: RootState) => state.carriers
   );
 
+  console.log('Carriers:', carriers);
+  console.log('Selected Carriers:', selectedCarriers);
+  console.log('Search Term:', searchTerm);
+
   const filteredCarriers = carriers.filter((carrier) =>
-    carrier.toLowerCase().includes(searchTerm.toLowerCase())
+    carrier.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const visibleCarriers = showAll
     ? filteredCarriers
     : filteredCarriers.slice(0, 4);
 
-  const handleCarrierToggle = (carrier: string) => {
-    dispatch(toggleCarrier(carrier));
+  const handleCarrierToggle = (carrierCode: string) => {
+    dispatch(toggleCarrier(carrierCode));
   };
 
   const handleSelectAll = () => {
     dispatch(toggleSelectAll());
   };
+
+  if (!carriers.length) {
+    return (
+      <div className="w-full max-w-sm p-4">
+        <p className="text-sm text-gray-500">No airlines available</p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-sm p-4">
@@ -40,14 +53,14 @@ export default function AirlineCarrierSelector() {
         <Search className="absolute left-2 top-2.5 h-3 w-3 text-gray-400" />
         <Input
           type="text"
-          placeholder="Search carriers"
+          placeholder="Search airlines"
           value={searchTerm}
           onChange={(e) => dispatch(setSearchTerm(e.target.value))}
           className="pl-7 text-xs font-semibold"
         />
       </div>
       <div className="flex justify-between items-center mb-2">
-        <span className="text-xs font-semibold">In results</span>
+        <span className="text-xs font-semibold">Airlines</span>
         <Button
           variant="ghost"
           size="sm"
@@ -62,18 +75,30 @@ export default function AirlineCarrierSelector() {
       <div className="space-y-2">
         {visibleCarriers.map((carrier, index) => (
           <div
-            key={carrier}
+            key={carrier.code}
             className={`flex items-center space-x-2 ${index === 3 && !showAll ? 'opacity-50' : ''}`}
           >
             <Checkbox
-              id={carrier}
-              checked={selectedCarriers.includes(carrier)}
-              onCheckedChange={() => handleCarrierToggle(carrier)}
+              id={carrier.code}
+              checked={selectedCarriers.includes(carrier.code)}
+              onCheckedChange={() => handleCarrierToggle(carrier.code)}
               className="h-3 w-3"
             />
-            <Label htmlFor={carrier} className="text-xs font-semibold">
-              {carrier}
-            </Label>
+            <div className="flex items-center space-x-2">
+              {carrier.logo && (
+                <div className="relative w-4 h-4">
+                  <Image
+                    src={carrier.logo}
+                    alt={carrier.name}
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              )}
+              <Label htmlFor={carrier.code} className="text-xs font-semibold">
+                {carrier.name}
+              </Label>
+            </div>
           </div>
         ))}
       </div>
@@ -84,7 +109,7 @@ export default function AirlineCarrierSelector() {
           onClick={() => dispatch(toggleShowAll())}
           className="mt-2 w-full text-xs font-semibold"
         >
-          {showAll ? 'Show less' : 'Show all carriers'}
+          {showAll ? 'Show less' : 'Show all airlines'}
         </Button>
       )}
     </div>

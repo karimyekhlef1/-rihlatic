@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import volsService from '@/lib/services/vols/vols_package';
+import { setCarriers } from '@/lib/store/custom/searchSlices/carrierSlice';
 
 interface VolsState {
     loading: boolean;
@@ -13,6 +14,32 @@ const initialState: VolsState = {
     flightsData: [],
     airportsData: {},
     error: null
+};
+
+const extractUniqueCarriers = (flights: any[]) => {
+    const carriersMap = new Map();
+    
+    flights.forEach(flight => {
+        flight.segments.forEach((segment: any[]) => {
+            segment.forEach(leg => {
+                // Check both airLine and airLineOperating
+                const airlines = [leg.airLine, leg.airLineOperating];
+                
+                airlines.forEach(airline => {
+                    if (airline && airline.iata) {
+                        carriersMap.set(airline.iata, {
+                            code: airline.iata,
+                            name: airline.name,
+                            // Logo can be added here if available in the future
+                            logo: null
+                        });
+                    }
+                });
+            });
+        });
+    });
+    
+    return Array.from(carriersMap.values());
 };
 
 export const searchFlights = createAsyncThunk('flights/search', async (params: any, thunkApi) => {
@@ -36,7 +63,11 @@ export const searchFlights = createAsyncThunk('flights/search', async (params: a
         console.log('volsSlice - API response:', response);
         
         if (response.success) {
-            return response.result.data;
+            const flights = response.result.data;
+            // Extract and set carriers
+            const carriers = extractUniqueCarriers(flights);
+            thunkApi.dispatch(setCarriers(carriers));
+            return flights;
         }
         console.error('volsSlice - API error:', response.message);
         throw new Error(response.message || 'Failed to fetch flights');
