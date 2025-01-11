@@ -1,24 +1,128 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import volsService from '@/lib/services/vols/vols_package';
+import { setCarriers } from '@/lib/store/custom/searchSlices/carrierSlice';
+import { setAirplaneTypes } from '@/lib/store/custom/searchSlices/airplaneSlice';
+import { setPriceRange } from '@/lib/store/custom/searchSlices/priceSlice';
 
 interface VolsState {
     loading: boolean;
-    flightsData: any;
+    flightsData: any[];
     airportsData: any;
+    error: string | null;
 }
 
 const initialState: VolsState = {
     loading: false,
-    flightsData: {},
+    flightsData: [],
     airportsData: {},
+    error: null
+};
+
+const extractUniqueCarriers = (flights: any[]) => {
+    const carriersMap = new Map();
+    
+    flights.forEach(flight => {
+        flight.segments.forEach((segment: any[]) => {
+            segment.forEach(leg => {
+                // Check both airLine and airLineOperating
+                const airlines = [leg.airLine, leg.airLineOperating];
+                
+                airlines.forEach(airline => {
+                    if (airline && airline.iata) {
+                        carriersMap.set(airline.iata, {
+                            code: airline.iata,
+                            name: airline.name,
+                            // Logo can be added here if available in the future
+                            logo: null
+                        });
+                    }
+                });
+            });
+        });
+    });
+    
+    return Array.from(carriersMap.values());
+};
+
+const getAirplaneName = (code: string): string => {
+    // This is a simplified mapping. In a real application, you might want to fetch this from an API or database
+    const airplaneMap: { [key: string]: string } = {
+        '73H': 'Boeing 737-800',
+        '320': 'Airbus A320',
+        '321': 'Airbus A321',
+        '738': 'Boeing 737-800',
+        '319': 'Airbus A319',
+        // Add more mappings as needed
+    };
+    return airplaneMap[code] || code;
+};
+
+const extractUniqueAirplaneTypes = (flights: any[]) => {
+    const airplaneTypesMap = new Map();
+    
+    flights.forEach(flight => {
+        flight.segments.forEach((segment: any[]) => {
+            segment.forEach(leg => {
+                if (leg.equipmentType) {
+                    const code = leg.equipmentType;
+                    airplaneTypesMap.set(code, {
+                        code,
+                        name: `${getAirplaneName(code)} (${code})`
+                    });
+                }
+            });
+        });
+    });
+    
+    return Array.from(airplaneTypesMap.values());
+};
+
+const extractPriceRange = (flights: any[]) => {
+    const prices = flights.map(flight => flight.price);
+    return {
+        min: Math.min(...prices),
+        max: Math.max(...prices)
+    };
 };
 
 export const searchFlights = createAsyncThunk('flights/search', async (params: any, thunkApi) => {
     try {
+        console.log('volsSlice - Search params received:', params);
+        // Validate required fields
+        if (!params.departureId || !params.arrivalId) {
+            console.error('volsSlice - Missing airport codes:', { departureId: params.departureId, arrivalId: params.arrivalId });
+            throw new Error('Please select both departure and arrival airports');
+        }
+
+        // Validate airport code format (IATA codes are typically 3 uppercase letters)
+        const isValidAirportCode = (code: string) => /^[A-Z]{3}$/.test(code);
+        
+        if (!isValidAirportCode(params.departureId) || !isValidAirportCode(params.arrivalId)) {
+            console.error('volsSlice - Invalid airport codes:', { departureId: params.departureId, arrivalId: params.arrivalId });
+            throw new Error('Invalid airport codes. Expected IATA format (e.g., PAR, ALG)');
+        }
+
         const response = await volsService.searchFlights(params);
-        return response;
+        console.log('volsSlice - API response:', response);
+        
+        if (response.success) {
+            const flights = response.result.data;
+            // Extract and set carriers
+            const carriers = extractUniqueCarriers(flights);
+            thunkApi.dispatch(setCarriers(carriers));
+            // Extract and set airplane types
+            const airplaneTypes = extractUniqueAirplaneTypes(flights);
+            thunkApi.dispatch(setAirplaneTypes(airplaneTypes));
+            // Extract and set price range
+            const priceRange = extractPriceRange(flights);
+            thunkApi.dispatch(setPriceRange(priceRange));
+            return flights;
+        }
+        console.error('volsSlice - API error:', response.message);
+        throw new Error(response.message || 'Failed to fetch flights');
     } catch (error: any) {
-        return thunkApi.rejectWithValue(error.response.data);
+        console.error('volsSlice - Error:', error.message);
+        return thunkApi.rejectWithValue(error.message || 'Failed to fetch flights');
     }
 });
 
@@ -34,19 +138,28 @@ export const getAirports = createAsyncThunk('airports/search', async (searchTerm
 const VolsSlice = createSlice({
     name: 'vols',
     initialState,
-    reducers: {},
+    reducers: {
+        clearFlightsData: (state) => {
+            state.flightsData = [];
+            state.error = null;
+        }
+    },
     extraReducers: (builder) => {
         // Search Flights
         builder
             .addCase(searchFlights.pending, (state) => {
                 state.loading = true;
+                state.error = null;
             })
             .addCase(searchFlights.fulfilled, (state, action) => {
                 state.loading = false;
-                state.flightsData = action.payload;
+                state.flightsData = action.payload || [];
+                state.error = null;
             })
-            .addCase(searchFlights.rejected, (state) => {
+            .addCase(searchFlights.rejected, (state, action) => {
                 state.loading = false;
+                state.flightsData = [];
+                state.error = action.payload as string || 'Failed to fetch flights';
             });
 
         // Get Airports
@@ -61,8 +174,8 @@ const VolsSlice = createSlice({
             .addCase(getAirports.rejected, (state) => {
                 state.loading = false;
             });
-    },
+    }
 });
 
-export const { actions, reducer } = VolsSlice;
-export default reducer;
+export const { clearFlightsData } = VolsSlice.actions;
+export default VolsSlice.reducer;

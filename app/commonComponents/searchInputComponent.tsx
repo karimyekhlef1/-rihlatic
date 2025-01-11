@@ -17,7 +17,7 @@ interface SearchInputProps {
   onSearch: (value: string) => void;
   isOnePick?: boolean;
   type: number;
-  selected?:string |null
+  selected?: string | null;
 }
 
 const SearchInputComponent: React.FC<SearchInputProps> = ({
@@ -25,7 +25,7 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({
   onSearch,
   dir,
   type,
-  selected
+  selected,
 }) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -85,10 +85,14 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({
       console.log(e);
     }
   };
-  const fullSearchClick =(item :any)=>{
-    searchClick(item.name)
-    onSearch(item)
-  }
+
+  const fullSearchClick = (item: any) => {
+    console.log('SearchInputComponent - Received item:', item);
+    searchClick(item.name);
+    const airportCode = item.iata || item.code;
+    console.log('SearchInputComponent - Sending airportCode:', airportCode);
+    onSearch(airportCode);
+  };
 
   useEffect(() => {
     getSearchData();
@@ -169,7 +173,7 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({
                 <DestinationComponent
                   key={index}
                   item={item}
-                  searchClick={()=>fullSearchClick(item)}
+                  searchClick={() => fullSearchClick(item)}
                   setIsPicked={setIsPicked}
                   type={type}
                 />

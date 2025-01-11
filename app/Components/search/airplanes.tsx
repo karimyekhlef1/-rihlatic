@@ -1,73 +1,104 @@
-import { useState } from "react";
-
-import { Checkbox } from "@/components/ui/checkbox";
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/lib/store/store';
+import {
+  setSearchTerm,
+  toggleAirplaneType,
+  toggleSelectAll,
+  toggleShowAll,
+} from '@/lib/store/custom/searchSlices/airplaneSlice';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Search } from 'lucide-react';
 
 export default function Airplanes() {
-  const airlines = [
-    "President Airlines",
-    "Alitalia",
-    "Nouvel Air Tunisie",
-    "Iberia Airlines",
-    "Air France",
-    "Air Algerie",
-    "Turkish Airlines",
-    "Lufthansa",
-    "Tunisair",
-  ];
+  const dispatch = useDispatch();
+  const { airplaneTypes, searchTerm, selectedAirplaneTypes, showAll } = useSelector(
+    (state: RootState) => state.airplanes
+  );
 
-  const [selectedAirlines, setSelectedAirlines] = useState<string[]>(airlines);
+  console.log('Airplane Types:', airplaneTypes);
+  console.log('Selected Types:', selectedAirplaneTypes);
+  console.log('Search Term:', searchTerm);
 
-  const handleSelectAll = (checked: boolean) => {
-    setSelectedAirlines(checked ? airlines : []);
+  const filteredAirplaneTypes = airplaneTypes.filter((type) =>
+    type.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const visibleAirplaneTypes = showAll
+    ? filteredAirplaneTypes
+    : filteredAirplaneTypes.slice(0, 4);
+
+  const handleAirplaneTypeToggle = (typeCode: string) => {
+    dispatch(toggleAirplaneType(typeCode));
   };
 
-  const handleAirlineToggle = (airline: string, checked: boolean) => {
-    setSelectedAirlines((prev) =>
-      checked ? [...prev, airline] : prev.filter((a) => a !== airline)
+  const handleSelectAll = () => {
+    dispatch(toggleSelectAll());
+  };
+
+  if (!airplaneTypes.length) {
+    return (
+      <div className="w-full max-w-sm p-4">
+        <p className="text-sm text-gray-500">No airplane types available</p>
+      </div>
     );
-  };
-
-  const allSelected = selectedAirlines.length === airlines.length;
+  }
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-xm font-medium text-muted-foreground">
-        Select your preferred airline
-      </h3>
-
-      <div className="flex items-center space-x-2">
-        <Checkbox
-          id="select-all"
-          checked={allSelected}
-          onCheckedChange={handleSelectAll}
+    <div className="w-full max-w-sm p-4">
+      <div className="relative mb-4">
+        <Search className="absolute left-2 top-2.5 h-3 w-3 text-gray-400" />
+        <Input
+          type="text"
+          placeholder="Search airplane types"
+          value={searchTerm}
+          onChange={(e) => dispatch(setSearchTerm(e.target.value))}
+          className="pl-7 text-xs font-semibold"
         />
-        <label
-          htmlFor="select-all"
-          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        >
-          Select All
-        </label>
       </div>
-
+      <div className="flex justify-between items-center mb-2">
+        <span className="text-xs font-semibold">Airplane Types</span>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleSelectAll}
+          className="text-xs font-semibold"
+        >
+          {selectedAirplaneTypes.length === airplaneTypes.length
+            ? 'Deselect all'
+            : 'Select all'}
+        </Button>
+      </div>
       <div className="space-y-2">
-        {airlines.map((airline) => (
-          <div key={airline} className="flex items-center space-x-2">
+        {visibleAirplaneTypes.map((type, index) => (
+          <div
+            key={type.code}
+            className={`flex items-center space-x-2 ${index === 3 && !showAll ? 'opacity-50' : ''}`}
+          >
             <Checkbox
-              id={airline}
-              checked={selectedAirlines.includes(airline)}
-              onCheckedChange={(checked) =>
-                handleAirlineToggle(airline, checked as boolean)
-              }
+              id={type.code}
+              checked={selectedAirplaneTypes.includes(type.code)}
+              onCheckedChange={() => handleAirplaneTypeToggle(type.code)}
+              className="h-3 w-3"
             />
-            <label
-              htmlFor={airline}
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              {airline}
-            </label>
+            <Label htmlFor={type.code} className="text-xs font-semibold">
+              {type.name}
+            </Label>
           </div>
         ))}
       </div>
+      {filteredAirplaneTypes.length > 4 && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => dispatch(toggleShowAll())}
+          className="mt-2 text-xs font-semibold w-full"
+        >
+          {showAll ? 'Show less' : `Show ${filteredAirplaneTypes.length - 4} more`}
+        </Button>
+      )}
     </div>
   );
 }
