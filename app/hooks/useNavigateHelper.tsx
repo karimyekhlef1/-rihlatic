@@ -9,7 +9,6 @@ export const useNavigateHelper = ({ onSearch }: UseNavigateHelperProps) => {
 
   const handleClickExplore = async (redirect: string) => {
     if (onSearch) {
-        console.log("---yes-p[-")
        onSearch(); 
     }
     router.push(redirect); // Navigate after search

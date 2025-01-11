@@ -6,22 +6,31 @@ import { setDateRange } from '@/lib/store/engine/hotel_search_slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { DateRange } from 'react-day-picker';
 import { useNavigateHelper } from '@/app/hooks/useNavigateHelper';
-
-const HotelsSearchComponent: React.FC = () => {
+import { setSelectedDestination , setSelectedDestinationName } from '@/lib/store/engine/hotel_search_slice';
+interface HotelsSearchComponentProps {
+    onSearch: () => Promise<void>; // Define the onSearch prop type
+  }
+  
+const HotelsSearchComponent: React.FC<HotelsSearchComponentProps> = ({ onSearch }) => {
 
     const dispatch = useDispatch<any>();
     const dateRange = useSelector((state: { hotelSearchSlice: { dateRange: DateRange } }) => state.hotelSearchSlice?.dateRange);
-    const { handleClickExplore } = useNavigateHelper();
-
+    const { handleClickExplore } = useNavigateHelper({onSearch});
+    const selectedDestinationName = useSelector((state: any) => state.hotelSearchSlice.selectedDestinationName);
+    const handleSelectionDestination = (item: any) => {
+    dispatch(setSelectedDestinationName(item.name));
+    dispatch(setSelectedDestination(item));
+    };
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 ">
             <div className="flex justify-start gap-2 flex-wrap">
                 <div className="flex items-center flex-wrap gap-2">
                     <SearchInputComponent
                         placeholder="City, airports or place"
-                        onSearch={(value) => console.log(value)}
+                        onSearch={handleSelectionDestination}
                         dir="To"
                         type={3}
+                        selected={selectedDestinationName}
                     />
                     {/* <DatePickerComponent isOnePick={false} /> */}
                     <DatePickerComponent isOnePick={false} dateRange={dateRange} setDateRange={(value: DateRange) => dispatch(setDateRange(value))} />

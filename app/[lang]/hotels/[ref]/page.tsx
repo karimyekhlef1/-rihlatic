@@ -16,11 +16,12 @@ import BookingHotelComponent from '@/app/Components/hotels/bookHotel';
 import PopularFacilities from '@/app/Components/hotels/popularFacilities';
 import OrganizeSection from '@/app/Components/home/organizeSection';
 import { getHotelsDetails } from '@/lib/store/api/hotels/hotelsSlice';
-import { useEffect, useState } from 'react';
+import { useEffect, useState ,useCallback} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from '@/app/Components/home/Loading';
 import { HotelDetails, Room } from '@/app/Types/hotel/HotelDetails';
 import { useParams, useSearchParams } from 'next/navigation';
+import { format } from "date-fns";
 
 export default function Details() {
   const params = useParams();
@@ -29,34 +30,47 @@ export default function Details() {
   const { loading, hotelData } = useSelector((state: any) => state.hotels);
   const [hotelDetails, setHotelDetails] = useState<HotelDetails | undefined>(undefined);
   const [selectedRoom, setSelectedRoom] = useState<Room | undefined>(undefined);
+  const selectedDestination = useSelector((state: any) => state.hotelSearchSlice.selectedDestination);
+  
+const dateRange = useSelector((state: { hotelSearchSlice: { dateRange: any } }) => state.hotelSearchSlice?.dateRange);
+const rooms = useSelector<any>((state) => state.hotelSearchSlice.rooms);
 
-  useEffect(() => {
+
+const prepareRoomData = useCallback((rooms: any) => {
+  return rooms.reduce((acc: any, room: any, index: number) => ({
+    ...acc,
+    [index]: {
+      adult: room.adults,
+      children: room.children,
+      count: 1,
+      Age: room.childAges?.length ? room.childAges.join('-') : null
+    }
+  }), {});
+}, []);
+useEffect(() => {
     const ref = params.ref.toString();
     const supplier = searchParams.get('supplier');
 
-    const body = {
+    const requestBody = {
       supplier,
-      checkin: '2025-01-10',
-      checkout: '2025-01-15',
+      checkin: format(dateRange.from, "yyyy-MM-dd"),
+      checkout: format(dateRange.to || dateRange.from, "yyyy-MM-dd"),
       city: {
-        mygo: { id: 'TABR' },
-        cng: { id: '109' },
+        mygo: { id: selectedDestination.mygo_code },
+        cng: { id: selectedDestination.cng_code },
         hb: { id: null },
       },
       hotel: ref,
-      room: {
-        0: { adult: 2, children: 0, count: 1, Age: null },
-      
-      },
+      room: prepareRoomData(rooms),
     };
-
     const getData = async () => {
-      const result = await dispatch(getHotelsDetails(body));
+      const result = await dispatch(getHotelsDetails(requestBody));
+    console.log("result===>",result)
       setHotelDetails(result.payload.result.hotel);
     };
 
     getData();
-  }, [dispatch, params.ref, searchParams]);
+  }, [dispatch, params.ref, dateRange]);
 
   const handleSelectedRoom = (room: Room, isChecked: boolean) => {
     if (isChecked) {

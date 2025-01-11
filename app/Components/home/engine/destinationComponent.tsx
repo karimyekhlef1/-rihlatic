@@ -13,7 +13,8 @@ interface DestinationComponentProps {
 const DestinationComponent: React.FC<DestinationComponentProps> = ({ item, searchClick, setIsPicked, type }) => {
     return (
         <li
-            className="hover:bg-slate-100 hover:cursor-pointer"
+        
+            className="hover:bg-slate-100 hover:cursor-pointer  "
             onClick={() => { searchClick(item.name); setIsPicked(true) }}
         >
             <div className="w-full flex justify-between items-center p-3">
