@@ -70,7 +70,7 @@ useEffect(() => {
     };
 
     getData();
-  }, [dispatch, params.ref, dateRange]);
+  }, [params.ref, dateRange]);
 
   const handleSelectedRoom = (room: Room, isChecked: boolean) => {
     if (isChecked) {
