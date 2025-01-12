@@ -12,8 +12,17 @@ import AlertPrices from "@/app/Components/search/alertPrices";
 import TravelOptions2 from "@/app/Components/search/travelOptions2";
 import TripDetails from "@/app/Components/search/tripDetails";
 import TripSummaryComponent from "@/app/Components/packages/tripSummary";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+} from "@/components/ui/pagination";
+import { cn, buttonVariants } from "@/lib/utils";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   searchFlights,
@@ -45,6 +54,22 @@ function FlightsResultsContent() {
   const isSummaryOpen = useSelector(
     (state: { vols: { isSummaryOpen: boolean } }) => state.vols.isSummaryOpen
   );
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+
+  // Calculate pagination values
+  const totalPages = Math.ceil(flightsData.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentFlights = flightsData.slice(startIndex, endIndex);
+
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Scroll to top of results
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   useEffect(() => {
     if (searchData) {
@@ -86,9 +111,58 @@ function FlightsResultsContent() {
           ) : error ? (
             <div>Error: {error}</div>
           ) : flightsData.length > 0 ? (
-            flightsData.map((flight, index) => (
-              <ResultCard key={index} flight={flight} />
-            ))
+            <>
+              {currentFlights.map((flight, index) => (
+                <ResultCard key={index} flight={flight} />
+              ))}
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <Pagination className="my-4">
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious
+                        className={cn(
+                          buttonVariants({ variant: "outline" }),
+                          "hover:bg-orange-100 hover:text-orange-500",
+                          currentPage === 1 && "pointer-events-none opacity-50"
+                        )}
+                        onClick={() => handlePageChange(currentPage - 1)}
+                      />
+                    </PaginationItem>
+
+                    {Array.from({ length: totalPages }).map((_, i) => (
+                      <PaginationItem key={i}>
+                        <PaginationLink
+                          className={cn(
+                            buttonVariants({ variant: "outline" }),
+                            "hover:bg-orange-100 hover:text-orange-500",
+                            currentPage === i + 1 &&
+                              "bg-orange-500 text-white hover:bg-orange-600 hover:text-white"
+                          )}
+                          onClick={() => handlePageChange(i + 1)}
+                          isActive={currentPage === i + 1}
+                        >
+                          {i + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+
+                    <PaginationItem>
+                      <PaginationNext
+                        className={cn(
+                          buttonVariants({ variant: "outline" }),
+                          "hover:bg-orange-100 hover:text-orange-500",
+                          currentPage === totalPages &&
+                            "pointer-events-none opacity-50"
+                        )}
+                        onClick={() => handlePageChange(currentPage + 1)}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              )}
+            </>
           ) : (
             <NoFlightsFound />
           )}
@@ -105,7 +179,9 @@ function FlightsResultsContent() {
         onOpenChange={() => dispatch(closeDialogSummary())}
       >
         <DialogContent>
-          {selectedFlight && <TripSummaryComponent flightInfo={selectedFlight} />}
+          {selectedFlight && (
+            <TripSummaryComponent flightInfo={selectedFlight} />
+          )}
         </DialogContent>
       </Dialog>
     </>
