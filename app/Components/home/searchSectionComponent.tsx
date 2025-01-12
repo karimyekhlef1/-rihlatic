@@ -8,6 +8,8 @@ import PackagesSearchComponent from './engine/packages/packagesSearchComponent';
 import HotelsSearchComponent from './engine/hotels/hotelsSearchComponent';
 
 const SearchSectionComponent: React.FC = () => {
+   const onSearch = async () => {
+    };
 
   const[selected, setSelected] = useState<number>(0);
 
@@ -16,9 +18,9 @@ const SearchSectionComponent: React.FC = () => {
       case 0:
         return <VolSearchComponent />;
       case 1:
-        return <PackagesSearchComponent />;
+        return <PackagesSearchComponent onSearch={onSearch}  />;
       case 2:
-        return <HotelsSearchComponent />;
+        return <HotelsSearchComponent onSearch={onSearch}  />;
       case 3:
         return <OmrasSearchComponent />;
       default:
