@@ -25,12 +25,18 @@ export default function ResultCard({ flight }: ResultCardProps) {
         <Card className="flex-grow rounded-t-xl sm:rounded-t-xl sm:border-r-0 sm:mb-0 border-b-0 sm:border-b">
           <CardContent className="p-4">
             <div className="space-y-4">
-              <FlightInfos />
-
-              {/* SEPARATOR */}
-              <FlightSeparator />
-
-              <FlightInfos />
+              {flight.segments && (
+                <>
+                  {flight.segments.map((segment, index) => (
+                    <FlightInfos
+                      key={index}
+                      segments={[segment]}
+                      type={index === 0 ? "outbound" : "inbound"}
+                    />
+                  ))}
+                  {flight.segments.length > 1 && <FlightSeparator />}
+                </>
+              )}
             </div>
           </CardContent>
 
