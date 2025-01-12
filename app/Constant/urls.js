@@ -50,6 +50,8 @@ export const omra_cancelPenalty_endpoint =
   BASE_URL + "/front/omras/bookings/cancelPenalty/:id";
 //hotels
 export const hotel_details = BASE_URL + "/front/hotel_details";
+export const search_hotel_endpoint = BASE_URL + "/front/hotels_search";
+
 // Flights
 export const flights_search_endpoint = BASE_URL + "/front/flights_search";
 // Airports

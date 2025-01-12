@@ -87,13 +87,14 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({
   };
 
   const fullSearchClick = (item: any) => {
-    console.log('SearchInputComponent - Received item:', item);
+   // console.log('SearchInputComponent - Received item:', item);
     searchClick(item.name);
-    const airportCode = item.iata || item.code;
-    console.log('SearchInputComponent - Sending airportCode:', airportCode);
-    onSearch(airportCode);
+   // const airportCode = item.iata || item.code;
+    //console.log('SearchInputComponent - Sending airportCode:', airportCode);
+    onSearch(item);
   };
 
+  
   useEffect(() => {
     getSearchData();
   }, [searchValue]);

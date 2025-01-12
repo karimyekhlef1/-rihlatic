@@ -5,11 +5,14 @@ interface HotelState {
     dateRange: DateRange;
     rooms: Room[];
     volError: string;
+    selectedDestinationName:string | null 
+    selectedDestination: any | null   
 }
 
 interface Room {
     adults: number;
     children: number;
+    childAges:number[]
 }
 
 const initialState: HotelState = {
@@ -21,9 +24,12 @@ const initialState: HotelState = {
         {
             adults: 1,
             children: 0,
+            childAges:[]
         },
     ],
     volError: '',
+    selectedDestinationName: null ,
+    selectedDestination: null 
 };
 
 const hotelSearchSlice = createSlice({
@@ -39,9 +45,16 @@ const hotelSearchSlice = createSlice({
         setDateRange: (state, action: PayloadAction<DateRange>) => {
             state.dateRange = action.payload;
         },
+        setSelectedDestination: (state, action: PayloadAction<any | null>) => {
+            state.selectedDestination = action.payload;
+        },
+        setSelectedDestinationName: (state, action: PayloadAction<string | null>) => {
+            state.selectedDestinationName = action.payload;
+        },
+
     },
 });
 
-export const { setHotelRooms, setDateRange, setVolError } = hotelSearchSlice.actions;
+export const { setHotelRooms, setDateRange, setVolError , setSelectedDestination  ,setSelectedDestinationName } = hotelSearchSlice.actions;
 
 export default hotelSearchSlice.reducer;
