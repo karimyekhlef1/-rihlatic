@@ -3,14 +3,19 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import FlightInfos from "./flightInfos";
 import FlightSeparator from "./flightSeparator";
 import FlightInfoFooter from "./flightInfoFooter";
-
+import { Flight } from "@/lib/types/flight";
 import { useDispatch } from "react-redux";
 import { openDialogDetail } from "@/lib/store/custom/mainSlices/dialogSlice";
-import TripDetails from "./tripDetails";
+import { setSelectedFlight } from "@/lib/store/api/vols/volsSlice";
 
-export default function ResultCard() {
+interface ResultCardProps {
+  flight: Flight;
+}
+
+export default function ResultCard({ flight }: ResultCardProps) {
   const dispatch = useDispatch();
   const handleOpenDialog = () => {
+    dispatch(setSelectedFlight(flight));
     dispatch(openDialogDetail());
   };
 
@@ -39,7 +44,7 @@ export default function ResultCard() {
         <Card className="w-full sm:w-60 rounded-b-xl sm:rounded-t-xl sm:border-l-0 flex flex-col border-t-0 sm:border-t">
           <CardContent className="p-4 flex-grow flex flex-col justify-between">
             <div className="flex-grow flex items-center justify-center">
-              <span className="text-xl font-bold">$584</span>
+              <span className="text-xl font-bold">{flight ? new Intl.NumberFormat('fr-DZ', { style: 'decimal', maximumFractionDigits: 0 }).format(flight.price) + ' DZD' : '584 DZD'}</span>
             </div>
             <Button
               className="w-full mt-4 text-sm"
@@ -50,9 +55,6 @@ export default function ResultCard() {
             </Button>
           </CardContent>
         </Card>
-        <div>
-          <TripDetails />
-        </div>
       </div>
     </div>
   );
