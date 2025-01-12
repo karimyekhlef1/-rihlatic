@@ -8,6 +8,9 @@ interface VolSearchState {
   volPassanger: volPassanger;
   volPackage: volPackage;
   volError: string;
+  searchData: any | null;
+  departureAirport: string;
+  arrivalAirport: string;
 }
 
 interface volPassanger {
@@ -57,6 +60,9 @@ const initialState: VolSearchState = {
     openReturn: false,
   },
   volError: "",
+  searchData: null,
+  departureAirport: "",
+  arrivalAirport: "",
 };
 
 const volSearchSlice = createSlice({
@@ -82,6 +88,40 @@ const volSearchSlice = createSlice({
     setDateRange: (state, action: PayloadAction<DateRange>) => {
       state.dateRange = action.payload;
     },
+    setDepartureAirport: (state, action: PayloadAction<string>) => {
+      state.departureAirport = action.payload;
+    },
+    setArrivalAirport: (state, action: PayloadAction<string>) => {
+      state.arrivalAirport = action.payload;
+    },
+    setSearchData: (state) => {
+      const flightClass = state.volMethod === "Not Specified" ? "NN" :
+                         state.volMethod === "Economy" ? "M" :
+                         state.volMethod === "Premium Economy" ? "W" :
+                         state.volMethod === "Business" ? "C" :
+                         state.volMethod === "First Class" ? "F" : "NN";
+
+      state.searchData = {
+        flightType: state.volType === "One Way" ? "ONE_WAY" :
+                    state.volType === "Round Trip" ? "ROUND_TRIP" :
+                    "MULTI_CITY",
+        flightClass,
+        quantityAdults: state.volPassanger.adults,
+        quantityChild: state.volPassanger.children,
+        quantityInfant: state.volPassanger.infants,
+        quantityInfantWithSeat: state.volPassanger.infantsSeat,
+        quantityStudent: state.volPassanger.students,
+        quantitySenior: state.volPassanger.thirdAge,
+        departureId: state.departureAirport,
+        arrivalId: state.arrivalAirport,
+        departureDate: state.dateRange.from?.toISOString().split('T')[0],
+        arrivalDate: state.volType !== "ONE_WAY" ? state.dateRange.to?.toISOString().split('T')[0] : null,
+        flightRefundable: state.volPackage.refundable,
+        flightWithBaggage: state.volPackage.uniquePackage,
+        directFlightsOnly: state.volPackage.directFlight,
+        openReturn: state.volPackage.openReturn
+      };
+    },
   },
 });
 
@@ -92,6 +132,9 @@ export const {
   setVolPackage,
   setDateRange,
   setVolError,
+  setSearchData,
+  setDepartureAirport,
+  setArrivalAirport,
 } = volSearchSlice.actions;
 
 export default volSearchSlice.reducer;

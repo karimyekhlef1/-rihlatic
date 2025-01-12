@@ -128,6 +128,7 @@ export const store = configureStore({
     
     // vols
     vols: volsReducer,
+    volsSlice: volsReducer,  // Add this line
     price: priceReducer,
   },
   // we can delete this later it's just to supress serializableCheck warnings
