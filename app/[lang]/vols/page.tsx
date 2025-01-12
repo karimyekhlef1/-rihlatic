@@ -1,6 +1,8 @@
 "use client";
 
 import ResultCard from "@/app/Components/search/resultCard";
+import ResultCardSkeleton from "@/app/Components/search/resultCardSkeleton";
+import NoFlightsFound from "@/app/Components/search/noFlightsFound";
 import ResultsSidebar from "@/app/Components/search/resultsSidebar";
 import { Provider } from "react-redux";
 import { store } from "@/lib/store/store";
@@ -77,7 +79,10 @@ function FlightsResultsContent() {
         {/* Main content */}
         <div className="flex flex-col w-full space-y-4 sm:space-y-0 sm:w-[650px]">
           {loading ? (
-            <div>Loading...</div>
+            // Show 6 skeleton items during loading
+            Array.from({ length: 6 }).map((_, index) => (
+              <ResultCardSkeleton key={index} />
+            ))
           ) : error ? (
             <div>Error: {error}</div>
           ) : flightsData.length > 0 ? (
@@ -85,7 +90,7 @@ function FlightsResultsContent() {
               <ResultCard key={index} flight={flight} />
             ))
           ) : (
-            <div>No flights found</div>
+            <NoFlightsFound />
           )}
         </div>
 
