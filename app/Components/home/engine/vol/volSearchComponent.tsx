@@ -93,17 +93,23 @@ const VolSearchComponent: React.FC = () => {
     setDestinations(updatedDestinations);
   };
 
-  const handleFromAirportSelect = (value: string, index: number = 0) => {
-    console.log("volSearchComponent - From airport selected:", value);
-    if (value) {
-      updateDestination(index, "from", value.toUpperCase());
+  const handleFromAirportSelect = (item:any , index: number = 0) => {
+    console.log('SearchInputComponent - Sending item:', item);
+
+    const airportCode = item.iata || item.code;
+    console.log('SearchInputComponent - Sending airportCode:', airportCode);
+
+    console.log("volSearchComponent - From airport selected:", airportCode);
+    if (airportCode) {
+      updateDestination(index, "from", airportCode.toUpperCase());
     }
   };
 
-  const handleToAirportSelect = (value: string, index: number = 0) => {
-    console.log("volSearchComponent - To airport selected:", value);
-    if (value) {
-      updateDestination(index, "to", value.toUpperCase());
+  const handleToAirportSelect = (item: any, index: number = 0) => {
+    const airportCode = item.iata || item.code;
+    console.log("volSearchComponent - To airport selected:", airportCode);
+    if (airportCode) {
+      updateDestination(index, "to", airportCode.toUpperCase());
     }
   };
 
