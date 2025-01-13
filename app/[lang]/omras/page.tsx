@@ -6,6 +6,16 @@ import OmraTripComponent from "@/app/commonComponents/OmratripComponent";
 import Loading from "@/app/Components/home/Loading";
 import { useSelector, useDispatch } from "react-redux";
 import { getOmraDetails } from "@/lib/store/api/omras/omrasSlice";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export default function Omras() {
   const { loading, omraData } = useSelector((state: any) => state.omras);
@@ -102,52 +112,51 @@ export default function Omras() {
             />
           ))}
         </div>
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex justify-center items-center gap-2 mt-8">
-            <button
-              onClick={() => setCurrentPage(1)}
-              disabled={currentPage === 1}
-              className="px-3 py-1 rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              «
-            </button>
-            <button
-              onClick={() => setCurrentPage(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="px-3 py-1 rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              ‹
-            </button>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={`px-3 py-1 rounded-md ${
-                  currentPage === page
-                    ? "bg-orange-500 text-white"
-                    : "bg-gray-100 hover:bg-gray-200"
-                }`}
-              >
-                {page}
-              </button>
+        
+        {/* Pagination - always shown */}
+        <Pagination className="my-4">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                className={cn(
+                  buttonVariants({ variant: "outline" }),
+                  "hover:bg-orange-100 hover:text-orange-500",
+                  (currentPage === 1 || totalPages <= 1) && "pointer-events-none opacity-50"
+                )}
+                onClick={() => setCurrentPage(currentPage - 1)}
+              />
+            </PaginationItem>
+
+            {Array.from({ length: Math.max(totalPages, 1) }).map((_, i) => (
+              <PaginationItem key={i}>
+                <PaginationLink
+                  className={cn(
+                    buttonVariants({ variant: "outline" }),
+                    "hover:bg-orange-100 hover:text-orange-500",
+                    currentPage === i + 1 &&
+                      "bg-orange-500 text-white hover:bg-orange-600 hover:text-white",
+                    totalPages <= 1 && "pointer-events-none"
+                  )}
+                  onClick={() => setCurrentPage(i + 1)}
+                  isActive={currentPage === i + 1}
+                >
+                  {i + 1}
+                </PaginationLink>
+              </PaginationItem>
             ))}
-            <button
-              onClick={() => setCurrentPage(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className="px-3 py-1 rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              ›
-            </button>
-            <button
-              onClick={() => setCurrentPage(totalPages)}
-              disabled={currentPage === totalPages}
-              className="px-3 py-1 rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              »
-            </button>
-          </div>
-        )}
+
+            <PaginationItem>
+              <PaginationNext
+                className={cn(
+                  buttonVariants({ variant: "outline" }),
+                  "hover:bg-orange-100 hover:text-orange-500",
+                  (currentPage === totalPages || totalPages <= 1) && "pointer-events-none opacity-50"
+                )}
+                onClick={() => setCurrentPage(currentPage + 1)}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
     </div>
   );
