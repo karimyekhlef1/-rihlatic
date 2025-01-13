@@ -65,6 +65,14 @@ function FlightsResultsContent() {
     (state: RootState) => state.airplanes.selectedAirplaneTypes
   );
 
+  const selectedPriceRange = useSelector(
+    (state: RootState) => state.price.selectedRange
+  );
+
+  const availablePriceRange = useSelector(
+    (state: RootState) => state.price.availableRange
+  );
+
   const selectedFlight = useSelector(
     (state: { vols: { selectedFlight: Flight | null } }) =>
       state.vols.selectedFlight
@@ -77,7 +85,7 @@ function FlightsResultsContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  // Filter flights based on selected times, stops, carriers, and airplane types
+  // Filter flights based on selected times, stops, carriers, airplane types, and price
   const filteredFlights = flightsData.filter((flight) => {
     if (
       !flight.segments ||
@@ -136,12 +144,20 @@ function FlightsResultsContent() {
         selectedAirplaneTypes.includes(segment.equipmentType)
       );
 
+    // Check if flight price is within selected range
+    const matchesPrice =
+      (selectedPriceRange.min === availablePriceRange.min &&
+        selectedPriceRange.max === availablePriceRange.max) ||
+      (flight.price >= selectedPriceRange.min &&
+        flight.price <= selectedPriceRange.max);
+
     return (
       matchesDeparture &&
       matchesReturn &&
       matchesStops &&
       matchesCarrier &&
-      matchesAirplaneType
+      matchesAirplaneType &&
+      matchesPrice
     );
   });
 
@@ -173,6 +189,7 @@ function FlightsResultsContent() {
     selectedStopFilter,
     selectedCarriers,
     selectedAirplaneTypes,
+    selectedPriceRange,
   ]);
 
   return (
