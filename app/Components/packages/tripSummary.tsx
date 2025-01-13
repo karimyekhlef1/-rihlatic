@@ -43,9 +43,39 @@ export default function TripSummaryComponent({ flightInfo }: TripSummaryProps) {
   // Function to toggle expanded state
   const toggleExpanded = () => setIsExpanded(!isExpanded);
 
+  // Validate flight data
+  if (!flightInfo?.segments || !Array.isArray(flightInfo.segments) || flightInfo.segments.length === 0) {
+    return (
+      <Card className="w-full bg-white rounded-lg shadow">
+        <CardContent className="p-4">
+          <div className="flex items-center justify-center text-red-500">
+            <CircleAlert className="w-5 h-5 mr-2" />
+            <span>Flight information unavailable</span>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   // Get first and last airports for the entire trip
-  const firstSegment = flightInfo.segments[0][0];
-  const lastSegment = flightInfo.segments[flightInfo.segments.length - 1].slice(-1)[0];
+  const firstSegment = flightInfo.segments[0]?.[0];
+  const lastSegmentArray = flightInfo.segments[flightInfo.segments.length - 1];
+  const lastSegment = lastSegmentArray?.[lastSegmentArray.length - 1];
+
+  // Additional validation for first and last segments
+  if (!firstSegment || !lastSegment) {
+    return (
+      <Card className="w-full bg-white rounded-lg shadow">
+        <CardContent className="p-4">
+          <div className="flex items-center justify-center text-red-500">
+            <CircleAlert className="w-5 h-5 mr-2" />
+            <span>Incomplete flight information</span>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   const totalDuration = calculateTotalDuration(flightInfo.segments);
   const isDirectFlight = flightInfo.segments.length === 1 && flightInfo.segments[0].length === 1;
 
@@ -110,7 +140,7 @@ export default function TripSummaryComponent({ flightInfo }: TripSummaryProps) {
                       <div className="w-full sm:w-2/3 sm:pl-4 md:pl-8 lg:pl-28 flex flex-col">
                         <div className="mb-2 sm:mb-4">
                           <p className="text-xs sm:text-sm font-semibold">
-                            {leg.boardAirportName.name}
+                            {leg.boardAirportName?.name || leg.boardAirport}
                           </p>
                           <p className="text-[10px] sm:text-xs text-gray-500">
                             {leg.boardAirport}
@@ -146,7 +176,7 @@ export default function TripSummaryComponent({ flightInfo }: TripSummaryProps) {
 
                         <div className="mt-auto">
                           <p className="text-xs sm:text-sm font-semibold">
-                            {leg.offAirportName.name}
+                            {leg.offAirportName?.name || leg.offAirport}
                           </p>
                           <p className="text-[10px] sm:text-xs text-gray-500">
                             {leg.offAirport}
@@ -158,7 +188,7 @@ export default function TripSummaryComponent({ flightInfo }: TripSummaryProps) {
                     {/* Show layover info if there's another leg in this segment */}
                     {legIndex < segment.length - 1 && (
                       <LayoverInfo
-                        airport={segment[legIndex + 1].boardAirportName.name}
+                        airport={segment[legIndex + 1].boardAirportName?.name || segment[legIndex + 1].boardAirport}
                         duration={calculateLayoverDuration(
                           leg.offTime,
                           segment[legIndex + 1].boardTime
@@ -171,7 +201,8 @@ export default function TripSummaryComponent({ flightInfo }: TripSummaryProps) {
                 {/* Show layover between segments */}
                 {segmentIndex < flightInfo.segments.length - 1 && (
                   <LayoverInfo
-                    airport={flightInfo.segments[segmentIndex + 1][0].boardAirportName.name}
+                    airport={flightInfo.segments[segmentIndex + 1][0].boardAirportName?.name || 
+                            flightInfo.segments[segmentIndex + 1][0].boardAirport}
                     duration={calculateLayoverDuration(
                       segment[segment.length - 1].offTime,
                       flightInfo.segments[segmentIndex + 1][0].boardTime
@@ -206,7 +237,7 @@ export default function TripSummaryComponent({ flightInfo }: TripSummaryProps) {
                             </p>
                           </div>
                           <p className="font-semibold text-[10px] sm:text-xs">
-                            {leg.airLine?.name}
+                            {leg.airLine?.name || 'N/A'}
                           </p>
                           <div className="flex items-center">
                             <Info size={15} className="mr-1 sm:mr-2" />
@@ -215,7 +246,7 @@ export default function TripSummaryComponent({ flightInfo }: TripSummaryProps) {
                             </p>
                           </div>
                           <p className="font-semibold text-[10px] sm:text-xs">
-                            {leg.flightNumber}
+                            {leg.flightNumber || 'N/A'}
                           </p>
                           <div className="flex items-center">
                             <Briefcase size={15} className="mr-1 sm:mr-2" />
@@ -224,7 +255,7 @@ export default function TripSummaryComponent({ flightInfo }: TripSummaryProps) {
                             </p>
                           </div>
                           <p className="font-semibold text-[10px] sm:text-xs">
-                            {leg.baggage}
+                            {leg.baggage || 'N/A'}
                           </p>
                         </div>
                       </div>

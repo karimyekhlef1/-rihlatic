@@ -19,24 +19,25 @@ export default function ResultCard({ flight }: ResultCardProps) {
     dispatch(openDialogDetail());
   };
 
+  // Validate flight data before rendering
+  if (!flight?.segments || !Array.isArray(flight.segments) || flight.segments.length === 0) {
+    return null;
+  }
+
   return (
     <div className="w-full max-w-sm sm:max-w-4xl mx-auto sm:px-0 sm:pb-4">
       <div className="flex flex-col sm:flex-row w-full transition-all duration-300 ease-in-out sm:hover:drop-shadow-md">
         <Card className="flex-grow rounded-t-xl sm:rounded-t-xl sm:border-r-0 sm:mb-0 border-b-0 sm:border-b">
           <CardContent className="p-4">
             <div className="space-y-4">
-              {flight.segments && (
-                <>
-                  {flight.segments.map((segment, index) => (
-                    <FlightInfos
-                      key={index}
-                      segments={[segment]}
-                      type={index === 0 ? "outbound" : "inbound"}
-                    />
-                  ))}
-                  {flight.segments.length > 1 && <FlightSeparator />}
-                </>
-              )}
+              {flight.segments.map((segment, index) => (
+                <FlightInfos
+                  key={index}
+                  segments={[segment]}
+                  type={index === 0 ? "outbound" : "inbound"}
+                />
+              ))}
+              {flight.segments.length > 1 && <FlightSeparator />}
             </div>
           </CardContent>
 
@@ -50,7 +51,9 @@ export default function ResultCard({ flight }: ResultCardProps) {
         <Card className="w-full sm:w-60 rounded-b-xl sm:rounded-t-xl sm:border-l-0 flex flex-col border-t-0 sm:border-t">
           <CardContent className="p-4 flex-grow flex flex-col justify-between">
             <div className="flex-grow flex items-center justify-center">
-              <span className="text-xl font-bold">{flight ? new Intl.NumberFormat('fr-DZ', { style: 'decimal', maximumFractionDigits: 0 }).format(flight.price) + ' DZD' : '584 DZD'}</span>
+              <span className="text-xl font-bold">
+                {new Intl.NumberFormat('fr-DZ', { style: 'decimal', maximumFractionDigits: 0 }).format(flight.price)} DZD
+              </span>
             </div>
             <Button
               className="w-full mt-4 text-sm"
