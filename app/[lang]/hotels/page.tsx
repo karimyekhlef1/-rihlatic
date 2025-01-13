@@ -14,6 +14,7 @@ import { setMaxMinRangePrice , setFilterRangePrice } from '@/lib/store/custom/ho
 import { getHotels } from '@/lib/store/api/hotels/hotelsSlice';
 import Loading from '@/app/Components/home/Loading';
 import { format } from "date-fns";
+import EmptyComponent from '@/app/commonComponents/emptyComponent';
 interface Room {
   adults: number;
   children: number;
@@ -143,10 +144,15 @@ export default function Hotels() {
         </aside>
 
         <main className="md:w-3/4 px-4 md:px-6 py-6">
-          <HotelsCardsComponent 
-            data={filteredHotels}
-           
-          />
+        {
+          filteredHotels.length === 0 ? (
+            <EmptyComponent message='No hotels found' />
+          ) : (
+            <HotelsCardsComponent 
+              data={filteredHotels}
+            />
+          )
+        }
         </main>
       </div>
     </div>

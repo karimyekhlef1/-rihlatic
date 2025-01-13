@@ -4,6 +4,7 @@ import SectionHeader from "./sectionHeader";
 import SwiperNavigation from "@/app/commonComponents/swiperNavigationComponent";
 // import { useSwiper } from 'swiper/react';
 import { Swiper as SwiperType } from "swiper";
+import { getScreenElementSize } from "@/app/Helper/engine";
 
 const OrganizeSection = ({ data, comp }: any) => {
   const swiperRef = useRef<SwiperType | null>(null);
@@ -28,7 +29,7 @@ const OrganizeSection = ({ data, comp }: any) => {
         list={data}
         Component={comp}
         swiper={swiperRef}
-        slidesPerView={3}
+        slidesPerView={getScreenElementSize()}
       />
     </div>
   );

@@ -35,7 +35,7 @@ const DatePickerComponent: React.FC<SearchInputProps> = ({
             variant="outline"
             size="sm"
             className={cn(
-              "w-[400px] h-9 justify-start text-xs bg-white border-gray-200",
+              "w-[400px] h-9 justify-start text-xs bg-white text-black border-gray-200",
               !dateRange && "border-[#FF8000] bg-orange-50"
             )}
           >
