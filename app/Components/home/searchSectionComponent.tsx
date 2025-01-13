@@ -11,14 +11,17 @@ const SearchSectionComponent: React.FC = () => {
 
   const[selected, setSelected] = useState<number>(0);
 
+  const onSearch = async () => {
+  }
+
   const searchClick = (value: number) => {
     switch (value) {
       case 0:
         return <VolSearchComponent />;
       case 1:
-        return <PackagesSearchComponent />;
+        return <PackagesSearchComponent onSearch={onSearch} />;
       case 2:
-        return <HotelsSearchComponent />;
+        return <HotelsSearchComponent onSearch={onSearch} />;
       case 3:
         return <OmrasSearchComponent />;
       default:
