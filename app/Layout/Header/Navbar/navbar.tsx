@@ -130,10 +130,8 @@ export default function Navbar() {
                       />
                       <span className="text-black font-medium">
                         {
-                          (userData?.user?.first_name && userData?.user?.last_name) ? userData.user?.email : (
-                            `${userData?.user?.first_name} ${userData?.user?.last_name}` ||
-                              userData?.user?.username ||
-                            "User"
+                          (userData?.user?.first_name == null && userData?.user?.last_name == null) ? userData.user?.username : (
+                            `${userData?.user?.first_name} ${userData?.user?.last_name}`
                           )
                         }
                       </span>

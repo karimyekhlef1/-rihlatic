@@ -77,7 +77,7 @@ export default function PassengerInformation({ titel, index, roomId }: Passenger
               </div>
             </div>
 
-        {titel=="adults" && index==0  ?  <div className="flex flex-row gap-x-4 pb-4">
+            {titel=="adults" && index==0  ?  <div className="flex flex-row gap-x-4 pb-4">
               <Input
                 id="email"
                 type="email"
@@ -133,91 +133,43 @@ export default function PassengerInformation({ titel, index, roomId }: Passenger
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
-            <Select
-              value={passenger?.sex || ''}
-              onValueChange={(value) => handleInputChange('sex', value)}
-            >
-              <SelectTrigger id="sex">
-                <SelectValue placeholder="Select gender" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="male">Male</SelectItem>
-                <SelectItem value="female">Female</SelectItem>
-              </SelectContent>
-            </Select>
+              <Select
+                value={passenger?.sex || 'male'}
+                onValueChange={(value) => handleInputChange('sex', value)}
+              >
+                <SelectTrigger id="sex">
+                  <SelectValue placeholder="Select gender" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Male</SelectItem>
+                  <SelectItem value="female">Female</SelectItem>
+                </SelectContent>
+              </Select>
 
-      <div className="flex flex-col space-y-2">
-                
+              <div className="flex flex-col space-y-2">
                 <Input
                   type="date"
                   placeholder="Select birth date"
                   value={passenger?.birth_date || ""}
                   onChange={(e) => handleInputChange( 'birth_date', e.target.value)}
-                  
                 />
               </div>
-
-
-            {/* <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant={'outline'} className={cn('w-full justify-start')}>
-                    {formatDob(passenger?.birth_date)}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent>
-                  <Calendar
-                  showOutsideDays={false}
-                    mode="single"
-                    selected={
-                      passenger?.birth_date
-                        ? undefined 
-                        : parse(passenger?.birth_date, 'yyyy-MM-dd', new Date())
-                    }
-                    onSelect={(date) =>
-                      handleInputChange('birth_date', date ? format(date, 'yyyy-MM-dd') : null)
-                    }
-           
-            
-                  />
-                </PopoverContent>
-              </Popover> */}
-
-
-
             </div>
 
           
 
-            <div  className="grid grid-cols-2 gap-4">
-              <div > 
-        
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant={'outline'} className={cn('w-full justify-start')}>
-                    {formatDob(passenger?.passport_expire_at)}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent>
-                  <Calendar
-
-                    mode="single"
-                    selected={
-                      passenger?.passport_expire_at
-                        ?  parse(passenger?.passport_expire_at, 'yyyy-MM-dd', new Date())  
-                        : undefined
-                    }
-                    onSelect={(date) =>
-                      handleInputChange('passport_expire_at', date ? format(date, 'yyyy-MM-dd') : null)
-                    }
-                  />
-                </PopoverContent>
-              </Popover>
-              </div>
+            <div className="grid grid-cols-2 gap-4">
               <Input
                 type="text"
                 placeholder="Passport Number"
                 value={passenger?.passport_nbr || ''}
                 onChange={(e) => handleInputChange('passport_nbr', e.target?.value)}
+              />
+              <Input
+                type="date"
+                placeholder="Select passport expire date"
+                value={passenger?.passport_expire_at || ""}
+                onChange={(e) => handleInputChange('passport_expire_at', e.target.value)}
               />
             </div>
           </form>

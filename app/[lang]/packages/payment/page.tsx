@@ -54,6 +54,7 @@ export default function PaymentPage() {
   if (!departure || !rooms || !pkg || !pricing) {
     return <Loading />;
   }
+
   return (
     <div className="flex flex-col items-center justify-start min-h-screen pt-16">
       <PaymentTitleComponent
@@ -65,7 +66,7 @@ export default function PaymentPage() {
       <PaymentProgressComponent />
       <RoomReservationInformation />
       <ChangePaymentSteps />
-      <div className="absolute  left-3/4">
+      <div className="absolute left-3/4">
         <PricingCard
           title={
             <div className=" flex flex-col items-start  justify-start">

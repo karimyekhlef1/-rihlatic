@@ -52,7 +52,7 @@ export default function PaymentProgressComponent() {
                 {isActive && (
                   <div className=" bg-[#ff8000] absolute inset-0 bg-[#ff8000]/50 rounded-full animate-ping z-[-1]" />
                 )}
-              </div>
+              </div>              
 
               {/* Step Label */}
               <span

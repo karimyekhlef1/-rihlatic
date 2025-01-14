@@ -48,6 +48,9 @@ export default function Details() {
             "departures,media,departures.flight,departures.media,departures.departureSchedules,departures.pricing,agencies,destinations.airport",
         })
       );
+      console.log('kawat');
+      console.log(result.payload);
+      console.log('kawat');
       setPackageDetails(result.payload.result.package);
       dispatch(setPackage(result.payload.result.package) )
       const all =  await dispatch(packagesFunc({ include: 'departures' }));
@@ -71,31 +74,44 @@ export default function Details() {
               />
               <ContentComponent htmlContent={packagesDetails?.description} />
 
-              <TitleComponent
-                title={"Trip summary"}
-                icon={<PlaneTakeoff size={20} />}
-                label={""}
-              />
-              <ContentComponent
-                dynamicContent={
-                  <Provider store={store}>
-                    <TripSummaryComponent flightInfo={outboundFlights[0]} />
-                  </Provider>
-                }
-              />
+              {
+                packagesDetails?.departures[0].flight != null && (
+                  <> 
+                    <TitleComponent
+                      title={"Trip summary"}
+                      icon={<PlaneTakeoff size={20} />}
+                      label={""}
+                    />
+                    <ContentComponent
+                      dynamicContent={
+                        <TripSummaryComponent flightInfo={outboundFlights[0]} />
+                      }
+                    />
+                  </>
+                )
+              }
 
-              <TitleComponent
-                title={"Hôtel(s)"}
-                icon={<Bed size={20} />}
-                label={""}
-              />
-              {packagesDetails?.departures.map((item, index) => (
-                <div key={index}>
-                  <ContentComponent
-                    dynamicContent={<HotelsComponent data={item.hotel_stay[0]} />}
-                  />
-                </div>
-              ))}
+              {
+                packagesDetails?.departures[0].hotel_stay.length > 0 && (
+                  <>
+                    <TitleComponent
+                      title={"Hôtel(s)"}
+                      icon={<Bed size={20} />}
+                      label={""}
+                    />
+                    
+                    {packagesDetails?.departures[0].hotel_stay?.map((item: any, index: number) => (
+                      <div key={index}>
+                        <ContentComponent
+                          dynamicContent={<HotelsComponent data={item.hotel_stay[0]} />}
+                        />
+                      </div>
+                    ))}
+                  </>
+                )
+              }
+
+
 
               <TitleComponent title={"Hôtel Details"} label={""} />
               <ContentComponent dynamicContent={<HotelDetails data={packagesDetails?.departures}/>} />
@@ -106,8 +122,8 @@ export default function Details() {
                 icon={<Luggage size={20} />}
                 label={""}
               />
-              <ContentComponent dynamicContent={<TravelProgram data={packagesDetails?.departures} />} />
 
+              <ContentComponent dynamicContent={<TravelProgram data={packagesDetails?.departures[0]?.schedule ?? []} />} />
               <TitleComponent
                 title={"important note"}
                 icon={<CircleAlert size={20} color="orange" />}

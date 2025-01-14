@@ -26,10 +26,12 @@ export interface PackageDetails {
     hotel_stay:any;
     visa:boolean;
     vol:boolean;
+    flight?: any;
     hotel:boolean;
     transfer:boolean;
     excursion:boolean;
     cruise:boolean;
-    includes:string[]
-    excludes:string[]
+    schedule?: any[];
+    includes:string[];
+    excludes:string[];
   }

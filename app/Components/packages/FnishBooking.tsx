@@ -169,11 +169,11 @@ export default function FinishBooking() {
         </div>
         <ScrollBar />
       </ScrollArea>
-      <div className="mt-8 flex justify-center">
+      {/* <div className="mt-8 flex justify-center">
         <Button onClick={handleComplete} className="px-16">
           Complete Booking
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 }

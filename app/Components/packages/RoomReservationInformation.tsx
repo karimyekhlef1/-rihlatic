@@ -25,13 +25,12 @@ export default function RoomReservationInformation() {
   };
 
   return (
-    <div className="  w-full flex justify-center  ">
-    <ScrollArea className=" max-h-[80vh]  w-1/2   ">
-    
-      {renderRoomInfo('adults', currentRoom.adults)}
-      {renderRoomInfo('children', currentRoom.children)}
-      {renderRoomInfo('infants', currentRoom.infants)}
-    </ScrollArea>
+    <div className="w-full flex justify-center">
+      <ScrollArea className=" max-h-[80vh] w-1/2">
+        {renderRoomInfo('adults', currentRoom.adults)}
+        {renderRoomInfo('children', currentRoom.children)}
+        {renderRoomInfo('infants', currentRoom.infants)}
+      </ScrollArea>
     </div>
   );
 }
