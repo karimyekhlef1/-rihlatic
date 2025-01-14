@@ -48,7 +48,7 @@ const VolPackageComponent: React.FC = () => {
                     variant="outline"
                     size="sm"
                     className={cn(
-                        "w-[200px] h-9 justify-start text-xs bg-white border-gray-200",
+                        "w-[200px] h-9 justify-start text-xs bg-white text-black border-gray-200",
                         activeOptionsCount > 0 && "border-[#FF8000] bg-orange-50"
                     )}
                 >

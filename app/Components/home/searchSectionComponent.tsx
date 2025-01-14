@@ -8,10 +8,11 @@ import PackagesSearchComponent from './engine/packages/packagesSearchComponent';
 import HotelsSearchComponent from './engine/hotels/hotelsSearchComponent';
 
 const SearchSectionComponent: React.FC = () => {
-   const onSearch = async () => {
-    };
-
+  
   const[selected, setSelected] = useState<number>(0);
+
+  const onSearch = async () => {
+  }
 
   const searchClick = (value: number) => {
     switch (value) {

@@ -14,3 +14,15 @@ export function getDestinationEngineUrl(index) {
             return engine_get_vols_endpoint;
     }
 }
+
+export function getScreenElementSize() {
+    if (window.innerWidth < 768) {
+        return 1;
+    } else if (window.innerWidth < 1024) {
+        return 2;
+    } else if (window.innerWidth < 1280 && window.innerWidth > 1024) {
+        return 3;
+    } else {
+        return 4;
+    }
+}

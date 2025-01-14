@@ -8,7 +8,7 @@ const DiscoverComponent: React.FC<DiscoverProps> = ({ image, name, establishment
         backgroundSize: "cover",
         backgroundColor: "rgba(0, 0, 0, 0.5)",
         height: '300px',
-        width: "100%",
+        minWidth: "100%",
     };
 
     const layoutStyle = {

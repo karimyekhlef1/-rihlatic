@@ -13,12 +13,8 @@ export default function Stops() {
   };
 
   return (
-    <RadioGroup 
-      value={selectedStopFilter} 
-      onValueChange={handleValueChange}
-      className="space-y-2"
-    >
-      <div className="flex items-center space-x-2">
+    <RadioGroup defaultValue="any" className="space-y-2">
+      <div className="flex items-center space-x-2 mt-3">
         <RadioGroupItem
           value="any"
           id="r1"

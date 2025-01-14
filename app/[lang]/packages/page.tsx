@@ -12,8 +12,9 @@ import { packagesFunc } from "@/lib/store/api/packages/packagesSlice";
 import { extractData } from "@/app/hooks/useExtractData";
 import { usefilterPackages } from "@/app/hooks/useFilterPackages"; // Import the utility function
 import PackagesSearchComponent from "@/app/Components/home/engine/packages/packagesSearchComponent";
-import SmalLoading from "@/app/commonComponents/SmalLoading";
 import { format } from "date-fns";
+import EmptyComponent from "@/app/commonComponents/emptyComponent";
+
 export default function Packages() {
   const { loading, packagesData } = useSelector((state: any) => state.packages);
   const { dateRange, packageType, selectedDestinationId } = useSelector(
@@ -84,9 +85,13 @@ export default function Packages() {
           </div>
         </div>
         <div className="px-10 pt-10 gap-y-8 pb-10 w-full">
-          <Provider store={store}>
-            <PackagesComponent data={filteredPackages} />
-          </Provider>
+          {
+            filteredPackages.length === 0 ? (
+              <EmptyComponent message="No packages found" />
+            ) : (
+              <PackagesComponent data={filteredPackages} />
+            )
+          }
         </div>
       </div>
     </div>

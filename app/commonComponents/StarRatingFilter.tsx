@@ -30,7 +30,7 @@ const StarRatingFilter = ({ onChange }: StarRatingFilterProps) => {
             variant="ghost"
             className={cn(
               "w-full justify-between hover:bg-gray-100",
-              isSelected && "bg-orange-100 hover:bg-orange-50"
+              isSelected && "bg-[#FF8000] hover:bg-[#FF8000]"
             )}
             onClick={() => handleRatingClick(rating)}
             aria-label={`Filter by ${rating} stars`}

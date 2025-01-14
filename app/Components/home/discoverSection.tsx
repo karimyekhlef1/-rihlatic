@@ -5,6 +5,7 @@ import SectionHeader from './sectionHeader';
 import SwiperNavigation from '@/app/commonComponents/swiperNavigationComponent';
 import { Swiper as SwiperType } from 'swiper';
 import image4 from '@/public/images/home/four.jpeg';
+import { getScreenElementSize } from '@/app/Helper/engine';
 
 const DiscoverSection= ({data}: any) => {
     const fakeList = [
@@ -54,12 +55,12 @@ const DiscoverSection= ({data}: any) => {
     const prev = useCallback(() => {
         if (!swiperRef.current) return;
         swiperRef.current?.slidePrev();
-      }, []);
+    }, []);
     
-      const next = useCallback(() => {
+    const next = useCallback(() => {
         if (!swiperRef.current) return;
         swiperRef.current?.slideNext();
-      }, []);
+    }, []);
 
     return (
         <div className="my-10 container">
@@ -67,7 +68,7 @@ const DiscoverSection= ({data}: any) => {
                 <SectionHeader title='Discover Algeria' description='lorem ipsum dolor sit amet consectetur adipiscing elit.' />
                 <SwiperNavigation onNext={next} onPrev={prev} />
             </div>
-            <SwiperComponent list={fakeList} Component={DiscoverComponent} swiper={swiperRef} slidesPerView={4} />
+            <SwiperComponent list={fakeList} Component={DiscoverComponent} swiper={swiperRef} slidesPerView={getScreenElementSize()} />
         </div>
     );
 };
