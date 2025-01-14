@@ -5,7 +5,7 @@ import ResultCardSkeleton from "@/app/Components/search/resultCardSkeleton";
 import NoFlightsFound from "@/app/Components/search/noFlightsFound";
 import ResultsSidebar from "@/app/Components/search/resultsSidebar";
 import { Provider } from "react-redux";
-import { store } from "@/lib/store/store";
+import { RootState, store } from "@/lib/store/store";
 import AdComponent from "@/app/commonComponents/adComponent";
 import TravelOptions from "@/app/Components/search/travelOptions";
 import AlertPrices from "@/app/Components/search/alertPrices";
@@ -46,6 +46,33 @@ function FlightsResultsContent() {
     }) => state.vols
   );
 
+  const selectedDepartureTimes = useSelector(
+    (state: RootState) => state.timeFilters.selectedDepartureTimes
+  );
+  const selectedReturnTimes = useSelector(
+    (state: RootState) => state.timeFilters.selectedReturnTimes
+  );
+
+  const selectedStopFilter = useSelector(
+    (state: RootState) => state.stopsFilter.selectedStopFilter
+  );
+
+  const selectedCarriers = useSelector(
+    (state: RootState) => state.carriers.selectedCarriers
+  );
+
+  const selectedAirplaneTypes = useSelector(
+    (state: RootState) => state.airplanes.selectedAirplaneTypes
+  );
+
+  const selectedPriceRange = useSelector(
+    (state: RootState) => state.price.selectedRange
+  );
+
+  const availablePriceRange = useSelector(
+    (state: RootState) => state.price.availableRange
+  );
+
   const selectedFlight = useSelector(
     (state: { vols: { selectedFlight: Flight | null } }) =>
       state.vols.selectedFlight
@@ -58,11 +85,87 @@ function FlightsResultsContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
+  // Filter flights based on selected times, stops, carriers, airplane types, and price
+  const filteredFlights = flightsData.filter((flight) => {
+    if (
+      !flight.segments ||
+      !flight.segments[0] ||
+      flight.segments[0].length === 0
+    ) {
+      return false;
+    }
+
+    const segments = flight.segments[0];
+    const departureTime = segments[0]?.depTime;
+    const arrivalTime = segments[segments.length - 1]?.arrTime;
+
+    // Check if flight matches all selected departure times
+    const matchesDeparture =
+      selectedDepartureTimes.length === 0 ||
+      (departureTime && selectedDepartureTimes.includes(departureTime));
+
+    // Check if flight matches all selected return times
+    const matchesReturn =
+      selectedReturnTimes.length === 0 ||
+      (arrivalTime && selectedReturnTimes.includes(arrivalTime));
+
+    // Calculate number of stops
+    const numberOfStops = segments.length - 1;
+
+    // Check if flight matches selected stop filter
+    let matchesStops = true;
+    switch (selectedStopFilter) {
+      case "direct":
+        matchesStops = numberOfStops === 0;
+        break;
+      case "up-to-1-stop":
+        matchesStops = numberOfStops <= 1;
+        break;
+      case "up-to-2-stops":
+        matchesStops = numberOfStops === 2;
+        break;
+      case "any":
+      default:
+        matchesStops = true;
+        break;
+    }
+
+    // Check if any segment's carrier matches selected carriers
+    const matchesCarrier =
+      selectedCarriers.length === 0 ||
+      segments.some((segment) =>
+        selectedCarriers.includes(segment.marketCompany)
+      );
+
+    // Check if ALL segments' airplane types match selected types
+    const matchesAirplaneType =
+      selectedAirplaneTypes.length === 0 ||
+      segments.every((segment) =>
+        selectedAirplaneTypes.includes(segment.equipmentType)
+      );
+
+    // Check if flight price is within selected range
+    const matchesPrice =
+      (selectedPriceRange.min === availablePriceRange.min &&
+        selectedPriceRange.max === availablePriceRange.max) ||
+      (flight.price >= selectedPriceRange.min &&
+        flight.price <= selectedPriceRange.max);
+
+    return (
+      matchesDeparture &&
+      matchesReturn &&
+      matchesStops &&
+      matchesCarrier &&
+      matchesAirplaneType &&
+      matchesPrice
+    );
+  });
+
   // Calculate pagination values
-  const totalPages = Math.ceil(flightsData.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredFlights.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentFlights = flightsData.slice(startIndex, endIndex);
+  const currentFlights = filteredFlights.slice(startIndex, endIndex);
 
   // Handle page change
   const handlePageChange = (page: number) => {
@@ -76,6 +179,18 @@ function FlightsResultsContent() {
       dispatch(searchFlights(searchData));
     }
   }, [searchData, dispatch]);
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [
+    selectedDepartureTimes,
+    selectedReturnTimes,
+    selectedStopFilter,
+    selectedCarriers,
+    selectedAirplaneTypes,
+    selectedPriceRange,
+  ]);
 
   return (
     <>
@@ -95,7 +210,7 @@ function FlightsResultsContent() {
                 ? "Searching flights..."
                 : error
                   ? "Error finding flights"
-                  : `Nous avons trouvé ${flightsData.length} vols pour vous`}
+                  : `Nous avons trouvé ${filteredFlights.length} vols pour vous`}
             </h2>
           </div>
           <ResultsSidebar />
@@ -110,7 +225,7 @@ function FlightsResultsContent() {
             ))
           ) : error ? (
             <div>Error: {error}</div>
-          ) : flightsData.length > 0 ? (
+          ) : filteredFlights.length > 0 ? (
             <>
               {currentFlights.map((flight, index) => (
                 <ResultCard key={index} flight={flight} />

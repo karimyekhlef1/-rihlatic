@@ -1,33 +1,78 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  toggleDepartureTime,
+  toggleReturnTime,
+} from "@/lib/store/custom/searchSlices/timeFiltersSlice";
+import { RootState } from "@/lib/store/store";
 
 export default function Hours() {
-  const flightsData = useSelector((state: any) => state.vols?.flightsData || []);
+  const dispatch = useDispatch();
+  const flightsData = useSelector(
+    (state: any) => state.vols?.flightsData || []
+  );
   const loading = useSelector((state: any) => state.vols?.loading);
   const error = useSelector((state: any) => state.vols?.error);
+  const selectedDepartureTimes = useSelector(
+    (state: RootState) => state.timeFilters.selectedDepartureTimes
+  );
+  const selectedReturnTimes = useSelector(
+    (state: RootState) => state.timeFilters.selectedReturnTimes
+  );
 
   const extractUniqueTimes = (flights: any[], isDepTime: boolean) => {
-    if (!flights || flights.length === 0) return [];
+    console.log('Flights received:', flights);
     
+    if (!flights || flights.length === 0) {
+      console.log('No flights data available');
+      return [];
+    }
+
     const times = flights.map((flight) => {
-      if (!flight.segments || !flight.segments[0] || flight.segments[0].length === 0) return null;
+      console.log('Processing flight:', flight);
+      
+      if (!flight.segments || !flight.segments[0] || flight.segments[0].length === 0) {
+        console.log('Invalid segments structure:', flight.segments);
+        return null;
+      }
       
       const segments = flight.segments[0];
+      console.log('First segment group:', segments);
+      
       if (isDepTime) {
         // Get departure time of first segment
-        return segments[0]?.depTime;
+        const firstSegment = segments[0];
+        console.log('First segment for departure:', firstSegment);
+        // Let's log all properties to find the time field
+        console.log('Available properties:', Object.keys(firstSegment));
+        return firstSegment?.depTime;
       } else {
         // Get arrival time of last segment
-        return segments[segments.length - 1]?.arrTime;
+        const lastSegment = segments[segments.length - 1];
+        console.log('Last segment for arrival:', lastSegment);
+        // Let's log all properties to find the time field
+        console.log('Available properties:', Object.keys(lastSegment));
+        return lastSegment?.arrTime;
       }
     });
 
-    // Filter out nulls and get unique times
-    return Array.from(new Set(times.filter(time => time))).sort();
+    const uniqueTimes = Array.from(new Set(times.filter((time) => time))).sort();
+    console.log(`Unique ${isDepTime ? 'departure' : 'arrival'} times:`, uniqueTimes);
+    return uniqueTimes;
   };
 
   const departureTimes = extractUniqueTimes(flightsData, true);
   const returnTimes = extractUniqueTimes(flightsData, false);
+
+  console.log('Final times:', { departureTimes, returnTimes });
+
+  const handleDepartureTimeChange = (time: string) => {
+    dispatch(toggleDepartureTime(time));
+  };
+
+  const handleReturnTimeChange = (time: string) => {
+    dispatch(toggleReturnTime(time));
+  };
 
   if (loading) {
     return (
@@ -63,7 +108,11 @@ export default function Hours() {
           <div className="space-y-2">
             {departureTimes.map((time) => (
               <div key={time} className="flex items-center space-x-2">
-                <Checkbox id={`departure-${time}`} />
+                <Checkbox
+                  id={`departure-${time}`}
+                  checked={selectedDepartureTimes.includes(time)}
+                  onCheckedChange={() => handleDepartureTimeChange(time)}
+                />
                 <label
                   htmlFor={`departure-${time}`}
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -84,7 +133,11 @@ export default function Hours() {
           <div className="space-y-2">
             {returnTimes.map((time) => (
               <div key={time} className="flex items-center space-x-2">
-                <Checkbox id={`return-${time}`} />
+                <Checkbox
+                  id={`return-${time}`}
+                  checked={selectedReturnTimes.includes(time)}
+                  onCheckedChange={() => handleReturnTimeChange(time)}
+                />
                 <label
                   htmlFor={`return-${time}`}
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
