@@ -29,7 +29,7 @@ const LayoverInfoComponent: React.FC<LayoverInfoProps> = ({ duration, location, 
         />
         <div className="text-xs">
           <p className="font-semibold">Self-transfer</p>
-          <p className="text-gray-500">You'll need to collect your bags and check in again.</p>
+          <p className="text-gray-500">You  ll need to collect your bags and check in again.</p>
         </div>
       </div>
     </div>
