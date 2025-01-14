@@ -87,17 +87,14 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({
   };
 
   const fullSearchClick = (item: any) => {
-   // console.log('SearchInputComponent - Received item:', item);
     searchClick(item.name);
-   // const airportCode = item.iata || item.code;
-    //console.log('SearchInputComponent - Sending airportCode:', airportCode);
     onSearch(item);
   };
 
-  
   useEffect(() => {
     getSearchData();
   }, [searchValue]);
+
   useEffect(() => {
     if (selected) {
       setSearchValue(selected);
@@ -113,6 +110,7 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({
       className="relative transition-all"
       style={{
         transition: "width 0.05s ease-in-out",
+        zIndex: 40,
       }}
       ref={wrapperRef}
     >
@@ -122,7 +120,8 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({
           isOpened
             ? "ring-2 ring-[#FF8000] ring-offset-0 z-10"
             : "border border-gray-200",
-          "transition-all duration-150"
+          "transition-all duration-150",
+          "w-full sm:w-full md:w-[350px] lg:w-[400px]"
         )}
         onClick={clickHandler}
       >

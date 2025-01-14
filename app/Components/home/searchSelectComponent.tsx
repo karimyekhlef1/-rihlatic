@@ -26,7 +26,7 @@ const SearchSelectComponent: React.FC<Props> = ({
       defaultValue={data[0]}
       onValueChange={(value) => setSelected && setSelected(value)}
     >
-      <SelectTrigger className="w-[200px] h-9 text-xs bg-white text-black border-gray-200 hover:bg-gray-50 focus:ring-1 focus:ring-[#FF8000] focus:ring-offset-0">
+      <SelectTrigger className="w-[200px] h-9 text-xs bg-white text-black border-gray-200 hover:bg-gray-50 focus:ring-1 focus:ring-[#FF8000] focus:ring-offset-0 z-50">
         <SelectValue placeholder="Select option" className="text-xs" />
       </SelectTrigger>
       <SelectContent>

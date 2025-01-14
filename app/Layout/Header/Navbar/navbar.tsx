@@ -123,15 +123,19 @@ export default function Navbar() {
                     <div className="flex gap-2 items-center">
                       <Image
                         alt="profile"
-                        src={userData?.user.avatar}
+                        src={userData?.user?.avatar}
                         className="h-8 w-8 rounded-full"
                         height={50}
                         width={50}
                       />
                       <span className="text-black font-medium">
-                        {`${userData?.user.first_name} ${userData?.user.last_name}` ||
-                          userData?.user.username ||
-                          "User"}
+                        {
+                          (userData?.user?.first_name && userData?.user?.last_name) ? userData.user?.email : (
+                            `${userData?.user?.first_name} ${userData?.user?.last_name}` ||
+                              userData?.user?.username ||
+                            "User"
+                          )
+                        }
                       </span>
                     </div>
                   </MenuButton>
