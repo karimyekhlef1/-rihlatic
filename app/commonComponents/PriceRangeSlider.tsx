@@ -21,7 +21,7 @@ interface PriceRangeSliderProps {
 
   useEffect(() => {
     onChange(range)
-  }, [range, onChange])
+  }, [range, onChange , max, min])
 
   const handleSliderChange = (newRange: [number, number]) => {
     setRange(newRange)

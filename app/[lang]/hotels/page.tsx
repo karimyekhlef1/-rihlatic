@@ -118,43 +118,69 @@ export default function Hotels() {
   }
   
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="flex justify-center py-4 mt-2 bg-white shadow-sm">
-        <HotelsSearchComponent 
-          onSearch={fetchHotels}
+//   return (
+//     <div className="min-h-screen bg-gray-50">
+//       <div className="flex justify-center py-4 mt-2 bg-white shadow-sm">
+//         <HotelsSearchComponent 
+//           onSearch={fetchHotels}
          
-        />
-      </div>
-      
-      {error && (
-        <div className="text-red-500 text-center py-4">
-          {error}
+//         />
+//       </div>
+//       <div className="flex md:flex-row flex-col max-w-7xl mx-auto ">
+//         <aside className="md:w-1/4 px-4 md:px-6  ">
+//           <div className="sticky top-4 space-y-6 py-6">
+//             <FilterComponentHotels />
+//             <div className="hidden md:block">
+//               <AdComponent />
+//             </div>
+//           </div>
+//         </aside>
+
+//         <main className="md:w-3/4 px-4 md:px-6 py-6">
+//         {
+//           filteredHotels.length === 0 ? (
+//             <EmptyComponent message='No hotels found' />
+//           ) : (
+//             <HotelsCardsComponent 
+//               data={filteredHotels}
+//             />
+//           )
+//         }
+//         </main>
+
+//       </div>
+//     </div>
+//   );
+// }
+
+
+return (
+  <div className="">
+    <div className="flex justify-center py-4 mt-2 bg-white">
+    <HotelsSearchComponent 
+       onSearch={fetchHotels} />
+    </div>
+
+    <div className="flex md:flex-row flex-col">
+      <div className="px-14 flex flex-col items-center pt-10 gap-y-8 md:pb-10">
+      <FilterComponentHotels/>
+        <div className="hidden md:block">
+          <AdComponent />
         </div>
-      )}
-
-      <div className="flex md:flex-row flex-col max-w-7xl mx-auto ">
-        <aside className="md:w-1/4 px-4 md:px-6  ">
-          <div className="sticky top-4 space-y-6 py-6">
-            <FilterComponentHotels />
-            <div className="hidden md:block">
-              <AdComponent />
-            </div>
-          </div>
-        </aside>
-
-        <main className="md:w-3/4 px-4 md:px-6 py-6">
-        {
-          filteredHotels.length === 0 ? (
-            <EmptyComponent message='No hotels found' />
-          ) : (
-            <HotelsCardsComponent 
-              data={filteredHotels}
-            />
-          )
-        }
-        </main>
+      </div>
+      <div className="px-10 pt-10 gap-y-8 pb-10 w-full">
+         {
+           filteredHotels.length === 0 ? (
+             <EmptyComponent message='No hotels found' />
+           ) : (
+             <HotelsCardsComponent 
+               data={filteredHotels}
+             />
+           )
+         }
       </div>
     </div>
-  );
+  </div>
+);
 }
+

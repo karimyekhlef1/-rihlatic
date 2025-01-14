@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Provider } from "react-redux";
 import { store } from "@/lib/store/store";
 
@@ -27,24 +27,35 @@ export default function Packages() {
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-  
-  const fetchPackages = async () => {
-    const result = await dispatch(
-      packagesFunc({
-        include: "departures",
-        "filter[destinationId]": selectedDestinationId? selectedDestinationId: "",
-        "filter[departure_date]":dateRange.from? format(dateRange.from,"yyyy/MM/dd"):"",
-        "filter[return_date]":dateRange.to ?format(dateRange.to,"yyyy/MM/dd"):""
-      })
-    );
+  const fetchPackages = async (isSearching: boolean = false) => {
+    console.log("isSearching", isSearching);
+    const baseParams = {
+      include: "departures",
+    };
+    const searchParams = isSearching
+      ? {
+          ...baseParams,
+          "filter[destinationId]": selectedDestinationId || "",
+          "filter[departure_date]": dateRange.from
+            ? format(dateRange.from, "yyyy/MM/dd")
+            : "",
+          "filter[return_date]": dateRange.to
+            ? format(dateRange.to, "yyyy/MM/dd")
+            : "",
+        }
+      : baseParams;
+
+    const result = await dispatch(packagesFunc(searchParams));
     const fetchedPackages = result.payload.result.packages;
     setPackage(fetchedPackages);
     setFilteredPackages(fetchedPackages);
   };
-
+  const handleSearch = async () => {
+    fetchPackages(true);
+  };
 
   useEffect(() => {
-    fetchPackages()
+    fetchPackages();
   }, [dispatch]);
 
   // Use the utility function to filter packages
@@ -56,7 +67,7 @@ export default function Packages() {
     );
     setFilteredPackages(filtered);
   }, [selectedCountries, selectedCategories, packages]);
- 
+
   if (loading) return <Loading />;
 
   const packageCategories = extractData(packages, (pkg) => `${pkg.category}`);
@@ -67,7 +78,7 @@ export default function Packages() {
   return (
     <div className="">
       <div className="flex justify-center py-4 mt-2 bg-white">
-        <PackagesSearchComponent onSearch={fetchPackages} />
+        <PackagesSearchComponent onSearch={handleSearch} />
       </div>
 
       <div className="flex md:flex-row flex-col">
@@ -85,13 +96,11 @@ export default function Packages() {
           </div>
         </div>
         <div className="px-10 pt-10 gap-y-8 pb-10 w-full">
-          {
-            filteredPackages.length === 0 ? (
-              <EmptyComponent message="No packages found" />
-            ) : (
-              <PackagesComponent data={filteredPackages} />
-            )
-          }
+          {filteredPackages.length === 0 ? (
+            <EmptyComponent message="No packages found" />
+          ) : (
+            <PackagesComponent data={filteredPackages} />
+          )}
         </div>
       </div>
     </div>
