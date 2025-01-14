@@ -75,7 +75,7 @@ interface Reservation {
   payment_status:string
 }
 
-export default function PackagesTable() {
+export default function PackagesReservationTable() {
   const dispatch = useDispatch<AppDispatch>();
   const [selectedStatus, setSelectedStatus] = useState<string>("");
   const [expandedPassengers, setExpandedPassengers] = useState<number | null>(
@@ -258,19 +258,23 @@ export default function PackagesTable() {
                       className="flex items-center gap-2 font-medium text-xs cursor-pointer hover:bg-gray-50"
                       // onClick={() => toggleActivities(reservation.id)}
                     >
+
+
                       {/* {expandedActivities === reservation.id ? (
                         <ChevronUp className="h-4 w-4" />
                       ) : (
                         <ChevronDown className="h-4 w-4" />
                       )} */}
-                      <Link href={`packages/${reservation.id}`}  >
+
+
+                      {/* <Link href={`packages/${reservation.id}`}  >
                       <Eye
                         // display={reservation.status =="Cancelled"? true : false}
                         className="h-4 w-4 text-green-500 hover:text-green-700 ml-2"
                         // onClick={(e) => console.log(" show details booking") }
                    
                       />
-                      </Link>
+                      </Link> */}
                      
                                             <Trash2
                         // display={reservation.status =="Cancelled"? true : false}
