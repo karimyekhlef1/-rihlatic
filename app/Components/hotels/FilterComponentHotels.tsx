@@ -16,7 +16,7 @@ export default function FilterComponentHotels() {
   const { maxMinRangePrice ,filterRangePrice, filterRating } = useSelector((state: any) => state.hotelState);
   useEffect(()=>{
 
-  },[maxMinRangePrice ,filterRangePrice, filterRating])
+  },[maxMinRangePrice])
   
   const handleStarChange = (value:number) => {
     dispatch(setFilterRating(value))

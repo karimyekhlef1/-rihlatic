@@ -132,6 +132,7 @@ export default function FinishBooking() {
   const RoomsData = useSelector((state: any) => state.paymentPackage.RoomsData);
   const departure = useSelector((state: any) => state.paymentPackage.departure);
   const [filtredRoomData, setFiltredRoomData] = useState<{ rooms: Room[] }>({ rooms: [] });
+  const cardToken = useSelector((state: any) => state.paymentPackage.cardToken);
 
   useEffect(() => {
     const filteredRooms = cleanEmptyPassengerArrays(RoomsData);
@@ -143,6 +144,7 @@ export default function FinishBooking() {
       const bodyData = {
         departure_id: departure.id,
         rooms: filtredRoomData.rooms,
+        token:cardToken
       };
       const response = await dispatch(storePackageReservation(bodyData)).unwrap();
       if (response.success) {
