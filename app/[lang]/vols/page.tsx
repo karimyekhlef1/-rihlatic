@@ -61,10 +61,6 @@ function FlightsResultsContent() {
     (state: RootState) => state.carriers.selectedCarriers
   );
 
-  const selectedAirplaneTypes = useSelector(
-    (state: RootState) => state.airplanes.selectedAirplaneTypes
-  );
-
   const selectedFlight = useSelector(
     (state: { vols: { selectedFlight: Flight | null } }) =>
       state.vols.selectedFlight
@@ -77,7 +73,21 @@ function FlightsResultsContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  // Filter flights based on selected times, stops, carriers, and airplane types
+  // Add debug logging for first flight
+  useEffect(() => {
+    if (flightsData.length > 0) {
+      const firstFlight = flightsData[0];
+      console.log('Flight Structure Debug:', {
+        firstSegment: firstFlight?.segments?.[0]?.[0],
+        segmentProperties: firstFlight?.segments?.[0]?.[0] ? 
+          Object.entries(firstFlight.segments[0][0]).filter(([key, value]) => 
+            typeof value === 'string' && value.length <= 3
+          ) : []
+      });
+    }
+  }, [flightsData]);
+
+  // Filter flights based on selected times, stops, and carriers
   const filteredFlights = flightsData.filter((flight) => {
     if (
       !flight.segments ||
@@ -125,24 +135,9 @@ function FlightsResultsContent() {
     // Check if any segment's carrier matches selected carriers
     const matchesCarrier =
       selectedCarriers.length === 0 ||
-      segments.some((segment) =>
-        selectedCarriers.includes(segment.marketCompany)
-      );
+      segments.some(segment => selectedCarriers.includes(segment.marketCompany));
 
-    // Check if ALL segments' airplane types match selected types
-    const matchesAirplaneType =
-      selectedAirplaneTypes.length === 0 ||
-      segments.every((segment) =>
-        selectedAirplaneTypes.includes(segment.equipmentType)
-      );
-
-    return (
-      matchesDeparture &&
-      matchesReturn &&
-      matchesStops &&
-      matchesCarrier &&
-      matchesAirplaneType
-    );
+    return matchesDeparture && matchesReturn && matchesStops && matchesCarrier;
   });
 
   // Calculate pagination values
@@ -164,16 +159,38 @@ function FlightsResultsContent() {
     }
   }, [searchData, dispatch]);
 
+  useEffect(() => {
+    if (flightsData.length > 0) {
+      const firstFlight = flightsData[0];
+      const firstSegment = firstFlight?.segments?.[0]?.[0];
+      console.log('First Flight Segment:', firstSegment);
+      console.log('All segment properties:', Object.keys(firstSegment || {}));
+    }
+  }, [flightsData]);
+
+  useEffect(() => {
+    if (flightsData.length > 0) {
+      const firstFlight = flightsData[0];
+      console.log('Flight Carrier Debug:', {
+        flight: firstFlight,
+        segments: firstFlight.segments?.[0]?.map(segment => ({
+          carrier: segment.carrier,
+          airlineCode: segment.airlineCode,
+          airline: segment.airline,
+          // Log all properties that might contain carrier info
+          allProps: Object.entries(segment).filter(([key]) => 
+            key.toLowerCase().includes('carrier') || 
+            key.toLowerCase().includes('airline')
+          )
+        }))
+      });
+    }
+  }, [flightsData]);
+
   // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [
-    selectedDepartureTimes,
-    selectedReturnTimes,
-    selectedStopFilter,
-    selectedCarriers,
-    selectedAirplaneTypes,
-  ]);
+  }, [selectedDepartureTimes, selectedReturnTimes, selectedStopFilter, selectedCarriers]);
 
   return (
     <>
