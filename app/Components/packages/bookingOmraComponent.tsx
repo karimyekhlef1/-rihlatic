@@ -1,16 +1,23 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { CircleCheck, ArrowRight } from "lucide-react";
+import { CircleCheck, ArrowRight, ChevronDown } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setOmraDepartureId } from "@/lib/store/custom/commonSlices/omraReservationSlice";
 
 import Link from "next/link";
-import DepartureDialog from "@/app/Components/packages/departure-dialog";
 import { RoomDialog } from "@/app/Components/packages/room-dialog";
 
+interface DepartureOption {
+  id: number;
+  label: string;
+}
+
 export default function BookingPackageComponent(data: any) {
+  const dispatch = useDispatch();
   const departure_date = new Date(data?.data?.[0]?.departure_date);
   const return_date = new Date(data?.data?.[0]?.return_date);
   const formattedDeparture_date = format(departure_date, "dd-MMMM-yyyy", {
@@ -20,12 +27,25 @@ export default function BookingPackageComponent(data: any) {
     locale: fr,
   });
 
-  const [isDepartureDialogOpen, setIsDepartureDialogOpen] = useState(false);
-  const [isDepartureSelected, setIsDepartureSelected] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedDeparture, setSelectedDeparture] = useState<DepartureOption | null>(null);
   const [isRoomDialogOpen, setIsRoomDialogOpen] = useState(false);
 
+  const departureOptions: DepartureOption[] = [
+    {
+      id: 4,
+      label: formattedDeparture_date,
+    },
+  ];
+
+  const handleDepartureSelect = (option: DepartureOption) => {
+    setSelectedDeparture(option);
+    setIsDropdownOpen(false);
+    dispatch(setOmraDepartureId(option.id));
+  };
+
   const handleBookNowClick = () => {
-    if (isDepartureSelected) {
+    if (selectedDeparture) {
       setIsRoomDialogOpen(true);
     }
   };
@@ -68,27 +88,36 @@ export default function BookingPackageComponent(data: any) {
                 </p>
               </div>
             </div>
-            <div className="pb-4">
-              <Button
-                className="px-14"
-                variant={"rihlatic"}
-                onClick={() => setIsDepartureDialogOpen(true)}
+            <div className="pb-4 relative w-[80%]">
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="w-full text-sm font-medium px-8 py-2 bg-white text-[#ff8000] border-2 border-[#ff8000] rounded-xl cursor-pointer flex items-center justify-center"
               >
-                {isDepartureSelected ? "Modify departure" : "Select departure"}
-              </Button>
-              <DepartureDialog
-                open={isDepartureDialogOpen}
-                onOpenChange={setIsDepartureDialogOpen}
-                onSelect={() => setIsDepartureSelected(true)}
-                onDelete={() => setIsDepartureSelected(false)}
-              />
+                <span>{selectedDeparture ? selectedDeparture.label : "Select departure"}</span>
+                <ChevronDown
+                  className={`transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""} ml-2`}
+                />
+              </button>
+              {isDropdownOpen && (
+                <div className="absolute z-10 w-full mt-1 bg-white border-2 border-[#ff8000] rounded-xl overflow-hidden transition-all duration-300 ease-in-out">
+                  {departureOptions.map((option) => (
+                    <div
+                      key={option.id}
+                      className="text-sm text-center font-semibold px-8 py-2 text-[#ff8000] cursor-pointer hover:bg-[#fff0e0] transition-colors duration-200"
+                      onClick={() => handleDepartureSelect(option)}
+                    >
+                      {option.label}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
             <Separator className="w-[90%]" />
             <div className="pt-4">
               <Button
                 className="px-20"
                 variant={"rihlatic"}
-                disabled={!isDepartureSelected}
+                disabled={!selectedDeparture}
                 onClick={handleBookNowClick}
               >
                 Book Now
