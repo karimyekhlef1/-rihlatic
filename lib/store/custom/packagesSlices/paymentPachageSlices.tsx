@@ -104,7 +104,7 @@ const paymentPackageSlice = createSlice({
       
       saveStateToLocalStorage(state);
     },
-      setCurrentStep(state, action: PayloadAction<number>) {
+    setCurrentStep(state, action: PayloadAction<number>) {
       state.currentStep = action.payload;
       saveStateToLocalStorage(state);
     },
@@ -146,7 +146,6 @@ const paymentPackageSlice = createSlice({
           birth_date: ''
         });
       }
-      
       // Update specific field
       passengerTypeArray[index] = {
         ...passengerTypeArray[index],
@@ -163,8 +162,6 @@ const paymentPackageSlice = createSlice({
       state.cardToken= action.payload
   
     },
-
-
     clearStoredState(state) {      
       localStorage.removeItem(STORAGE_KEY);
       return createInitialState();

@@ -215,7 +215,7 @@ const HotelRoomsComponent = () => {
           variant="outline"
           size="sm"
           className={cn(
-            "w-[200px] h-9 justify-start text-xs bg-white border-gray-200",
+            "w-[200px] h-9 justify-start text-xs bg-white border-gray-200 text-black",
             rooms.length > 1 && "border-[#FF8000] bg-orange-50"
           )}
         >
