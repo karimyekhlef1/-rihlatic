@@ -77,10 +77,7 @@ function FlightsResultsContent() {
         {/* Main content */}
         <div className="flex flex-col w-full space-y-4 sm:space-y-0 sm:w-[650px]">
           {loading ? (
-            // Show 6 skeleton items during loading
-            Array.from({ length: 6 }).map((_, index) => (
-              <ResultCardSkeleton key={index} />
-            ))
+            <div>Loading...</div>
           ) : error ? (
             <div>Error: {error}</div>
           ) : flightsData.length > 0 ? (
@@ -88,7 +85,7 @@ function FlightsResultsContent() {
               <ResultCard key={index} flight={flight} />
             ))
           ) : (
-            <NoFlightsFound />
+            <div>No flights found</div>
           )}
         </div>
 
