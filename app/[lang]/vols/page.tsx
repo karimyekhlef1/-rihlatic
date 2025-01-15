@@ -53,10 +53,6 @@ function FlightsResultsContent() {
     (state: RootState) => state.timeFilters.selectedReturnTimes
   );
 
-  const selectedStopFilter = useSelector(
-    (state: RootState) => state.stopsFilter.selectedStopFilter
-  );
-
   const selectedFlight = useSelector(
     (state: { vols: { selectedFlight: Flight | null } }) =>
       state.vols.selectedFlight
@@ -69,7 +65,7 @@ function FlightsResultsContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  // Filter flights based on selected times and stops
+  // Filter flights based on selected times
   const filteredFlights = flightsData.filter((flight) => {
     if (
       !flight.segments ||
@@ -93,28 +89,7 @@ function FlightsResultsContent() {
       selectedReturnTimes.length === 0 ||
       (arrivalTime && selectedReturnTimes.includes(arrivalTime));
 
-    // Calculate number of stops
-    const numberOfStops = segments.length - 1;
-
-    // Check if flight matches selected stop filter
-    let matchesStops = true;
-    switch (selectedStopFilter) {
-      case "direct":
-        matchesStops = numberOfStops === 0;
-        break;
-      case "up-to-1-stop":
-        matchesStops = numberOfStops <= 1;
-        break;
-      case "up-to-2-stops":
-        matchesStops = numberOfStops === 2;
-        break;
-      case "any":
-      default:
-        matchesStops = true;
-        break;
-    }
-
-    return matchesDeparture && matchesReturn && matchesStops;
+    return matchesDeparture && matchesReturn;
   });
 
   // Calculate pagination values
@@ -136,10 +111,21 @@ function FlightsResultsContent() {
     }
   }, [searchData, dispatch]);
 
+  // Debug log to check flight data structure
+  useEffect(() => {
+    if (flightsData.length > 0) {
+      console.log('Sample flight data:', {
+        firstFlight: flightsData[0],
+        firstSegment: flightsData[0]?.segments?.[0]?.[0],
+        allProperties: flightsData[0]?.segments?.[0]?.[0] ? Object.keys(flightsData[0].segments[0][0]) : []
+      });
+    }
+  }, [flightsData]);
+
   // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedDepartureTimes, selectedReturnTimes, selectedStopFilter]);
+  }, [selectedDepartureTimes, selectedReturnTimes]);
 
   return (
     <>
