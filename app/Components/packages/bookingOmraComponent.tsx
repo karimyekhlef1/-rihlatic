@@ -36,7 +36,21 @@ export default function BookingPackageComponent(data: any) {
       id: 4,
       label: formattedDeparture_date,
     },
-  ];
+    {
+      id: 5,
+      label: format(new Date(data?.data?.[1]?.departure_date || departure_date), "dd-MMMM-yyyy", {
+        locale: fr,
+      }),
+    },
+    {
+      id: 6,
+      label: format(new Date(data?.data?.[2]?.departure_date || departure_date), "dd-MMMM-yyyy", {
+        locale: fr,
+      }),
+    },
+  ].filter((option, index) => 
+    data?.data?.[index]?.departure_date != null
+  );
 
   const handleDepartureSelect = (option: DepartureOption) => {
     setSelectedDeparture(option);
@@ -91,7 +105,7 @@ export default function BookingPackageComponent(data: any) {
             <div className="pb-4 relative w-[80%]">
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="w-full text-sm font-medium px-8 py-2 bg-white text-[#ff8000] border-2 border-[#ff8000] rounded-xl cursor-pointer flex items-center justify-center"
+                className="w-full text-sm font-medium px-8 py-2 bg-white text-[#ff8000] border-2 border-[#ff8000] rounded-xl cursor-pointer flex items-center justify-center transition-colors duration-200 hover:bg-orange-50"
               >
                 <span>{selectedDeparture ? selectedDeparture.label : "Select departure"}</span>
                 <ChevronDown
