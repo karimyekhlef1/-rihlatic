@@ -134,6 +134,7 @@ export default function FinishBooking() {
   const [filtredRoomData, setFiltredRoomData] = useState<{ rooms: Room[] }>({ rooms: [] });
   const cardToken = useSelector((state: any) => state.paymentPackage.cardToken);
 
+
   useEffect(() => {
     const filteredRooms = cleanEmptyPassengerArrays(RoomsData);
     setFiltredRoomData(filteredRooms);
@@ -163,14 +164,14 @@ export default function FinishBooking() {
   return (
     <div className="w-1/2 mx-auto p-6">
       <h2 className="text-2xl font-bold mb-6">Booking Summary</h2>
-      <ScrollArea className="h-[calc(100vh-250px)] px-1">
+      {/* <ScrollArea className="h-[calc(100vh-250px)] px-1"> */}
         <div className="pr-4">
           {filtredRoomData.rooms.map((room: Room, index: number) => (
             <RoomCard key={`room-${index}`} room={room} index={index} />
           ))}
         </div>
-        <ScrollBar />
-      </ScrollArea>
+        {/* <ScrollBar /> */}
+      {/* </ScrollArea> */}
       {/* <div className="mt-8 flex justify-center">
         <Button onClick={handleComplete} className="px-16">
           Complete Booking

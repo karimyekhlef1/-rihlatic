@@ -15,11 +15,8 @@ export default function Packages() {
         startDate="12-August-2024"
         endDate="20-August-2024"
       />
-
-      <Provider store={store}>
-        <PaymentProgressComponent />
-        <PaymentCardComponent />
-      </Provider>
+      <PaymentProgressComponent />
+      <PaymentCardComponent />
     </div>
   );
 }

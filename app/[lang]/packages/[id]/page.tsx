@@ -30,8 +30,8 @@ import { packagesFunc } from "@/lib/store/api/packages/packagesSlice";
 import Loading from "@/app/Components/home/Loading";
 import { PackageDetails } from "@/app/Types/package/packageDetails";
 import { setPackage } from "@/lib/store/custom/packagesSlices/paymentPachageSlices";
-import { Departure } from '@/app/Types/package/packageDetails';
 import TripComponent from "@/app/commonComponents/tripComponent";
+
 export default function Details() {
   const dispatch = useDispatch<any>();
   const { loading, packagesData } = useSelector((state: any) => state.packages);
@@ -48,9 +48,6 @@ export default function Details() {
             "departures,media,departures.flight,departures.media,departures.departureSchedules,departures.pricing,agencies,destinations.airport",
         })
       );
-      console.log('kawat');
-      console.log(result.payload);
-      console.log('kawat');
       setPackageDetails(result.payload.result.package);
       dispatch(setPackage(result.payload.result.package) )
       const all =  await dispatch(packagesFunc({ include: 'departures' }));
@@ -111,11 +108,8 @@ export default function Details() {
                 )
               }
 
-
-
               <TitleComponent title={"Hôtel Details"} label={""} />
               <ContentComponent dynamicContent={<HotelDetails data={packagesDetails?.departures}/>} />
-        
         
               <TitleComponent
                 title={"Travel program"}
@@ -154,7 +148,7 @@ export default function Details() {
       </div>
       <div className="container">
         <div className="w-100" id="home-page">
-        <OrganizeSection data={packages}  comp={TripComponent} />
+          <OrganizeSection data={packages}  comp={TripComponent} />
         </div>
       </div>
     </div>
