@@ -94,6 +94,21 @@ const FlightInfos: React.FC<FlightInfosProps> = ({ segments, type }) => {
                 )
               ))}
             </div>
+            {/* Commenting out airline logos for now
+            <div className="flex -space-x-2">
+              {allSegments.map((segment, index) => (
+                segment.airLine?.iata && (
+                  <Image
+                    key={index}
+                    src={airlogo1}
+                    alt={segment.airLine.name}
+                    width={18}
+                    height={18}
+                    className={`relative z-${10 + index}`}
+                  />
+                )
+              ))}
+            </div>
             */}
           </div>
           <div className="text-[10px] font-semibold text-muted-foreground mt-1">
