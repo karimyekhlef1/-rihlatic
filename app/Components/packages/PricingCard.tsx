@@ -17,7 +17,7 @@ interface PricingCardProps {
     total 
   }: PricingCardProps) {
   return (
-    <Card className="max-w-md p-4 space-y-6 pt-5">
+    <Card className="p-4 space-y-6 pt-5">
   {title}
 
  

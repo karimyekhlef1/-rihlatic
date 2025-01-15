@@ -91,24 +91,23 @@ export default function ChangePaymentSteps() {
   };
 
   return (
-    <div className="flex justify-between w-1/2 mx-auto my-4">
+    <div className="flex justify-between w-full mx-auto my-4">
       {
         currentStep > 1 ? (
-          <Button variant="outline" onClick={handleBack} className="px-16">
+          <Button variant="outline" onClick={handleBack} className="px-10 sm:px-14">
             Back
           </Button>
         ) : (<span></span>)
       }
       {
         currentStep <= rooms?.length ? (
-          <Button variant={'active'} onClick={handleNext} className="px-16">
+          <Button variant={'active'} onClick={handleNext} className="px-10 sm:px-14">
             Next
           </Button>
-        ) : (<Button variant={'active'} onClick={handleComplete} className="px-16">
+        ) : (<Button variant={'active'} onClick={handleComplete} className="px-10 sm:px-14">
           Complete Booking
         </Button>)
       }
-   
-  </div>
+    </div>
   )
 }

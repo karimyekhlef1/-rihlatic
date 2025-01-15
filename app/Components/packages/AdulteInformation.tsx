@@ -67,64 +67,68 @@ export default function PassengerInformation({ titel, index, roomId }: Passenger
   };
 
   return (
-    <div>
-      <Card className="w-full max-w-[840px] mx-auto mb-4">
-        <CardContent>
-          <form className="space-y-4">
-            <div className="flex flex-col space-y-2 mt-4 mb-6">
-              <div className="text-lg font-semibold">
-                {titel} {index + 1}
-              </div>
+    <Card className="w-full">
+      <CardContent className='w-full'>
+        <form className="space-y-4">
+          <div className="flex flex-col space-y-2 mt-4 mb-6">
+            <div className="text-lg font-semibold">
+              {titel} {index + 1}
             </div>
+          </div>
 
-            {titel=="adults" && index==0  ?  <div className="flex flex-row gap-x-4 pb-4">
-              <Input
-                id="email"
-                type="email"
-                placeholder="E-mail of passenger"
-                value={passenger?.email || ''}
-                onChange={(e) => handleInputChange('email', e.target.value)}
-              />
-              <Input
-                id="phone"
-                type="tel"
-                placeholder="Phone number"
-                value={passenger?.phone || ''}
-                onChange={(e) => handleInputChange('phone', e.target.value)}
-              />
-            </div>:null}
-            <Separator />
+          {titel=="adults" && index == 0  ? <div className="flex flex-col sm:flex-row gap-4 pb-2">
+            <Input
+              id="email"
+              type="email"
+              placeholder="E-mail of passenger"
+              value={passenger?.email || ''}
+              onChange={(e) => handleInputChange('email', e.target.value)}
+            />
+            <Input
+              id="phone"
+              type="tel"
+              placeholder="Phone number"
+              value={passenger?.phone || ''}
+              onChange={(e) => handleInputChange('phone', e.target.value)}
+            />
+          </div>:null}
+          <Separator />
 
-            <div className="relative">
-              <Input
-                id="passport"
-                type="file"
-                className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
-                accept="image/*"
-                onChange={handleFileUpload}
-              />
-              <div className="flex items-center border rounded-md bg-background px-3 py-2 text-gray-700">
-                <Button
-                  type="button"
-                  size="sm"
-                  variant={'outline'}
-                  className="mr-2 drop-shadow-md"
-                >
-                  Scan passport
-                </Button>
-              </div>
+          <div className="relative">
+            <Input
+              id="passport"
+              type="file"
+              className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
+              accept="image/*"
+              onChange={handleFileUpload}
+            />
+            <div className="flex items-center border rounded-md bg-background px-3 py-2 text-gray-700">
+              <Button
+                type="button"
+                size="sm"
+                variant={'outline'}
+                className="mr-2 drop-shadow-md"
+              >
+                Scan passport
+              </Button>
             </div>
-            <p className="text-xs text-gray-400">
-              We will scan your passport automatically when you upload it
-            </p>
+          </div>
+          <p className="text-xs text-gray-400">
+            We will scan your passport automatically when you upload it
+          </p>
 
-            <div className="flex flex-row gap-x-4 pb-2">
+          <div className="flex flex-col sm:flex-row gap-4 pb-2">
+            <div className="flex flex-col w-full">
+              <label htmlFor="firstName" className="text-sm text-gray-500">First name</label>
               <Input
                 id="firstName"
                 placeholder="First name"
                 value={passenger?.first_name || ''}
                 onChange={(e) => handleInputChange('first_name', e.target.value)}
               />
+            </div>
+            <div className="flex flex-col w-full">
+              <label htmlFor="lastName" className="text-sm text-gray-500">Last name</label>
               <Input
                 id="lastName"
                 placeholder="Last name"
@@ -132,7 +136,10 @@ export default function PassengerInformation({ titel, index, roomId }: Passenger
                 onChange={(e) => handleInputChange('last_name', e.target.value)}
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="flex flex-col">
+              <label className="text-sm text-gray-500">Gender</label>
               <Select
                 value={passenger?.sex || 'male'}
                 onValueChange={(value) => handleInputChange('sex', value)}
@@ -145,36 +152,41 @@ export default function PassengerInformation({ titel, index, roomId }: Passenger
                   <SelectItem value="female">Female</SelectItem>
                 </SelectContent>
               </Select>
-
-              <div className="flex flex-col space-y-2">
-                <Input
-                  type="date"
-                  placeholder="Select birth date"
-                  value={passenger?.birth_date || ""}
-                  onChange={(e) => handleInputChange( 'birth_date', e.target.value)}
-                />
-              </div>
             </div>
 
-          
-
-            <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col">
+              <label htmlFor="dob" className="text-sm text-gray-500">Birth date</label>
               <Input
-                type="text"
+                type="date" id="dob"
+                placeholder="Select birth date"
+                value={passenger?.birth_date || ""}
+                onChange={(e) => handleInputChange( 'birth_date', e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className='flex flex-col'>
+              <label htmlFor='passport-nbr' className="text-sm text-gray-500">Passport Number</label>
+              <Input
+                type="text" id='passport-nbr'
                 placeholder="Passport Number"
                 value={passenger?.passport_nbr || ''}
                 onChange={(e) => handleInputChange('passport_nbr', e.target?.value)}
               />
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor='ex-date' className="text-sm text-gray-500">Passport expire date</label>
               <Input
-                type="date"
+                type="date" id='ex-date'
                 placeholder="Select passport expire date"
                 value={passenger?.passport_expire_at || ""}
                 onChange={(e) => handleInputChange('passport_expire_at', e.target.value)}
               />
             </div>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 }

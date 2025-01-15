@@ -25,8 +25,8 @@ export default function RoomReservationInformation() {
   };
 
   return (
-    <div className="w-full flex justify-center">
-      <ScrollArea className=" max-h-[80vh] w-1/2">
+    <div className="w-full">
+      <ScrollArea className=" max-h-[80vh]">
         {renderRoomInfo('adults', currentRoom.adults)}
         {renderRoomInfo('children', currentRoom.children)}
         {renderRoomInfo('infants', currentRoom.infants)}
