@@ -1,28 +1,18 @@
 import Image from 'next/image';
-import { generateAirlineColor } from '@/lib/utils/flightUtils';
 
 interface AirlineCompanyProps {
-  iata: string;
+  logo: string;
   name: string;
 }
 
 export default function AirlineCompanyComponent({
-  iata,
+  logo,
   name,
 }: AirlineCompanyProps) {
-  const colors = generateAirlineColor(iata);
-
   return (
     <div className="flex items-center bg-[#f8f8f8] rounded-full px-1">
-      <div
-        className="w-8 h-8 rounded-lg flex items-center justify-center mr-2"
-        style={{ backgroundColor: colors.bg }}
-      >
-        <span className="text-sm font-semibold" style={{ color: colors.text }}>
-          {iata}
-        </span>
-      </div>
-      <span className="text-xs font-medium text-gray-600">{name}</span>
+      <Image src={logo} alt={name} width={18} height={18} className="mr-2" />
+      <p className="text-xs font-medium text-gray-500">{name}</p>
     </div>
   );
 }

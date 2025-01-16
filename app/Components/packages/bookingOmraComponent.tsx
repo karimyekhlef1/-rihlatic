@@ -1,18 +1,54 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { CircleCheck, ArrowRight } from "lucide-react";
+import { CircleCheck, ArrowRight, ChevronDown } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setOmraDepartureId } from "@/lib/store/custom/commonSlices/omraReservationSlice";
 
-import Link from "next/link";
-import DepartureDialog from "@/app/Components/packages/departure-dialog";
 import { RoomDialog } from "@/app/Components/packages/room-dialog";
 
-export default function BookingPackageComponent(data: any) {
-  const departure_date = new Date(data?.data?.[0]?.departure_date);
-  const return_date = new Date(data?.data?.[0]?.return_date);
+import PopularFacilitiesOmra from "../omra/PopularFacilitiesOmra";
+
+interface DepartureOption {
+  id: number;
+  label: string;
+}
+
+interface BookingOmraComponentProps {
+  data: any;
+  facilities?: {
+    visa: boolean;
+    vol: boolean;
+    hotel: boolean;
+    transfer: boolean;
+    excursion: boolean;
+    cruise: boolean;
+  };
+}
+
+export default function BookingOmraComponent({ data, facilities }: BookingOmraComponentProps) {
+  const dispatch = useDispatch();
+  
+  // Safely parse dates with validation
+  const parseDateSafely = (dateString: string | undefined) => {
+    if (!dateString) return new Date();
+    try {
+      const date = new Date(dateString);
+      // Check if date is valid
+      if (isNaN(date.getTime())) {
+        return new Date();
+      }
+      return date;
+    } catch (error) {
+      return new Date();
+    }
+  };
+
+  const departure_date = parseDateSafely(data?.[0]?.departure_date);
+  const return_date = parseDateSafely(data?.[0]?.return_date);
   const formattedDeparture_date = format(departure_date, "dd-MMMM-yyyy", {
     locale: fr,
   });
@@ -20,12 +56,46 @@ export default function BookingPackageComponent(data: any) {
     locale: fr,
   });
 
-  const [isDepartureDialogOpen, setIsDepartureDialogOpen] = useState(false);
-  const [isDepartureSelected, setIsDepartureSelected] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedDeparture, setSelectedDeparture] =
+    useState<DepartureOption | null>(null);
   const [isRoomDialogOpen, setIsRoomDialogOpen] = useState(false);
 
+  const departureOptions: DepartureOption[] = [
+    {
+      id: 4,
+      label: formattedDeparture_date,
+    },
+    {
+      id: 5,
+      label: format(
+        new Date(data?.[1]?.departure_date || departure_date),
+        "dd-MMMM-yyyy",
+        {
+          locale: fr,
+        }
+      ),
+    },
+    {
+      id: 6,
+      label: format(
+        new Date(data?.[2]?.departure_date || departure_date),
+        "dd-MMMM-yyyy",
+        {
+          locale: fr,
+        }
+      ),
+    },
+  ].filter((option, index) => data?.[index]?.departure_date != null);
+
+  const handleDepartureSelect = (option: DepartureOption) => {
+    setSelectedDeparture(option);
+    setIsDropdownOpen(false);
+    dispatch(setOmraDepartureId(option.id));
+  };
+
   const handleBookNowClick = () => {
-    if (isDepartureSelected) {
+    if (selectedDeparture) {
       setIsRoomDialogOpen(true);
     }
   };
@@ -38,10 +108,21 @@ export default function BookingPackageComponent(data: any) {
             <div className="flex flex-col items-center justify-center pb-4">
               <p className="text-xs">Starting from</p>
               <p className="font-semibold text-lg">
-                {data?.data?.[0]?.price_ini} DZD
+                {data?.[0]?.price_ini} DZD
               </p>
             </div>
             <Separator />
+
+            {facilities && (
+              <PopularFacilitiesOmra
+                visa={facilities.visa}
+                vol={facilities.vol}
+                hotel={facilities.hotel}
+                transfer={facilities.transfer}
+                excursion={facilities.excursion}
+                cruise={facilities.cruise}
+              />
+            )}
             <div className="flex flex-col pt-4 pb-8">
               <div className="flex flex-row items-center">
                 <CircleCheck
@@ -50,9 +131,9 @@ export default function BookingPackageComponent(data: any) {
                   fill="#b4deff"
                 />
                 <p className="text-xs text-gray-700 font-medium pl-2">
-                  {data?.data?.[0]?.total_days} nights{" "}
+                  {data?.[0]?.total_days} nights{" "}
                   <span className="text-xs text-gray-700 font-bold">/</span>{" "}
-                  {data?.data?.[0]?.total_days + 1} days
+                  {data?.[0]?.total_days + 1} days
                 </p>
               </div>
               <div className="flex flex-row items-center mt-2">
@@ -68,27 +149,40 @@ export default function BookingPackageComponent(data: any) {
                 </p>
               </div>
             </div>
-            <div className="pb-4">
-              <Button
-                className="px-14"
-                variant={"rihlatic"}
-                onClick={() => setIsDepartureDialogOpen(true)}
+            <div className="pb-4 relative w-[80%]">
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="w-full text-sm font-medium px-8 py-2 bg-white text-[#ff8000] border-2 border-[#ff8000] rounded-xl cursor-pointer flex items-center justify-center transition-colors duration-200 hover:bg-orange-50"
               >
-                {isDepartureSelected ? "Modify departure" : "Select departure"}
-              </Button>
-              <DepartureDialog
-                open={isDepartureDialogOpen}
-                onOpenChange={setIsDepartureDialogOpen}
-                onSelect={() => setIsDepartureSelected(true)}
-                onDelete={() => setIsDepartureSelected(false)}
-              />
+                <span>
+                  {selectedDeparture
+                    ? selectedDeparture.label
+                    : "Select departure"}
+                </span>
+                <ChevronDown
+                  className={`transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""} ml-2`}
+                />
+              </button>
+              {isDropdownOpen && (
+                <div className="absolute z-10 w-full mt-1 bg-white border-2 border-[#ff8000] rounded-xl overflow-hidden transition-all duration-300 ease-in-out">
+                  {departureOptions.map((option) => (
+                    <div
+                      key={option.id}
+                      className="text-sm text-center font-semibold px-8 py-2 text-[#ff8000] cursor-pointer hover:bg-[#fff0e0] transition-colors duration-200"
+                      onClick={() => handleDepartureSelect(option)}
+                    >
+                      {option.label}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
             <Separator className="w-[90%]" />
             <div className="pt-4">
               <Button
                 className="px-20"
                 variant={"rihlatic"}
-                disabled={!isDepartureSelected}
+                disabled={!selectedDeparture}
                 onClick={handleBookNowClick}
               >
                 Book Now

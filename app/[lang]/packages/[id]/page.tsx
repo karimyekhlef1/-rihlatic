@@ -30,8 +30,8 @@ import { packagesFunc } from "@/lib/store/api/packages/packagesSlice";
 import Loading from "@/app/Components/home/Loading";
 import { PackageDetails } from "@/app/Types/package/packageDetails";
 import { setPackage } from "@/lib/store/custom/packagesSlices/paymentPachageSlices";
-import { Departure } from '@/app/Types/package/packageDetails';
 import TripComponent from "@/app/commonComponents/tripComponent";
+
 export default function Details() {
   const dispatch = useDispatch<any>();
   const { loading, packagesData } = useSelector((state: any) => state.packages);
@@ -71,43 +71,53 @@ export default function Details() {
               />
               <ContentComponent htmlContent={packagesDetails?.description} />
 
-              <TitleComponent
-                title={"Trip summary"}
-                icon={<PlaneTakeoff size={20} />}
-                label={""}
-              />
-              <ContentComponent
-                dynamicContent={
-                  <Provider store={store}>
-                    <TripSummaryComponent flightInfo={outboundFlights[0]} />
-                  </Provider>
-                }
-              />
+              {
+                packagesDetails?.departures[0].flight != null && (
+                  <> 
+                    <TitleComponent
+                      title={"Trip summary"}
+                      icon={<PlaneTakeoff size={20} />}
+                      label={""}
+                    />
+                    <ContentComponent
+                      dynamicContent={
+                        <TripSummaryComponent flightInfo={outboundFlights[0]} />
+                      }
+                    />
+                  </>
+                )
+              }
 
-              <TitleComponent
-                title={"Hôtel(s)"}
-                icon={<Bed size={20} />}
-                label={""}
-              />
-              {packagesDetails?.departures.map((item, index) => (
-                <div key={index}>
-                  <ContentComponent
-                    dynamicContent={<HotelsComponent data={item.hotel_stay[0]} />}
-                  />
-                </div>
-              ))}
+              {
+                packagesDetails?.departures[0].hotel_stay.length > 0 && (
+                  <>
+                    <TitleComponent
+                      title={"Hôtel(s)"}
+                      icon={<Bed size={20} />}
+                      label={""}
+                    />
+                    
+                    {packagesDetails?.departures[0].hotel_stay?.map((item: any, index: number) => (
+                      <div key={index}>
+                        <ContentComponent
+                          dynamicContent={<HotelsComponent data={item.hotel_stay[0]} />}
+                        />
+                      </div>
+                    ))}
+                  </>
+                )
+              }
 
               <TitleComponent title={"Hôtel Details"} label={""} />
               <ContentComponent dynamicContent={<HotelDetails data={packagesDetails?.departures}/>} />
-        
         
               <TitleComponent
                 title={"Travel program"}
                 icon={<Luggage size={20} />}
                 label={""}
               />
-              <ContentComponent dynamicContent={<TravelProgram data={packagesDetails?.departures} />} />
 
+              <ContentComponent dynamicContent={<TravelProgram data={packagesDetails?.departures[0]?.schedule ?? []} />} />
               <TitleComponent
                 title={"important note"}
                 icon={<CircleAlert size={20} color="orange" />}
@@ -138,7 +148,7 @@ export default function Details() {
       </div>
       <div className="container">
         <div className="w-100" id="home-page">
-        <OrganizeSection data={packages}  comp={TripComponent} />
+          <OrganizeSection data={packages}  comp={TripComponent} />
         </div>
       </div>
     </div>

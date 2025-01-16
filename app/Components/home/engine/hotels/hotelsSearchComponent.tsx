@@ -32,9 +32,7 @@ const HotelsSearchComponent: React.FC<HotelsSearchComponentProps> = ({ onSearch 
                         type={3}
                         selected={selectedDestinationName}
                     />
-                    {/* <DatePickerComponent isOnePick={false} /> */}
                     <DatePickerComponent isOnePick={false} dateRange={dateRange} setDateRange={(value: DateRange) => dispatch(setDateRange(value))} />
-
                     <HotelRoomsComponent />
                     <button
                         type="button"

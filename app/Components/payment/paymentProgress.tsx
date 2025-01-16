@@ -16,7 +16,7 @@ export default function PaymentProgressComponent() {
 
   return (
     <div className="w-full max-w-3xl mx-auto p-6">
-      <div className="flex items-center justify-between relative">
+      <div className="flex items-center justify-between flex-wrap relative">
         {steps.map((step, index) => {
           const isActive = index + 1 === currentStep;
           const isCompleted = index + 1 < currentStep;
@@ -52,7 +52,7 @@ export default function PaymentProgressComponent() {
                 {isActive && (
                   <div className=" bg-[#ff8000] absolute inset-0 bg-[#ff8000]/50 rounded-full animate-ping z-[-1]" />
                 )}
-              </div>
+              </div>              
 
               {/* Step Label */}
               <span

@@ -54,47 +54,55 @@ export default function PaymentPage() {
   if (!departure || !rooms || !pkg || !pricing) {
     return <Loading />;
   }
+
+  const getMonthName = (date: Date) => {
+    return date.toLocaleString("default", { month: "long" });
+  };
+
   return (
-    <div className="flex flex-col items-center justify-start min-h-screen pt-16">
-      <PaymentTitleComponent
-        location={pkg.name}
-        month="August"
-        startDate={departure.departure_date}
-        endDate={departure.return_date}
-      />
-      <PaymentProgressComponent />
-      <RoomReservationInformation />
-      <ChangePaymentSteps />
-      <div className="absolute  left-3/4">
-        <PricingCard
-          title={
-            <div className=" flex flex-col items-start  justify-start">
-              <div className="flex flex-row items-center">
-                <MapPin fill="gray" color="#ffffff" />
+    <div className="container">
+      <div className="flex flex-col sm:flex-row gap-4 py-10">
+        <div className="w-full md:w-2/3 flex flex-col items-center">
+          <PaymentTitleComponent
+            location={pkg.name}
+            month={getMonthName(departure.departure_date)}
+            startDate={departure.departure_date}
+            endDate={departure.return_date}
+          />
+          <PaymentProgressComponent />
+          <RoomReservationInformation />
+          <ChangePaymentSteps />
+        </div>
+        <div className="w-full md:w-1/3">
+          <PricingCard
+            title={
+              <div className=" flex flex-col items-start justify-start">
+                <div className="flex flex-row items-center">
+                  <MapPin fill="gray" color="#ffffff" />
+                  <p className="text-sm font-semibold pl-2 text-gray-500 ">
+                    {pkg.destinations[0].name}
+                  </p>
+                </div>
 
-                <p className="text-sm font-semibold pl-2 text-gray-500 ">
-                  {pkg.destinations[0].name}
-                </p>
+                <div className="flex flex-row items-center">
+                  <CircleCheck
+                    className="font-semibold text-xs text-[#43acff]"
+                    fill="#b4deff"
+                  />
+                  <p className="text-sm font-semibold pl-2">
+                    {calculateDuration(
+                      departure.departure_date,
+                      departure.return_date
+                    )}
+                  </p>
+                </div>
               </div>
-
-              <div className="flex flex-row items-center">
-                <CircleCheck
-                  className="font-semibold text-xs text-[#43acff]"
-                  fill="#b4deff"
-                />
-                <p className="text-sm font-semibold pl-2">
-                  {calculateDuration(
-                    departure.departure_date,
-                    departure.return_date
-                  )}
-                </p>
-              </div>
-            </div>
-          }
-          image={pkg.url_featured_image}
-          rooms={pricing.rooms}
-          total={pricing.total}
-        />
+            }
+            image={pkg.url_featured_image}
+            rooms={pricing.rooms}
+            total={pricing.total}
+          />
+        </div>
       </div>
     </div>
   );

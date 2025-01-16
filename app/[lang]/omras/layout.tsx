@@ -1,5 +1,6 @@
-import Footer from '@/app/commonComponents/footer';
-import Navbar from '@/app/Layout/Header/Navbar/navbar';
+"use client";
+import Footer from "@/app/commonComponents/footer";
+import Navbar from "@/app/Layout/Header/Navbar/navbar";
 
 const OmrasLayout = ({ children }: { children: React.ReactNode }) => {
   return (

@@ -21,7 +21,10 @@ import OrganizeSection from "@/app/Components/home/organizeSection";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getOmraDetails } from "@/lib/store/api/omras/omrasSlice";
+import {
+  getOmraDetails,
+  getOmraReservationDetails,
+} from "@/lib/store/api/omras/omrasSlice";
 import Loading from "@/app/Components/home/Loading";
 import PricingTable from "@/app/commonComponents/pricing-table";
 import TripSummaryComponent from "@/app/Components/packages/tripSummary";
@@ -38,13 +41,13 @@ export default function OmraDetails() {
   const [omraDetails, setOmraDetails] = useState<any>(undefined);
   const [omras, setOmras] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [facilities, setFacilities] = useState<any>(null);
   const { id } = useParams();
 
   useEffect(() => {
     const getData = async () => {
       setIsLoading(true);
       try {
-        console.log("Fetching omra details for ID:", id);
         const result = await dispatch(
           getOmraDetails({
             id,
@@ -53,47 +56,47 @@ export default function OmraDetails() {
           })
         ).unwrap();
 
-        console.log("Full omra details response:", result);
+        const omraFacilities = await dispatch(
+          getOmraReservationDetails({
+            include: "omraDeparture,omraDeparture.pricing",
+          })
+        ).unwrap();
+
+        // Extract facilities from the first booking
+        if (omraFacilities?.result?.bookings?.[0]?.departure) {
+          const { visa, vol, hotel, transfer, excursion, cruise } =
+            omraFacilities.result.bookings[0].departure;
+          setFacilities({ visa, vol, hotel, transfer, excursion, cruise });
+        }
 
         if (result?.success && result?.result?.omra) {
-          // Find the specific omra by ID
           const specificOmra = result.result.omra.find(
             (omra: any) => omra.id === Number(id)
           );
 
           if (specificOmra) {
-            console.log("Found specific omra:", specificOmra);
             setOmraDetails(specificOmra);
-          } else {
-            console.log("No omra found with ID:", id);
           }
         }
 
         const allResult = await dispatch(
-          getOmraDetails({ include: "omraDepartures,media" })
+          getOmraDetails({
+            include: "omraDepartures,media",
+          })
         ).unwrap();
 
         if (allResult?.success && allResult?.result?.omra) {
-          // For all omras, we can use the array directly
           setOmras(allResult.result.omra);
         }
       } catch (error) {
-        console.error("Error fetching omra details:", error);
+        setIsLoading(false);
       } finally {
         setIsLoading(false);
       }
     };
+
     getData();
   }, [dispatch, id]);
-
-  // Add debug logging
-  console.log("Component state:", {
-    isLoading,
-    loading,
-    hasOmraDetails: !!omraDetails,
-    omraDetailsKeys: omraDetails ? Object.keys(omraDetails) : [],
-    omrasLength: omras.length,
-  });
 
   if (isLoading) {
     return <Loading />;
@@ -154,9 +157,18 @@ export default function OmraDetails() {
                           to: omraDetails.omraDepartures[0].flight.bounds[0]
                             .segments[0].arrival_airport.city,
                           duration: (() => {
-                            const dep = omraDetails.omraDepartures[0].flight.bounds[0].departure_date.split(" ")[1].substring(0, 5);
-                            const arr = omraDetails.omraDepartures[0].flight.bounds[0].arrival_date.split(" ")[1].substring(0, 5);
-                            const { hours, minutes } = calculateDuration(dep, arr);
+                            const dep =
+                              omraDetails.omraDepartures[0].flight.bounds[0].departure_date
+                                .split(" ")[1]
+                                .substring(0, 5);
+                            const arr =
+                              omraDetails.omraDepartures[0].flight.bounds[0].arrival_date
+                                .split(" ")[1]
+                                .substring(0, 5);
+                            const { hours, minutes } = calculateDuration(
+                              dep,
+                              arr
+                            );
                             return `${hours}h ${minutes}m`;
                           })(),
                           departureTime:
@@ -212,9 +224,18 @@ export default function OmraDetails() {
                           to: omraDetails.omraDepartures[0].flight.bounds[1]
                             .segments[0].arrival_airport.city,
                           duration: (() => {
-                            const dep = omraDetails.omraDepartures[0].flight.bounds[1].departure_date.split(" ")[1].substring(0, 5);
-                            const arr = omraDetails.omraDepartures[0].flight.bounds[1].arrival_date.split(" ")[1].substring(0, 5);
-                            const { hours, minutes } = calculateDuration(dep, arr);
+                            const dep =
+                              omraDetails.omraDepartures[0].flight.bounds[1].departure_date
+                                .split(" ")[1]
+                                .substring(0, 5);
+                            const arr =
+                              omraDetails.omraDepartures[0].flight.bounds[1].arrival_date
+                                .split(" ")[1]
+                                .substring(0, 5);
+                            const { hours, minutes } = calculateDuration(
+                              dep,
+                              arr
+                            );
                             return `${hours}h ${minutes}m`;
                           })(),
                           departureTime:
@@ -334,7 +355,23 @@ export default function OmraDetails() {
           {/* Booking Section - Desktop */}
           <div className="md:hidden lg:flex lg:flex-col items-center pt-4 sm:pt-16 gap-y-8">
             <Provider store={store}>
-              <BookingOmraComponent data={omraDetails?.omraDepartures} />
+              <BookingOmraComponent
+                data={omraDetails?.omraDepartures}
+                facilities={facilities}
+              />
+            </Provider>
+            <div className="pt-6 sm:pt-0">
+              <AdComponent />
+            </div>
+          </div>
+
+          {/* Booking Section - Tablet */}
+          <div className="hidden lg:hidden md:flex md:pt-8 md:gap-x-8 md:justify-center md:items-center">
+            <Provider store={store}>
+              <BookingOmraComponent
+                data={omraDetails?.omraDepartures}
+                facilities={facilities}
+              />
             </Provider>
             <div className="pt-6 sm:pt-0">
               <AdComponent />
@@ -342,21 +379,11 @@ export default function OmraDetails() {
           </div>
         </div>
 
-        {/* Booking Section - Tablet */}
-        <div className="hidden lg:hidden md:flex md:pt-8 md:gap-x-8 md:justify-center md:items-center">
-          <Provider store={store}>
-            <BookingOmraComponent data={omraDetails?.omraDepartures} />
-          </Provider>
-          <div className="pt-6 sm:pt-0">
-            <AdComponent />
+        {/* Related Omras */}
+        <div className="container textarabic">
+          <div className="w-100" id="home-page">
+            <OrganizeSection data={omras} comp={OmraTripComponent} />
           </div>
-        </div>
-      </div>
-
-      {/* Related Omras */}
-      <div className="container textarabic">
-        <div className="w-100" id="home-page">
-          <OrganizeSection data={omras} comp={OmraTripComponent} />
         </div>
       </div>
     </div>
