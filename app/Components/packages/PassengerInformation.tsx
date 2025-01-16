@@ -93,13 +93,11 @@ export default function PassengerInformation({
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // Validate file size (1MB = 1024 * 1024 bytes)
     if (file.size > 1024 * 1024) {
       toast.error("File too large. Please select a file smaller than 1MB");
       return;
     }
 
-    // Validate file type
     if (!file.type.startsWith("image/") && !file.type.startsWith("application/pdf")) {
       toast.error("Invalid file type. Please select an image or PDF file");
       return;
@@ -114,152 +112,177 @@ export default function PassengerInformation({
   };
 
   return (
-    <div>
-      <Card className={`w-full max-w-[840px] mx-auto mb-4 ${readOnly ? "opacity-90" : ""}`}>
-        <CardContent>
-          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-            <div className="flex justify-between items-center">
-              <h2 className="text-lg font-semibold capitalize">
-                {title.replace("_", " ")} #{index + 1}
-              </h2>
+    <Card className="w-full">
+      <CardContent className="w-full">
+        <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+          <div className="flex flex-col space-y-2 mt-4 mb-6">
+            <div className="text-lg font-semibold capitalize">
+              {title.replace("_", " ")} {index + 1}
             </div>
-            <Separator className="my-4" />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium">First Name</label>
-                <Input
-                  {...register("first_name")}
-                  onChange={(e) => handleInputChange("first_name", e.target.value)}
-                  disabled={readOnly}
-                  className="mt-1"
-                />
-                {errors.first_name && (
-                  <p className="text-red-500 text-xs mt-1">{errors.first_name.message}</p>
-                )}
-              </div>
-              <div>
-                <label className="text-sm font-medium">Last Name</label>
-                <Input
-                  {...register("last_name")}
-                  onChange={(e) => handleInputChange("last_name", e.target.value)}
-                  disabled={readOnly}
-                  className="mt-1"
-                />
-                {errors.last_name && (
-                  <p className="text-red-500 text-xs mt-1">{errors.last_name.message}</p>
-                )}
-              </div>
-              <div>
-                <label className="text-sm font-medium">Gender</label>
-                <Select
-                  disabled={readOnly}
-                  onValueChange={(value: "male" | "female") => handleInputChange("sex", value)}
-                  defaultValue={currentPassenger?.sex || ""}
-                >
-                  <SelectTrigger className="mt-1">
-                    <SelectValue placeholder="Select gender" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="male">Male</SelectItem>
-                    <SelectItem value="female">Female</SelectItem>
-                  </SelectContent>
-                </Select>
-                {errors.sex && (
-                  <p className="text-red-500 text-xs mt-1">{errors.sex.message}</p>
-                )}
-              </div>
-              <div>
-                <label className="text-sm font-medium">Nationality</label>
-                <Input
-                  {...register("nationality")}
-                  onChange={(e) => handleInputChange("nationality", e.target.value)}
-                  disabled={readOnly}
-                  className="mt-1"
-                />
-                {errors.nationality && (
-                  <p className="text-red-500 text-xs mt-1">{errors.nationality.message}</p>
-                )}
-              </div>
-              <div>
-                <label className="text-sm font-medium">Date of Birth</label>
-                <Input
-                  {...register("birthday")}
-                  type="date"
-                  onChange={(e) => handleInputChange("birthday", e.target.value)}
-                  disabled={readOnly}
-                  className="mt-1"
-                />
-                {errors.birthday && (
-                  <p className="text-red-500 text-xs mt-1">{errors.birthday.message}</p>
-                )}
-              </div>
-              <div>
-                <label className="text-sm font-medium">Phone Number</label>
-                <Input
-                  {...register("phone")}
-                  onChange={(e) => handleInputChange("phone", e.target.value)}
-                  disabled={readOnly}
-                  className="mt-1"
-                />
-                {errors.phone && (
-                  <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>
-                )}
-              </div>
-              <div>
-                <label className="text-sm font-medium">Email</label>
+          </div>
+
+          {title === "adults" && index === 0 && (
+            <div className="flex flex-col sm:flex-row gap-4 pb-2">
+              <div className="flex flex-col w-full">
+                <label className="text-sm text-gray-500">Email</label>
                 <Input
                   {...register("email")}
                   type="email"
+                  placeholder="E-mail of passenger"
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   disabled={readOnly}
-                  className="mt-1"
                 />
                 {errors.email && (
                   <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
                 )}
               </div>
-              <div>
-                <label className="text-sm font-medium">Passport Number</label>
+              <div className="flex flex-col w-full">
+                <label className="text-sm text-gray-500">Phone Number</label>
                 <Input
-                  {...register("passport_nbr")}
-                  onChange={(e) => handleInputChange("passport_nbr", e.target.value)}
+                  {...register("phone")}
+                  type="tel"
+                  placeholder="Phone number"
+                  onChange={(e) => handleInputChange("phone", e.target.value)}
                   disabled={readOnly}
-                  className="mt-1"
                 />
-                {errors.passport_nbr && (
-                  <p className="text-red-500 text-xs mt-1">{errors.passport_nbr.message}</p>
-                )}
-              </div>
-              <div>
-                <label className="text-sm font-medium">Passport Expiry Date</label>
-                <Input
-                  {...register("passport_expire_at")}
-                  type="date"
-                  onChange={(e) => handleInputChange("passport_expire_at", e.target.value)}
-                  disabled={readOnly}
-                  className="mt-1"
-                />
-                {errors.passport_expire_at && (
-                  <p className="text-red-500 text-xs mt-1">{errors.passport_expire_at.message}</p>
-                )}
-              </div>
-              <div>
-                <label className="text-sm font-medium">Passport Scan</label>
-                <Input
-                  type="file"
-                  accept="image/*,application/pdf"
-                  onChange={handleFileUpload}
-                  disabled={readOnly}
-                  className="mt-1"
-                />
-                {currentPassenger?.passport_scan && (
-                  <p className="text-green-500 text-xs mt-1">Passport scan uploaded</p>
+                {errors.phone && (
+                  <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>
                 )}
               </div>
             </div>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+          )}
+
+          <Separator />
+
+          <div className="relative">
+            <Input
+              type="file"
+              accept="image/*,application/pdf"
+              className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
+              onChange={handleFileUpload}
+              disabled={readOnly}
+            />
+            <div className="flex items-center border rounded-md bg-background px-3 py-2 text-gray-700">
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                className="mr-2 drop-shadow-md"
+              >
+                Scan passport
+              </Button>
+            </div>
+          </div>
+          <p className="text-xs text-gray-400">
+            We will scan your passport automatically when you upload it
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 pb-2">
+            <div className="flex flex-col w-full">
+              <label className="text-sm text-gray-500">First Name</label>
+              <Input
+                {...register("first_name")}
+                placeholder="First name"
+                onChange={(e) => handleInputChange("first_name", e.target.value)}
+                disabled={readOnly}
+              />
+              {errors.first_name && (
+                <p className="text-red-500 text-xs mt-1">{errors.first_name.message}</p>
+              )}
+            </div>
+            <div className="flex flex-col w-full">
+              <label className="text-sm text-gray-500">Last Name</label>
+              <Input
+                {...register("last_name")}
+                placeholder="Last name"
+                onChange={(e) => handleInputChange("last_name", e.target.value)}
+                disabled={readOnly}
+              />
+              {errors.last_name && (
+                <p className="text-red-500 text-xs mt-1">{errors.last_name.message}</p>
+              )}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="flex flex-col">
+              <label className="text-sm text-gray-500">Gender</label>
+              <Select
+                disabled={readOnly}
+                onValueChange={(value: "male" | "female") => handleInputChange("sex", value)}
+                defaultValue={currentPassenger?.sex || ""}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select gender" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Male</SelectItem>
+                  <SelectItem value="female">Female</SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.sex && (
+                <p className="text-red-500 text-xs mt-1">{errors.sex.message}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col">
+              <label className="text-sm text-gray-500">Date of Birth</label>
+              <Input
+                {...register("birthday")}
+                type="date"
+                placeholder="Select birth date"
+                onChange={(e) => handleInputChange("birthday", e.target.value)}
+                disabled={readOnly}
+              />
+              {errors.birthday && (
+                <p className="text-red-500 text-xs mt-1">{errors.birthday.message}</p>
+              )}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="flex flex-col">
+              <label className="text-sm text-gray-500">Nationality</label>
+              <Input
+                {...register("nationality")}
+                placeholder="Nationality"
+                onChange={(e) => handleInputChange("nationality", e.target.value)}
+                disabled={readOnly}
+              />
+              {errors.nationality && (
+                <p className="text-red-500 text-xs mt-1">{errors.nationality.message}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col">
+              <label className="text-sm text-gray-500">Passport Number</label>
+              <Input
+                {...register("passport_nbr")}
+                placeholder="Passport Number"
+                onChange={(e) => handleInputChange("passport_nbr", e.target.value)}
+                disabled={readOnly}
+              />
+              {errors.passport_nbr && (
+                <p className="text-red-500 text-xs mt-1">{errors.passport_nbr.message}</p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-col">
+            <label className="text-sm text-gray-500">Passport Expiry Date</label>
+            <Input
+              {...register("passport_expire_at")}
+              type="date"
+              placeholder="Select passport expire date"
+              onChange={(e) => handleInputChange("passport_expire_at", e.target.value)}
+              disabled={readOnly}
+            />
+            {errors.passport_expire_at && (
+              <p className="text-red-500 text-xs mt-1">{errors.passport_expire_at.message}</p>
+            )}
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 }
