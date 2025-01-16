@@ -15,7 +15,8 @@ interface Passenger {
   last_name: string;
   sex: string;
   birth_date?: string;
-  birthdate?: string;  // Alternative field name
+  birthdate?: string;
+  birthday?: string;
 }
 
 interface Passengers {
@@ -31,23 +32,19 @@ interface Room {
 
 // Utility function to safely parse and format dates
 const formatDate = (passenger: Passenger) => {
-  // Try both possible date field names
-  const dateString = passenger.birth_date || passenger.birthdate;
+  const dateString = passenger.birth_date || passenger.birthdate || passenger.birthday;
   
   if (!dateString) {
-    console.log("No date found in passenger:", passenger);
     return "N/A";
   }
   
   try {
     const date = new Date(dateString);
     if (isNaN(date.getTime())) {
-      console.log("Invalid date:", dateString);
       return "Invalid Date";
     }
     return format(date, "dd MMM yyyy");
   } catch (error) {
-    console.log("Error parsing date:", error);
     return "Invalid Date";
   }
 };
