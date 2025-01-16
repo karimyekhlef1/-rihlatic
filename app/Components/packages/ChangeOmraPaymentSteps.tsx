@@ -42,26 +42,35 @@ export default function ChangeOmraPaymentSteps() {
   };
 
   return (
-    <div className="flex justify-between w-1/2 mx-auto my-4 px-8">
-      {currentStep > 1 ? (
-        <Button variant="outline" onClick={handleBack} className="px-16">
-          Back
+    <div className="flex justify-center gap-8 md:gap-16 max-w-3xl w-full mx-auto my-4">
+      <div className="flex-1 flex justify-end">
+        {currentStep > 1 ? (
+          <Button 
+            variant="outline" 
+            onClick={handleBack} 
+            className="w-32 md:w-48"
+          >
+            Back
+          </Button>
+        ) : (
+          <div className="w-32 md:w-48"></div>
+        )}
+      </div>
+
+      <div className="flex-1 flex justify-start">
+        <Button
+          variant="active"
+          onClick={handleNext}
+          className="w-48 md:w-64"
+          disabled={status === "loading"}
+        >
+          {isVerificationStep
+            ? status === "loading"
+              ? "Saving..."
+              : "Confirm Reservation"
+            : "Next"}
         </Button>
-      ) : (
-        <div className="w-[128px]"></div> /* Empty div for spacing */
-      )}
-      <Button
-        variant="active"
-        onClick={handleNext}
-        className="px-16"
-        disabled={status === "loading"}
-      >
-        {isVerificationStep
-          ? status === "loading"
-            ? "Saving..."
-            : "Confirm Reservation"
-          : "Next"}
-      </Button>
+      </div>
     </div>
   );
 }

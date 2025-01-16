@@ -130,11 +130,11 @@ const RoomSummary = ({ room, index }: { room: Room; index: number }) => (
 
 export default function OmraSummary({ rooms }: { rooms: Room[] }) {
   return (
-    <div className="w-full max-w-4xl mx-auto py-6">
-      <h2 className="text-2xl font-semibold text-center mb-6">
+    <div className="w-full max-w-4xl mx-auto py-4">
+      <h2 className="text-2xl font-semibold text-center mb-4">
         Booking Summary
       </h2>
-      <ScrollArea className="h-[600px]">
+      <ScrollArea className="h-[400px]">
         {rooms.map((room, index) => (
           <RoomSummary key={index} room={room} index={index} />
         ))}
