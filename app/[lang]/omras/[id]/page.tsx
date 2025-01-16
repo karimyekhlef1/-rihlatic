@@ -64,7 +64,8 @@ export default function OmraDetails() {
 
         // Extract facilities from the first booking
         if (omraFacilities?.result?.bookings?.[0]?.departure) {
-          const { visa, vol, hotel, transfer, excursion, cruise } = omraFacilities.result.bookings[0].departure;
+          const { visa, vol, hotel, transfer, excursion, cruise } =
+            omraFacilities.result.bookings[0].departure;
           setFacilities({ visa, vol, hotel, transfer, excursion, cruise });
         }
 
@@ -383,13 +384,6 @@ export default function OmraDetails() {
           <div className="w-100" id="home-page">
             <OrganizeSection data={omras} comp={OmraTripComponent} />
           </div>
-        </div>
-      </div>
-
-      {/* Related Omras */}
-      <div className="container textarabic">
-        <div className="w-100" id="home-page">
-          <OrganizeSection data={omras} comp={OmraTripComponent} />
         </div>
       </div>
     </div>
