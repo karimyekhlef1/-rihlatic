@@ -5,6 +5,7 @@ import OmraPaymentProgressComponent from "@/app/Components/omra/OmraPaymentProgr
 import OmraRoomReservationInformation from "@/app/Components/packages/OmraRoomReservationInformation";
 import ChangeOmraPaymentSteps from "@/app/Components/packages/ChangeOmraPaymentSteps";
 import OmraPricingCard from "@/app/Components/omra/OmraPricingCard";
+import OmraSummary from "@/app/Components/omra/OmraSummary";
 import { useSelector } from "react-redux";
 import { CircleCheck, MapPin } from "lucide-react";
 
@@ -20,6 +21,8 @@ export default function OmraPaymentPage() {
   const { rooms, total } = useSelector(
     (state: any) => state.omreaReservationInfos
   );
+  const currentStep = useSelector((state: any) => state.paymentOmra.currentStep);
+  const isVerificationStep = currentStep > rooms.length;
   const omra = omraData?.result?.omra?.[0];
   const location = omra?.destinations?.[0]?.country?.full_name;
   const departure = omra?.omraDepartures?.[0];
@@ -52,7 +55,11 @@ export default function OmraPaymentPage() {
           ) : null}
 
           <OmraPaymentProgressComponent />
-          <OmraRoomReservationInformation />
+          {isVerificationStep ? (
+            <OmraSummary rooms={rooms} />
+          ) : (
+            <OmraRoomReservationInformation />
+          )}
           <ChangeOmraPaymentSteps />
         </div>
 

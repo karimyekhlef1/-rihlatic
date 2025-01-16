@@ -12,7 +12,9 @@ import { toast } from "sonner";
 
 export default function ChangeOmraPaymentSteps() {
   const dispatch = useDispatch<AppDispatch>();
-  const currentStep = useSelector((state: RootState) => state.paymentOmra.currentStep);
+  const currentStep = useSelector(
+    (state: RootState) => state.paymentOmra.currentStep
+  );
   const { rooms, status, omra_departure_id } = useSelector(
     (state: RootState) => state.omreaReservationInfos
   );
@@ -40,24 +42,25 @@ export default function ChangeOmraPaymentSteps() {
   };
 
   return (
-    <div className="flex justify-between w-1/2 mx-auto my-4">
-      {currentStep > 1 && (
+    <div className="flex justify-between w-1/2 mx-auto my-4 px-8">
+      {currentStep > 1 ? (
         <Button variant="outline" onClick={handleBack} className="px-16">
           Back
         </Button>
+      ) : (
+        <div className="w-[128px]"></div> /* Empty div for spacing */
       )}
-      <Button 
-        variant="active" 
-        onClick={handleNext} 
-        className={`px-16 ${currentStep === 1 ? "ml-auto" : ""}`}
+      <Button
+        variant="active"
+        onClick={handleNext}
+        className="px-16"
         disabled={status === "loading"}
       >
-        {isVerificationStep 
-          ? status === "loading" 
-            ? "Saving..." 
+        {isVerificationStep
+          ? status === "loading"
+            ? "Saving..."
             : "Confirm Reservation"
-          : "Next"
-        }
+          : "Next"}
       </Button>
     </div>
   );
