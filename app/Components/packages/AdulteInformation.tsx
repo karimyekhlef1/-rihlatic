@@ -1,17 +1,10 @@
 'use client';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Calendar } from '@/components/ui/calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
 import { format, parse } from 'date-fns';
 import { updatePassengerFieldByIndex } from '@/lib/store/custom/packagesSlices/paymentPachageSlices';
 import {
@@ -21,97 +14,154 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { toast } from 'sonner';
+import { passengerSchema } from '@/lib/schemas/packageSchema';
+// Define the validation schema
+
+type FormData = z.infer<typeof passengerSchema>;
 
 type PassengerType = 'adults' | 'children' | 'infants';
 type PassengerInformationProps = {
   titel: PassengerType;
   index: number;
   roomId: number;
-  room_index:number;
+  room_index: number;
+  readOnly?: boolean;
 };
 
-export default function PassengerInformation({ titel, index, roomId,room_index }: PassengerInformationProps) {
-  useEffect(()=>{
-
-  },[titel, index, roomId])
+export default function PassengerInformation({ 
+  titel, 
+  index, 
+  roomId, 
+  room_index,
+  readOnly = false 
+}: PassengerInformationProps) {
   const dispatch = useDispatch();
   const passenger = useSelector((state: any) => 
     state.paymentPackage.RoomsData[room_index]?.passengers[titel][index]
   );
 
-  const handleInputChange = (key: string, value: string | null) => {
-    dispatch(
-      updatePassengerFieldByIndex({
-        room_id: roomId,
-        room_index,
-        type: titel,
-        index,
-        field: key,
-        value,
-      })
-    );
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    trigger
+  } = useForm<FormData>({
+    resolver: zodResolver(passengerSchema),
+    defaultValues: passenger || {},
+    mode: "onChange"
+  });
 
-  const formatDob = useMemo(() => (dateString: string | null) => {
-    if (!dateString) return 'DD | Select Month | YYYY';
-    const date = parse(dateString, 'yyyy-MM-dd', new Date());
-    return `${format(date, 'dd')} | ${format(date, 'MMMM')} | ${format(date, 'yyyy')}`;
-  }, []);
+  useEffect(() => {
+    if (passenger) {
+      Object.entries(passenger).forEach(([key, value]) => {
+        setValue(key as keyof FormData, value as string);
+      });
+    }
+  }, [passenger, setValue]);
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const base64 = e.target?.result as string;
-        handleInputChange('passport_scan', base64);
-      };
-      reader.readAsDataURL(file);
+  const handleInputChange = async (field: keyof FormData, value: string) => {
+    if (readOnly) return;
+
+    setValue(field, value);
+    const isValid = await trigger(field);
+
+    if (isValid) {
+      dispatch(
+        updatePassengerFieldByIndex({
+          room_id: roomId,
+          room_index,
+          type: titel,
+          index,
+          field,
+          value,
+        })
+      );
     }
   };
-  console.log("titel, index, roomId",titel, index, roomId)
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 1024 * 1024) {
+      toast.error("File too large. Please select a file smaller than 1MB");
+      return;
+    }
+
+    if (!file.type.startsWith("image/") && !file.type.startsWith("application/pdf")) {
+      toast.error("Invalid file type. Please select an image or PDF file");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const base64 = e.target?.result as string;
+      await handleInputChange('passport_scan', base64);
+    };
+    reader.readAsDataURL(file);
+  };
 
   return (
-    <Card className="w-full">
-      <CardContent className='w-full'>
-        <form className="space-y-4">
+    <Card className="w-full mt-2">
+      <CardContent className="w-full">
+        <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
           <div className="flex flex-col space-y-2 mt-4 mb-6">
-            <div className="text-lg font-semibold">
+            <div className="text-lg font-semibold capitalize">
               {titel} {index + 1}
             </div>
           </div>
 
-          {titel=="adults" && index == 0  ? <div className="flex flex-col sm:flex-row gap-4 pb-2">
-            <Input
-              id="email"
-              type="email"
-              placeholder="E-mail of passenger"
-              value={passenger?.email || ''}
-              onChange={(e) => handleInputChange('email', e.target.value)}
-            />
-            <Input
-              id="phone"
-              type="tel"
-              placeholder="Phone number"
-              value={passenger?.phone || ''}
-              onChange={(e) => handleInputChange('phone', e.target.value)}
-            />
-          </div>:null}
+          {titel === "adults" && index === 0 && (
+            <div className="flex flex-col sm:flex-row gap-4 pb-2">
+              <div className="flex flex-col w-full">
+                <label className="text-sm text-gray-500">Email</label>
+                <Input
+                  {...register("email")}
+                  type="email"
+                  placeholder="E-mail of passenger"
+                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  disabled={readOnly}
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+                )}
+              </div>
+              <div className="flex flex-col w-full">
+                <label className="text-sm text-gray-500">Phone Number</label>
+                <Input
+                  {...register("phone")}
+                  type="tel"
+                  placeholder="Phone number"
+                  onChange={(e) => handleInputChange("phone", e.target.value)}
+                  disabled={readOnly}
+                />
+                {errors.phone && (
+                  <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>
+                )}
+              </div>
+            </div>
+          )}
+
           <Separator />
 
           <div className="relative">
             <Input
-              id="passport"
               type="file"
+              accept="image/*,application/pdf"
               className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
-              accept="image/*"
               onChange={handleFileUpload}
+              disabled={readOnly}
             />
             <div className="flex items-center border rounded-md bg-background px-3 py-2 text-gray-700">
               <Button
                 type="button"
                 size="sm"
-                variant={'outline'}
+                variant="outline"
                 className="mr-2 drop-shadow-md"
               >
                 Scan passport
@@ -124,32 +174,40 @@ export default function PassengerInformation({ titel, index, roomId,room_index }
 
           <div className="flex flex-col sm:flex-row gap-4 pb-2">
             <div className="flex flex-col w-full">
-              <label htmlFor="firstName" className="text-sm text-gray-500">First name</label>
+              <label className="text-sm text-gray-500">First Name</label>
               <Input
-                id="firstName"
+                {...register("first_name")}
                 placeholder="First name"
-                value={passenger?.first_name || ''}
-                onChange={(e) => handleInputChange('first_name', e.target.value)}
+                onChange={(e) => handleInputChange("first_name", e.target.value)}
+                disabled={readOnly}
               />
+              {errors.first_name && (
+                <p className="text-red-500 text-xs mt-1">{errors.first_name.message}</p>
+              )}
             </div>
             <div className="flex flex-col w-full">
-              <label htmlFor="lastName" className="text-sm text-gray-500">Last name</label>
+              <label className="text-sm text-gray-500">Last Name</label>
               <Input
-                id="lastName"
+                {...register("last_name")}
                 placeholder="Last name"
-                value={passenger?.last_name || ''}
-                onChange={(e) => handleInputChange('last_name', e.target.value)}
+                onChange={(e) => handleInputChange("last_name", e.target.value)}
+                disabled={readOnly}
               />
+              {errors.last_name && (
+                <p className="text-red-500 text-xs mt-1">{errors.last_name.message}</p>
+              )}
             </div>
           </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col">
               <label className="text-sm text-gray-500">Gender</label>
               <Select
-                value={passenger?.sex || 'male'}
-                onValueChange={(value) => handleInputChange('sex', value)}
+                disabled={readOnly}
+                onValueChange={(value: "male" | "female") => handleInputChange("sex", value)}
+                defaultValue={passenger?.sex || ""}
               >
-                <SelectTrigger id="sex">
+                <SelectTrigger>
                   <SelectValue placeholder="Select gender" />
                 </SelectTrigger>
                 <SelectContent>
@@ -157,37 +215,51 @@ export default function PassengerInformation({ titel, index, roomId,room_index }
                   <SelectItem value="female">Female</SelectItem>
                 </SelectContent>
               </Select>
+              {errors.sex && (
+                <p className="text-red-500 text-xs mt-1">{errors.sex.message}</p>
+              )}
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="dob" className="text-sm text-gray-500">Birth date</label>
+              <label className="text-sm text-gray-500">Birth Date</label>
               <Input
-                type="date" id="dob"
+                {...register("birth_date")}
+                type="date"
                 placeholder="Select birth date"
-                value={passenger?.birth_date || ""}
-                onChange={(e) => handleInputChange( 'birth_date', e.target.value)}
+                onChange={(e) => handleInputChange("birth_date", e.target.value)}
+                disabled={readOnly}
               />
+              {errors.birth_date && (
+                <p className="text-red-500 text-xs mt-1">{errors.birth_date.message}</p>
+              )}
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className='flex flex-col'>
-              <label htmlFor='passport-nbr' className="text-sm text-gray-500">Passport Number</label>
+            <div className="flex flex-col">
+              <label className="text-sm text-gray-500">Passport Number</label>
               <Input
-                type="text" id='passport-nbr'
+                {...register("passport_nbr")}
                 placeholder="Passport Number"
-                value={passenger?.passport_nbr || ''}
-                onChange={(e) => handleInputChange('passport_nbr', e.target?.value)}
+                onChange={(e) => handleInputChange("passport_nbr", e.target.value)}
+                disabled={readOnly}
               />
+              {errors.passport_nbr && (
+                <p className="text-red-500 text-xs mt-1">{errors.passport_nbr.message}</p>
+              )}
             </div>
             <div className="flex flex-col">
-              <label htmlFor='ex-date' className="text-sm text-gray-500">Passport expire date</label>
+              <label className="text-sm text-gray-500">Passport Expiry Date</label>
               <Input
-                type="date" id='ex-date'
+                {...register("passport_expire_at")}
+                type="date"
                 placeholder="Select passport expire date"
-                value={passenger?.passport_expire_at || ""}
-                onChange={(e) => handleInputChange('passport_expire_at', e.target.value)}
+                onChange={(e) => handleInputChange("passport_expire_at", e.target.value)}
+                disabled={readOnly}
               />
+              {errors.passport_expire_at && (
+                <p className="text-red-500 text-xs mt-1">{errors.passport_expire_at.message}</p>
+              )}
             </div>
           </div>
         </form>
