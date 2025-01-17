@@ -166,7 +166,7 @@ export default function FinishBooking() {
   console.log("filtredRoomData",filtredRoomData)
 
   return (
-    <div className="w-1/2 mx-auto p-6">
+    <div className="w-full mx-auto p-6">
       <h2 className="text-2xl font-bold mb-6">Booking Summary</h2>
       {/* <ScrollArea className="h-[calc(100vh-250px)] px-1"> */}
         <div className="pr-4">
