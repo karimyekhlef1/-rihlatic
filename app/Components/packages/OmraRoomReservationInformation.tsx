@@ -63,7 +63,7 @@ export default function OmraRoomReservationInformation() {
 
   return (
     <div className="w-full max-w-3xl mx-auto p-4">
-      <ScrollArea className="h-[calc(100vh-200px)] px-4 rounded-lg">
+      <ScrollArea className="h-[400px] px-4 rounded-lg">
         <div className="space-y-6">
           {renderPassengers("adults")}
           {renderPassengers("children")}
