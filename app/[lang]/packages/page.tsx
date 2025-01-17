@@ -35,6 +35,7 @@ export default function Packages() {
     const searchParams = isSearching
       ? {
           ...baseParams,
+          "filter[type]":packageType,
           "filter[destinationId]": selectedDestinationId || "",
           "filter[departure_date]": dateRange.from
             ? format(dateRange.from, "yyyy/MM/dd")

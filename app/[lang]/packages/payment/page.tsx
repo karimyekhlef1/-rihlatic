@@ -20,6 +20,7 @@ export default function PaymentPage() {
   const rooms = useSelector((state: any) => state.paymentPackage.rooms);
   const pkg = useSelector((state: any) => state.paymentPackage.package);
   const cardToken = useSelector((state: any) => state.paymentPackage.cardToken);
+  
   const [pricing, setPricing] = useState<any>(null);
 
   const calculateDuration = (startDate: Date, endDate: Date) => {

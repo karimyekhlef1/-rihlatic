@@ -108,51 +108,11 @@ export default function Hotels() {
   }, [hotels, filterRangePrice, filterRating]);
 
 
-  // useEffect(() => {
-  //   fetchHotels();
-  // }, [fetchHotels]);
-
 
   if (loading){
     return <Loading />
   }
   
-
-//   return (
-//     <div className="min-h-screen bg-gray-50">
-//       <div className="flex justify-center py-4 mt-2 bg-white shadow-sm">
-//         <HotelsSearchComponent 
-//           onSearch={fetchHotels}
-         
-//         />
-//       </div>
-//       <div className="flex md:flex-row flex-col max-w-7xl mx-auto ">
-//         <aside className="md:w-1/4 px-4 md:px-6  ">
-//           <div className="sticky top-4 space-y-6 py-6">
-//             <FilterComponentHotels />
-//             <div className="hidden md:block">
-//               <AdComponent />
-//             </div>
-//           </div>
-//         </aside>
-
-//         <main className="md:w-3/4 px-4 md:px-6 py-6">
-//         {
-//           filteredHotels.length === 0 ? (
-//             <EmptyComponent message='No hotels found' />
-//           ) : (
-//             <HotelsCardsComponent 
-//               data={filteredHotels}
-//             />
-//           )
-//         }
-//         </main>
-
-//       </div>
-//     </div>
-//   );
-// }
-
 
 return (
   <div className="">

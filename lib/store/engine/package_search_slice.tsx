@@ -11,7 +11,7 @@ interface PackageSearchState {
   
 }
 
-export const packageEngineTypes = ['All', 'Oorganized trip', 'Circuit', 'Personalized trip', 'Omra', 'Cruise'];
+export const packageEngineTypes = ['All', 'Oorganized trip', 'Circuit', 'Personalized trip', 'Cruise'];
 
 const initialState: PackageSearchState = {
     packageType: 'All',

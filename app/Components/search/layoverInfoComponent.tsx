@@ -33,12 +33,10 @@ const LayoverInfoComponent: React.FC<LayoverInfoProps> = ({ layovers }) => {
           height={20}
           className="mr-2 bg-orange-50 rounded-full p-[2px]"
         />
-        <p className="text-xs text-black">
-          <span className="font-medium text-orange-500">
-            Self-transfer hack:
-          </span>{' '}
-          Transport to your connecting flights is your responsibility
-        </p>
+        <div className="text-xs">
+          <p className="font-semibold">Self-transfer</p>
+          <p className="text-gray-500">You  ll need to collect your bags and check in again.</p>
+        </div>
       </div>
     </div>
   );
