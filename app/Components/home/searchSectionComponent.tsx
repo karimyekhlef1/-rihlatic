@@ -17,9 +17,9 @@ const SearchSectionComponent: React.FC = () => {
       case 0:
         return <VolSearchComponent />;
       case 1:
-        return <PackagesSearchComponent />;
+        return <PackagesSearchComponent onSearch={onSearch} />;
       case 2:
-        return <HotelsSearchComponent />;
+        return <HotelsSearchComponent onSearch={onSearch} />;
       case 3:
         return <OmrasSearchComponent />;
       default:
