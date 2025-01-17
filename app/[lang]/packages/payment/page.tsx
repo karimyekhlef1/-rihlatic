@@ -71,8 +71,8 @@ export default function PaymentPage() {
             endDate={departure.return_date}
           />
           <PaymentProgressComponent />
-          <RoomReservationInformation />
-          <ChangePaymentSteps />
+          <RoomReservationInformation /> 
+          <ChangePaymentSteps /> 
         </div>
         <div className="w-full md:w-1/3">
           <PricingCard
