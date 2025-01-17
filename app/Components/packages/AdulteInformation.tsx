@@ -1,5 +1,5 @@
 'use client';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -27,19 +27,23 @@ type PassengerInformationProps = {
   titel: PassengerType;
   index: number;
   roomId: number;
+  room_index:number;
 };
 
-export default function PassengerInformation({ titel, index, roomId }: PassengerInformationProps) {
+export default function PassengerInformation({ titel, index, roomId,room_index }: PassengerInformationProps) {
+  useEffect(()=>{
+
+  },[titel, index, roomId])
   const dispatch = useDispatch();
-  
   const passenger = useSelector((state: any) => 
-    state.paymentPackage.RoomsData.find((r: any) => r.room_id === roomId)?.passengers[titel][index]
+    state.paymentPackage.RoomsData[room_index]?.passengers[titel][index]
   );
 
   const handleInputChange = (key: string, value: string | null) => {
     dispatch(
       updatePassengerFieldByIndex({
         room_id: roomId,
+        room_index,
         type: titel,
         index,
         field: key,
@@ -65,6 +69,7 @@ export default function PassengerInformation({ titel, index, roomId }: Passenger
       reader.readAsDataURL(file);
     }
   };
+  console.log("titel, index, roomId",titel, index, roomId)
 
   return (
     <Card className="w-full">

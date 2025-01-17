@@ -161,6 +161,10 @@ export default function FinishBooking() {
     }
   };
 
+  console.log("  RoomsData",  RoomsData)
+
+  console.log("filtredRoomData",filtredRoomData)
+
   return (
     <div className="w-1/2 mx-auto p-6">
       <h2 className="text-2xl font-bold mb-6">Booking Summary</h2>

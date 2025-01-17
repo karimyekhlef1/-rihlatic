@@ -12,7 +12,7 @@ import { MdChildCare } from "react-icons/md";
 import { LuBaby } from "react-icons/lu";
 import { useSelector } from "react-redux";
 import { useBookingPackage } from "@/app/hooks/useBookingPackage";
-
+import { Loader2 } from "lucide-react";
 interface Props {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
@@ -148,7 +148,7 @@ const RoomsDetailsBooking: React.FC<Props> = ({
             disabled={rooms.length < 1 || !rooms[0].roomType}
             className="flex-1 bg-[#ff8000] hover:bg-[#ff8000]"
           >
-            {loadingCard ? "..." : "Booking"}
+            {loadingCard ? <Loader2 className='animate-spin text-gray-200' size={24}/> : "Booking"}
           </Button>
         </DialogFooter>
       </DialogContent>
