@@ -1,8 +1,9 @@
-import React from 'react';
-import { Card } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { CircleCheck, MapPin } from 'lucide-react';
-import { differenceInDays } from 'date-fns';
+import React from "react";
+import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { CircleCheck, MapPin } from "lucide-react";
+import { differenceInDays } from "date-fns";
+import PopularFacilitiesOmra from "./PopularFacilitiesOmra";
 
 interface OmraPricingCardProps {
   title?: React.ReactNode;
@@ -37,7 +38,7 @@ export default function OmraPricingCard({
   total,
   startDate,
   endDate,
-  facilities
+  facilities,
 }: OmraPricingCardProps) {
   const calculateDuration = (start: string, end: string) => {
     if (start && end) {
@@ -72,42 +73,16 @@ export default function OmraPricingCard({
       {facilities && (
         <div className="space-y-2">
           <h3 className="font-semibold text-sm">Included Services:</h3>
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            {facilities.visa && (
-              <div className="flex items-center gap-2">
-                <CircleCheck className="text-[#43acff]" size={16} />
-                <span>Visa</span>
-              </div>
-            )}
-            {facilities.vol && (
-              <div className="flex items-center gap-2">
-                <CircleCheck className="text-[#43acff]" size={16} />
-                <span>Flight</span>
-              </div>
-            )}
-            {facilities.hotel && (
-              <div className="flex items-center gap-2">
-                <CircleCheck className="text-[#43acff]" size={16} />
-                <span>Hotel</span>
-              </div>
-            )}
-            {facilities.transfer && (
-              <div className="flex items-center gap-2">
-                <CircleCheck className="text-[#43acff]" size={16} />
-                <span>Transfer</span>
-              </div>
-            )}
-            {facilities.excursion && (
-              <div className="flex items-center gap-2">
-                <CircleCheck className="text-[#43acff]" size={16} />
-                <span>Excursion</span>
-              </div>
-            )}
-            {facilities.cruise && (
-              <div className="flex items-center gap-2">
-                <CircleCheck className="text-[#43acff]" size={16} />
-                <span>Cruise</span>
-              </div>
+          <div className="grid grid-cols-1 gap-2 text-sm">
+            {facilities && (
+              <PopularFacilitiesOmra
+                visa={facilities.visa}
+                vol={facilities.vol}
+                hotel={facilities.hotel}
+                transfer={facilities.transfer}
+                excursion={facilities.excursion}
+                cruise={facilities.cruise}
+              />
             )}
           </div>
         </div>
@@ -115,7 +90,7 @@ export default function OmraPricingCard({
 
       {/* Duration */}
       {startDate && endDate && (
-        <div className="flex items-center gap-2 text-sm">
+        <div className="flex items-center gap-2 text-xs font-semibold">
           <CircleCheck className="text-[#43acff]" size={16} />
           <span>{calculateDuration(startDate, endDate)}</span>
         </div>
@@ -131,15 +106,21 @@ export default function OmraPricingCard({
               <div className="text-sm space-y-1">
                 <div className="flex justify-between">
                   <span>Adult(s):</span>
-                  <span>{room.adults_quantity} x {room.adults_price} DZD</span>
+                  <span>
+                    {room.adults_quantity} x {room.adults_price} DZD
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span>Child(ren):</span>
-                  <span>{room.children_quantity} x {room.children_price} DZD</span>
+                  <span>
+                    {room.children_quantity} x {room.children_price} DZD
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span>Infant(s):</span>
-                  <span>{room.infant_quantity} x {room.infant_price} DZD</span>
+                  <span>
+                    {room.infant_quantity} x {room.infant_price} DZD
+                  </span>
                 </div>
                 <div className="flex justify-between font-bold">
                   <span>Room {index + 1} Total:</span>
