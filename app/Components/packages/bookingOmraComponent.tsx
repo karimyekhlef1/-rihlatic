@@ -70,15 +70,16 @@ export default function BookingOmraComponent({
     locale: fr,
   });
 
-  const departureOptions: DepartureOption[] = data
-    ?.filter((item: any) => item?.departure_date != null)
-    ?.map((item: any, index: number) => ({
-      id: item.id,
-      label: format(new Date(item.departure_date), "dd-MMMM-yyyy", {
-        locale: fr,
-      }),
-      data: item,
-    })) || [];
+  const departureOptions: DepartureOption[] =
+    data
+      ?.filter((item: any) => item?.departure_date != null)
+      ?.map((item: any, index: number) => ({
+        id: item.id,
+        label: format(new Date(item.departure_date), "dd-MMMM-yyyy", {
+          locale: fr,
+        }),
+        data: item,
+      })) || [];
 
   const handleDepartureSelect = (option: DepartureOption) => {
     setSelectedDeparture(option);
@@ -117,32 +118,48 @@ export default function BookingOmraComponent({
                 cruise={facilities.cruise}
               />
             )}
-            <div className="flex flex-col pt-4 pb-8">
-              <div className="flex flex-row items-center">
-                <CircleCheck
-                  size={15}
-                  className="font-semibold text-xs text-[#43acff]"
-                  fill="#b4deff"
-                />
-                <p className="text-xs text-gray-700 font-medium pl-2">
-                  {selectedDepartureData?.total_days} nights{" "}
-                  <span className="text-xs text-gray-700 font-bold">/</span>{" "}
-                  {selectedDepartureData?.total_days + 1} days
-                </p>
+
+            {!selectedDeparture ? (
+              <div className="flex flex-col items-center py-6 px-4">
+                <div className="text-center mb-4">
+                  <p className="text-gray-600 font-semibold mb-2 text-sm">
+                    Choose Your Journey Date
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Select a departure date to view detailed trip information
+                    and availability.
+                  </p>
+                </div>
               </div>
-              <div className="flex flex-row items-center mt-2">
-                <CircleCheck
-                  size={15}
-                  className="font-semibold text-xs text-[#ff8000]"
-                  fill="#ffcc99"
-                />
-                <p className="flex flex-row items-center text-xs text-gray-700 font-medium pl-2">
-                  {formattedDeparture_date}
-                  <ArrowRight size={15} strokeWidth={3} />
-                  {formattedReturn_date}
-                </p>
+            ) : (
+              <div className="flex flex-col pt-4 pb-8">
+                <div className="flex flex-row items-center">
+                  <CircleCheck
+                    size={15}
+                    className="font-semibold text-xs text-[#43acff]"
+                    fill="#b4deff"
+                  />
+                  <p className="text-xs text-gray-700 font-medium pl-2">
+                    {selectedDepartureData?.total_days} nights{" "}
+                    <span className="text-xs text-gray-700 font-bold">/</span>{" "}
+                    {selectedDepartureData?.total_days + 1} days
+                  </p>
+                </div>
+                <div className="flex flex-row items-center mt-2">
+                  <CircleCheck
+                    size={15}
+                    className="font-semibold text-xs text-[#ff8000]"
+                    fill="#ffcc99"
+                  />
+                  <p className="flex flex-row items-center text-xs text-gray-700 font-medium pl-2">
+                    {formattedDeparture_date}
+                    <ArrowRight size={15} strokeWidth={3} />
+                    {formattedReturn_date}
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
+
             <div className="pb-4 relative w-[80%]">
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -154,7 +171,9 @@ export default function BookingOmraComponent({
                     : "Select departure"}
                 </span>
                 <ChevronDown
-                  className={`transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""} ml-2`}
+                  className={`transition-transform duration-300 ${
+                    isDropdownOpen ? "rotate-180" : ""
+                  } ml-2`}
                 />
               </button>
               {isDropdownOpen && (

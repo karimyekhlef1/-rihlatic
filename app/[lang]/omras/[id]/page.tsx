@@ -158,10 +158,10 @@ export default function OmraDetails() {
                     {selectedDeparture?.flight?.bounds?.[0] && (
                       <TripSummaryComponent
                         flightInfo={{
-                          from: selectedDeparture.flight.bounds[0]
-                            .segments[0].departure_airport.city,
-                          to: selectedDeparture.flight.bounds[0]
-                            .segments[0].arrival_airport.city,
+                          from: selectedDeparture.flight.bounds[0].segments[0]
+                            .departure_airport.city,
+                          to: selectedDeparture.flight.bounds[0].segments[0]
+                            .arrival_airport.city,
                           duration: (() => {
                             const dep =
                               selectedDeparture.flight.bounds[0].departure_date
@@ -186,25 +186,28 @@ export default function OmraDetails() {
                             selectedDeparture.flight.bounds[0].arrival_date
                               .split(" ")[1]
                               .substring(0, 5),
-                          arrivalDate: selectedDeparture.flight.bounds[0].arrival_date
-                            ?.split(" ")?.[0] || 'N/A',
+                          arrivalDate:
+                            selectedDeparture.flight.bounds[0].arrival_date?.split(
+                              " "
+                            )?.[0] || "N/A",
                           departureCity:
                             selectedDeparture.flight.bounds[0].segments[0]
                               .departure_airport.city,
                           departureAirport:
                             selectedDeparture.flight.bounds[0].segments[0]
                               .departure_airport.name,
-                          airline: selectedDeparture.flight.bounds[0].segments[0]
-                            ?.operating_carrier?.name || 
+                          airline:
                             selectedDeparture.flight.bounds[0].segments[0]
-                            ?.operating_airline?.name || 
-                            'Airline information not available',
+                              ?.operating_carrier?.name ||
+                            selectedDeparture.flight.bounds[0].segments[0]
+                              ?.operating_airline?.name ||
+                            "Airline information not available",
                           flightNumber:
                             selectedDeparture.flight.bounds[0].segments[0]
                               ?.flight_number ||
                             selectedDeparture.flight.bounds[0].segments[0]
                               ?.flight_or_train_number ||
-                            'N/A',
+                            "N/A",
                         }}
                       />
                     )}
@@ -223,7 +226,7 @@ export default function OmraDetails() {
                   {selectedDeparture?.hotel_stay?.[0] && (
                     <ContentComponent
                       dynamicContent={
-                        <OmraHotelsComponent 
+                        <OmraHotelsComponent
                           data={selectedDeparture.hotel_stay[0]}
                         />
                       }
@@ -251,9 +254,7 @@ export default function OmraDetails() {
                 />
                 <ContentComponent
                   dynamicContent={
-                    <OmraTravelProgram
-                      schedule={omraDetails?.omraDepartures?.[0]?.schedule}
-                    />
+                    <OmraTravelProgram schedule={selectedDeparture?.schedule} />
                   }
                 />
               </div>
@@ -268,7 +269,9 @@ export default function OmraDetails() {
                 <div className="textarabic rtl">
                   <ContentComponent
                     dynamicContent={
-                      <ImportantNote content={omraDetails?.note} />
+                      <ImportantNote
+                        content={selectedDeparture?.note || omraDetails?.note}
+                      />
                     }
                   />
                 </div>

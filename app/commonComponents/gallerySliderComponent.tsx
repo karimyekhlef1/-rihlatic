@@ -36,7 +36,7 @@ export default function ImageSlider({ data, page }: any) {
     (index: number) => {
       if (!emblaApi) return;
       emblaApi.scrollTo(index);
-      setCurrentIndex(index); 
+      setCurrentIndex(index);
     },
     [emblaApi]
   );
@@ -44,10 +44,9 @@ export default function ImageSlider({ data, page }: any) {
     const distance = Math.abs(index - currentIndex);
     return Math.max(1 - distance * 0.2, 0.05);
   };
-  
+
   return (
     <div className="px-4 py-12">
-      
       <PageTitleComponent
         title={
           page === "package"
@@ -56,13 +55,12 @@ export default function ImageSlider({ data, page }: any) {
               ? `${data?.infos?.name}`
               : ""
         }
-        rating=
-        {
-          page === 'package'
+        rating={
+          page === "package"
             ? null
-            : page === 'hotel'
-            ? parseInt(data?.infos.rating)
-            : ''
+            : page === "hotel"
+              ? parseInt(data?.infos.rating)
+              : ""
         }
         adress={
           page === "package"
