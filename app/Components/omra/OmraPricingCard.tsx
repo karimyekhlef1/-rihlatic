@@ -4,6 +4,7 @@ import { Separator } from "@/components/ui/separator";
 import { CircleCheck, MapPin } from "lucide-react";
 import { differenceInDays } from "date-fns";
 import PopularFacilitiesOmra from "./PopularFacilitiesOmra";
+import Image from "next/image";
 
 interface OmraPricingCardProps {
   title?: React.ReactNode;
@@ -60,11 +61,13 @@ export default function OmraPricingCard({
       <Separator />
 
       {image && (
-        <div className="relative h-48 w-full rounded-lg overflow-hidden">
-          <img
+        <div className="relative w-full h-[200px]">
+          <Image
             src={image}
             alt="Omra Destination"
-            className="object-cover w-full h-full"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         </div>
       )}

@@ -15,6 +15,7 @@ import PopularFacilitiesOmra from "../omra/PopularFacilitiesOmra";
 interface DepartureOption {
   id: number;
   label: string;
+  data: any;
 }
 
 interface BookingOmraComponentProps {
@@ -27,11 +28,16 @@ interface BookingOmraComponentProps {
     excursion: boolean;
     cruise: boolean;
   };
+  onDepartureSelect?: (departure: any) => void;
 }
 
-export default function BookingOmraComponent({ data, facilities }: BookingOmraComponentProps) {
+export default function BookingOmraComponent({
+  data,
+  facilities,
+  onDepartureSelect,
+}: BookingOmraComponentProps) {
   const dispatch = useDispatch();
-  
+
   // Safely parse dates with validation
   const parseDateSafely = (dateString: string | undefined) => {
     if (!dateString) return new Date();
@@ -47,8 +53,16 @@ export default function BookingOmraComponent({ data, facilities }: BookingOmraCo
     }
   };
 
-  const departure_date = parseDateSafely(data?.[0]?.departure_date);
-  const return_date = parseDateSafely(data?.[0]?.return_date);
+  const [selectedDeparture, setSelectedDeparture] =
+    useState<DepartureOption | null>(null);
+  const [selectedDepartureData, setSelectedDepartureData] = useState(
+    data?.[0] || null
+  );
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isRoomDialogOpen, setIsRoomDialogOpen] = useState(false);
+
+  const departure_date = parseDateSafely(selectedDepartureData?.departure_date);
+  const return_date = parseDateSafely(selectedDepartureData?.return_date);
   const formattedDeparture_date = format(departure_date, "dd-MMMM-yyyy", {
     locale: fr,
   });
@@ -56,42 +70,22 @@ export default function BookingOmraComponent({ data, facilities }: BookingOmraCo
     locale: fr,
   });
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [selectedDeparture, setSelectedDeparture] =
-    useState<DepartureOption | null>(null);
-  const [isRoomDialogOpen, setIsRoomDialogOpen] = useState(false);
-
-  const departureOptions: DepartureOption[] = [
-    {
-      id: 4,
-      label: formattedDeparture_date,
-    },
-    {
-      id: 5,
-      label: format(
-        new Date(data?.[1]?.departure_date || departure_date),
-        "dd-MMMM-yyyy",
-        {
-          locale: fr,
-        }
-      ),
-    },
-    {
-      id: 6,
-      label: format(
-        new Date(data?.[2]?.departure_date || departure_date),
-        "dd-MMMM-yyyy",
-        {
-          locale: fr,
-        }
-      ),
-    },
-  ].filter((option, index) => data?.[index]?.departure_date != null);
+  const departureOptions: DepartureOption[] = data
+    ?.filter((item: any) => item?.departure_date != null)
+    ?.map((item: any, index: number) => ({
+      id: item.id,
+      label: format(new Date(item.departure_date), "dd-MMMM-yyyy", {
+        locale: fr,
+      }),
+      data: item,
+    })) || [];
 
   const handleDepartureSelect = (option: DepartureOption) => {
     setSelectedDeparture(option);
+    setSelectedDepartureData(option.data);
     setIsDropdownOpen(false);
     dispatch(setOmraDepartureId(option.id));
+    onDepartureSelect?.(option.data);
   };
 
   const handleBookNowClick = () => {
@@ -108,7 +102,7 @@ export default function BookingOmraComponent({ data, facilities }: BookingOmraCo
             <div className="flex flex-col items-center justify-center pb-4">
               <p className="text-xs">Starting from</p>
               <p className="font-semibold text-lg">
-                {data?.[0]?.price_ini} DZD
+                {selectedDepartureData?.price_ini} DZD
               </p>
             </div>
             <Separator />
@@ -131,9 +125,9 @@ export default function BookingOmraComponent({ data, facilities }: BookingOmraCo
                   fill="#b4deff"
                 />
                 <p className="text-xs text-gray-700 font-medium pl-2">
-                  {data?.[0]?.total_days} nights{" "}
+                  {selectedDepartureData?.total_days} nights{" "}
                   <span className="text-xs text-gray-700 font-bold">/</span>{" "}
-                  {data?.[0]?.total_days + 1} days
+                  {selectedDepartureData?.total_days + 1} days
                 </p>
               </div>
               <div className="flex flex-row items-center mt-2">
