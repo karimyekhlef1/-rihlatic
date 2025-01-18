@@ -220,16 +220,14 @@ export default function OmraDetails() {
                   label={""}
                 />
                 <div className="textarabic">
-                  {omraDetails?.omraDepartures?.map(
-                    (item: any, index: number) => (
-                      <div key={index}>
-                        <ContentComponent
-                          dynamicContent={
-                            <OmraHotelsComponent data={item.hotel_stay?.[0]} />
-                          }
+                  {selectedDeparture?.hotel_stay?.[0] && (
+                    <ContentComponent
+                      dynamicContent={
+                        <OmraHotelsComponent 
+                          data={selectedDeparture.hotel_stay[0]}
                         />
-                      </div>
-                    )
+                      }
+                    />
                   )}
                 </div>
               </div>
@@ -238,8 +236,8 @@ export default function OmraDetails() {
               <ContentComponent
                 dynamicContent={
                   <OmraHotelDetails
-                    includes={omraDetails?.omraDepartures?.[0]?.includes}
-                    excludes={omraDetails?.omraDepartures?.[0]?.excludes}
+                    includes={selectedDeparture?.includes}
+                    excludes={selectedDeparture?.excludes}
                   />
                 }
               />
