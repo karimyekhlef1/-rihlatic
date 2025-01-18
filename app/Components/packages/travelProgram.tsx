@@ -5,6 +5,7 @@ export default function TravelProgram({ data }: any) {
   const [activeDay, setActiveDay] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [schedule, setSchedule] = useState<any[]>([]);
+  console.log("TravelProgram",data)
   useEffect(() => {
     if (data) {
       const allSchedule = data.flatMap((item: any) => item.schedule || []);
@@ -33,7 +34,7 @@ export default function TravelProgram({ data }: any) {
       <div
         className={`flex flex-col sm:flex-row gap-4 sm:gap-2 ${isMobile ? "" : "[&:hover>div]:w-full sm:[&:hover>div]:w-40 [&>div:hover]:w-full sm:[&>div:hover]:w-[30rem]"}`}
       >
-        {schedule.map((item, index) => (
+        {data.map((item:any, index:number) => (
           <div
             key={index}
             className={`group relative shadow-sm shadow-black/30 h-64 sm:h-96 w-full sm:w-40 ${
@@ -43,7 +44,7 @@ export default function TravelProgram({ data }: any) {
           >
             <Image
               className={`h-full w-full object-cover ${isMobile && activeDay === index ? "scale-150" : ""} ${!isMobile ? "group-hover:scale-150" : ""} transition-all`}
-              src={item.url}
+              src={item.media_path.url}
               alt={`Jour ${item.url} image`}
               width="100"
               height="100"
@@ -60,11 +61,11 @@ export default function TravelProgram({ data }: any) {
                   </p>
                 </div>
                 <div>
-                  <p
+                  {/* <p
                     className={` ${isMobile ? "text-sm font-normal" : "text-lg font-norml"} text-gray-100`}
                   >
                     {item.title || "Title"}
-                  </p>
+                  </p> */}
                 </div>
               </div>
             </div>

@@ -10,7 +10,14 @@ import { Room } from '@/app/Types/package/packageDetails';
 import { Departure } from '@/app/Types/package/packageDetails';
 import { reStateRoomData } from '@/lib/store/custom/packagesSlices/paymentPachageSlices';
 import PopularFacilitiesPackage from './PopularFacilitiesPackage';
-export default function BookingPackageComponent({ data }: { data: Departure[] }) {
+export default function BookingPackageComponent({ data ,onSelectedDeparture}: { 
+  data: Departure[]
+  onSelectedDeparture:(item: Departure) => void;
+ })
+ 
+ {
+
+
   const dispatch = useDispatch<any>();
   const [selectedDeparture, setSelectedDeparture] = useState<Departure | undefined>();
   const [selectedOption, setSelectedOption] = useState<string | null>('test');
@@ -48,7 +55,6 @@ export default function BookingPackageComponent({ data }: { data: Departure[] })
   }
  
   const currentDeparture = selectedDeparture || data[0];
-  
   const price = currentDeparture?.price_ini ?? 0;
   const startDate = currentDeparture?.departure_date;
   const endDate = currentDeparture?.return_date;
@@ -62,6 +68,7 @@ export default function BookingPackageComponent({ data }: { data: Departure[] })
     dispatch(reStateRoomData())
     const selected = data.find((item) => item.id === selectedOption.id);
     if (selected) {
+      onSelectedDeparture(selected)
       setSelectedDeparture(selected);
     }
   };
