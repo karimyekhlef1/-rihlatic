@@ -225,7 +225,7 @@ const VolSearchComponent: React.FC = () => {
                 type={1}
               />
               <DatePickerComponent
-                isOnePick={false}
+                isOnePick={true}
                 dateRange={dest.date}
                 setDateRange={(value: DateRange) => {
                   updateDestination(i, "date", value);
@@ -250,6 +250,15 @@ const VolSearchComponent: React.FC = () => {
             onClick={addDestination}
           >
             Add Destination
+          </Button>
+
+          <Button
+            onClick={handleSearch}
+            variant="active"
+            type="button"
+            className="rounded px-4 h-9 text-sm font-semibold w-28"
+          >
+            Search
           </Button>
         </div>
       )}
