@@ -32,6 +32,7 @@ import { PackageDetails } from "@/app/Types/package/packageDetails";
 import { setPackage } from "@/lib/store/custom/packagesSlices/paymentPachageSlices";
 import TripComponent from "@/app/commonComponents/tripComponent";
 import { Departure } from '@/app/Types/package/packageDetails';
+import { calculateDuration } from "@/app/utils/timeUtils";
 
 export default function Details() {
   const dispatch = useDispatch<any>();
@@ -76,23 +77,74 @@ const onSelectedDeparture=(item :Departure)=>{
               />
               <ContentComponent htmlContent={packagesDetails?.description} />
         
-              {
-                packagesDetails?.departures[0].flight != null && (
-                  <> 
-                    <TitleComponent
-                      title={"Trip summary"}
-                      icon={<PlaneTakeoff size={20} />}
-                      label={""}
-                    />
-                    <ContentComponent
-                      dynamicContent={
-                        <TripSummaryComponent flightInfo={outboundFlights[0]} />
-                      }
-                    />
-                  </>
-                )
-              }
-
+           <TitleComponent
+                title={"Trip summary"}
+                icon={<PlaneTakeoff size={20} />}
+                label={""}
+              />
+              <ContentComponent
+                dynamicContent={
+                  <Provider store={store}>
+                    {currentDeparture?.flight?.bounds?.[0] && (
+                      <TripSummaryComponent
+                        flightInfo={{
+                          from: currentDeparture.flight.bounds[0].segments[0]
+                            .departure_airport.city,
+                          to: currentDeparture.flight.bounds[0].segments[0]
+                            .arrival_airport.city,
+                          duration: (() => {
+                            const dep =
+                            currentDeparture.flight.bounds[0].departure_date
+                                .split(" ")[1]
+                                .substring(0, 5);
+                            const arr =
+                            currentDeparture.flight.bounds[0].arrival_date
+                                .split(" ")[1]
+                                .substring(0, 5);
+                            const { hours, minutes } = calculateDuration(
+                              dep,
+                              arr
+                            );
+                            return `${hours}h ${minutes}m`;
+                          })(),
+                          departureTime:
+                          currentDeparture.flight.bounds[0].departure_date
+                              .split(" ")[1]
+                              .substring(0, 5),
+                          departureDate: currentDeparture.departure_date,
+                          arrivalTime:
+                          currentDeparture.flight.bounds[0].arrival_date
+                              .split(" ")[1]
+                              .substring(0, 5),
+                          arrivalDate:
+                          currentDeparture.flight.bounds[0].arrival_date?.split(
+                              " "
+                            )?.[0] || "N/A",
+                          departureCity:
+                          currentDeparture.flight.bounds[0].segments[0]
+                              .departure_airport.city,
+                          departureAirport:
+                          currentDeparture.flight.bounds[0].segments[0]
+                              .departure_airport.name,
+                          airline:
+                          currentDeparture.flight.bounds[0].segments[0]
+                              ?.operating_carrier?.name ||
+                              currentDeparture.flight.bounds[0].segments[0]
+                              ?.operating_airline?.name ||
+                            "Airline information not available",
+                          flightNumber:
+                          currentDeparture.flight.bounds[0].segments[0]
+                              ?.flight_number ||
+                              currentDeparture.flight.bounds[0].segments[0]
+                              ?.flight_or_train_number ||
+                            "N/A",
+                        }}
+                      />
+                    )}
+                  </Provider>
+                }
+              />
+              
               {currentDeparture &&
                 currentDeparture.hotel_stay.length > 0 && (
                   <>
