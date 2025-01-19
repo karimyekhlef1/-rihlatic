@@ -10,7 +10,7 @@ import { format } from "date-fns";
 import { storePackageReservation } from "@/lib/store/api/packages/packagesSlice";
 import { AppDispatch } from "@/lib/store/store";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-
+import PassengerCard from "./PassengerCard";
 interface Passenger {
   email?: string;
   phone?: string;
@@ -33,42 +33,7 @@ interface Room {
   passengers: Passengers;
 }
 
-const PassengerField = ({ label, value }: { label: string; value: string }) => (
-  <div className="space-y-1">
-    <Label className="text-gray-600 text-xs uppercase tracking-wide">{label}</Label>
-    <p className="font-medium text-sm">{value}</p>
-  </div>
-);
 
-const PassengerCard = ({ passenger }: { passenger: Passenger }) => (
-  <div className="mb-4 p-4 bg-white rounded-lg shadow-sm border border-gray-100">
-    <div className="flex justify-between items-center mb-4">
-      <h4 className="text-lg font-semibold text-gray-900">
-        {passenger.first_name} {passenger.last_name}
-      </h4>
-      <span className="text-xs px-3 py-1 bg-blue-100 text-blue-800 rounded-full font-medium">
-        {passenger.sex}
-      </span>
-    </div>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {passenger.email && (
-        <PassengerField label="Email" value={passenger.email} />
-      )}
-      {passenger.phone && (
-        <PassengerField label="Phone" value={passenger.phone} />
-      )}
-      <PassengerField label="Passport Number" value={passenger.passport_nbr} />
-      <PassengerField 
-        label="Passport Expiry" 
-        value={format(new Date(passenger.passport_expire_at), "dd MMM yyyy")} 
-      />
-      <PassengerField 
-        label="Birth Date" 
-        value={format(new Date(passenger.birth_date), "dd MMM yyyy")} 
-      />
-    </div>
-  </div>
-);
 
 const RoomCard = ({ room, index }: { room: Room; index: number }) => (
   <div className="mb-6">
@@ -128,59 +93,23 @@ const cleanEmptyPassengerArrays = (data: Room[]): { rooms: Room[] } => {
 };
 
 export default function FinishBooking() {
-  const dispatch = useDispatch<AppDispatch>();
   const RoomsData = useSelector((state: any) => state.paymentPackage.RoomsData);
   const departure = useSelector((state: any) => state.paymentPackage.departure);
   const [filtredRoomData, setFiltredRoomData] = useState<{ rooms: Room[] }>({ rooms: [] });
-  const cardToken = useSelector((state: any) => state.paymentPackage.cardToken);
-
-
   useEffect(() => {
     const filteredRooms = cleanEmptyPassengerArrays(RoomsData);
     setFiltredRoomData(filteredRooms);
   }, [RoomsData, departure]);
 
-  const handleComplete = async () => {
-    try {
-      const bodyData = {
-        departure_id: departure.id,
-        rooms: filtredRoomData.rooms,
-        token:cardToken
-      };
-      const response = await dispatch(storePackageReservation(bodyData)).unwrap();
-      if (response.success) {
-        toast.success("Booking completed successfully!");
-      } else {
-        toast.error(
-          response.message || "Failed to complete booking. Please try again."
-        );
-      }
-    } catch (error: any) {
-      console.error("Booking error details:", error);
-      toast.error("An error occurred while processing your booking");
-    }
-  };
-
-  console.log("  RoomsData",  RoomsData)
-
-  console.log("filtredRoomData",filtredRoomData)
-
   return (
     <div className="w-full mx-auto p-6">
       <h2 className="text-2xl font-bold mb-6">Booking Summary</h2>
-      {/* <ScrollArea className="h-[calc(100vh-250px)] px-1"> */}
         <div className="pr-4">
           {filtredRoomData.rooms.map((room: Room, index: number) => (
             <RoomCard key={`room-${index}`} room={room} index={index} />
           ))}
         </div>
-        {/* <ScrollBar /> */}
-      {/* </ScrollArea> */}
-      {/* <div className="mt-8 flex justify-center">
-        <Button onClick={handleComplete} className="px-16">
-          Complete Booking
-        </Button>
-      </div> */}
+    
     </div>
   );
 }

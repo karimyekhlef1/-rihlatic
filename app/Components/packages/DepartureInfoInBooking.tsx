@@ -14,6 +14,8 @@ import TripSummaryComponent from "./tripSummary";
 import { CircleCheck, CircleX } from "lucide-react";
 import DepartureInfoInBookingCard from "./DepartureInfoInBookingCard";
 import { Departure } from "@/app/Types/package/packageDetails";
+import { calculateDuration } from "@/app/utils/timeUtils";
+
 type Props = {
     departure: Departure;
   };
@@ -26,16 +28,73 @@ type Props = {
           <div className="flex flex-col">
             <div className="flex flex-col">
               <DepartureInfoInBookingCard departure={departure} />
-              <TitleComponent
+               <TitleComponent
                 title={"Trip summary"}
                 icon={<PlaneTakeoff size={20} />}
                 label={""}
               />
-              {/* <ContentComponent
+              <ContentComponent
                 dynamicContent={
-                    <TripSummaryComponent flightInfo={outboundFlights[0]} />
+                  <div>
+                    {departure?.flight?.bounds?.[0] && (
+                      <TripSummaryComponent
+                        flightInfo={{
+                          from: departure.flight.bounds[0].segments[0]
+                            .departure_airport.city,
+                          to: departure.flight.bounds[0].segments[0]
+                            .arrival_airport.city,
+                          duration: (() => {
+                            const dep =
+                            departure.flight.bounds[0].departure_date
+                                .split(" ")[1]
+                                .substring(0, 5);
+                            const arr =
+                            departure.flight.bounds[0].arrival_date
+                                .split(" ")[1]
+                                .substring(0, 5);
+                            const { hours, minutes } = calculateDuration(
+                              dep,
+                              arr
+                            );
+                            return `${hours}h ${minutes}m`;
+                          })(),
+                          departureTime:
+                          departure.flight.bounds[0].departure_date
+                              .split(" ")[1]
+                              .substring(0, 5),
+                          departureDate: departure.departure_date,
+                          arrivalTime:
+                          departure.flight.bounds[0].arrival_date
+                              .split(" ")[1]
+                              .substring(0, 5),
+                          arrivalDate:
+                          departure.flight.bounds[0].arrival_date?.split(
+                              " "
+                            )?.[0] || "N/A",
+                          departureCity:
+                          departure.flight.bounds[0].segments[0]
+                              .departure_airport.city,
+                          departureAirport:
+                          departure.flight.bounds[0].segments[0]
+                              .departure_airport.name,
+                          airline:
+                          departure.flight.bounds[0].segments[0]
+                              ?.operating_carrier?.name ||
+                              departure.flight.bounds[0].segments[0]
+                              ?.operating_airline?.name ||
+                            "Airline information not available",
+                          flightNumber:
+                          departure.flight.bounds[0].segments[0]
+                              ?.flight_number ||
+                              departure.flight.bounds[0].segments[0]
+                              ?.flight_or_train_number ||
+                            "N/A",
+                        }}
+                      />
+                    )}
+                  </div>
                 }
-              /> */}
+              />
 
               <TitleComponent
                 title={"Hôtel(s)"}
@@ -44,9 +103,13 @@ type Props = {
               />
 
               <div>
-                {/* <ContentComponent
-                    dynamicContent={<HotelsComponent data={departure.hotel_stay[0]} />}
-                  /> */}
+              {departure?.hotel_stay?.map((item: any, index: number) => (
+                      <div key={index}>
+                        <ContentComponent
+                          dynamicContent={<HotelsComponent data={item} />}
+                        />
+                      </div>
+                    ))}
               </div>
 
               <TitleComponent title={"Hôtel Details"} label={""} />
