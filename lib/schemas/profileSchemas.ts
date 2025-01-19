@@ -1,4 +1,5 @@
 import { z } from 'zod';
+const isBrowser = typeof window !== 'undefined';
 
 export const passwordChangeSchema = z.object({
   old_password: z.string()
@@ -49,10 +50,10 @@ export const accountDetailsSchema = z.object({
 });
 
 export const avatarSchema = z.object({
-  file: z.instanceof(File)
+  file: isBrowser ? z.instanceof(File)
     .refine((file) => file.size <= 1024 * 1024, 'File size must be less than 1MB')
     .refine(
       (file) => ['image/jpeg', 'image/png', 'image/gif'].includes(file.type),
       'File must be an image (JPEG, PNG, or GIF)'
-    )
+    ) : z.unknown(),
 });

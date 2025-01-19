@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 
 import { Badge, type BadgeProps } from "@/components/ui/badge";
-import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, Trash2, EyeIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -297,11 +297,13 @@ export default function FlightsTable() {
                         className="flex items-center gap-2 font-medium text-xs cursor-pointer hover:bg-gray-50"
                         onClick={() => toggleActivities(reservation.id)}
                       >
-                        {expandedActivities === reservation.id ? (
-                          <ChevronUp className="h-4 w-4" />
-                        ) : (
-                          <ChevronDown className="h-4 w-4" />
-                        )}
+                        <EyeIcon
+                          className="h-4 w-4 text-blue-500 hover:text-blue-700 ml-2"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            cancelWithPenalty(reservation);
+                          }}
+                        />
                         <Trash2
                           className="h-4 w-4 text-red-500 hover:text-red-700 ml-2"
                           onClick={(e) => {
@@ -331,7 +333,7 @@ export default function FlightsTable() {
                         </TableCell>
                       </TableRow>
                     )}
-                    {expandedActivities === reservation.id && (
+                    {/* {expandedActivities === reservation.id && (
                       <TableRow>
                         <TableCell colSpan={9}>
                           <div className="p-4 bg-gray-50">
@@ -349,7 +351,7 @@ export default function FlightsTable() {
                           </div>
                         </TableCell>
                       </TableRow>
-                    )}
+                    )} */}
                   </>
                 ))
               )}

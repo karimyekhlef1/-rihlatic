@@ -9,7 +9,7 @@ export default function page() {
         <SearchInput />
       </div>
       <div className="flex pt-8">
-        <PackagesReservationTable/>
+        <PackagesReservationTable />
       </div>
     </div>
   );

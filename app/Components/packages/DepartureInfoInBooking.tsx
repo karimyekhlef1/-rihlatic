@@ -20,13 +20,12 @@ type Props = {
   
   export default function DepartureInfoInBooking({ departure }: Props) {
   return (
-    <div className="flex flex-col items-center overflow-x-clip">
+    <div className="flex flex-col items-center overflow-x-clip mb-4">
       <div className="fluid-container">
-        <div className="flex flex-col md:flex-row md:items-start items-center gap-4 pt-5">
+        <div className="flex flex-col md:flex-row md:items-start items-center gap-4">
           <div className="flex flex-col">
             <div className="flex flex-col">
               <DepartureInfoInBookingCard departure={departure} />
-
               <TitleComponent
                 title={"Trip summary"}
                 icon={<PlaneTakeoff size={20} />}
@@ -97,9 +96,7 @@ type Props = {
             </div>
           </div>
           <div className="md:hidden lg:flex lg:flex-col items-center pt-4 sm:pt-16 gap-y-8">
-            {/* <Provider store={store}> */}
             {/* <BookingPackageComponent data={packagesDetails?.departures ?? []}  /> */}
-            {/* </Provider> */}
           </div>
         </div>
       </div>
