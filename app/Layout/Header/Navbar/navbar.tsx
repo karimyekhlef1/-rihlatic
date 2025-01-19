@@ -128,7 +128,7 @@ export default function Navbar() {
                         height={50}
                         width={50}
                       />
-                      <span className="text-black font-medium">
+                      <span className="text-black font-medium hidden sm:block">
                         {
                           (userData?.user?.first_name == null && userData?.user?.last_name == null) ? userData.user?.username : (
                             `${userData?.user?.first_name} ${userData?.user?.last_name}`
@@ -161,7 +161,7 @@ export default function Navbar() {
                   </MenuItem>
                 </MenuItems>
               </Menu>
-            ) : (
+            ) : (  
               // Sign in button for non-logged in users
               <Button variant={"login"} onClick={handleOpenDialogSignUp}>
                 <CircleUserRound className="h-5 w-5 mr-2" />
