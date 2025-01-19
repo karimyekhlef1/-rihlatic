@@ -44,10 +44,8 @@ export default function PackageReservationPage() {
   if (loading) return <Loading />;
 
   return (
-    <div className="bg-[#F8F8F8] flex justify-center">
-      <div>
-        <DepartureInfoInBooking departure={bookinPackagesDetails?.departure} />
-      </div>
+    <div className="bg-[#F8F8F8] flex items-start justify-center flex-wrap gap-2">
+      <DepartureInfoInBooking departure={bookinPackagesDetails?.departure} />
       <BookingDetailsPricing data={bookinPackagesDetails} />
     </div>
   );

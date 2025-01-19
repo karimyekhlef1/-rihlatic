@@ -16,6 +16,7 @@ type ReservationDetailsProps = {
   currency?: string;
 };
 
+
 export default function ReservationSummary({
   referenceNumber,
   isPaid = false,
@@ -24,7 +25,7 @@ export default function ReservationSummary({
   currency = "DZD"
 }: any) {
   return (
-    <Card className="max-w-md p-4 space-y-4 pt-5">
+    <Card className="max-w-md p-4 space-y-4 pt-5 w-full mb-4">
       {/* Header */}
       <div className="flex items-center justify-center">
         <div className="flex items-center space-x-2">
