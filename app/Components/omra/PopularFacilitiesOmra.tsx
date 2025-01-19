@@ -10,12 +10,12 @@ import {
 } from "lucide-react";
 
 interface PopularFacilitiesOmraProps {
-  visa: boolean;
-  vol: boolean;
-  hotel: boolean;
-  transfer: boolean;
-  excursion: boolean;
-  cruise: boolean;
+  visa?: boolean | null;
+  vol?: boolean | null;
+  hotel?: boolean | null;
+  transfer?: boolean | null;
+  excursion?: boolean | null;
+  cruise?: boolean | null;
 }
 
 export default function PopularFacilitiesOmra({
@@ -28,20 +28,32 @@ export default function PopularFacilitiesOmra({
 }: PopularFacilitiesOmraProps) {
   const renderBadge = (
     label: string,
-    isAvailable: boolean,
+    isAvailable: boolean | null | undefined,
     Icon: React.ComponentType<any>
-  ) => (
-    <Badge
-      variant="outline"
-      className={`
-        ${isAvailable ? "bg-green-200 hover:bg-green-300" : "bg-red-200 hover:bg-red-300"} 
-        inline-flex items-center gap-x-1.5 px-2 py-1 text-xs
-      `}
-    >
-      <Icon size={14} className="shrink-0" />
-      {label}
-    </Badge>
-  );
+  ) => {
+    // If the value is undefined or null, treat it as not available
+    const available = !!isAvailable;
+
+    return (
+      <Badge
+        variant="outline"
+        className={`
+          ${
+            available
+              ? "bg-green-100 text-green-700 border-green-500 hover:bg-green-200"
+              : "bg-red-100 text-red-700 border-red-500 hover:bg-red-200"
+          } 
+          inline-flex items-center gap-x-1.5 px-2 py-1 text-xs font-medium transition-colors duration-200
+        `}
+      >
+        <Icon
+          size={14}
+          className={`shrink-0 ${available ? "text-green-600" : "text-red-600"}`}
+        />
+        {label}
+      </Badge>
+    );
+  };
 
   return (
     <div className="flex flex-wrap gap-2 my-3 px-2">

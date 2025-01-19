@@ -4,6 +4,7 @@ import DatePickerComponent from "@/app/commonComponents/datePickerComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { DateRange } from "react-day-picker";
 import { setDateRange } from "@/lib/store/engine/omra_search_slice";
+import { Button } from "@/components/ui/button";
 
 const OmrasSearchComponent: React.FC = () => {
   const dispatch = useDispatch<any>();
@@ -27,12 +28,13 @@ const OmrasSearchComponent: React.FC = () => {
             dateRange={dateRange}
             setDateRange={(value: DateRange) => dispatch(setDateRange(value))}
           />
-          <button
+          <Button
+            variant="active"
             type="button"
-            className="rounded bg-[#FF8000] py-2.5 text-sm font-semibold text-white sm:w-24 w-full"
+            className="rounded px-4 h-9 text-sm font-semibold w-28"
           >
             Search
-          </button>
+          </Button>
         </div>
       </div>
     </div>

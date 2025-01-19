@@ -93,11 +93,11 @@ const VolSearchComponent: React.FC = () => {
     setDestinations(updatedDestinations);
   };
 
-  const handleFromAirportSelect = (item:any , index: number = 0) => {
-    console.log('SearchInputComponent - Sending item:', item);
+  const handleFromAirportSelect = (item: any, index: number = 0) => {
+    console.log("SearchInputComponent - Sending item:", item);
 
     const airportCode = item.iata || item.code;
-    console.log('SearchInputComponent - Sending airportCode:', airportCode);
+    console.log("SearchInputComponent - Sending airportCode:", airportCode);
 
     console.log("volSearchComponent - From airport selected:", airportCode);
     if (airportCode) {
