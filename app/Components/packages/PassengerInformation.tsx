@@ -112,8 +112,26 @@ export default function PassengerInformation({
   };
 
   return (
-    <Card className="w-full">
-      <CardContent className="w-full">
+    <Card
+      className={`w-full ${
+        title === "children_without_bed"
+          ? "border-orange-200 bg-orange-50"
+          : ""
+      }`}
+    >
+      <CardContent className="space-y-4 p-6">
+        <div className="flex justify-between items-center">
+          <h3 className="text-lg font-semibold capitalize flex items-center gap-2">
+            {title.replace(/_/g, " ")}
+            {title === "children_without_bed" && (
+              <span className="text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded">
+                No Bed
+              </span>
+            )}
+          </h3>
+          <span className="text-sm text-gray-500">#{index + 1}</span>
+        </div>
+
         <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
           <div className="flex flex-col space-y-2 mt-4 mb-6">
             <div className="text-lg font-semibold capitalize">

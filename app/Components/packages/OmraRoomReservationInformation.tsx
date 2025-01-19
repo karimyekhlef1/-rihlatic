@@ -77,11 +77,15 @@ export default function OmraRoomReservationInformation() {
 
 // Helper function to validate reservation data
 const validateReservationData = (rooms: any[], omra_departure_id: string) => {
+  console.log("Validating reservation data:", { rooms, omra_departure_id });
+
   if (!omra_departure_id) {
     throw new Error("No departure ID selected");
   }
 
   for (const room of rooms) {
+    console.log("Validating room:", room);
+
     if (!room.room_id || !room.type || !room.reservation_type) {
       throw new Error("Missing required room information");
     }
@@ -96,6 +100,8 @@ const validateReservationData = (rooms: any[], omra_departure_id: string) => {
       ...(room.passengers.children_without_bed || []),
       ...(room.passengers.infants || []),
     ];
+
+    console.log("All passengers in room:", allPassengers);
 
     for (const passenger of allPassengers) {
       if (!passenger.first_name || !passenger.last_name) {
@@ -122,30 +128,45 @@ export const handleOmraSubmit = async (
   status: string
 ) => {
   try {
+    console.log("Starting Omra submission with:", {
+      rooms,
+      omra_departure_id,
+      status
+    });
+
     validateReservationData(rooms, omra_departure_id);
 
-    const transformedRooms = rooms.map((room: any) => ({
+    const transformedRooms = rooms.map((room) => ({
       ...room,
       passengers: {
-        adults: room.passengers.adults?.map(transformPassengerData),
-        children: room.passengers.children?.map(transformPassengerData),
-        children_without_bed: room.passengers.children_without_bed?.map(transformPassengerData),
-        infants: room.passengers.infants?.map(transformPassengerData),
+        adults: room.passengers.adults.map(transformPassengerData),
+        children: room.passengers.children?.map(transformPassengerData) || [],
+        children_without_bed: room.passengers.children_without_bed?.map(transformPassengerData) || [],
+        infants: room.passengers.infants?.map(transformPassengerData) || [],
       },
     }));
 
-    await dispatch(
+    console.log("Transformed rooms for API:", transformedRooms);
+
+    const response = await dispatch(
       storeOmraReservation({
         omra_departure_id,
         rooms: transformedRooms,
       })
     ).unwrap();
 
-    await dispatch(getOmraDetails(omra_departure_id)).unwrap();
-    toast.success("Reservation saved successfully!");
-    return true;
+    console.log("API Response:", response);
+
+    if (response.success) {
+      toast.success(response.message);
+      return response;
+    } else {
+      toast.error(response.message || "Failed to store reservation");
+      return null;
+    }
   } catch (error: any) {
-    toast.error(error.message || "Failed to save reservation");
-    return false;
+    console.error("Error in handleOmraSubmit:", error);
+    toast.error(error.message || "An error occurred while processing your reservation");
+    return null;
   }
 };
