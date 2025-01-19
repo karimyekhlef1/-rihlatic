@@ -29,14 +29,18 @@ export const getOmraReservationDetails = createAsyncThunk('omraReservationDetail
     }
 });
 
-export const storeOmraReservation = createAsyncThunk('omraStoreReservation/slice', async (data:any, thunkApi) => {
+export const storeOmraReservation = createAsyncThunk(
+  'omraStoreReservation/slice',
+  async (formData: FormData, thunkApi) => {
     try {
-        const response = await omrasService.storeOmraReservation(data);
-        return response;
+      // Send as multipart/form-data
+      const response = await omrasService.storeOmraReservation(formData);
+      return response.data;
     } catch (error: any) {
-        return thunkApi.rejectWithValue(error.response.data);
+      return thunkApi.rejectWithValue(error.response?.data || error.message);
     }
-});
+  }
+);
 
 export const cancelOmraPenalty = createAsyncThunk(
     'omraCancelPenalty/slice',

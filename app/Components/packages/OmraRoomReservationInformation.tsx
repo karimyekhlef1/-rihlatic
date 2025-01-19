@@ -10,16 +10,71 @@ import {
   getOmraDetails,
 } from "@/lib/store/api/omras/omrasSlice";
 import { AppDispatch } from "@/lib/store/store";
-import { Passenger } from "@/lib/store/custom/commonSlices/omraReservationSlice";
+import { Passenger, cleanRoomData } from "@/lib/store/custom/commonSlices/omraReservationSlice";
 
 // Helper function to transform passenger data to match API expectations
 const transformPassengerData = (passenger: any) => {
-  if (!passenger) return passenger;
+  if (!passenger) return null;
   
+  // Create a new object without birthday field
+  const {
+    birthday,  // Extract and remove birthday field
+    passport_scan, // Extract passport_scan to handle separately
+    ...passengerData
+  } = passenger;
+
   return {
-    ...passenger,
-    birth_date: passenger.birthday,
+    ...passengerData,
+    birth_date: passenger.birth_date || birthday,
+    // Set passport_scan to null in JSON data
+    passport_scan: null
   };
+};
+
+// Helper function to create FormData with files
+const createFormDataWithFiles = (rooms: any[], omra_departure_id: string) => {
+  const formData = new FormData();
+
+  // Add the basic reservation data
+  console.log("Adding omra_departure_id to FormData:", omra_departure_id);
+  formData.append('omra_departure_id', omra_departure_id);
+  
+  // Process each room
+  rooms.forEach((room, roomIndex) => {
+    // Add room data
+    formData.append(`rooms[${roomIndex}][room_id]`, room.room_id.toString());
+    formData.append(`rooms[${roomIndex}][type]`, room.type);
+    formData.append(`rooms[${roomIndex}][reservation_type]`, room.reservation_type);
+
+    // Process passengers with type safety
+    if (room.passengers) {
+      Object.entries(room.passengers).forEach(([type, value]) => {
+        const passengers = Array.isArray(value) ? value : [];
+        if (!passengers.length) return;
+
+        passengers.forEach((passenger, passengerIndex) => {
+          const prefix = `rooms[${roomIndex}][passengers][${type}][${passengerIndex}]`;
+          
+          // Add passenger data
+          const transformedData = transformPassengerData(passenger);
+          if (transformedData) {
+            Object.entries(transformedData).forEach(([key, value]) => {
+              if (value !== null && value !== undefined) {
+                formData.append(`${prefix}[${key}]`, value.toString());
+              }
+            });
+          }
+
+          // Add passport scan file if exists
+          if (passenger.passport_scan instanceof File) {
+            formData.append(`${prefix}[passport_scan]`, passenger.passport_scan);
+          }
+        });
+      });
+    }
+  });
+
+  return formData;
 };
 
 export default function OmraRoomReservationInformation() {
@@ -112,15 +167,13 @@ const validateReservationData = (rooms: any[], omra_departure_id: string) => {
           "All passengers must have valid passport information"
         );
       }
-      const passengerWithBirthday = passenger as { birthday?: string };
-      if (!passengerWithBirthday.birthday) {
+      if (!passenger.birth_date) {
         throw new Error("All passengers must have a birth date");
       }
     }
   }
 };
 
-// Export the handleSubmit function to be used by ChangeOmraPaymentSteps
 export const handleOmraSubmit = async (
   dispatch: AppDispatch,
   rooms: any[],
@@ -136,23 +189,12 @@ export const handleOmraSubmit = async (
 
     validateReservationData(rooms, omra_departure_id);
 
-    const transformedRooms = rooms.map((room) => ({
-      ...room,
-      passengers: {
-        adults: room.passengers.adults.map(transformPassengerData),
-        children: room.passengers.children?.map(transformPassengerData) || [],
-        children_without_bed: room.passengers.children_without_bed?.map(transformPassengerData) || [],
-        infants: room.passengers.infants?.map(transformPassengerData) || [],
-      },
-    }));
-
-    console.log("Transformed rooms for API:", transformedRooms);
+    // Create FormData with files - pass omra_departure_id directly
+    const formData = createFormDataWithFiles(rooms, omra_departure_id);
+    console.log("Prepared FormData for API submission");
 
     const response = await dispatch(
-      storeOmraReservation({
-        omra_departure_id,
-        rooms: transformedRooms,
-      })
+      storeOmraReservation(formData)
     ).unwrap();
 
     console.log("API Response:", response);

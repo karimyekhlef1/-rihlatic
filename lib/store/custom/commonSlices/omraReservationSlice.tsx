@@ -8,16 +8,34 @@ export interface Passenger {
   sex: "male" | "female";
   passport_nbr: string;
   passport_expire_at: string;
-  passport_scan: string | null;
+  passport_scan: File | string | null;
   birth_date: string;
 }
 
 export interface Passengers {
-  adults: Passenger[];
-  children: Passenger[];
-  children_without_bed: Passenger[];
-  infants: Passenger[];
+  adults?: Passenger[];
+  children?: Passenger[];
+  children_without_bed?: Passenger[];
+  infants?: Passenger[];
 }
+
+// Utility function to clean passenger data before API submission
+export const cleanPassengers = (passengers: Passengers): Passengers => {
+  const cleaned: Passengers = {};
+  if (passengers.adults?.length) cleaned.adults = passengers.adults;
+  if (passengers.children?.length) cleaned.children = passengers.children;
+  if (passengers.children_without_bed?.length) cleaned.children_without_bed = passengers.children_without_bed;
+  if (passengers.infants?.length) cleaned.infants = passengers.infants;
+  return cleaned;
+};
+
+// Clean room data before API submission
+export const cleanRoomData = (room: Room): Room => {
+  return {
+    ...room,
+    passengers: cleanPassengers(room.passengers)
+  };
+};
 
 export interface Room {
   room_id: number;
@@ -73,14 +91,14 @@ const omraReservationSlice = createSlice({
       const { roomIndex, passengerType, passengerData } = action.payload;
       if (state.rooms[roomIndex]) {
         if (!state.rooms[roomIndex].passengers) {
-          state.rooms[roomIndex].passengers = {
-            adults: [],
-            children: [],
-            children_without_bed: [],
-            infants: [],
-          };
+          // Initialize only the required passenger type array
+          state.rooms[roomIndex].passengers = {};
         }
-        state.rooms[roomIndex].passengers[passengerType].push(passengerData);
+        // Initialize the specific passenger type array if it doesn't exist
+        if (!state.rooms[roomIndex].passengers[passengerType]) {
+          state.rooms[roomIndex].passengers[passengerType] = [];
+        }
+        state.rooms[roomIndex].passengers[passengerType]!.push(passengerData);
       }
     },
     updatePassenger: (
