@@ -31,9 +31,11 @@ import Loading from "@/app/Components/home/Loading";
 import { PackageDetails } from "@/app/Types/package/packageDetails";
 import { setPackage } from "@/lib/store/custom/packagesSlices/paymentPachageSlices";
 import TripComponent from "@/app/commonComponents/tripComponent";
+import { Departure } from '@/app/Types/package/packageDetails';
 
 export default function Details() {
   const dispatch = useDispatch<any>();
+  const [selectedDeparture, setSelectedDeparture] = useState<Departure | undefined>();
   const { loading, packagesData } = useSelector((state: any) => state.packages);
   const [packagesDetails, setPackageDetails] = useState<PackageDetails | undefined>(undefined);
   const [packages, setPackages] = useState<any[]>([]);
@@ -56,7 +58,10 @@ export default function Details() {
     getData();
   }, []);
   if (loading) return <Loading />;
-
+  const currentDeparture = selectedDeparture || packagesDetails?.departures[0];
+const onSelectedDeparture=(item :Departure)=>{
+  setSelectedDeparture(item)
+}
   return (
     <div className="flex flex-col items-center overflow-x-clip">
       <GallerySlider data={packagesDetails} page={"package"} />
@@ -70,7 +75,7 @@ export default function Details() {
                 label={""}
               />
               <ContentComponent htmlContent={packagesDetails?.description} />
-
+        
               {
                 packagesDetails?.departures[0].flight != null && (
                   <> 
@@ -88,19 +93,20 @@ export default function Details() {
                 )
               }
 
-              {
-                packagesDetails?.departures[0].hotel_stay.length > 0 && (
+              {currentDeparture &&
+                currentDeparture.hotel_stay.length > 0 && (
                   <>
                     <TitleComponent
                       title={"Hôtel(s)"}
                       icon={<Bed size={20} />}
                       label={""}
                     />
+              {/* {currentDeparture?.hotel_stay[0].name} */}
                     
-                    {packagesDetails?.departures[0].hotel_stay?.map((item: any, index: number) => (
+                    {currentDeparture?.hotel_stay?.map((item: any, index: number) => (
                       <div key={index}>
                         <ContentComponent
-                          dynamicContent={<HotelsComponent data={item.hotel_stay[0]} />}
+                          dynamicContent={<HotelsComponent data={item} />}
                         />
                       </div>
                     ))}
@@ -117,7 +123,7 @@ export default function Details() {
                 label={""}
               />
 
-              <ContentComponent dynamicContent={<TravelProgram data={packagesDetails?.departures[0]?.schedule ?? []} />} />
+              <ContentComponent dynamicContent={<TravelProgram data={currentDeparture?.schedule ?? []} />} />
               <TitleComponent
                 title={"important note"}
                 icon={<CircleAlert size={20} color="orange" />}
@@ -130,7 +136,9 @@ export default function Details() {
           </div>
           <div className="md:hidden lg:flex lg:flex-col items-center pt-4 sm:pt-16 gap-y-8">
             <Provider store={store}>
-              <BookingPackageComponent data={packagesDetails?.departures ?? []}  />
+              <BookingPackageComponent 
+            onSelectedDeparture={onSelectedDeparture}
+              data={packagesDetails?.departures ?? []}  />
             </Provider>
             <div className="pt-6 sm:pt-0">
               <AdComponent />
@@ -139,7 +147,9 @@ export default function Details() {
         </div>
         <div className="hidden lg:hidden md:flex md:pt-8 md:gap-x-8 md:justify-center md:items-center">
           <Provider store={store}>
-            <BookingPackageComponent  data={packagesDetails?.departures ?? []} />
+            <BookingPackageComponent 
+            onSelectedDeparture={onSelectedDeparture}
+             data={packagesDetails?.departures ?? []} />
           </Provider>
           <div className="pt-6 sm:pt-0">
             <AdComponent />

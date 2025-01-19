@@ -2,7 +2,7 @@
 
 import PassengerInformation from "./PassengerInformation";
 import { useSelector, useDispatch } from "react-redux";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { RootState } from "@/lib/store/store";
 import { toast } from "sonner";
 import {
@@ -18,8 +18,7 @@ const transformPassengerData = (passenger: any) => {
   
   return {
     ...passenger,
-    birth_date: passenger.birthday, // Transform birthday to birth_date
-    // Add any other field transformations here if needed
+    birth_date: passenger.birthday,
   };
 };
 
@@ -62,143 +61,91 @@ export default function OmraRoomReservationInformation() {
     ));
   };
 
-  const validateReservationData = () => {
-    // Basic validation to ensure all required data is present
-    if (!omra_departure_id) {
-      throw new Error("No departure ID selected");
-    }
-
-    for (const room of rooms) {
-      // Validate required room fields
-      if (!room.room_id || !room.type || !room.reservation_type) {
-        throw new Error("Missing required room information");
-      }
-
-      // Validate passengers
-      if (!room.passengers.adults?.length) {
-        throw new Error("Each room must have at least one adult passenger");
-      }
-
-      // Validate passenger information
-      const allPassengers = [
-        ...room.passengers.adults,
-        ...(room.passengers.children || []),
-        ...(room.passengers.children_without_bed || []),
-        ...(room.passengers.infants || []),
-      ];
-
-      for (const passenger of allPassengers) {
-        if (!passenger.first_name || !passenger.last_name) {
-          throw new Error("All passengers must have first and last names");
-        }
-        if (!passenger.passport_nbr || !passenger.passport_expire_at) {
-          throw new Error(
-            "All passengers must have valid passport information"
-          );
-        }
-        // Use type assertion since we know the field exists in our form
-        const passengerWithBirthday = passenger as { birthday?: string };
-        if (!passengerWithBirthday.birthday) {
-          throw new Error("Birth date is required for all passengers");
-        }
-      }
-    }
-
-    // Transform the booking data
-    const transformedData = {
-      omra_departure_id,
-      rooms: rooms.map((room) => ({
-        room_id: room.room_id,
-        type: room.type,
-        reservation_type: room.reservation_type,
-        passengers: {
-          adults: room.passengers.adults.map(transformPassengerData),
-          ...(room.passengers.children?.length && {
-            children: room.passengers.children.map(transformPassengerData),
-          }),
-          ...(room.passengers.children_without_bed?.length && {
-            children_without_bed: room.passengers.children_without_bed.map(
-              transformPassengerData
-            ),
-          }),
-          ...(room.passengers.infants?.length && {
-            infants: room.passengers.infants.map(transformPassengerData),
-          }),
-        },
-      })),
-    };
-
-    return transformedData;
-  };
-
-  const handleVerifyAndComplete = async () => {
-    if (status === "idle") {
-      try {
-        // Validate and transform the data
-        const bookingData = validateReservationData();
-
-        // Log the transformed data for debugging
-        console.log(
-          "Transformed booking data:",
-          JSON.stringify(bookingData, null, 2)
-        );
-
-        // Store the reservation
-        const response = await dispatch(
-          storeOmraReservation(bookingData)
-        ).unwrap();
-
-        if (response.success) {
-          // Fetch updated Omra details
-          await dispatch(getOmraDetails(omra_departure_id));
-          toast.success("Booking completed successfully!");
-        } else {
-          toast.error(response.message || "Failed to complete booking");
-        }
-      } catch (error: any) {
-        console.error("Booking error:", error);
-        toast.error(error.message || "Failed to complete booking");
-      }
-    }
-  };
-
   return (
-    <div className="w-full flex flex-col items-center justify-center gap-6">
-      <div className="text-2xl font-semibold text-gray-800">
-        {isVerificationStep
-          ? "Verify Your Information"
-          : `Room ${currentRoomIndex + 1} (${currentRoom.type})`}
-      </div>
-
-      <div className="w-1/2">
-        <Tabs defaultValue="adults">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="adults">Adults</TabsTrigger>
-            <TabsTrigger value="children">Children</TabsTrigger>
-            <TabsTrigger value="children_without_bed">Without Bed</TabsTrigger>
-            <TabsTrigger value="infants">Infants</TabsTrigger>
-          </TabsList>
-          <TabsContent value="adults">{renderPassengers("adults")}</TabsContent>
-          <TabsContent value="children">
-            {renderPassengers("children")}
-          </TabsContent>
-          <TabsContent value="children_without_bed">
-            {renderPassengers("children_without_bed")}
-          </TabsContent>
-          <TabsContent value="infants">
-            {renderPassengers("infants")}
-          </TabsContent>
-        </Tabs>
-      </div>
-
-      {isVerificationStep && (
-        <button
-          onClick={handleVerifyAndComplete}
-          className="px-6 py-3 bg-[#ff8000] text-white rounded-lg hover:bg-[#ff9933] transition-colors"
-        >
-          Complete Booking
-        </button>
-      )}
+    <div className="w-full max-w-3xl mx-auto p-4">
+      <ScrollArea className="h-[400px] px-4 rounded-lg">
+        <div className="space-y-6">
+          {renderPassengers("adults")}
+          {renderPassengers("children")}
+          {renderPassengers("children_without_bed")}
+          {renderPassengers("infants")}
+        </div>
+      </ScrollArea>
     </div>
   );
 }
+
+// Helper function to validate reservation data
+const validateReservationData = (rooms: any[], omra_departure_id: string) => {
+  if (!omra_departure_id) {
+    throw new Error("No departure ID selected");
+  }
+
+  for (const room of rooms) {
+    if (!room.room_id || !room.type || !room.reservation_type) {
+      throw new Error("Missing required room information");
+    }
+
+    if (!room.passengers.adults?.length) {
+      throw new Error("Each room must have at least one adult passenger");
+    }
+
+    const allPassengers = [
+      ...room.passengers.adults,
+      ...(room.passengers.children || []),
+      ...(room.passengers.children_without_bed || []),
+      ...(room.passengers.infants || []),
+    ];
+
+    for (const passenger of allPassengers) {
+      if (!passenger.first_name || !passenger.last_name) {
+        throw new Error("All passengers must have first and last names");
+      }
+      if (!passenger.passport_nbr || !passenger.passport_expire_at) {
+        throw new Error(
+          "All passengers must have valid passport information"
+        );
+      }
+      const passengerWithBirthday = passenger as { birthday?: string };
+      if (!passengerWithBirthday.birthday) {
+        throw new Error("All passengers must have a birth date");
+      }
+    }
+  }
+};
+
+// Export the handleSubmit function to be used by ChangeOmraPaymentSteps
+export const handleOmraSubmit = async (
+  dispatch: AppDispatch,
+  rooms: any[],
+  omra_departure_id: string,
+  status: string
+) => {
+  try {
+    validateReservationData(rooms, omra_departure_id);
+
+    const transformedRooms = rooms.map((room: any) => ({
+      ...room,
+      passengers: {
+        adults: room.passengers.adults?.map(transformPassengerData),
+        children: room.passengers.children?.map(transformPassengerData),
+        children_without_bed: room.passengers.children_without_bed?.map(transformPassengerData),
+        infants: room.passengers.infants?.map(transformPassengerData),
+      },
+    }));
+
+    await dispatch(
+      storeOmraReservation({
+        omra_departure_id,
+        rooms: transformedRooms,
+      })
+    ).unwrap();
+
+    await dispatch(getOmraDetails(omra_departure_id)).unwrap();
+    toast.success("Reservation saved successfully!");
+    return true;
+  } catch (error: any) {
+    toast.error(error.message || "Failed to save reservation");
+    return false;
+  }
+};

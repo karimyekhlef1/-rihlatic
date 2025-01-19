@@ -20,6 +20,7 @@ export default function PaymentPage() {
   const rooms = useSelector((state: any) => state.paymentPackage.rooms);
   const pkg = useSelector((state: any) => state.paymentPackage.package);
   const cardToken = useSelector((state: any) => state.paymentPackage.cardToken);
+  
   const [pricing, setPricing] = useState<any>(null);
 
   const calculateDuration = (startDate: Date, endDate: Date) => {
@@ -70,8 +71,8 @@ export default function PaymentPage() {
             endDate={departure.return_date}
           />
           <PaymentProgressComponent />
-          <RoomReservationInformation />
-          <ChangePaymentSteps />
+          <RoomReservationInformation /> 
+          <ChangePaymentSteps /> 
         </div>
         <div className="w-full md:w-1/3">
           <PricingCard

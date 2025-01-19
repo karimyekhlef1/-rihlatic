@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // Existing interfaces
 interface UpdatePassengerFieldPayload {
   room_id: number;
+  room_index:number
   type: 'adults' | 'children' | 'infants';
   index: number;
   field: string;
@@ -95,9 +96,18 @@ const paymentPackageSlice = createSlice({
       saveStateToLocalStorage(state);
     },
     setRooms(state, action: PayloadAction<any[]>) {
+      console.log(action.payload)
      
       const filteredRooms = action.payload.filter(room => room.roomType !== null);
       state.rooms = filteredRooms; 
+      state.RoomsData = Array(filteredRooms.length).fill(null).map((_, index) => ({
+        room_id: filteredRooms[index].roomType.id,
+        passengers: {
+          adults: [],
+          children: [],
+          infants: []
+        }
+      }));
       state.currentStep = 1; 
       state.steps = filteredRooms.map((_, index) => `Réglage de la chambre: ${index + 1}`);
       state.steps.push('Vérifier'); 
@@ -121,17 +131,17 @@ const paymentPackageSlice = createSlice({
       }
     },
     updatePassengerFieldByIndex(state, action: PayloadAction<UpdatePassengerFieldPayload>) {
-      const { room_id, type, index, field, value } = action.payload;
+      const { room_id,room_index, type, index, field, value } = action.payload;
       
       // Find room, create if not exists
-      let room = state.RoomsData.find(r => r.room_id === room_id);
-      if (!room) {
-        room = { room_id, passengers: { adults: [], children: [], infants: [] } };
-        state.RoomsData.push(room);
-      }
+ 
+      let room = state.RoomsData[room_index]
+      // let room = state.RoomsData[room_index]
+      console.log("state.RoomsData[room_index]",room_index)
+
       
       // Ensure passenger type array exists and has enough elements
-      const passengerTypeArray = room.passengers[type];
+      const passengerTypeArray = room?.passengers[type];
       while (passengerTypeArray.length <= index) {
         passengerTypeArray.push({
           id: Date.now() + passengerTypeArray.length,
@@ -147,10 +157,7 @@ const paymentPackageSlice = createSlice({
         });
       }
       // Update specific field
-      passengerTypeArray[index] = {
-        ...passengerTypeArray[index],
-        [field]: value
-      };
+      passengerTypeArray[index] = { ...passengerTypeArray[index], [field]: value };
       
       saveStateToLocalStorage(state);
     },
