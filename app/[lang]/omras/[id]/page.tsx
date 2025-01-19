@@ -59,17 +59,28 @@ export default function OmraDetails() {
           })
         ).unwrap();
 
-        const omraFacilities = await dispatch(
-          getOmraReservationDetails({
-            include: "omraDeparture,omraDeparture.pricing",
-          })
-        ).unwrap();
+        // Set initial facilities from the first departure if available
+        if (result?.success && result?.result?.omra) {
+          const specificOmra = result.result.omra.find(
+            (omra: any) => omra.id === Number(id)
+          );
 
-        // Extract facilities from the first booking
-        if (omraFacilities?.result?.bookings?.[0]?.departure) {
-          const { visa, vol, hotel, transfer, excursion, cruise } =
-            omraFacilities.result.bookings[0].departure;
-          setFacilities({ visa, vol, hotel, transfer, excursion, cruise });
+          if (specificOmra?.omraDepartures?.[0]) {
+            const firstDeparture = specificOmra.omraDepartures[0];
+            // Extract facilities with safe fallbacks for initial load
+            const defaultFacilities = { visa: null, vol: null, hotel: null, transfer: null, excursion: null, cruise: null };
+            const { visa, vol, hotel, transfer, excursion, cruise } = firstDeparture || {};
+            setFacilities({
+              ...defaultFacilities,
+              visa: typeof visa === 'boolean' ? visa : null,
+              vol: typeof vol === 'boolean' ? vol : null,
+              hotel: typeof hotel === 'boolean' ? hotel : null,
+              transfer: typeof transfer === 'boolean' ? transfer : null,
+              excursion: typeof excursion === 'boolean' ? excursion : null,
+              cruise: typeof cruise === 'boolean' ? cruise : null
+            });
+            setSelectedDeparture(firstDeparture);
+          }
         }
 
         if (result?.success && result?.result?.omra) {
@@ -103,6 +114,24 @@ export default function OmraDetails() {
 
   const handleDepartureSelect = (departure: any) => {
     setSelectedDeparture(departure);
+    // Update facilities when departure changes
+    if (departure) {
+      // Extract facilities with safe fallbacks
+      const defaultFacilities = { visa: null, vol: null, hotel: null, transfer: null, excursion: null, cruise: null };
+      const { visa, vol, hotel, transfer, excursion, cruise } = departure || {};
+      setFacilities({
+        ...defaultFacilities,
+        visa: typeof visa === 'boolean' ? visa : null,
+        vol: typeof vol === 'boolean' ? vol : null,
+        hotel: typeof hotel === 'boolean' ? hotel : null,
+        transfer: typeof transfer === 'boolean' ? transfer : null,
+        excursion: typeof excursion === 'boolean' ? excursion : null,
+        cruise: typeof cruise === 'boolean' ? cruise : null
+      });
+    } else {
+      // Reset facilities if no departure selected
+      setFacilities(null);
+    }
   };
 
   if (isLoading) {
