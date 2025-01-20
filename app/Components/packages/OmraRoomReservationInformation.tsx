@@ -10,21 +10,26 @@ import {
   getOmraDetails,
 } from "@/lib/store/api/omras/omrasSlice";
 import { AppDispatch } from "@/lib/store/store";
-import { Passenger, cleanRoomData, Room, Passengers } from "@/lib/store/custom/commonSlices/omraReservationSlice";
+import {
+  Passenger,
+  cleanRoomData,
+  Room,
+  Passengers,
+} from "@/lib/store/custom/commonSlices/omraReservationSlice";
 
 // Helper function to transform passenger data to match API expectations
 const transformPassengerData = (passenger: any) => {
   if (!passenger) return null;
-  
+
   const {
-    passport_scan,  // Extract passport_scan to handle separately
+    passport_scan, // Extract passport_scan to handle separately
     ...passengerData
   } = passenger;
 
   return {
     ...passengerData,
     // Include passport_scan URL if available
-    passport_scan: typeof passport_scan === 'string' ? passport_scan : null
+    passport_scan: typeof passport_scan === "string" ? passport_scan : null,
   };
 };
 
@@ -35,16 +40,19 @@ const createFormDataWithFiles = (rooms: Room[], omra_departure_id: string) => {
   console.log("[Form Data] Omra departure ID:", omra_departure_id);
 
   const formData = new FormData();
-  
+
   // Add omra_departure_id directly
-  formData.append('omra_departure_id', omra_departure_id);
+  formData.append("omra_departure_id", omra_departure_id);
 
   // Process each room
   rooms.forEach((room, roomIndex) => {
     // Add room base data
     formData.append(`rooms[${roomIndex}][room_id]`, room.room_id.toString());
     formData.append(`rooms[${roomIndex}][type]`, room.type);
-    formData.append(`rooms[${roomIndex}][reservation_type]`, room.reservation_type);
+    formData.append(
+      `rooms[${roomIndex}][reservation_type]`,
+      room.reservation_type
+    );
 
     // Process adults
     if (room.passengers.adults?.length) {
@@ -52,8 +60,11 @@ const createFormDataWithFiles = (rooms: Room[], omra_departure_id: string) => {
         const prefix = `rooms[${roomIndex}][passengers][adults][${passengerIndex}]`;
         Object.entries(passenger).forEach(([key, value]) => {
           if (value !== null && value !== undefined) {
-            if (key === 'passport_scan' && value instanceof File) {
-              console.log(`[Form Data] Adding passport scan for room ${roomIndex}, adults passenger ${passengerIndex}:`, value.name);
+            if (key === "passport_scan" && value instanceof File) {
+              console.log(
+                `[Form Data] Adding passport scan for room ${roomIndex}, adults passenger ${passengerIndex}:`,
+                value.name
+              );
               formData.append(`${prefix}[passport_scan]`, value);
             } else {
               formData.append(`${prefix}[${key}]`, value.toString());
@@ -69,8 +80,11 @@ const createFormDataWithFiles = (rooms: Room[], omra_departure_id: string) => {
         const prefix = `rooms[${roomIndex}][passengers][children][${passengerIndex}]`;
         Object.entries(passenger).forEach(([key, value]) => {
           if (value !== null && value !== undefined) {
-            if (key === 'passport_scan' && value instanceof File) {
-              console.log(`[Form Data] Adding passport scan for room ${roomIndex}, children passenger ${passengerIndex}:`, value.name);
+            if (key === "passport_scan" && value instanceof File) {
+              console.log(
+                `[Form Data] Adding passport scan for room ${roomIndex}, children passenger ${passengerIndex}:`,
+                value.name
+              );
               formData.append(`${prefix}[passport_scan]`, value);
             } else {
               formData.append(`${prefix}[${key}]`, value.toString());
@@ -82,19 +96,24 @@ const createFormDataWithFiles = (rooms: Room[], omra_departure_id: string) => {
 
     // Process children_without_bed
     if (room.passengers.children_without_bed?.length) {
-      room.passengers.children_without_bed.forEach((passenger, passengerIndex) => {
-        const prefix = `rooms[${roomIndex}][passengers][children_without_bed][${passengerIndex}]`;
-        Object.entries(passenger).forEach(([key, value]) => {
-          if (value !== null && value !== undefined) {
-            if (key === 'passport_scan' && value instanceof File) {
-              console.log(`[Form Data] Adding passport scan for room ${roomIndex}, children_without_bed passenger ${passengerIndex}:`, value.name);
-              formData.append(`${prefix}[passport_scan]`, value);
-            } else {
-              formData.append(`${prefix}[${key}]`, value.toString());
+      room.passengers.children_without_bed.forEach(
+        (passenger, passengerIndex) => {
+          const prefix = `rooms[${roomIndex}][passengers][children_without_bed][${passengerIndex}]`;
+          Object.entries(passenger).forEach(([key, value]) => {
+            if (value !== null && value !== undefined) {
+              if (key === "passport_scan" && value instanceof File) {
+                console.log(
+                  `[Form Data] Adding passport scan for room ${roomIndex}, children_without_bed passenger ${passengerIndex}:`,
+                  value.name
+                );
+                formData.append(`${prefix}[passport_scan]`, value);
+              } else {
+                formData.append(`${prefix}[${key}]`, value.toString());
+              }
             }
-          }
-        });
-      });
+          });
+        }
+      );
     }
 
     // Process infants
@@ -103,8 +122,11 @@ const createFormDataWithFiles = (rooms: Room[], omra_departure_id: string) => {
         const prefix = `rooms[${roomIndex}][passengers][infants][${passengerIndex}]`;
         Object.entries(passenger).forEach(([key, value]) => {
           if (value !== null && value !== undefined) {
-            if (key === 'passport_scan' && value instanceof File) {
-              console.log(`[Form Data] Adding passport scan for room ${roomIndex}, infants passenger ${passengerIndex}:`, value.name);
+            if (key === "passport_scan" && value instanceof File) {
+              console.log(
+                `[Form Data] Adding passport scan for room ${roomIndex}, infants passenger ${passengerIndex}:`,
+                value.name
+              );
               formData.append(`${prefix}[passport_scan]`, value);
             } else {
               formData.append(`${prefix}[${key}]`, value.toString());
@@ -116,12 +138,15 @@ const createFormDataWithFiles = (rooms: Room[], omra_departure_id: string) => {
   });
 
   console.log("[Form Data] Finished creating FormData");
-  
+
   // Log all form data entries for debugging
   console.log("[Form Data] Final FormData entries:");
   const entries = Array.from(formData.entries());
   entries.forEach(([key, value]) => {
-    console.log(`${key}:`, value instanceof File ? `File: ${value.name}` : value);
+    console.log(
+      `${key}:`,
+      value instanceof File ? `File: ${value.name}` : value
+    );
   });
 
   return formData;
@@ -212,7 +237,7 @@ const validateReservationData = (rooms: any[], omra_departure_id: string) => {
       if (!passenger.birth_date) {
         throw new Error("All passengers must have a birth date");
       }
-      if (!passenger.sex || !['male', 'female'].includes(passenger.sex)) {
+      if (!passenger.sex || !["male", "female"].includes(passenger.sex)) {
         throw new Error("All passengers must specify their sex (male/female)");
       }
     }
@@ -229,7 +254,7 @@ export const handleOmraSubmit = async (
     console.log("[Submit] Starting Omra submission:", {
       roomCount: rooms.length,
       omra_departure_id,
-      status
+      status,
     });
 
     validateReservationData(rooms, omra_departure_id);
@@ -244,6 +269,13 @@ export const handleOmraSubmit = async (
     if (response.success) {
       console.log("[Submit] Reservation successful");
       toast.success(response.message);
+      
+      // Add delay and navigation
+      console.log("[Submit] Redirecting to reservations page in 2 seconds...");
+      setTimeout(() => {
+        window.location.href = "/en/reservations/omra";
+      }, 2000);
+      
       return response;
     } else {
       console.error("[Submit] Reservation failed:", response.message);
@@ -252,7 +284,9 @@ export const handleOmraSubmit = async (
     }
   } catch (error: any) {
     console.error("[Submit] Error in handleOmraSubmit:", error);
-    toast.error(error.message || "An error occurred while processing your reservation");
+    toast.error(
+      error.message || "An error occurred while processing your reservation"
+    );
     return null;
   }
 };
