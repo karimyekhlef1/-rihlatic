@@ -117,7 +117,7 @@ export const cancelOmraPenalty = createAsyncThunk(
   }
 );
 
-export const  storeShoppingCard = createAsyncThunk(
+export const storeShoppingCard = createAsyncThunk(
     "storeShoppingCardOmra/slice",
     async (data: any, thunkApi) => {
       try {
@@ -127,10 +127,10 @@ export const  storeShoppingCard = createAsyncThunk(
         return thunkApi.rejectWithValue(error.response.data);
       }
     }
-  )
+  );
   
   
-  export const  pricingShoppingCard = createAsyncThunk(
+  export const pricingShoppingCard = createAsyncThunk(
     "getPricingBookingCardPackage/slice",
     async (token: any, thunkApi) => {
       try {
@@ -140,7 +140,7 @@ export const  storeShoppingCard = createAsyncThunk(
         return thunkApi.rejectWithValue(error.response.data);
       }
     }
-  )
+  );
 
 const omrasSlice = createSlice({
   name: 'omras',
@@ -218,7 +218,6 @@ const omrasSlice = createSlice({
       })
       .addCase(storeShoppingCard.rejected, (state, action) => {
         state.loadingCard = false;
-        state.cardData = {};
         state.error = action.error.message || 'An error occurred';
       })
       .addCase(pricingShoppingCard.pending, (state) => {
@@ -231,7 +230,6 @@ const omrasSlice = createSlice({
       })
       .addCase(pricingShoppingCard.rejected, (state, action) => {
         state.loadingCard = false;
-        state.cardData = {};
         state.error = action.error.message || 'An error occurred';
       });
   },
