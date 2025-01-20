@@ -16,6 +16,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardTitle, CardContent } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -150,6 +151,7 @@ export function RoomDialog({ open, onOpenChange }: RoomDialogProps) {
   };
 
   const handleRoomTypeChange = (selected: { id: number; label: string }) => {
+    console.log("[Room Dialog] Room type changed to:", selected.label);
     const selectedRoomType = roomTypes[room.reservation_type].find(
       (type) => type.id === selected.id
     );
@@ -173,11 +175,19 @@ export function RoomDialog({ open, onOpenChange }: RoomDialogProps) {
   };
 
   const saveRoomAndProceed = async () => {
+    console.log("[Room Dialog] Starting room save process");
+    console.log("[Room Dialog] Current room state:", room);
+    console.log("[Room Dialog] Current reservation state:", reservationState);
+
     const currentOmraDepartureId = reservationState.omra_departure_id;
+    console.log("[Room Dialog] Current omra departure ID:", currentOmraDepartureId);
+    
     dispatch(resetReservation());
+    console.log("[Room Dialog] Reservation reset");
 
     if (currentOmraDepartureId) {
       dispatch(setOmraDepartureId(currentOmraDepartureId));
+      console.log("[Room Dialog] Restored omra departure ID after reset");
     }
 
     const storeRoom: StoreRoom = {
@@ -187,11 +197,14 @@ export function RoomDialog({ open, onOpenChange }: RoomDialogProps) {
       passengers: room.passengers,
     };
 
+    console.log("[Room Dialog] Storing room data:", storeRoom);
     dispatch(addRoomToStore(storeRoom));
 
     await new Promise((resolve) => setTimeout(resolve, 0));
+    console.log("[Room Dialog] Updated reservation state:", store.getState().omreaReservationInfos);
 
     onOpenChange(false);
+    console.log("[Room Dialog] Dialog closed, redirecting to payment page");
     router.push("/en/omras/payment");
   };
 
@@ -209,6 +222,7 @@ export function RoomDialog({ open, onOpenChange }: RoomDialogProps) {
               <RadioGroup
                 value={room.reservation_type}
                 onValueChange={(value) => {
+                  console.log("[Room Dialog] Reservation type changed to:", value);
                   setRoom({
                     ...room,
                     reservation_type: value,
@@ -269,9 +283,16 @@ export function RoomDialog({ open, onOpenChange }: RoomDialogProps) {
               <NumberOfPeople
                 icon={<MdChildCare />}
                 label="Child"
-                value={room.passengers.children.length}
+                value={room.passengers.children.length + room.passengers.children_without_bed.length}
                 onIncrement={() => handleGuestChange("children", "increment")}
-                onDecrement={() => handleGuestChange("children", "decrement")}
+                onDecrement={() => {
+                  const lastChildIndex = room.passengers.children.length - 1;
+                  if (lastChildIndex >= 0) {
+                    handleGuestChange("children", "decrement");
+                  } else {
+                    handleGuestChange("children_without_bed", "decrement");
+                  }
+                }}
                 min={0}
                 max={
                   roomTypes[room.reservation_type].find(
@@ -279,6 +300,40 @@ export function RoomDialog({ open, onOpenChange }: RoomDialogProps) {
                   )?.maxOccupants || 0
                 }
               />
+              {/* Child bed toggles */}
+              <div className="space-y-2 pl-8">
+                {[...Array(room.passengers.children.length + room.passengers.children_without_bed.length)].map((_, index) => {
+                  const isWithoutBed = index >= room.passengers.children.length;
+                  return (
+                    <div key={index} className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">Child {index + 1}</span>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-sm text-gray-500">{isWithoutBed ? 'Without Bed' : 'With Bed'}</span>
+                        <Switch
+                          checked={isWithoutBed}
+                          onCheckedChange={(checked) => {
+                            const newPassengers = { ...room.passengers };
+                            const childToMove = checked 
+                              ? newPassengers.children[index]
+                              : newPassengers.children_without_bed[index - newPassengers.children.length];
+                            
+                            if (checked) {
+                              newPassengers.children = newPassengers.children.filter((_, i) => i !== index);
+                              newPassengers.children_without_bed.push(childToMove);
+                            } else {
+                              newPassengers.children_without_bed = newPassengers.children_without_bed.filter((_, i) => i !== (index - newPassengers.children.length));
+                              newPassengers.children.push(childToMove);
+                            }
+                            
+                            setRoom({ ...room, passengers: newPassengers });
+                          }}
+                          className="data-[state=checked]:bg-orange-600"
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
 
               <NumberOfPeople
                 icon={<LuBaby />}

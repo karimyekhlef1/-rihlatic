@@ -22,6 +22,7 @@ interface Passenger {
 interface Passengers {
   adults: Passenger[];
   children?: Passenger[];
+  children_without_bed?: Passenger[];
   infants?: Passenger[];
 }
 
@@ -120,6 +121,12 @@ const RoomSummary = ({ room, index }: { room: Room; index: number }) => (
       <PassengerGroup passengers={room.passengers.adults} type="Adult" />
       {room.passengers.children && room.passengers.children.length > 0 && (
         <PassengerGroup passengers={room.passengers.children} type="Child" />
+      )}
+      {room.passengers.children_without_bed && room.passengers.children_without_bed.length > 0 && (
+        <PassengerGroup 
+          passengers={room.passengers.children_without_bed} 
+          type="Child without Bed" 
+        />
       )}
       {room.passengers.infants && room.passengers.infants.length > 0 && (
         <PassengerGroup passengers={room.passengers.infants} type="Infant" />

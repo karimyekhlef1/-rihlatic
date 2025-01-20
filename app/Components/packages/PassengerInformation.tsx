@@ -44,7 +44,7 @@ export default function PassengerInformation({
 
   const passenger = useSelector(
     (state: RootState) =>
-      state.omreaReservationInfos.rooms[roomIndex]?.passengers[title][index]
+      state.omreaReservationInfos.rooms[roomIndex]?.passengers?.[title]?.[index]
   );
 
   const currentPassenger = passengerData || passenger;
@@ -64,18 +64,18 @@ export default function PassengerInformation({
   useEffect(() => {
     if (currentPassenger) {
       Object.entries(currentPassenger).forEach(([key, value]) => {
-        setValue(key as keyof FormData, value as string);
+        if (key !== 'passport_scan') { // Skip passport_scan as it needs special handling
+          setValue(key as keyof FormData, value as string);
+        }
       });
     }
   }, [currentPassenger, setValue]);
 
-  const handleInputChange = async (field: keyof FormData, value: string) => {
+  const handleInputChange = async (field: keyof FormData, value: string | File) => {
     if (readOnly) return;
 
-    setValue(field, value);
-    const isValid = await trigger(field);
-
-    if (isValid) {
+    if (field === 'passport_scan' && value instanceof File) {
+      // Handle file separately
       dispatch(
         updatePassenger({
           roomIndex,
@@ -86,6 +86,23 @@ export default function PassengerInformation({
           },
         })
       );
+    } else {
+      // Handle other fields
+      setValue(field, value as string);
+      const isValid = await trigger(field);
+
+      if (isValid) {
+        dispatch(
+          updatePassenger({
+            roomIndex,
+            passengerType: title,
+            passengerIndex: index,
+            passengerData: {
+              [field]: value,
+            },
+          })
+        );
+      }
     }
   };
 
@@ -103,17 +120,31 @@ export default function PassengerInformation({
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      const base64 = e.target?.result as string;
-      await handleInputChange("passport_scan", base64);
-    };
-    reader.readAsDataURL(file);
+    // Store the actual file
+    await handleInputChange("passport_scan", file);
   };
 
   return (
-    <Card className="w-full">
-      <CardContent className="w-full">
+    <Card
+      className={`w-full ${
+        title === "children_without_bed"
+          ? "border-orange-200 bg-orange-50"
+          : ""
+      }`}
+    >
+      <CardContent className="space-y-4 p-6">
+        <div className="flex justify-between items-center">
+          <h3 className="text-lg font-semibold capitalize flex items-center gap-2">
+            {title.replace(/_/g, " ")}
+            {title === "children_without_bed" && (
+              <span className="text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded">
+                No Bed
+              </span>
+            )}
+          </h3>
+          <span className="text-sm text-gray-500">#{index + 1}</span>
+        </div>
+
         <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
           <div className="flex flex-col space-y-2 mt-4 mb-6">
             <div className="text-lg font-semibold capitalize">
@@ -206,6 +237,23 @@ export default function PassengerInformation({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col">
+              <label className="text-sm text-gray-500">Birth Date</label>
+              <Input
+                {...register("birth_date")}
+                type="date"
+                placeholder="Birth date"
+                onChange={(e) => handleInputChange("birth_date", e.target.value)}
+                disabled={readOnly}
+                className={errors.birth_date ? "border-red-500" : ""}
+              />
+              {errors.birth_date && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.birth_date.message}
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-col">
               <label className="text-sm text-gray-500">Gender</label>
               <Select
                 disabled={readOnly}
@@ -222,20 +270,6 @@ export default function PassengerInformation({
               </Select>
               {errors.sex && (
                 <p className="text-red-500 text-xs mt-1">{errors.sex.message}</p>
-              )}
-            </div>
-
-            <div className="flex flex-col">
-              <label className="text-sm text-gray-500">Date of Birth</label>
-              <Input
-                {...register("birthday")}
-                type="date"
-                placeholder="Select birth date"
-                onChange={(e) => handleInputChange("birthday", e.target.value)}
-                disabled={readOnly}
-              />
-              {errors.birthday && (
-                <p className="text-red-500 text-xs mt-1">{errors.birthday.message}</p>
               )}
             </div>
           </div>

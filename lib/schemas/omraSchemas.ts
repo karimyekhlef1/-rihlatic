@@ -19,7 +19,7 @@ export const passengerSchema = z.object({
     required_error: 'Please select a gender',
     invalid_type_error: 'Gender must be either male or female',
   }),
-  birthday: z.string()
+  birth_date: z.string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)')
     .refine((date) => {
       const birthDate = new Date(date);
@@ -38,7 +38,7 @@ export const passengerSchema = z.object({
   phone: z.string()
     .regex(phonePattern, 'Invalid phone number format')
     .optional(),
-  passport_scan: z.string().optional(),
+  passport_scan: z.any(), // Allow File or string or null
   email: z.string()
     .email('Invalid email format')
     .optional(),
