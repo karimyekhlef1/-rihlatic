@@ -151,6 +151,7 @@ export function RoomDialog({ open, onOpenChange }: RoomDialogProps) {
   };
 
   const handleRoomTypeChange = (selected: { id: number; label: string }) => {
+    console.log("[Room Dialog] Room type changed to:", selected.label);
     const selectedRoomType = roomTypes[room.reservation_type].find(
       (type) => type.id === selected.id
     );
@@ -174,14 +175,19 @@ export function RoomDialog({ open, onOpenChange }: RoomDialogProps) {
   };
 
   const saveRoomAndProceed = async () => {
-    console.log("Current room state:", room);
-    console.log("Current reservation state:", reservationState);
+    console.log("[Room Dialog] Starting room save process");
+    console.log("[Room Dialog] Current room state:", room);
+    console.log("[Room Dialog] Current reservation state:", reservationState);
 
     const currentOmraDepartureId = reservationState.omra_departure_id;
+    console.log("[Room Dialog] Current omra departure ID:", currentOmraDepartureId);
+    
     dispatch(resetReservation());
+    console.log("[Room Dialog] Reservation reset");
 
     if (currentOmraDepartureId) {
       dispatch(setOmraDepartureId(currentOmraDepartureId));
+      console.log("[Room Dialog] Restored omra departure ID after reset");
     }
 
     const storeRoom: StoreRoom = {
@@ -191,13 +197,14 @@ export function RoomDialog({ open, onOpenChange }: RoomDialogProps) {
       passengers: room.passengers,
     };
 
-    console.log("Storing room data:", storeRoom);
+    console.log("[Room Dialog] Storing room data:", storeRoom);
     dispatch(addRoomToStore(storeRoom));
 
     await new Promise((resolve) => setTimeout(resolve, 0));
-    console.log("Updated reservation state:", store.getState().omreaReservationInfos);
+    console.log("[Room Dialog] Updated reservation state:", store.getState().omreaReservationInfos);
 
     onOpenChange(false);
+    console.log("[Room Dialog] Dialog closed, redirecting to payment page");
     router.push("/en/omras/payment");
   };
 
@@ -215,6 +222,7 @@ export function RoomDialog({ open, onOpenChange }: RoomDialogProps) {
               <RadioGroup
                 value={room.reservation_type}
                 onValueChange={(value) => {
+                  console.log("[Room Dialog] Reservation type changed to:", value);
                   setRoom({
                     ...room,
                     reservation_type: value,
