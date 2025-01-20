@@ -37,14 +37,21 @@ export const resend_code_endpoint = BASE_URL + "/front/email/resend_code";
 // Packages
 export const packages_endpoint = BASE_URL + "/front/packages";
 export const package_bookings_endpoint = BASE_URL + "/front/package/bookings";
-export const package_cancelPenalty_endpoint = BASE_URL + "/front/package/bookings/cancelPenalty/"
-export const packages_bookingCard_endpoint=BASE_URL+"/front/package/carts"
-export const package_Booking_pricing = BASE_URL+"/front/package/bookings/pricing"
+export const package_cancelPenalty_endpoint =
+  BASE_URL + "/front/package/bookings/cancelPenalty/";
+export const packages_bookingCard_endpoint = BASE_URL + "/front/package/carts";
+export const package_Booking_pricing =
+  BASE_URL + "/front/package/bookings/pricing";
 
 // Omra
 export const omra_endpoint = BASE_URL + "/front/omra";
 // Omras Bookings
 export const omras_bookings_endpoint = BASE_URL + "/front/omras/bookings";
+// Omras Shopping Card
+export const omras_shopping_card_endpoint = BASE_URL + "/front/omra/carts";
+// Omras Get Pricing
+export const omras_get_pricing_endpoint =
+  BASE_URL + "/front/omras/bookings/pricing";
 //Omra Cancel Penalty
 export const omra_cancelPenalty_endpoint =
   BASE_URL + "/front/omras/bookings/cancelPenalty/:id";

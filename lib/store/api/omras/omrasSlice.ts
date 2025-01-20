@@ -11,12 +11,16 @@ interface OmrasState {
   loading: boolean;
   error: string | null;
   omraData: any;
+  cardData :any;
+  loadingCard:any;
 }
 
 const initialState: OmrasState = {
   loading: false,
   error: null,
   omraData: {},
+  cardData :{},
+  loadingCard:false
 };
 
 export const getOmraDetails = createAsyncThunk('omraDetails/slice', async (params: any, { rejectWithValue }) => {
@@ -113,6 +117,31 @@ export const cancelOmraPenalty = createAsyncThunk(
   }
 );
 
+export const  storeShoppingCard = createAsyncThunk(
+    "storeShoppingCardOmra/slice",
+    async (data: any, thunkApi) => {
+      try {
+        const response = await omrasService.storeShoppingCard(data);
+        return response;
+      } catch (error: any) {
+        return thunkApi.rejectWithValue(error.response.data);
+      }
+    }
+  )
+  
+  
+  export const  pricingShoppingCard = createAsyncThunk(
+    "getPricingBookingCardPackage/slice",
+    async (token: any, thunkApi) => {
+      try {
+        const response = await omrasService.pricingShoppingCard(token);
+        return response;
+      } catch (error: any) {
+        return thunkApi.rejectWithValue(error.response.data);
+      }
+    }
+  )
+
 const omrasSlice = createSlice({
   name: 'omras',
   initialState,
@@ -177,6 +206,32 @@ const omrasSlice = createSlice({
       })
       .addCase(cancelOmraPenalty.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.error.message || 'An error occurred';
+      })
+      .addCase(storeShoppingCard.pending, (state) => {
+        state.loadingCard = true;
+        state.error = null;
+      })
+      .addCase(storeShoppingCard.fulfilled, (state, action) => {
+        state.loadingCard = false;
+        state.cardData = action.payload;
+      })
+      .addCase(storeShoppingCard.rejected, (state, action) => {
+        state.loadingCard = false;
+        state.cardData = {};
+        state.error = action.error.message || 'An error occurred';
+      })
+      .addCase(pricingShoppingCard.pending, (state) => {
+        state.loadingCard = true;
+        state.error = null;
+      })
+      .addCase(pricingShoppingCard.fulfilled, (state, action) => {
+        state.loadingCard = false;
+        state.cardData = action.payload;
+      })
+      .addCase(pricingShoppingCard.rejected, (state, action) => {
+        state.loadingCard = false;
+        state.cardData = {};
         state.error = action.error.message || 'An error occurred';
       });
   },
