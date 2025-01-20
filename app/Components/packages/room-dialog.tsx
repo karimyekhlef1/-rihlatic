@@ -24,12 +24,18 @@ import {
   Room as StoreRoom,
   resetReservation,
   setOmraDepartureId,
+  updatePricing,
+  RoomWithPricing
 } from "@/lib/store/custom/commonSlices/omraReservationSlice";
 import { resetStep } from "@/lib/store/custom/omraSlices/paymentOmraSlice";
-import { RootState } from "@/lib/store/store";
+import { RootState, AppDispatch } from "@/lib/store/store";
 import { store } from "@/lib/store/store";
 import DropDownBookingComponent from "./dropDownBooking";
 import NumberOfPeople from "./numberOfPeople";
+import { 
+  storeShoppingCard,
+  pricingShoppingCard 
+} from "@/lib/store/api/omras/omrasSlice";
 
 interface Passenger {
   email: string | null;
@@ -57,6 +63,26 @@ interface RoomType {
   maxOccupants: number;
 }
 
+interface PricingRoom {
+  room_id: number;
+  name: string;
+  capacity_adult: number;
+  capacity_child: number;
+  capacity_child_without_bed: number;
+  capacity_bebe: number;
+  adults_price: number;
+  children_price: number;
+  infant_price: number;
+  total: number;
+}
+
+interface PricingResponse {
+  data: {
+    rooms: PricingRoom[];
+    total: number;
+  }
+}
+
 const roomTypes: Record<string, RoomType[]> = {
   "with-bed": [
     { id: 1, value: "quadruple", label: "Quadruple", maxOccupants: 4 },
@@ -78,7 +104,7 @@ interface RoomDialogProps {
 
 export function RoomDialog({ open, onOpenChange }: RoomDialogProps) {
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const reservationState = useSelector(
     (state: RootState) => state.omreaReservationInfos
   );
@@ -155,7 +181,7 @@ export function RoomDialog({ open, onOpenChange }: RoomDialogProps) {
     const selectedRoomType = roomTypes[room.reservation_type].find(
       (type) => type.id === selected.id
     );
-    
+
     if (selectedRoomType) {
       setRoom({
         ...room,
@@ -180,8 +206,11 @@ export function RoomDialog({ open, onOpenChange }: RoomDialogProps) {
     console.log("[Room Dialog] Current reservation state:", reservationState);
 
     const currentOmraDepartureId = reservationState.omra_departure_id;
-    console.log("[Room Dialog] Current omra departure ID:", currentOmraDepartureId);
-    
+    console.log(
+      "[Room Dialog] Current omra departure ID:",
+      currentOmraDepartureId
+    );
+
     dispatch(resetReservation());
     console.log("[Room Dialog] Reservation reset");
 
@@ -200,12 +229,70 @@ export function RoomDialog({ open, onOpenChange }: RoomDialogProps) {
     console.log("[Room Dialog] Storing room data:", storeRoom);
     dispatch(addRoomToStore(storeRoom));
 
-    await new Promise((resolve) => setTimeout(resolve, 0));
-    console.log("[Room Dialog] Updated reservation state:", store.getState().omreaReservationInfos);
+    try {
+      // First, store the shopping card data
+      const shoppingCardData = {
+        departure_id: currentOmraDepartureId,
+        rooms: [
+          {
+            room_id: storeRoom.room_id,
+            note: room.note,
+            capacity_adult: room.passengers.adults.length,
+            capacity_child: room.passengers.children.length,
+            capacity_child_without_bed:
+              room.passengers.children_without_bed.length,
+            capacity_bebe: room.passengers.infants.length,
+          },
+        ],
+      };
 
-    onOpenChange(false);
-    console.log("[Room Dialog] Dialog closed, redirecting to payment page");
-    router.push("/en/omras/payment");
+      console.log("[Room Dialog] Storing shopping card:", shoppingCardData);
+      const shoppingCardResponse: { data: { token: string } } = await dispatch(
+        storeShoppingCard(shoppingCardData)
+      ).unwrap();
+
+      if (shoppingCardResponse?.data?.token) {
+        console.log(
+          "[Room Dialog] Got shopping card token:",
+          shoppingCardResponse.data.token
+        );
+
+        // Use the token to get pricing
+        const pricingResponse: PricingResponse = await dispatch(
+          pricingShoppingCard(shoppingCardResponse.data.token)
+        ).unwrap();
+        console.log("[Room Dialog] Pricing data fetched successfully");
+
+        // Update the reservation info with pricing data
+        if (pricingResponse?.data) {
+          dispatch(updatePricing({
+            rooms: pricingResponse.data.rooms.map((room: PricingRoom): RoomWithPricing => ({
+              ...storeRoom,
+              name: room.name,
+              adults_quantity: room.capacity_adult,
+              adults_price: room.adults_price,
+              children_quantity: room.capacity_child + room.capacity_child_without_bed,
+              children_price: room.children_price,
+              infant_quantity: room.capacity_bebe,
+              infant_price: room.infant_price,
+              total: room.total
+            })),
+            total: pricingResponse.data.total
+          }));
+        }
+      }
+
+      console.log(
+        "[Room Dialog] Updated reservation state:",
+        store.getState().omreaReservationInfos
+      );
+
+      onOpenChange(false);
+      console.log("[Room Dialog] Dialog closed, redirecting to payment page");
+      router.push("/en/omras/payment");
+    } catch (error) {
+      console.error("[Room Dialog] Error in shopping card process:", error);
+    }
   };
 
   return (
@@ -222,7 +309,10 @@ export function RoomDialog({ open, onOpenChange }: RoomDialogProps) {
               <RadioGroup
                 value={room.reservation_type}
                 onValueChange={(value) => {
-                  console.log("[Room Dialog] Reservation type changed to:", value);
+                  console.log(
+                    "[Room Dialog] Reservation type changed to:",
+                    value
+                  );
                   setRoom({
                     ...room,
                     reservation_type: value,
@@ -283,7 +373,10 @@ export function RoomDialog({ open, onOpenChange }: RoomDialogProps) {
               <NumberOfPeople
                 icon={<MdChildCare />}
                 label="Child"
-                value={room.passengers.children.length + room.passengers.children_without_bed.length}
+                value={
+                  room.passengers.children.length +
+                  room.passengers.children_without_bed.length
+                }
                 onIncrement={() => handleGuestChange("children", "increment")}
                 onDecrement={() => {
                   const lastChildIndex = room.passengers.children.length - 1;
@@ -302,29 +395,52 @@ export function RoomDialog({ open, onOpenChange }: RoomDialogProps) {
               />
               {/* Child bed toggles */}
               <div className="space-y-2 pl-8">
-                {[...Array(room.passengers.children.length + room.passengers.children_without_bed.length)].map((_, index) => {
+                {[
+                  ...Array(
+                    room.passengers.children.length +
+                      room.passengers.children_without_bed.length
+                  ),
+                ].map((_, index) => {
                   const isWithoutBed = index >= room.passengers.children.length;
                   return (
-                    <div key={index} className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Child {index + 1}</span>
+                    <div
+                      key={index}
+                      className="flex items-center justify-between"
+                    >
+                      <span className="text-sm text-gray-600">
+                        Child {index + 1}
+                      </span>
                       <div className="flex items-center space-x-2">
-                        <span className="text-sm text-gray-500">{isWithoutBed ? 'Without Bed' : 'With Bed'}</span>
+                        <span className="text-sm text-gray-500">
+                          {isWithoutBed ? "Without Bed" : "With Bed"}
+                        </span>
                         <Switch
                           checked={isWithoutBed}
                           onCheckedChange={(checked) => {
                             const newPassengers = { ...room.passengers };
-                            const childToMove = checked 
+                            const childToMove = checked
                               ? newPassengers.children[index]
-                              : newPassengers.children_without_bed[index - newPassengers.children.length];
-                            
+                              : newPassengers.children_without_bed[
+                                  index - newPassengers.children.length
+                                ];
+
                             if (checked) {
-                              newPassengers.children = newPassengers.children.filter((_, i) => i !== index);
-                              newPassengers.children_without_bed.push(childToMove);
+                              newPassengers.children =
+                                newPassengers.children.filter(
+                                  (_, i) => i !== index
+                                );
+                              newPassengers.children_without_bed.push(
+                                childToMove
+                              );
                             } else {
-                              newPassengers.children_without_bed = newPassengers.children_without_bed.filter((_, i) => i !== (index - newPassengers.children.length));
+                              newPassengers.children_without_bed =
+                                newPassengers.children_without_bed.filter(
+                                  (_, i) =>
+                                    i !== index - newPassengers.children.length
+                                );
                               newPassengers.children.push(childToMove);
                             }
-                            
+
                             setRoom({ ...room, passengers: newPassengers });
                           }}
                           className="data-[state=checked]:bg-orange-600"
