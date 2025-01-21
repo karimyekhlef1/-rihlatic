@@ -190,8 +190,10 @@ export default function OmraReservationSummaryPage() {
               </h2>
               <Badge
                 variant={
-                  reservationDetails.status === "confirmed"
+                  reservationDetails.status === "Accepted" || reservationDetails.status === "accepted"
                     ? "Accepted"
+                    : reservationDetails.status === "cancelled" || reservationDetails.status === "Cancelled"
+                    ? "cancelled"
                     : "destructive"
                 }
               >
