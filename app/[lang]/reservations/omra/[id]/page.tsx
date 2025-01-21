@@ -364,15 +364,23 @@ export default function OmraReservationSummaryPage() {
               {reservationDetails.activities.map((activity) => (
                 <TimelineItem key={activity.id}>
                   <div className="flex flex-col gap-1">
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm font-normal text-gray-800">
                       {format(
                         new Date(activity.created_at),
                         "dd MMM yyyy HH:mm"
                       )}
                     </span>
-                    <p>{activity.description}</p>
-                    <span className="text-sm text-gray-500">
-                      by {activity.user.name}
+                    <p
+                      className={`text-sm font-medium ${
+                        activity.description.startsWith("Created ")
+                          ? "text-green-500"
+                          : "text-red-500"
+                      }`}
+                    >
+                      {activity.description}
+                    </p>
+                    <span className="text-xs font-medium text-gray-500">
+                      by {activity.user.email}
                     </span>
                   </div>
                 </TimelineItem>
