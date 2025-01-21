@@ -6,11 +6,20 @@ import { differenceInDays } from "date-fns";
 import PopularFacilitiesOmra from "./PopularFacilitiesOmra";
 import Image from "next/image";
 
+interface Passengers {
+  adults: number[];
+  children: number[];
+  children_without_bed: number[];
+  infants: number[];
+}
+
 interface OmraPricingCardProps {
   title?: React.ReactNode;
   image?: string;
   rooms: Array<{
+    type: string;
     name: string;
+    passengers: Passengers;
     adults_quantity: number;
     adults_price: number;
     children_quantity: number;
@@ -104,26 +113,48 @@ export default function OmraPricingCard({
           <React.Fragment key={index}>
             <div>
               <h3 className="font-semibold mb-2">
-                Room {index + 1} ({room.name})
+                Room {index + 1} ({room.type.toLocaleUpperCase()})
               </h3>
               <div className="text-sm space-y-1">
                 <div className="flex justify-between">
-                  <span>Adult(s):</span>
                   <span>
-                    {room.adults_quantity} x {room.adults_price} DZD
+                    Adult(s) x{" "}
+                    <span className="font-bold">
+                      {room.passengers.adults.length}
+                    </span>
+                    :
                   </span>
+                  <span>{room.adults_price} DZD</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Child(ren):</span>
                   <span>
-                    {room.children_quantity} x {room.children_price} DZD
+                    Child(ren) x{" "}
+                    <span className="font-bold">
+                      {room.passengers.children.length}
+                    </span>
+                    :
                   </span>
+                  <span>{room.children_price} DZD</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Infant(s):</span>
                   <span>
-                    {room.infant_quantity} x {room.infant_price} DZD
+                    Child(ren) without bed x{" "}
+                    <span className="font-bold">
+                      {room.passengers.children_without_bed.length}
+                    </span>
+                    :
                   </span>
+                  <span>{room.children_price} DZD</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>
+                    Infant(s)x{" "}
+                    <span className="font-bold">
+                      {room.passengers.infants.length}
+                    </span>
+                    :
+                  </span>
+                  <span>{room.infant_price} DZD</span>
                 </div>
                 <div className="flex justify-between font-bold">
                   <span>Room {index + 1} Total:</span>

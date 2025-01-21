@@ -29,14 +29,6 @@ export const cleanPassengers = (passengers: Passengers): Passengers => {
   return cleaned;
 };
 
-// Clean room data before API submission
-export const cleanRoomData = (room: Room): Room => {
-  return {
-    ...room,
-    passengers: cleanPassengers(room.passengers)
-  };
-};
-
 export interface Room {
   room_id: number;
   type: string;
@@ -44,9 +36,21 @@ export interface Room {
   passengers: Passengers;
 }
 
+export interface RoomWithPricing extends Room {
+  name: string;
+  adults_quantity: number;
+  adults_price: number;
+  children_quantity: number;
+  children_price: number;
+  infant_quantity: number;
+  infant_price: number;
+  total: number;
+}
+
 interface OmraReservationState {
   omra_departure_id: number | null;
-  rooms: Room[];
+  rooms: RoomWithPricing[];
+  total: number;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
@@ -54,8 +58,17 @@ interface OmraReservationState {
 const initialState: OmraReservationState = {
   omra_departure_id: null,
   rooms: [],
+  total: 0,
   status: "idle",
   error: null,
+};
+
+// Clean room data before API submission
+export const cleanRoomData = (room: Room): Room => {
+  return {
+    ...room,
+    passengers: cleanPassengers(room.passengers)
+  };
 };
 
 const omraReservationSlice = createSlice({
@@ -66,16 +79,36 @@ const omraReservationSlice = createSlice({
       state.omra_departure_id = action.payload;
     },
     addRoom: (state, action: PayloadAction<Room>) => {
-      state.rooms.push(action.payload);
+      state.rooms.push({
+        ...action.payload,
+        name: "",
+        adults_quantity: action.payload.passengers.adults?.length || 0,
+        adults_price: 0,
+        children_quantity: (action.payload.passengers.children?.length || 0) + (action.payload.passengers.children_without_bed?.length || 0),
+        children_price: 0,
+        infant_quantity: action.payload.passengers.infants?.length || 0,
+        infant_price: 0,
+        total: 0
+      });
     },
     updateRoom: (
       state,
-      action: PayloadAction<{ roomIndex: number; roomData: Partial<Room> }>
+      action: PayloadAction<{ roomIndex: number; roomData: Partial<RoomWithPricing> }>
     ) => {
       const { roomIndex, roomData } = action.payload;
       if (state.rooms[roomIndex]) {
         state.rooms[roomIndex] = { ...state.rooms[roomIndex], ...roomData };
       }
+    },
+    updatePricing: (
+      state,
+      action: PayloadAction<{
+        rooms: RoomWithPricing[];
+        total: number;
+      }>
+    ) => {
+      state.rooms = action.payload.rooms;
+      state.total = action.payload.total;
     },
     removeRoom: (state, action: PayloadAction<number>) => {
       state.rooms = state.rooms.filter((_, index) => index !== action.payload);
@@ -165,6 +198,7 @@ export const {
   resetReservation,
   setStatus,
   setError,
+  updatePricing,
 } = omraReservationSlice.actions;
 
 export default omraReservationSlice.reducer;
