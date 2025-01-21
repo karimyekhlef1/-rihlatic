@@ -11,9 +11,9 @@ const PopularDestinationComponent = ({ data }: { data: DestinationData }) => {
     const boxStyle = (image: string) => ({
         backgroundImage: `url(${image})`,
         backgroundRepeat: "no-repeat",
-        backgroundSize: "cover", // Proper styling for the background
+        backgroundSize: "cover",
         height: '325px',
-        width: "100%", // Removed `objectFit` as it's not applicable
+        width: "100%",
     });
 
     const dropFilter = {
@@ -26,7 +26,7 @@ const PopularDestinationComponent = ({ data }: { data: DestinationData }) => {
             <dd className="mt-1 flex justify-between items-center absolute bottom-5 right-5 left-5 p-3 rounded-xl text-black" style={dropFilter}>
                 <div className="left">
                     <h2 className="text-lg font-semibold m-0">{data?.name}</h2>
-                    <p className="text-md">Ticket from <b>{data?.price}$</b></p>
+                    <p className="text-md">Ticket from <b>{data?.price ?? "10000 DA"}</b></p>
                 </div>
                 <div className="right">
                     <button>

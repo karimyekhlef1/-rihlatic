@@ -88,7 +88,7 @@ const PassengersComponent = () => {
           variant="outline"
           size="sm"
           className={cn(
-            "w-[120px] h-9 justify-start text-xs bg-white border-gray-200 text-black",
+            "w-[200px] h-9 justify-start text-xs bg-white border-gray-200 text-black",
             totalPassengers > 1 && "border-[#FF8000] bg-orange-50"
           )}
         >

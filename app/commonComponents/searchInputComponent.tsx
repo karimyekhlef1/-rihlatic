@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Building2, X, Plus, Loader2 } from "lucide-react";
-import { DatePickerHome } from "./datePickerHome";
+import { X, Loader2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store/store";
 import { GetDestinations } from "@/lib/store/api/engine/destinationsSlice";
-import { id } from "date-fns/locale";
 import DestinationComponent from "../Components/home/engine/destinationComponent";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
@@ -110,7 +108,7 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({
       className="relative transition-all"
       style={{
         transition: "width 0.05s ease-in-out",
-        zIndex: 40,
+        width: "100%",
       }}
       ref={wrapperRef}
     >
@@ -118,15 +116,16 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({
         className={cn(
           "flex items-center gap-3 p-2 bg-white rounded relative",
           isOpened
-            ? "ring-2 ring-[#FF8000] ring-offset-0 z-10"
-            : "border border-gray-200",
+            ? "ring-2 ring-[#FF8000] ring-offset-0"
+            : "border border-gray-200 z-0",
           "transition-all duration-150",
-          "w-full sm:w-full md:w-[350px] lg:w-[400px]"
         )}
+        style={isOpened ? {zIndex: 30} : {}}
         onClick={clickHandler}
       >
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-gray-400 text-xs font-medium">{dir}</span>
+          <span className="text-gray-400 text-xs font-medium">{isOpened ? "True" : "False"}</span>
+          {/* <span className="text-gray-400 text-xs font-medium">{dir}</span> */}
           {isPicked && (
             <Badge
               variant="outline"
@@ -151,7 +150,7 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({
         {!isPicked && (
           <Input
             type="text"
-            className="border-0 p-0 text-xs focus-visible:ring-0 h-auto placeholder:text-gray-400"
+            className={`border-0 px-2 py-0 text-xs text-black focus-visible:ring-0 h-auto placeholder:text-gray-400`}
             placeholder={placeholder}
             onChange={handleInputChange}
             id="InputField"
@@ -159,8 +158,8 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({
         )}
       </div>
       {isOpened && (
-        <Card className="absolute top-[-10px] right-[-10px] left-[-10px] bg-white pt-16 border-gray-200">
-          <ul className="p-0">
+        <Card className="absolute top-[-10px] right-[-10px] left-[-10px] bg-white pt-16 border-gray-200 z-10">
+          <ul className="p-0 z-40">
             {loadingDestinations ? (
               <li className="px-3 py-2">
                 <div className="w-full flex items-center gap-2 text-gray-500">

@@ -16,7 +16,7 @@ const OmrasSearchComponent: React.FC = () => {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-start gap-2 flex-wrap">
-        <div className="flex items-center flex-wrap gap-2">
+        <div className="flex flex-col md:flex-row w-full gap-2">
           <SearchInputComponent
             placeholder="Search for a Omra"
             onSearch={(value) => console.log(value)}
@@ -31,9 +31,9 @@ const OmrasSearchComponent: React.FC = () => {
           <Button
             variant="active"
             type="button"
-            className="rounded px-4 h-9 text-sm font-semibold w-28"
+            className="rounded px-7 h-9 text-sm font-semibold w-full md:w-36"
           >
-            Search
+            Explore
           </Button>
         </div>
       </div>

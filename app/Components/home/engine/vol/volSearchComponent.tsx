@@ -168,7 +168,7 @@ const VolSearchComponent: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-2">
         <SearchSelectComponent
           data={volEngineTypes}
           setSelected={setVolTypeFunc}
@@ -180,9 +180,9 @@ const VolSearchComponent: React.FC = () => {
         <PassengersComponent />
         <VolPackageComponent />
       </div>
-      <div className="flex justify-start gap-2 flex-wrap">
+      <div className="flex flex-col sm:flex-row justify-start gap-2">
         {volType !== "Multi Destinations" ? (
-          <div className="flex items-center flex-wrap gap-2">
+          <div className="flex flex-col md:flex-row w-full gap-2">
             <SearchInputComponent
               placeholder="City, airports or place"
               onSearch={(value) => handleFromAirportSelect(value)}
@@ -204,14 +204,14 @@ const VolSearchComponent: React.FC = () => {
               onClick={handleSearch}
               variant="active"
               type="button"
-              className="rounded px-4 h-9 text-sm font-semibold w-28"
+              className="rounded bg-[#FF8000] text-white px-7 h-9 text-sm font-semibold w-full md:w-36"
             >
-              Search
+              Explore
             </Button>
           </div>
         ) : (
           destinations.map((dest: any, i: number) => (
-            <div className="flex flex-wrap items-center gap-2" key={dest.id}>
+            <div className="flex flex-col lg:flex-row w-full gap-2" key={dest.id}>
               <SearchInputComponent
                 placeholder="City, airports or place"
                 onSearch={(value) => handleFromAirportSelect(value, i)}
@@ -232,7 +232,7 @@ const VolSearchComponent: React.FC = () => {
                 }}
               />
               <div
-                className="flex items-center gap-2 bg-red-50 hover:bg-red-100 p-4 h-9 rounded"
+                className="flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 p-4 h-9 rounded"
                 onClick={() => removeDestination(i)}
               >
                 <Trash2 className="text-red-500 h-4 w-4 cursor-pointer" />
@@ -246,7 +246,7 @@ const VolSearchComponent: React.FC = () => {
           <Button
             variant="outline"
             size="sm"
-            className="text-gray-500 text-sm border rounded bg-transparent hover:bg-gray-200"
+            className="text-gray-600 text-sm rounded bg-gray-200 hover:bg-gray-600 hover:text-gray-200"
             onClick={addDestination}
           >
             Add Destination
@@ -256,9 +256,9 @@ const VolSearchComponent: React.FC = () => {
             onClick={handleSearch}
             variant="active"
             type="button"
-            className="rounded px-4 h-9 text-sm font-semibold w-28"
+            className="rounded bg-[#FF8000] text-white px-7 h-9 text-sm font-semibold w-full md:w-36"
           >
-            Search
+            Explore
           </Button>
         </div>
       )}

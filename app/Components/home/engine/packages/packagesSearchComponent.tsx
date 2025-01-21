@@ -44,8 +44,8 @@ const PackagesSearchComponent: React.FC<PackagesSearchComponentProps> = ({ onSea
           setSelected={handleSelectionType}
         />
       </div>
-      <div className="flex justify-start gap-2 flex-wrap">
-        <div className="flex items-center flex-wrap gap-2">
+      <div className="flex flex-col md:flex-row gap-2">
+        <div className="flex flex-col md:flex-row items-center gap-2 w-full">
           <SearchInputComponent
             placeholder="City, airports or place"
             onSearch={handleSelectionDestination}
@@ -60,7 +60,7 @@ const PackagesSearchComponent: React.FC<PackagesSearchComponentProps> = ({ onSea
           />
           <button
             type="button"
-            className="rounded bg-[#FF8000] px-2 py-2.5 text-sm font-semibold text-white w-full sm:w-24"
+            className="rounded bg-[#FF8000] text-white px-7 h-9 text-sm font-semibold w-full md:w-36"
             onClick={() => handleClickExplore("packages")}
           >
             Exploire
