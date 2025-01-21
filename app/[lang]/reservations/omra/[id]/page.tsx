@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Timeline, TimelineItem } from "@/app/Components/common/Timeline";
 import OmraFacilities from "@/app/Components/omra/OmraFacilities";
 import OmraSummary from "@/app/Components/omra/OmraSummary";
+import { toast } from "sonner";
 
 interface Activity {
   id: number;
@@ -171,6 +172,96 @@ export default function OmraReservationSummaryPage() {
     }
   }, [dispatch, id]);
 
+  const handleCancelBooking = async () => {
+    try {
+      if (!reservationDetails?.id) {
+        console.error("No reservation ID found:", reservationDetails);
+        return;
+      }
+
+      // Check if reservation is already cancelled
+      if (reservationDetails.status.toLowerCase() === "cancelled") {
+        toast.error("This reservation is already cancelled", {
+          description: `Reservation #${reservationDetails.reference} cannot be cancelled again.`,
+        });
+        return;
+      }
+
+      // Optimistically update UI
+      setReservationDetails((prev) =>
+        prev ? { ...prev, status: "cancelled" } : prev
+      );
+
+      console.log(
+        "Attempting to cancel reservation with ID:",
+        reservationDetails.id
+      );
+      try {
+        await dispatch(
+          cancelOmraPenalty({
+            data: {
+              reservation_id: reservationDetails.id,
+              reference: reservationDetails.reference,
+            },
+            id: reservationDetails.id.toString(),
+          })
+        ).unwrap();
+
+        console.log("Successfully cancelled reservation");
+        toast.success("Reservation Cancelled", {
+          description: `Successfully cancelled reservation #${reservationDetails.reference}`,
+        });
+
+        // Fetch fresh data
+        const response = await dispatch(getOmraReservationDetails({})).unwrap();
+        if (response.success && response.result.bookings) {
+          const updatedBooking = response.result.bookings.find(
+            (booking: Reservation) => booking.id === reservationDetails.id
+          );
+          if (updatedBooking) {
+            setReservationDetails(updatedBooking);
+          }
+        }
+      } catch (error) {
+        console.error("Cancel API error:", error);
+        toast.error("Failed to cancel reservation", {
+          description:
+            "There was an error cancelling your reservation. Please try again.",
+        });
+        // Revert optimistic update on error
+        const response = await dispatch(getOmraReservationDetails({})).unwrap();
+        if (response.success && response.result.bookings) {
+          const originalBooking = response.result.bookings.find(
+            (booking: Reservation) => booking.id === reservationDetails.id
+          );
+          if (originalBooking) {
+            setReservationDetails(originalBooking);
+          }
+        }
+      }
+    } catch (error: any) {
+      console.error("Error in handleCancelBooking:", error);
+      console.error("Error details:", {
+        message: error?.message,
+        status: error?.response?.status,
+        data: error?.response?.data,
+      });
+      toast.error("Error", {
+        description: "An unexpected error occurred. Please try again.",
+      });
+      // Revert optimistic update on error
+      const response = await dispatch(getOmraReservationDetails({})).unwrap();
+      if (response.success && response.result.bookings) {
+        const originalBooking = response.result.bookings.find(
+          (booking: Reservation) => booking.id === reservationDetails?.id
+        );
+        if (originalBooking) {
+          setReservationDetails(originalBooking);
+        }
+      }
+    }
+  };
+
   if (loading || isLoading) return <Loading />;
   if (error) return <div className="text-red-500">{error}</div>;
   if (!reservationDetails) return <div>No reservation details found</div>;
@@ -190,11 +281,13 @@ export default function OmraReservationSummaryPage() {
               </h2>
               <Badge
                 variant={
-                  reservationDetails.status === "Accepted" || reservationDetails.status === "accepted"
+                  reservationDetails.status === "Accepted" ||
+                  reservationDetails.status === "accepted"
                     ? "Accepted"
-                    : reservationDetails.status === "cancelled" || reservationDetails.status === "Cancelled"
-                    ? "cancelled"
-                    : "destructive"
+                    : reservationDetails.status === "cancelled" ||
+                        reservationDetails.status === "Cancelled"
+                      ? "cancelled"
+                      : "destructive"
                 }
               >
                 {reservationDetails.status}
@@ -293,7 +386,7 @@ export default function OmraReservationSummaryPage() {
           <div className="flex justify-end">
             <Button
               variant="destructive"
-              onClick={() => console.log("Cancel button clicked")}
+              onClick={handleCancelBooking}
               className="flex items-center gap-2"
             >
               <AlertCircle className="h-4 w-4" />
