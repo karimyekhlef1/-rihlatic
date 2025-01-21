@@ -33,12 +33,13 @@ interface Room {
 
 // Utility function to safely parse and format dates
 const formatDate = (passenger: Passenger) => {
-  const dateString = passenger.birth_date || passenger.birthdate || passenger.birthday;
-  
+  const dateString =
+    passenger.birth_date || passenger.birthdate || passenger.birthday;
+
   if (!dateString) {
     return "N/A";
   }
-  
+
   try {
     const date = new Date(dateString);
     if (isNaN(date.getTime())) {
@@ -52,7 +53,7 @@ const formatDate = (passenger: Passenger) => {
 
 const PassengerInfo = ({ passenger }: { passenger: Passenger }) => {
   const getSexStyle = (sex: string) => {
-    return sex.toLowerCase() === "female" 
+    return sex.toLowerCase() === "female"
       ? "bg-pink-100 text-pink-800"
       : "bg-blue-100 text-blue-800";
   };
@@ -64,7 +65,9 @@ const PassengerInfo = ({ passenger }: { passenger: Passenger }) => {
         <span className="font-medium">
           {passenger.first_name} {passenger.last_name}
         </span>
-        <span className={`text-xs px-2 py-1 rounded-full ${getSexStyle(passenger.sex)}`}>
+        <span
+          className={`text-xs px-2 py-1 rounded-full ${getSexStyle(passenger.sex)}`}
+        >
           {passenger.sex}
         </span>
       </div>
@@ -90,17 +93,19 @@ const PassengerInfo = ({ passenger }: { passenger: Passenger }) => {
   );
 };
 
-const PassengerGroup = ({ 
-  passengers, 
-  type 
-}: { 
-  passengers: Passenger[], 
-  type: string 
+const PassengerGroup = ({
+  passengers,
+  type,
+}: {
+  passengers: Passenger[];
+  type: string;
 }) => (
   <div className="space-y-4">
     {passengers.map((passenger, idx) => (
       <div key={idx}>
-        <Label className="text-sm text-gray-500 mb-2">{type} {idx + 1}</Label>
+        <Label className="text-sm text-gray-500 mb-2">
+          {type} {idx + 1}
+        </Label>
         <PassengerInfo passenger={passenger} />
         {idx < passengers.length - 1 && (
           <div className="flex justify-center my-4">
@@ -122,12 +127,13 @@ const RoomSummary = ({ room, index }: { room: Room; index: number }) => (
       {room.passengers.children && room.passengers.children.length > 0 && (
         <PassengerGroup passengers={room.passengers.children} type="Child" />
       )}
-      {room.passengers.children_without_bed && room.passengers.children_without_bed.length > 0 && (
-        <PassengerGroup 
-          passengers={room.passengers.children_without_bed} 
-          type="Child without Bed" 
-        />
-      )}
+      {room.passengers.children_without_bed &&
+        room.passengers.children_without_bed.length > 0 && (
+          <PassengerGroup
+            passengers={room.passengers.children_without_bed}
+            type="Child without Bed"
+          />
+        )}
       {room.passengers.infants && room.passengers.infants.length > 0 && (
         <PassengerGroup passengers={room.passengers.infants} type="Infant" />
       )}
@@ -138,7 +144,7 @@ const RoomSummary = ({ room, index }: { room: Room; index: number }) => (
 export default function OmraSummary({ rooms }: { rooms: Room[] }) {
   return (
     <div className="w-full max-w-4xl mx-auto py-4">
-      <h2 className="text-2xl font-semibold text-center mb-4">
+      <h2 className="text-xl font-semibold text-center mb-4">
         Booking Summary
       </h2>
       <ScrollArea className="h-[400px]">
