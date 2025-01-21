@@ -21,8 +21,18 @@ import {
 } from "@/lib/store/api/omras/omrasSlice";
 import { AppDispatch } from "@/lib/store/store";
 import { toast } from "sonner";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationFirst, PaginationPrevious, PaginationNext, PaginationLast } from "@/components/ui/pagination";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationFirst,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationLast,
+} from "@/components/ui/pagination";
 import cn from "classnames";
+import Link from "next/link";
 
 interface User {
   id: number;
@@ -87,7 +97,7 @@ export default function FlightsTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const totalPages = Math.ceil(reservations.length / itemsPerPage);
-  
+
   const paginatedReservations = reservations.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -148,51 +158,52 @@ export default function FlightsTable() {
 
   const cancelWithPenalty = async (reservation: Reservation) => {
     try {
-      console.log('Reservation ID:', reservation.id);
-      console.log('Full reservation:', reservation);
-      
+      console.log("Reservation ID:", reservation.id);
+      console.log("Full reservation:", reservation);
+
       if (!reservation.id) {
         console.error("No reservation ID found:", reservation);
         return;
       }
 
       // Check if reservation is already cancelled
-      if (reservation.status.toLowerCase() === 'cancelled') {
+      if (reservation.status.toLowerCase() === "cancelled") {
         toast.error("This reservation is already cancelled", {
-          description: `Reservation #${reservation.reference} cannot be cancelled again.`
+          description: `Reservation #${reservation.reference} cannot be cancelled again.`,
         });
         return;
       }
 
       // Optimistically update UI
-      setReservations(prev => 
-        prev.map(res => 
-          res.id === reservation.id 
-            ? { ...res, status: 'cancelled' }
-            : res
+      setReservations((prev) =>
+        prev.map((res) =>
+          res.id === reservation.id ? { ...res, status: "cancelled" } : res
         )
       );
 
-      console.log('Attempting to cancel reservation with ID:', reservation.id);
+      console.log("Attempting to cancel reservation with ID:", reservation.id);
       try {
-        await dispatch(cancelOmraPenalty({ 
-          data: {
-            reservation_id: reservation.id,
-            reference: reservation.reference
-          }, 
-          id: reservation.id.toString() 
-        })).unwrap();
-        
-        console.log('Successfully cancelled reservation. Refreshing data...');
+        await dispatch(
+          cancelOmraPenalty({
+            data: {
+              reservation_id: reservation.id,
+              reference: reservation.reference,
+            },
+            id: reservation.id.toString(),
+          })
+        ).unwrap();
+
+        console.log("Successfully cancelled reservation. Refreshing data...");
         toast.success("Reservation Cancelled", {
-          description: `Successfully cancelled reservation #${reservation.reference}`
+          description: `Successfully cancelled reservation #${reservation.reference}`,
         });
         // Fetch fresh data after cancellation
         await fetchReservations();
       } catch (error) {
-        console.error('Cancel API error:', error);
+        console.error("Cancel API error:", error);
         toast.error("Failed to cancel reservation", {
-          description: "There was an error cancelling your reservation. Please try again."
+          description:
+            "There was an error cancelling your reservation. Please try again.",
         });
         // Revert optimistic update on error
         await fetchReservations();
@@ -203,10 +214,10 @@ export default function FlightsTable() {
       console.error("Error details:", {
         message: error?.message,
         status: error?.response?.status,
-        data: error?.response?.data
+        data: error?.response?.data,
       });
       toast.error("Error", {
-        description: "An unexpected error occurred. Please try again."
+        description: "An unexpected error occurred. Please try again.",
       });
       // Revert optimistic update on error
       await fetchReservations();
@@ -297,13 +308,10 @@ export default function FlightsTable() {
                         className="flex items-center gap-2 font-medium text-xs cursor-pointer hover:bg-gray-50"
                         onClick={() => toggleActivities(reservation.id)}
                       >
-                        <EyeIcon
-                          className="h-4 w-4 text-blue-500 hover:text-blue-700 ml-2"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            cancelWithPenalty(reservation);
-                          }}
-                        />
+                        <Link href={`/reservations/omra/${reservation.id}`}>
+                          <EyeIcon className="h-4 w-4 text-blue-500 hover:text-blue-700 ml-2" />
+                        </Link>
+
                         <Trash2
                           className="h-4 w-4 text-red-500 hover:text-red-700 ml-2"
                           onClick={(e) => {
@@ -372,33 +380,41 @@ export default function FlightsTable() {
                   </PaginationItem>
                   <PaginationItem>
                     <PaginationPrevious
-                      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.max(prev - 1, 1))
+                      }
                       className={cn(
                         "hover:bg-orange-100 transition-colors",
                         currentPage === 1 && "pointer-events-none opacity-50"
                       )}
                     />
                   </PaginationItem>
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <PaginationItem key={page}>
-                      <PaginationLink
-                        onClick={() => setCurrentPage(page)}
-                        isActive={currentPage === page}
-                        className={cn(
-                          "hover:bg-orange-100 transition-colors",
-                          currentPage === page && "bg-orange-500 text-white hover:bg-orange-600"
-                        )}
-                      >
-                        {page}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ))}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => (
+                      <PaginationItem key={page}>
+                        <PaginationLink
+                          onClick={() => setCurrentPage(page)}
+                          isActive={currentPage === page}
+                          className={cn(
+                            "hover:bg-orange-100 transition-colors",
+                            currentPage === page &&
+                              "bg-orange-500 text-white hover:bg-orange-600"
+                          )}
+                        >
+                          {page}
+                        </PaginationLink>
+                      </PaginationItem>
+                    )
+                  )}
                   <PaginationItem>
                     <PaginationNext
-                      onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                      }
                       className={cn(
                         "hover:bg-orange-100 transition-colors",
-                        currentPage === totalPages && "pointer-events-none opacity-50"
+                        currentPage === totalPages &&
+                          "pointer-events-none opacity-50"
                       )}
                     />
                   </PaginationItem>
@@ -407,7 +423,8 @@ export default function FlightsTable() {
                       onClick={() => setCurrentPage(totalPages)}
                       className={cn(
                         "hover:bg-orange-100 transition-colors",
-                        currentPage === totalPages && "pointer-events-none opacity-50"
+                        currentPage === totalPages &&
+                          "pointer-events-none opacity-50"
                       )}
                     />
                   </PaginationItem>
