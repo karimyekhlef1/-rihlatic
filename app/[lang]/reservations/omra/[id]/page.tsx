@@ -1,7 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getOmraReservationDetails, cancelOmraPenalty } from "@/lib/store/api/omras/omrasSlice";
+import {
+  getOmraReservationDetails,
+  cancelOmraPenalty,
+} from "@/lib/store/api/omras/omrasSlice";
 import Loading from "@/app/Components/home/Loading";
 import { useParams } from "next/navigation";
 import { AppDispatch } from "@/lib/store/store";
@@ -78,86 +81,93 @@ interface Reservation {
 export default function OmraReservationSummaryPage() {
   const dispatch = useDispatch<AppDispatch>();
   const { loading } = useSelector((state: any) => state.omras);
-  const [reservationDetails, setReservationDetails] = useState<Reservation | null>(null);
+  const [reservationDetails, setReservationDetails] =
+    useState<Reservation | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { id } = useParams();
 
   useEffect(() => {
     const getData = async () => {
-      console.log('🚀 Starting getData function');
-      console.log('📝 Current ID:', id);
-      
+      console.log("🚀 Starting getData function");
+      console.log("📝 Current ID:", id);
+
       setIsLoading(true);
       setError(null);
-      
+
       try {
-        console.log('📡 Making API request...');
+        console.log("📡 Making API request...");
         const response = await dispatch(getOmraReservationDetails({})).unwrap();
-        console.log('📦 Full API Response:', JSON.stringify(response, null, 2));
+        console.log("📦 Full API Response:", JSON.stringify(response, null, 2));
 
         if (!response?.success) {
-          console.error('❌ API request failed:', response);
-          setError('Failed to fetch reservation details');
+          console.error("❌ API request failed:", response);
+          setError("Failed to fetch reservation details");
           return;
         }
 
         if (!response?.result?.bookings) {
-          console.error('❌ No bookings found in response:', response.result);
-          setError('No booking data found');
+          console.error("❌ No bookings found in response:", response.result);
+          setError("No booking data found");
           return;
         }
 
-        console.log('📋 All bookings:', response.result.bookings);
-        
+        console.log("📋 All bookings:", response.result.bookings);
+
         const booking = response.result.bookings.find(
           (booking: Reservation) => booking.id === Number(id)
         );
 
         if (!booking) {
           console.error(`❌ No booking found with ID: ${id}`);
-          console.log('🔍 Available booking IDs:', response.result.bookings.map((b: Reservation) => b.id));
+          console.log(
+            "🔍 Available booking IDs:",
+            response.result.bookings.map((b: Reservation) => b.id)
+          );
           setError(`No booking found with ID: ${id}`);
           return;
         }
 
-        console.log('✅ Found matching booking:', JSON.stringify(booking, null, 2));
-        console.log('🏨 Departure details:', booking.departure);
-        console.log('👥 Booking details:', booking.bookingDetails);
-        console.log('📅 Activities:', booking.activities);
-        console.log('💰 Pricing:', {
+        console.log(
+          "✅ Found matching booking:",
+          JSON.stringify(booking, null, 2)
+        );
+        console.log("🏨 Departure details:", booking.departure);
+        console.log("👥 Booking details:", booking.bookingDetails);
+        console.log("📅 Activities:", booking.activities);
+        console.log("💰 Pricing:", {
           total_price: booking.total_price,
           total_paid: booking.total_paid,
           adults: {
             count: booking.total_adults,
-            price: booking.adults_price
+            price: booking.adults_price,
           },
           children: {
             count: booking.total_children,
-            price: booking.children_price
-          }
+            price: booking.children_price,
+          },
         });
 
         setReservationDetails(booking);
       } catch (error: any) {
-        console.error('🔥 Error in getData:', error);
-        console.error('Error details:', {
+        console.error("🔥 Error in getData:", error);
+        console.error("Error details:", {
           message: error.message,
           response: error.response?.data,
-          stack: error.stack
+          stack: error.stack,
         });
-        setError(error.response?.data?.message || 'An error occurred');
+        setError(error.response?.data?.message || "An error occurred");
       } finally {
-        console.log('🏁 getData function completed');
+        console.log("🏁 getData function completed");
         setIsLoading(false);
       }
     };
 
     if (id) {
-      console.log('🔄 Effect triggered with ID:', id);
+      console.log("🔄 Effect triggered with ID:", id);
       getData();
     } else {
-      console.warn('⚠️ No ID provided');
+      console.warn("⚠️ No ID provided");
     }
   }, [dispatch, id]);
 
@@ -172,9 +182,18 @@ export default function OmraReservationSummaryPage() {
         <Card>
           <CardHeader className="pb-2">
             <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold">Reservation #{reservationDetails.reference}</h2>
-              <Badge 
-                variant={reservationDetails.status === 'confirmed' ? 'Accepted' : 'destructive'}
+              <h2 className="text-2xl font-bold">
+                Reservation{" "}
+                <span className="font-semibold text-orange-500">
+                  #{reservationDetails.reference}
+                </span>
+              </h2>
+              <Badge
+                variant={
+                  reservationDetails.status === "confirmed"
+                    ? "Accepted"
+                    : "destructive"
+                }
               >
                 {reservationDetails.status}
               </Badge>
@@ -186,17 +205,29 @@ export default function OmraReservationSummaryPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm text-gray-500">Departure Date</p>
-                  <p className="font-medium">{format(new Date(reservationDetails.departure.departure_date), 'dd MMM yyyy')}</p>
+                  <p className="font-medium">
+                    {format(
+                      new Date(reservationDetails.departure.departure_date),
+                      "dd MMM yyyy"
+                    )}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Return Date</p>
-                  <p className="font-medium">{format(new Date(reservationDetails.departure.return_date), 'dd MMM yyyy')}</p>
+                  <p className="font-medium">
+                    {format(
+                      new Date(reservationDetails.departure.return_date),
+                      "dd MMM yyyy"
+                    )}
+                  </p>
                 </div>
               </div>
-              
+
               <div>
                 <p className="text-sm text-gray-500">Itinerary</p>
-                <p className="font-medium">{reservationDetails.departure.itinerary.join(" → ")}</p>
+                <p className="font-medium">
+                  {reservationDetails.departure.itinerary.join(" → ")}
+                </p>
               </div>
 
               {/* Facilities */}
@@ -208,19 +239,21 @@ export default function OmraReservationSummaryPage() {
         {/* Passengers Card */}
         <Card>
           <CardHeader>
-            <h3 className="text-xl font-semibold">Passengers</h3>
+            <h3 className="text-2xl font-bold">Passengers information</h3>
           </CardHeader>
           <CardContent>
             <OmraSummary
-              rooms={reservationDetails.bookingDetails.map(detail => ({
+              rooms={reservationDetails.bookingDetails.map((detail) => ({
                 room_id: detail.room.id,
                 passengers: {
-                  adults: [{
-                    ...detail.passenger,
-                    sex: 'male' // You might want to get this from your API or form data
-                  }],
-                  children: []
-                }
+                  adults: [
+                    {
+                      ...detail.passenger,
+                      sex: "male", // You might want to get this from your API or form data
+                    },
+                  ],
+                  children: [],
+                },
               }))}
             />
           </CardContent>
@@ -229,15 +262,18 @@ export default function OmraReservationSummaryPage() {
         {/* Activities Timeline */}
         <Card>
           <CardHeader>
-            <h3 className="text-xl font-semibold">Booking History</h3>
+            <h3 className="text-2xl font-bold">Booking History</h3>
           </CardHeader>
           <CardContent>
             <Timeline>
-              {reservationDetails.activities.map(activity => (
+              {reservationDetails.activities.map((activity) => (
                 <TimelineItem key={activity.id}>
                   <div className="flex flex-col gap-1">
                     <span className="text-sm text-gray-600">
-                      {format(new Date(activity.created_at), 'dd MMM yyyy HH:mm')}
+                      {format(
+                        new Date(activity.created_at),
+                        "dd MMM yyyy HH:mm"
+                      )}
                     </span>
                     <p>{activity.description}</p>
                     <span className="text-sm text-gray-500">
@@ -251,11 +287,11 @@ export default function OmraReservationSummaryPage() {
         </Card>
 
         {/* Cancel Button */}
-        {reservationDetails.status !== 'cancelled' && (
+        {reservationDetails.status !== "cancelled" && (
           <div className="flex justify-end">
-            <Button 
+            <Button
               variant="destructive"
-              onClick={() => console.log('Cancel button clicked')}
+              onClick={() => console.log("Cancel button clicked")}
               className="flex items-center gap-2"
             >
               <AlertCircle className="h-4 w-4" />
@@ -278,16 +314,16 @@ export default function OmraReservationSummaryPage() {
                 <span>{reservationDetails.adults_price}</span>
               </div>
             )}
-            
+
             {reservationDetails.total_children > 0 && (
               <div className="flex justify-between">
                 <span>Children ({reservationDetails.total_children})</span>
                 <span>{reservationDetails.children_price}</span>
               </div>
             )}
-            
+
             <Separator />
-            
+
             <div className="flex justify-between font-bold">
               <span>Total Price</span>
               <span>{reservationDetails.total_price}</span>
