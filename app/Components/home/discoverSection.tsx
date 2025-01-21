@@ -63,12 +63,12 @@ const DiscoverSection= ({data}: any) => {
     }, []);
 
     return (
-        <div className="my-10 container">
+        (data?.length > 0) && <div className="my-10 container">
             <div className="flex justify-between items-center gap-2 flex-wrap">
                 <SectionHeader title='Discover Algeria' description='lorem ipsum dolor sit amet consectetur adipiscing elit.' />
                 <SwiperNavigation onNext={next} onPrev={prev} />
             </div>
-            <SwiperComponent list={fakeList} Component={DiscoverComponent} swiper={swiperRef} slidesPerView={getScreenElementSize()} />
+            <SwiperComponent list={data} Component={DiscoverComponent} swiper={swiperRef} slidesPerView={getScreenElementSize()} />
         </div>
     );
 };

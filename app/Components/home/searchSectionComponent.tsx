@@ -49,6 +49,7 @@ const SearchSectionComponent: React.FC = () => {
             (item: string, index: number) => (
               <SearchCatBox
                 key={index}
+                icon={index}
                 item={item}
                 selected={selected}
                 index={index}
@@ -57,9 +58,9 @@ const SearchSectionComponent: React.FC = () => {
             )
           )}
         </div>
-        <div className="main-search-box w-auto mt-3 p-3 sm:p-5">
+        <div className="main-search-box w-auto mt-1 p-3 sm:p-5">
           {searchClick(selected)}
-          {/* <AccommodationComponent /> */}
+          <AccommodationComponent />
         </div>
       </div>
     </div>

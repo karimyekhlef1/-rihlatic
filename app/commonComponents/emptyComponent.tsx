@@ -1,5 +1,5 @@
 import React from 'react';
-import emptyImage from '@/public/images/empty.png';
+import emptyImage from '@/public/images/no_results.png';
 import Image from 'next/image';
 
 

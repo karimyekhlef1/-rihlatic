@@ -24,7 +24,7 @@ const HotelsSearchComponent: React.FC<HotelsSearchComponentProps> = ({ onSearch 
     return (
         <div className="flex flex-col gap-2 ">
             <div className="flex justify-start gap-2 flex-wrap">
-                <div className="flex items-center flex-wrap gap-2">
+                <div className="flex flex-col md:flex-row gap-2 w-full">
                     <SearchInputComponent
                         placeholder="City, airports or place"
                         onSearch={handleSelectionDestination}
@@ -36,14 +36,10 @@ const HotelsSearchComponent: React.FC<HotelsSearchComponentProps> = ({ onSearch 
                     <HotelRoomsComponent />
                     <button
                         type="button"
-                        className="rounded bg-[#FF8000] py-2.5 text-sm font-semibold text-white w-full sm:w-24"
-                        onClick={()=>handleClickExplore("hotels")
-
-
-                        }
-               
-               >
-                        Exploire
+                        className="rounded bg-[#FF8000] text-white px-7 h-9 text-sm font-semibold w-full md:w-36"
+                        onClick={()=>handleClickExplore("hotels")}
+                    >
+                        Explore
                     </button>
                 </div>
             </div>

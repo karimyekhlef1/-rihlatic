@@ -28,14 +28,14 @@ const DatePickerComponent: React.FC<SearchInputProps> = ({
   const dispatch = useDispatch<any>();
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <Popover>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             size="sm"
             className={cn(
-              "w-full sm:w-[350px] h-9 justify-start text-xs bg-white text-black border-gray-200",
+              "w-full h-9 justify-start text-xs bg-white text-black border-gray-200",
               !dateRange && "border-[#FF8000] bg-orange-50"
             )}
           >

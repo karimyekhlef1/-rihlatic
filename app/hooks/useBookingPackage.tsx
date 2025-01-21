@@ -161,7 +161,7 @@ export const useBookingPackage = (selectedDeparture: any, selectedRoom: any) => 
     try {
       const response = await dispatch<any>(storBookingCard(bookingData));
       console.log("response_ card- package==>",response.payload.result)
-      dispatch(setCardToken(response.payload.result.$cart.token));
+      dispatch(setCardToken(response.payload.result?.cart.token));
       dispatch(setDeparture(selectedDeparture));
       dispatch(setRooms(createdRooms));
       router.push('/packages/payment');
