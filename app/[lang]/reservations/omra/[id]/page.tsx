@@ -1,10 +1,19 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getOmraReservationDetails } from "@/lib/store/api/omras/omrasSlice";
+import { getOmraReservationDetails, cancelOmraPenalty } from "@/lib/store/api/omras/omrasSlice";
 import Loading from "@/app/Components/home/Loading";
 import { useParams } from "next/navigation";
 import { AppDispatch } from "@/lib/store/store";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { format } from "date-fns";
+import { AlertCircle } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Timeline, TimelineItem } from "@/app/Components/common/Timeline";
+import OmraFacilities from "@/app/Components/omra/OmraFacilities";
+import OmraSummary from "@/app/Components/omra/OmraSummary";
 
 interface Activity {
   id: number;
@@ -76,149 +85,221 @@ export default function OmraReservationSummaryPage() {
 
   useEffect(() => {
     const getData = async () => {
+      console.log('🚀 Starting getData function');
+      console.log('📝 Current ID:', id);
+      
       setIsLoading(true);
       setError(null);
+      
       try {
+        console.log('📡 Making API request...');
         const response = await dispatch(getOmraReservationDetails({})).unwrap();
-        
-        console.log('API Response:', response);
+        console.log('📦 Full API Response:', JSON.stringify(response, null, 2));
 
         if (!response?.success) {
+          console.error('❌ API request failed:', response);
           setError('Failed to fetch reservation details');
           return;
         }
 
         if (!response?.result?.bookings) {
+          console.error('❌ No bookings found in response:', response.result);
           setError('No booking data found');
           return;
         }
 
-        // Find the specific booking by ID
+        console.log('📋 All bookings:', response.result.bookings);
+        
         const booking = response.result.bookings.find(
           (booking: Reservation) => booking.id === Number(id)
         );
 
         if (!booking) {
+          console.error(`❌ No booking found with ID: ${id}`);
+          console.log('🔍 Available booking IDs:', response.result.bookings.map((b: Reservation) => b.id));
           setError(`No booking found with ID: ${id}`);
           return;
         }
 
-        console.log('Found booking:', booking);
+        console.log('✅ Found matching booking:', JSON.stringify(booking, null, 2));
+        console.log('🏨 Departure details:', booking.departure);
+        console.log('👥 Booking details:', booking.bookingDetails);
+        console.log('📅 Activities:', booking.activities);
+        console.log('💰 Pricing:', {
+          total_price: booking.total_price,
+          total_paid: booking.total_paid,
+          adults: {
+            count: booking.total_adults,
+            price: booking.adults_price
+          },
+          children: {
+            count: booking.total_children,
+            price: booking.children_price
+          }
+        });
+
         setReservationDetails(booking);
       } catch (error: any) {
-        console.error('Error fetching reservation details:', error);
+        console.error('🔥 Error in getData:', error);
+        console.error('Error details:', {
+          message: error.message,
+          response: error.response?.data,
+          stack: error.stack
+        });
         setError(error.response?.data?.message || 'An error occurred');
       } finally {
+        console.log('🏁 getData function completed');
         setIsLoading(false);
       }
     };
 
     if (id) {
+      console.log('🔄 Effect triggered with ID:', id);
       getData();
+    } else {
+      console.warn('⚠️ No ID provided');
     }
   }, [dispatch, id]);
 
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString("en-GB");
-  };
-
   if (loading || isLoading) return <Loading />;
-  
-  if (error) {
-    return (
-      <div className="h-full flex-col items-center flex pt-8 pb-20 bg-[#f8f8f8]">
-        <div className="text-red-500">Error: {error}</div>
-      </div>
-    );
-  }
+  if (error) return <div className="text-red-500">{error}</div>;
+  if (!reservationDetails) return <div>No reservation details found</div>;
 
   return (
-    <div className="h-full flex-col items-center flex pt-8 pb-20 bg-[#f8f8f8]">
-      {reservationDetails ? (
-        <div className="w-full max-w-4xl mx-auto px-4">
-          <h1 className="text-2xl font-bold mb-4">Reservation Summary</h1>
-          <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
-            {/* Basic Information */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="font-semibold">Reference:</p>
-                <p>{reservationDetails.reference}</p>
-              </div>
-              <div>
-                <p className="font-semibold">Status:</p>
-                <p>{reservationDetails.status}</p>
-              </div>
-              <div>
-                <p className="font-semibold">Total Price:</p>
-                <p>{reservationDetails.total_price}</p>
-              </div>
-              <div>
-                <p className="font-semibold">Amount Paid:</p>
-                <p>{reservationDetails.total_paid}</p>
-              </div>
+    <div className="bg-[#F8F8F8] flex items-start justify-center flex-wrap gap-4 p-4">
+      <div className="w-full max-w-3xl space-y-4">
+        {/* Header Card */}
+        <Card>
+          <CardHeader className="pb-2">
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-bold">Reservation #{reservationDetails.reference}</h2>
+              <Badge 
+                variant={reservationDetails.status === 'confirmed' ? 'Accepted' : 'destructive'}
+              >
+                {reservationDetails.status}
+              </Badge>
             </div>
-
+          </CardHeader>
+          <CardContent>
             {/* Travel Details */}
-            <div>
-              <h2 className="text-xl font-semibold mb-3">Travel Details</h2>
+            <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="font-semibold">Departure Date:</p>
-                  <p>{formatDate(reservationDetails.departure.departure_date)}</p>
+                  <p className="text-sm text-gray-500">Departure Date</p>
+                  <p className="font-medium">{format(new Date(reservationDetails.departure.departure_date), 'dd MMM yyyy')}</p>
                 </div>
                 <div>
-                  <p className="font-semibold">Return Date:</p>
-                  <p>{formatDate(reservationDetails.departure.return_date)}</p>
-                </div>
-                <div>
-                  <p className="font-semibold">Itinerary:</p>
-                  <p>{reservationDetails.departure.itinerary.join(" → ")}</p>
+                  <p className="text-sm text-gray-500">Return Date</p>
+                  <p className="font-medium">{format(new Date(reservationDetails.departure.return_date), 'dd MMM yyyy')}</p>
                 </div>
               </div>
+              
+              <div>
+                <p className="text-sm text-gray-500">Itinerary</p>
+                <p className="font-medium">{reservationDetails.departure.itinerary.join(" → ")}</p>
+              </div>
+
+              {/* Facilities */}
+              <OmraFacilities facilities={reservationDetails.departure} />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Passengers Card */}
+        <Card>
+          <CardHeader>
+            <h3 className="text-xl font-semibold">Passengers</h3>
+          </CardHeader>
+          <CardContent>
+            <OmraSummary
+              rooms={reservationDetails.bookingDetails.map(detail => ({
+                room_id: detail.room.id,
+                passengers: {
+                  adults: [{
+                    ...detail.passenger,
+                    sex: 'male' // You might want to get this from your API or form data
+                  }],
+                  children: []
+                }
+              }))}
+            />
+          </CardContent>
+        </Card>
+
+        {/* Activities Timeline */}
+        <Card>
+          <CardHeader>
+            <h3 className="text-xl font-semibold">Booking History</h3>
+          </CardHeader>
+          <CardContent>
+            <Timeline>
+              {reservationDetails.activities.map(activity => (
+                <TimelineItem key={activity.id}>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-sm text-gray-600">
+                      {format(new Date(activity.created_at), 'dd MMM yyyy HH:mm')}
+                    </span>
+                    <p>{activity.description}</p>
+                    <span className="text-sm text-gray-500">
+                      by {activity.user.name}
+                    </span>
+                  </div>
+                </TimelineItem>
+              ))}
+            </Timeline>
+          </CardContent>
+        </Card>
+
+        {/* Cancel Button */}
+        {reservationDetails.status !== 'cancelled' && (
+          <div className="flex justify-end">
+            <Button 
+              variant="destructive"
+              onClick={() => console.log('Cancel button clicked')}
+              className="flex items-center gap-2"
+            >
+              <AlertCircle className="h-4 w-4" />
+              Cancel Booking
+            </Button>
+          </div>
+        )}
+      </div>
+
+      {/* Pricing Card */}
+      <Card className="w-full md:w-80 sticky top-4">
+        <CardHeader>
+          <h3 className="text-xl font-semibold">Price Details</h3>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {reservationDetails.total_adults > 0 && (
+              <div className="flex justify-between">
+                <span>Adults ({reservationDetails.total_adults})</span>
+                <span>{reservationDetails.adults_price}</span>
+              </div>
+            )}
+            
+            {reservationDetails.total_children > 0 && (
+              <div className="flex justify-between">
+                <span>Children ({reservationDetails.total_children})</span>
+                <span>{reservationDetails.children_price}</span>
+              </div>
+            )}
+            
+            <Separator />
+            
+            <div className="flex justify-between font-bold">
+              <span>Total Price</span>
+              <span>{reservationDetails.total_price}</span>
             </div>
 
-            {/* Passengers */}
-            <div>
-              <h2 className="text-xl font-semibold mb-3">Passengers</h2>
-              <div className="space-y-2">
-                {reservationDetails.bookingDetails.map((detail) => (
-                  <div key={detail.id} className="bg-gray-50 p-3 rounded">
-                    <p>
-                      <span className="font-semibold">Name:</span>{" "}
-                      {detail.passenger.first_name} {detail.passenger.last_name}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Passport:</span>{" "}
-                      {detail.passenger.passport_number}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Room:</span>{" "}
-                      {detail.room.name} ({detail.room.type})
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Activities */}
-            <div>
-              <h2 className="text-xl font-semibold mb-3">Activities</h2>
-              <div className="space-y-2">
-                {reservationDetails.activities.map((activity) => (
-                  <div key={activity.id} className="text-sm">
-                    <span className="font-medium">
-                      {formatDate(activity.created_at)}:
-                    </span>{" "}
-                    {activity.description}
-                  </div>
-                ))}
-              </div>
+            <div className="flex justify-between text-sm text-gray-600">
+              <span>Amount Paid</span>
+              <span>{reservationDetails.total_paid}</span>
             </div>
           </div>
-        </div>
-      ) : (
-        <div>No reservation details available</div>
-      )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
