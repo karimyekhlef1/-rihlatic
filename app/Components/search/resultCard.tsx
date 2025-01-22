@@ -7,6 +7,7 @@ import FlightInfoFooter from "./flightInfoFooter";
 import { useDispatch } from "react-redux";
 import { openDialogDetail } from "@/lib/store/custom/mainSlices/dialogSlice";
 import TripDetails from "./tripDetails";
+import { Info } from "lucide-react";
 
 export default function ResultCard() {
   const dispatch = useDispatch();
@@ -40,6 +41,12 @@ export default function ResultCard() {
           <CardContent className="p-4 flex-grow flex flex-col justify-between">
             <div className="flex-grow flex items-center justify-center">
               <span className="text-xl font-bold">$584</span>
+            </div>
+            <div className="flex items-center justify-center">
+              <span className="group text-sm underline font-semibold text-blue-600 flex items-center hover:no-underline hover:text-blue-700 cursor-pointer">
+                <Info className="w-4 h-4 mr-1 text-white fill-blue-600 group-hover:fill-blue-700" />
+                Conditions
+              </span>
             </div>
             <Button
               className="w-full mt-4 text-sm"
