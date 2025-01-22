@@ -19,10 +19,11 @@ const HomePage: React.FC = () => {
     const dispatch = useDispatch<any>();
     useEffect(() => {
         const getData = async () => {
-            const act = await dispatch(HomeFunc({ include: 'departures' }));   
-            console.log("-------------------");
-            console.log(act);
-            console.log("-------------------");
+            try {
+                await dispatch(HomeFunc({ include: 'departures' }));
+            } catch (e) {
+                console.log(e);
+            }
         };
         getData();
     }, []);
@@ -36,15 +37,12 @@ const HomePage: React.FC = () => {
             <SearchSectionComponent />
             <ServiceSection  />
             <br />
-            <hr style={{border: '1px solid #e5e7eb40'}} />
+            <hr style={{border: '1px solid #e5e7eb70'}} />
             <DiscoverSection data={homeData?.discoverAlgeria}  />
             <FavSection data={homeData?.favoriteDestinations} />
             <OrganizeSection data={homeData?.organzidTrip} comp ={TripComponent}/>
             <PopularSection data={homeData?.popularFromAlgiers}/>
             <FlightsSection data={homeData?.popularFlights}  />
-            <br />
-            <br />
-            <br />
         </div>
     );
 };
