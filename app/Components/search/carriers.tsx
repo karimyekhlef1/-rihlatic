@@ -92,7 +92,7 @@ export default function AirlineCarrierSelector() {
                   alt={carrier.name}
                   width={24}
                   height={24}
-                  className="object-contain"
+                  className="object-contain rounded-md border border-transparent"
                 />
               </div>
               <Label htmlFor={carrier.code} className="text-xs font-semibold">
