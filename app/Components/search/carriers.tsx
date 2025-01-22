@@ -1,17 +1,18 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/lib/store/store';
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/lib/store/store";
 import {
   setSearchTerm,
   toggleCarrier,
   toggleSelectAll,
   toggleShowAll,
-} from '@/lib/store/custom/searchSlices/carrierSlice';
-import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Search } from 'lucide-react';
-import Image from 'next/image';
+} from "@/lib/store/custom/searchSlices/carrierSlice";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Search } from "lucide-react";
+import Image from "next/image";
+import { AIRLINE_IMAGE_URL } from "@/app/Constant/urls";
 
 export default function AirlineCarrierSelector() {
   const dispatch = useDispatch();
@@ -19,9 +20,9 @@ export default function AirlineCarrierSelector() {
     (state: RootState) => state.carriers
   );
 
-  console.log('Carriers:', carriers);
-  console.log('Selected Carriers:', selectedCarriers);
-  console.log('Search Term:', searchTerm);
+  console.log("Carriers:", carriers);
+  console.log("Selected Carriers:", selectedCarriers);
+  console.log("Search Term:", searchTerm);
 
   const filteredCarriers = carriers.filter((carrier) =>
     carrier.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -68,15 +69,15 @@ export default function AirlineCarrierSelector() {
           className="text-xs font-semibold"
         >
           {selectedCarriers.length === carriers.length
-            ? 'Deselect all'
-            : 'Select all'}
+            ? "Deselect all"
+            : "Select all"}
         </Button>
       </div>
       <div className="space-y-2">
         {visibleCarriers.map((carrier, index) => (
           <div
             key={carrier.code}
-            className={`flex items-center space-x-2 ${index === 3 && !showAll ? 'opacity-50' : ''}`}
+            className={`flex items-center space-x-2 ${index === 3 && !showAll ? "opacity-50" : ""}`}
           >
             <Checkbox
               id={carrier.code}
@@ -85,16 +86,15 @@ export default function AirlineCarrierSelector() {
               className="h-3 w-3"
             />
             <div className="flex items-center space-x-2">
-              {carrier.logo && (
-                <div className="relative w-4 h-4">
-                  <Image
-                    src={carrier.logo}
-                    alt={carrier.name}
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-              )}
+              <div className="relative w-6 h-6">
+                <Image
+                  src={`${AIRLINE_IMAGE_URL}/${carrier.code}.png?default=airline.png`}
+                  alt={carrier.name}
+                  width={24}
+                  height={24}
+                  className="object-contain"
+                />
+              </div>
               <Label htmlFor={carrier.code} className="text-xs font-semibold">
                 {carrier.name}
               </Label>
@@ -109,7 +109,7 @@ export default function AirlineCarrierSelector() {
           onClick={() => dispatch(toggleShowAll())}
           className="mt-2 w-full text-xs font-semibold"
         >
-          {showAll ? 'Show less' : 'Show all airlines'}
+          {showAll ? "Show less" : "Show all airlines"}
         </Button>
       )}
     </div>
