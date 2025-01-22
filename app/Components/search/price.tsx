@@ -1,7 +1,7 @@
 "use client";
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/lib/store/store';
-import { setSelectedPriceRange } from '@/lib/store/custom/searchSlices/priceSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/lib/store/store";
+import { setSelectedPriceRange } from "@/lib/store/custom/searchSlices/priceSlice";
 import { Slider } from "@/components/ui/slider";
 
 export default function Price() {
@@ -16,10 +16,12 @@ export default function Price() {
 
   const handleValueChange = (values: number[]) => {
     if (values.length === 2) {
-      dispatch(setSelectedPriceRange({
-        min: values[0],
-        max: values[1]
-      }));
+      dispatch(
+        setSelectedPriceRange({
+          min: values[0],
+          max: values[1],
+        })
+      );
     }
   };
 
@@ -39,7 +41,7 @@ export default function Price() {
         </h3>
         <p className="text-xm font-semibold">All prices</p>
         <p className="text-sm font-medium pt-4">
-          {formatPrice(selectedRange.min)} - {formatPrice(selectedRange.max)}
+          {selectedRange.min} - {selectedRange.max} {"DZD"}
         </p>
       </div>
 
