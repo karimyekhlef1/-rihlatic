@@ -124,8 +124,7 @@ const SearchInputComponent: React.FC<SearchInputProps> = ({
         onClick={clickHandler}
       >
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-gray-400 text-xs font-medium">{isOpened ? "True" : "False"}</span>
-          {/* <span className="text-gray-400 text-xs font-medium">{dir}</span> */}
+          <span className="text-gray-400 text-xs font-medium">{dir}</span>
           {isPicked && (
             <Badge
               variant="outline"

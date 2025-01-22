@@ -1,7 +1,7 @@
 import React from 'react';
 import { LuHotel } from 'react-icons/lu';
 import { MdCardTravel, MdFlightTakeoff } from 'react-icons/md';
-import { PiCubeBold } from "react-icons/pi";
+import { PiAirplaneInFlightDuotone, PiCubeBold } from "react-icons/pi";
 
 interface SearchCatBoxProps {
     icon: number;
@@ -14,7 +14,7 @@ interface SearchCatBoxProps {
 function getIcon(icon: number) {
     switch (icon) {
         case 0:
-            return <MdFlightTakeoff className='text-md' />;
+            return <PiAirplaneInFlightDuotone className='text-md' />;
         case 1:
             return <MdCardTravel className='text-md' />;
         case 2:
