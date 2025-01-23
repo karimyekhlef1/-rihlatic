@@ -1,6 +1,7 @@
 "use client";
 
 import ResultCard from "@/app/Components/search/resultCard";
+import ResultCardSkeleton from "@/app/Components/search/resultCardSkeleton";
 import ResultsSidebar from "@/app/Components/search/resultsSidebar";
 import { Provider } from "react-redux";
 import { store } from "@/lib/store/store";
@@ -43,8 +44,10 @@ function FlightResults() {
           <TravelOptions2 />
         </div> */}
         {loading ? (
-          <div className="flex justify-center items-center h-40">
-            <span className="text-gray-500">Loading flights...</span>
+          <div className="space-y-4">
+            <ResultCardSkeleton />
+            <ResultCardSkeleton />
+            <ResultCardSkeleton />
           </div>
         ) : flightsData.length > 0 ? (
           flightsData.map((flight, index) => (
