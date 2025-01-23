@@ -21,17 +21,42 @@ export default function ResultCard({ flightData }: ResultCardProps) {
     dispatch(openDialogDetail());
   };
 
-  // Safely extract outbound and return segments
-  const outboundSegments = flightData?.segments?.[0] || [];
-  const returnSegments = flightData?.segments?.[1];
+  // Check if flightData is empty or invalid
+  if (!flightData || 
+      typeof flightData !== 'object' || 
+      Object.keys(flightData).length === 0) {
+    return null;
+  }
 
-  // Guard against missing data
-  if (!outboundSegments.length) {
+  // Check if required properties exist and are valid
+  if (!flightData.price || 
+      !Array.isArray(flightData.segments) || 
+      flightData.segments.length === 0) {
+    return null;
+  }
+
+  // Safely extract outbound and return segments
+  const outboundSegments = flightData.segments[0] || [];
+  const returnSegments = flightData.segments[1];
+
+  // Check if outbound segments contain valid data
+  if (!Array.isArray(outboundSegments) || 
+      outboundSegments.length === 0 || 
+      !outboundSegments[0] || 
+      typeof outboundSegments[0] !== 'object') {
     return null;
   }
 
   // Get first segment for footer info
   const firstSegment = outboundSegments[0];
+
+  // Check if first segment has required properties
+  if (!firstSegment.availability || 
+      !firstSegment.equipmentType || 
+      !firstSegment.bookClass || 
+      !firstSegment.cabinClass) {
+    return null;
+  }
 
   // Format price with space for thousands
   const formattedPrice = flightData.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
@@ -56,10 +81,10 @@ export default function ResultCard({ flightData }: ResultCardProps) {
           <CardFooter className="px-4 py-3 border-t border-dashed border-gray-200">
             <FlightInfoFooter 
               segment={{
-                availability: firstSegment.availability || 'N/A',
-                equipmentType: firstSegment.equipmentType || 'N/A',
-                bookClass: firstSegment.bookClass || 'N/A',
-                cabinClass: firstSegment.cabinClass || 'N/A',
+                availability: firstSegment.availability,
+                equipmentType: firstSegment.equipmentType,
+                bookClass: firstSegment.bookClass,
+                cabinClass: firstSegment.cabinClass,
                 baggage: firstSegment.baggage || '0 Piece(s)'
               }} 
             />
