@@ -4,7 +4,7 @@ import FlightInfos from "./flightInfos";
 import FlightSeparator from "./flightSeparator";
 import FlightInfoFooter from "./flightInfoFooter";
 import { useDispatch } from "react-redux";
-import { openDialogSummary } from "@/lib/store/custom/mainSlices/dialogSlice";
+import { openDialogDetail } from "@/lib/store/custom/mainSlices/dialogSlice";
 import { Info } from "lucide-react";
 
 interface ResultCardProps {
@@ -18,7 +18,7 @@ export default function ResultCard({ flightData }: ResultCardProps) {
   const dispatch = useDispatch();
 
   const handleSelectFlight = () => {
-    dispatch(openDialogSummary());
+    dispatch(openDialogDetail());
   };
 
   // Check if flightData is empty or invalid

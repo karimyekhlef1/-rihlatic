@@ -3,7 +3,7 @@
 import ResultCard from "@/app/Components/search/resultCard";
 import ResultCardSkeleton from "@/app/Components/search/resultCardSkeleton";
 import ResultsSidebar from "@/app/Components/search/resultsSidebar";
-import TripSummary from "@/app/Components/search/tripSummary";
+import TripDetails from "@/app/Components/search/tripDetails";
 import { Provider } from "react-redux";
 import { store } from "@/lib/store/store";
 import AdComponent from "@/app/commonComponents/adComponent";
@@ -65,7 +65,7 @@ function FlightResults() {
           <AdComponent />
         </div>
       </div>
-      <TripSummary />
+      <TripDetails />
     </>
   );
 }
