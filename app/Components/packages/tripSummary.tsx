@@ -13,7 +13,6 @@ import {
   Luggage,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import airlineLogo from "@/public/images/airalgerie.svg";
 import AirlineCompanyComponent from "./airlineCompany";
 import { FaPlane, FaCircle } from "react-icons/fa";
 import { FlightInfo } from "@/app/Types/Common/flightInfo";
@@ -122,7 +121,7 @@ export default function TripSummaryComponent({ flightInfo }: TripSummaryProps) {
                 <div className="mb-2 sm:mb-4 flex items-center justify-between">
                   <div className="flex items-center">
                     <AirlineCompanyComponent
-                      logo={airlineLogo}
+                      logo={flightInfo.airlineLogo}
                       name={flightInfo.airline}
                     />
                     <span className="ml-2 text-xs text-gray-600">

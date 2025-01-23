@@ -7,6 +7,7 @@ import { setPriceRange } from '@/lib/store/custom/searchSlices/priceSlice';
 interface VolsState {
     loading: boolean;
     flightsData: any[];
+    selectedFlight: any | null;
     airportsData: any;
     error: string | null;
 }
@@ -14,6 +15,7 @@ interface VolsState {
 const initialState: VolsState = {
     loading: false,
     flightsData: [],
+    selectedFlight: null,
     airportsData: {},
     error: null
 };
@@ -139,13 +141,16 @@ const VolsSlice = createSlice({
     name: 'vols',
     initialState,
     reducers: {
-        clearFlightsData: (state) => {
+        clearFlightsData(state) {
             state.flightsData = [];
             state.error = null;
+            state.loading = false;
+        },
+        setSelectedFlight(state, action) {
+            state.selectedFlight = action.payload;
         }
     },
-    extraReducers: (builder) => {
-        // Search Flights
+    extraReducers(builder) {
         builder
             .addCase(searchFlights.pending, (state) => {
                 state.loading = true;
@@ -177,5 +182,5 @@ const VolsSlice = createSlice({
     }
 });
 
-export const { clearFlightsData } = VolsSlice.actions;
+export const { clearFlightsData, setSelectedFlight } = VolsSlice.actions;
 export default VolsSlice.reducer;
