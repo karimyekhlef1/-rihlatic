@@ -101,7 +101,7 @@ export default function TripDetails() {
           </div>
         </DialogContent>
       </Dialog>
-      <TripSummary />
+      <TripSummary selectedFlight={selectedFlight} />
       <SignUpDialog />
     </div>
   );
