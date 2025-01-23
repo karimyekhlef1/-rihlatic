@@ -46,8 +46,10 @@ function FlightResults() {
             <TravelOptions2 />
           </div> */}
           {loading ? (
-            <div className="flex justify-center items-center h-40">
-              <span className="text-gray-500">Loading flights...</span>
+            <div className="space-y-4">
+              <ResultCardSkeleton />
+              <ResultCardSkeleton />
+              <ResultCardSkeleton />
             </div>
           ) : flightsData.length > 0 ? (
             flightsData.map((flight, index) => (
