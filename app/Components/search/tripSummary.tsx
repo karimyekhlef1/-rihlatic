@@ -14,14 +14,13 @@ import {
 } from '@/lib/store/custom/mainSlices/dialogSlice';
 import { RootState } from '@/lib/store/store';
 import TripSummaryComponent from '../packages/tripSummary';
-import TripSeparator from '@/app/commonComponents/tripSeparator';
-import { outboundFlights } from '@/app/Data/flightInfos';
 
 export default function TripSummary() {
   const dispatch = useDispatch();
   const isDialogOpen = useSelector(
     (state: RootState) => state.dialog.isSummaryOpen
   );
+  const flightData = useSelector((state: RootState) => state.vols.flightsData[0]);
 
   return (
     <Dialog
@@ -44,11 +43,7 @@ export default function TripSummary() {
             Trip Summary
           </DialogTitle>
         </DialogHeader>
-        <TripSummaryComponent flightInfo={outboundFlights[0]} />
-        <TripSeparator time="12 nights" place="Paris" />
-        <TripSummaryComponent flightInfo={outboundFlights[1]} />
-        <TripSeparator time="2 days" place="London" />
-        <TripSummaryComponent flightInfo={outboundFlights[2]} />
+        {flightData && <TripSummaryComponent flightInfo={flightData} />}
       </DialogContent>
     </Dialog>
   );

@@ -150,11 +150,13 @@ const VolSearchComponent: React.FC = () => {
       departureId: destinations[0].from.toUpperCase(),
       arrivalId: destinations[0].to.toUpperCase(),
       departureDate: dateRange?.from
-        ? dateRange.from.toISOString().split("T")[0]
+        ? new Date(dateRange.from.getTime() - (dateRange.from.getTimezoneOffset() * 60000))
+            .toISOString().split("T")[0]
         : null,
       arrivalDate:
         !isOnePick() && dateRange?.to
-          ? dateRange.to.toISOString().split("T")[0]
+          ? new Date(dateRange.to.getTime() - (dateRange.to.getTimezoneOffset() * 60000))
+              .toISOString().split("T")[0]
           : null,
       flightRefundable: false,
       flightWithBaggage: false,
