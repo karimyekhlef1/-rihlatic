@@ -64,3 +64,6 @@ export const flights_search_endpoint = BASE_URL + "/front/flights_search";
 // Airports
 export const airports_endpoint =
   BASE_URL + "/front/airports?filter[search]=czl";
+
+// Airline Images
+export const AIRLINE_IMAGE_URL = "https://images.kiwi.com/airlines/32x32";
