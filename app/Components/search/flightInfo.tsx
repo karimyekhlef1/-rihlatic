@@ -32,16 +32,18 @@ const FlightInfoCard: React.FC<FlightInfoCardProps> = ({
             <div className="text-sm text-gray-500 mt-1">
               <div className="flex flex-col items-start text-xs font-medium">
                 <span>{flight.airline}</span>
-                <div className="flex flex-row justify-center items-center gap-x-1">
-                  <CircleArrowRight
-                    size={20}
-                    className="font-semibold text-xs text-[#3279f4]"
-                    fill="#cddfff"
-                  />
-                  <p className="font-semibold text-xs text-blue-400">
-                    Direct flight
-                  </p>
-                </div>
+                {!flight.additionalInfo && (
+                  <div className="flex flex-row justify-center items-center gap-x-1">
+                    <CircleArrowRight
+                      size={20}
+                      className="font-semibold text-xs text-[#3279f4]"
+                      fill="#cddfff"
+                    />
+                    <p className="font-semibold text-xs text-blue-400">
+                      Direct flight
+                    </p>
+                  </div>
+                )}
                 {flight.additionalInfo && (
                   <div className="pt-2">{additionalInfo}</div>
                 )}

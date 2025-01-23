@@ -5,6 +5,7 @@ import FlightSeparator from "./flightSeparator";
 import FlightInfoFooter from "./flightInfoFooter";
 import { useDispatch } from "react-redux";
 import { openDialogDetail } from "@/lib/store/custom/mainSlices/dialogSlice";
+import { setSelectedFlight } from "@/lib/store/api/vols/volsSlice";
 import { Info } from "lucide-react";
 
 interface ResultCardProps {
@@ -18,6 +19,7 @@ export default function ResultCard({ flightData }: ResultCardProps) {
   const dispatch = useDispatch();
 
   const handleSelectFlight = () => {
+    dispatch(setSelectedFlight(flightData));
     dispatch(openDialogDetail());
   };
 

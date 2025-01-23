@@ -20,31 +20,12 @@ import FlightInfoCard from './flightInfo';
 import SignUpDialog from '@/app/commonComponents/signupComponent';
 import LayoverInfoComponent from './layoverInfoComponent';
 
-const layovers = [
-  { duration: '8h 35m', location: 'Paris', code: 'CDG' },
-  { duration: '6h 40m', location: 'Alger', code: 'ALG' },
-];
-
-const flightData = [
-  {
-    from: 'Algiers',
-    to: 'Paris',
-    airline: 'Air Algerie',
-    additionalInfo: false,
-  },
-  {
-    from: 'Paris',
-    to: 'Algiers',
-    airline: 'Air Algerie',
-    additionalInfo: true,
-  },
-];
-
 export default function TripDetails() {
   const dispatch = useDispatch();
   const isDialogOpen = useSelector(
     (state: RootState) => state.dialog.isDetailOpen
   );
+  const selectedFlight = useSelector((state: RootState) => state.vols.selectedFlight);
 
   const handleOpenDialogSummary = () => {
     dispatch(openDialogSummary());
@@ -53,6 +34,36 @@ export default function TripDetails() {
   const handleOpenDialogSignUp = () => {
     dispatch(openDialogSignUp());
   };
+
+  // Early return if no flight is selected
+  if (!selectedFlight) return null;
+
+  // Process flight data for display
+  const processedFlightData = selectedFlight.segments.map((segmentGroup: any[]) => {
+    const firstSegment = segmentGroup[0];
+    const lastSegment = segmentGroup[segmentGroup.length - 1];
+
+    return {
+      from: firstSegment.boardAirportName.city,
+      to: lastSegment.offAirportName.city,
+      airline: firstSegment.airLine.name,
+      additionalInfo: segmentGroup.length > 1,
+    };
+  });
+
+  // Process layovers if any
+  const layovers = selectedFlight.segments.flatMap((segmentGroup: any[]) => {
+    if (segmentGroup.length <= 1) return [];
+
+    return segmentGroup.slice(0, -1).map((segment: any, index: number) => {
+      const nextSegment = segmentGroup[index + 1];
+      return {
+        duration: nextSegment.duration,
+        location: nextSegment.boardAirportName.city,
+        code: nextSegment.boardAirport,
+      };
+    });
+  });
 
   return (
     <div>
@@ -73,8 +84,8 @@ export default function TripDetails() {
             >
               <CardContent className="p-2">
                 <FlightInfoCard
-                  flights={flightData}
-                  additionalInfo={<LayoverInfoComponent layovers={layovers} />}
+                  flights={processedFlightData}
+                  additionalInfo={layovers.length > 0 ? <LayoverInfoComponent layovers={layovers} /> : undefined}
                 />
               </CardContent>
             </Card>
