@@ -1,9 +1,19 @@
+import { useDispatch, useSelector } from "react-redux";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { RootState } from "@/lib/store/store";
+import { setSelectedStops } from "@/lib/store/custom/searchSlices/stopsSlice";
 
 export default function Stops() {
+  const dispatch = useDispatch();
+  const selectedStops = useSelector((state: RootState) => state.stops.selectedStops);
+
+  const handleValueChange = (value: string) => {
+    dispatch(setSelectedStops(value as 'any' | 'direct' | 'up-to-1-stop' | 'up-to-2-stops'));
+  };
+
   return (
-    <RadioGroup defaultValue="any" className="space-y-2">
+    <RadioGroup value={selectedStops} onValueChange={handleValueChange} className="space-y-2">
       <div className="flex items-center space-x-2">
         <RadioGroupItem
           value="any"

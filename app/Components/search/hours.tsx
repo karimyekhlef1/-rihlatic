@@ -90,15 +90,19 @@ export default function Hours() {
   return (
     <Tabs
       defaultValue="departure"
-      className="w-full"
+      className="w-full min-w-0"
       onValueChange={setActiveTab}
     >
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="departure">Departure</TabsTrigger>
-        <TabsTrigger value="arrival">Arrival</TabsTrigger>
+      <TabsList className="grid w-full grid-cols-2 min-w-0">
+        <TabsTrigger value="departure" className="px-2 sm:px-4">
+          Departure
+        </TabsTrigger>
+        <TabsTrigger value="arrival" className="px-2 sm:px-4">
+          Arrival
+        </TabsTrigger>
       </TabsList>
       <TabsContent value="departure" className="mt-4">
-        <div className="space-y-2">
+        <div className="space-y-2 overflow-x-hidden">
           {departureTimes.map((time) => (
             <div key={time} className="flex items-center space-x-2">
               <Checkbox
@@ -117,7 +121,7 @@ export default function Hours() {
         </div>
       </TabsContent>
       <TabsContent value="arrival" className="mt-4">
-        <div className="space-y-2">
+        <div className="space-y-2 overflow-x-hidden">
           {arrivalTimes.map((time) => (
             <div key={time} className="flex items-center space-x-2">
               <Checkbox

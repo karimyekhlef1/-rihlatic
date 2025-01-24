@@ -51,34 +51,13 @@ export default function ResultsSidebar() {
 
   const sidebarContent = (
     <>
-      {/* <SidebarSection title="Bags">
-        <BaggageItem
-          icon={<Luggage size={20} className="mr-2" />}
-          type="Cabin baggage"
-          count={cabinBaggage}
-          onIncrement={() => dispatch(incrementCabin())}
-          onDecrement={() => dispatch(decrementCabin())}
-        />
-        <BaggageItem
-          icon={<Briefcase size={20} className="mr-2" />}
-          type="Checked baggage"
-          count={checkedBaggage}
-          onIncrement={() => dispatch(incrementChecked())}
-          onDecrement={() => dispatch(decrementChecked())}
-        />
-      </SidebarSection> */}
-      <div className="space-y-4">
-        <SidebarSection title="Hours">
-          <Hours />
-        </SidebarSection>
+      <SidebarSection title="Hours">
+        <Hours />
+      </SidebarSection>
 
-        <SidebarSection title="Stops">
-          <Stops />
-        </SidebarSection>
-      </div>
-      {/* <SidebarSection title="Connections">
-        <Connections />
-      </SidebarSection> */}
+      <SidebarSection title="Stops">
+        <Stops />
+      </SidebarSection>
       <SidebarSection title="Carriers">
         <AirlineCarrierSelector />
       </SidebarSection>
@@ -88,15 +67,6 @@ export default function ResultsSidebar() {
       <SidebarSection title="Price">
         <Price />
       </SidebarSection>
-      {/* <SidebarSection title="Booking options">
-        <BookingOptions />
-      </SidebarSection>
-      <SidebarSection title="★ Travel hacks">
-        <TravelHacks />
-      </SidebarSection>
-      <SidebarSection title="Exclude countries">
-        <ExcludedCountriesSelector />
-      </SidebarSection> */}
     </>
   );
 
@@ -104,15 +74,20 @@ export default function ResultsSidebar() {
     <div className="flex flex-col pt-4">
       {isMobile ? (
         <Sheet>
-          <SheetTrigger>
-            <Button variant="ghost2" className="p-0">
-              <Filter size={15} className="text-orange-500" />
-              <span className="ml-2 text-xs font-semibold text-orange-500">
+          <SheetTrigger asChild>
+            <Button variant="ghost" className="flex items-center gap-2">
+              <Filter className="h-4 w-4 text-orange-500" />
+              <span className="text-sm font-medium text-orange-500">
                 Filters
               </span>
             </Button>
           </SheetTrigger>
-          <SheetContent side={"left"}>{sidebarContent}</SheetContent>
+          <SheetContent side="left" className="w-[280px] sm:w-[340px]">
+            <SheetHeader>
+              <SheetTitle>Filters</SheetTitle>
+            </SheetHeader>
+            <div className="mt-4">{sidebarContent}</div>
+          </SheetContent>
         </Sheet>
       ) : (
         sidebarContent
