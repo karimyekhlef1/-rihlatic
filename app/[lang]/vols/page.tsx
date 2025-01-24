@@ -12,6 +12,7 @@ import AlertPrices from "@/app/Components/search/alertPrices";
 import TravelOptions2 from "@/app/Components/search/travelOptions2";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store/store";
+import Loading from "@/app/Components/home/Loading";
 
 function FlightResults() {
   const { flightsData, loading } = useSelector((state: RootState) => state.vols);
