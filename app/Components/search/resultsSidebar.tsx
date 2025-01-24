@@ -67,12 +67,15 @@ export default function ResultsSidebar() {
           onDecrement={() => dispatch(decrementChecked())}
         />
       </SidebarSection> */}
-      <SidebarSection title="Hours">
-        <Hours />
-      </SidebarSection>
-      <SidebarSection title="Stops">
-        <Stops />
-      </SidebarSection>
+      <div className="space-y-4">
+        <SidebarSection title="Hours">
+          <Hours />
+        </SidebarSection>
+
+        <SidebarSection title="Stops">
+          <Stops />
+        </SidebarSection>
+      </div>
       {/* <SidebarSection title="Connections">
         <Connections />
       </SidebarSection> */}

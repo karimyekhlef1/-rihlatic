@@ -13,9 +13,11 @@ import TravelOptions2 from "@/app/Components/search/travelOptions2";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store/store";
 import Loading from "@/app/Components/home/Loading";
+import { selectFilteredFlights } from "@/lib/store/selectors/flightSelectors";
 
 function FlightResults() {
-  const { flightsData, loading } = useSelector((state: RootState) => state.vols);
+  const { loading } = useSelector((state: RootState) => state.vols);
+  const filteredFlights = useSelector(selectFilteredFlights);
 
   return (
     <>
@@ -35,7 +37,7 @@ function FlightResults() {
           <div className="hidden lg:block">
             {/* <AlertPrices /> */}
             <h2 className="text-xs font-semibold text-gray-500">
-              {`Nous avons trouvé ${flightsData.length} vols pour vous`}
+              {`Nous avons trouvé ${filteredFlights.length} vols pour vous`}
             </h2>
           </div>
           <ResultsSidebar />
@@ -52,13 +54,16 @@ function FlightResults() {
               <ResultCardSkeleton />
               <ResultCardSkeleton />
             </div>
-          ) : flightsData.length > 0 ? (
-            flightsData.map((flight, index) => (
-              <ResultCard key={index} flightData={flight} />
-            ))
           ) : (
-            <div className="flex justify-center items-center h-40">
-              <span className="text-gray-500">No flights found</span>
+            <div className="space-y-4">
+              {filteredFlights.map((flight: any, index: number) => (
+                <ResultCard key={index} flightData={flight} />
+              ))}
+              {filteredFlights.length === 0 && (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">No flights found matching your filters.</p>
+                </div>
+              )}
             </div>
           )}
         </div>
