@@ -1,19 +1,19 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { Button } from '@/components/ui/button';
+import { useDispatch, useSelector } from "react-redux";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { ArrowLeft } from 'lucide-react';
+} from "@/components/ui/dialog";
+import { ArrowLeft } from "lucide-react";
 import {
   openDialogSummary,
   closeDialogSummary,
-} from '@/lib/store/custom/mainSlices/dialogSlice';
-import { RootState } from '@/lib/store/store';
-import TripSummaryComponent from '../packages/tripSummary';
-import { AIRLINE_IMAGE_URL } from '@/app/Constant/urls';
+} from "@/lib/store/custom/mainSlices/dialogSlice";
+import { RootState } from "@/lib/store/store";
+import TripSummaryComponent from "../packages/tripSummary";
+import { AIRLINE_IMAGE_URL } from "@/app/Constant/urls";
 
 interface TripSummaryProps {
   selectedFlight: any;
@@ -32,7 +32,7 @@ export default function TripSummary({ selectedFlight }: TripSummaryProps) {
 
     // Calculate total duration for multi-segment flights
     const totalDuration = segmentGroup.reduce((total: number, segment: any) => {
-      const [hours, minutes] = segment.duration.split(':').map(Number);
+      const [hours, minutes] = segment.duration.split(":").map(Number);
       return total + hours * 60 + minutes;
     }, 0);
 
@@ -45,10 +45,10 @@ export default function TripSummary({ selectedFlight }: TripSummaryProps) {
     // Format dates correctly using depDate and arrDate from API
     const formatDate = (dateStr: string) => {
       const date = new Date(dateStr);
-      return date.toLocaleDateString('en-US', { 
-        month: 'short', 
-        day: 'numeric',
-        year: 'numeric'
+      return date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
       });
     };
 
@@ -63,7 +63,9 @@ export default function TripSummary({ selectedFlight }: TripSummaryProps) {
       departureDate: formatDate(firstSegment.depDate),
       arrivalDate: formatDate(lastSegment.arrDate),
       duration: formatDuration(totalDuration),
-      nextdayDeparture: new Date(lastSegment.arrDate).getDate() > new Date(firstSegment.depDate).getDate(),
+      nextdayDeparture:
+        new Date(lastSegment.arrDate).getDate() >
+        new Date(firstSegment.depDate).getDate(),
       airline: firstSegment.airLine.name,
       flightNumber: `${firstSegment.airLine.iata}${firstSegment.flightNumber}`,
       departureCity: firstSegment.boardAirportName.city,
@@ -75,7 +77,7 @@ export default function TripSummary({ selectedFlight }: TripSummaryProps) {
       cabinClass: firstSegment.cabinClass,
       seatingClass: firstSegment.bookingClass,
       // Pass logo URL to AirlineCompanyComponent
-      airlineLogo: airlineLogoUrl
+      airlineLogo: airlineLogoUrl,
     };
   };
 
@@ -100,12 +102,13 @@ export default function TripSummary({ selectedFlight }: TripSummaryProps) {
             Trip Summary
           </DialogTitle>
         </DialogHeader>
-        {selectedFlight && selectedFlight.segments.map((segmentGroup: any[], index: number) => (
-          <TripSummaryComponent 
-            key={index} 
-            flightInfo={processFlightInfo(segmentGroup)} 
-          />
-        ))}
+        {selectedFlight &&
+          selectedFlight.segments.map((segmentGroup: any[], index: number) => (
+            <TripSummaryComponent
+              key={index}
+              flightInfo={processFlightInfo(segmentGroup)}
+            />
+          ))}
       </DialogContent>
     </Dialog>
   );

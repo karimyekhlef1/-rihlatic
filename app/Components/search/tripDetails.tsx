@@ -11,17 +11,20 @@ import { Share2 } from "lucide-react";
 import {
   openDialogDetail,
   closeDialogDetail,
-  openDialogSummary,
   openDialogSignUp,
+  openDialogSummary,
 } from "@/lib/store/custom/mainSlices/dialogSlice";
 import { RootState } from "@/lib/store/store";
 import TripSummary from "./tripSummary";
 import FlightInfoCard from "./flightInfo";
 import SignUpDialog from "@/app/commonComponents/signupComponent";
 import LayoverInfoComponent from "./layoverInfoComponent";
+import { useRouter } from "next/navigation";
+import { setSelectedFlight } from "@/lib/store/custom/flightSlices/flightPaymentSlice";
 
 export default function TripDetails() {
   const dispatch = useDispatch();
+  const router = useRouter();
   const isDialogOpen = useSelector(
     (state: RootState) => state.dialog.isDetailOpen
   );
@@ -30,17 +33,19 @@ export default function TripDetails() {
   );
   const isLoggedIn = useSelector((state: RootState) => state.signIn.success);
 
-  const handleOpenDialogSummary = () => {
-    dispatch(openDialogSummary());
-  };
-
   const handleNext = () => {
     if (!isLoggedIn) {
       dispatch(openDialogSignUp());
     } else {
-      // If user is logged in, proceed directly to summary (for now)
-      dispatch(openDialogSummary());
+      // Store selected flight in flight payment state and route to payment page
+      dispatch(setSelectedFlight(selectedFlight));
+      dispatch(closeDialogDetail());
+      router.push("/vols/payment");
     }
+  };
+
+  const handleOpenSummary = () => {
+    dispatch(openDialogSummary());
   };
 
   // Early return if no flight is selected
@@ -90,7 +95,7 @@ export default function TripDetails() {
           <div className="py-4">
             <Card
               className="mb-4 cursor-pointer hover:shadow-md transition-colors"
-              onClick={handleOpenDialogSummary}
+              onClick={handleOpenSummary}
             >
               <CardContent className="p-2">
                 <FlightInfoCard
