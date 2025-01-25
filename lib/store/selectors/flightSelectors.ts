@@ -5,9 +5,13 @@ export const selectFilteredFlights = createSelector(
   [(state: RootState) => state.vols.flightsData,
    (state: RootState) => state.hours.selectedDepartureTimes,
    (state: RootState) => state.hours.selectedArrivalTimes,
-   (state: RootState) => state.stops.selectedStops],
-  (flights, selectedDepartureTimes, selectedArrivalTimes, selectedStops) => {
+   (state: RootState) => state.stops.selectedStops,
+   (state: RootState) => state.carriers.selectedCarriers],
+  (flights, selectedDepartureTimes, selectedArrivalTimes, selectedStops, selectedCarriers) => {
     if (!flights) return [];
+    
+    // Return empty array if no carriers are selected
+    if (selectedCarriers.length === 0) return [];
     
     return flights.filter(flight => {
       if (!flight.segments?.[0]) return false;
@@ -30,7 +34,12 @@ export const selectFilteredFlights = createSelector(
         (selectedStops === 'up-to-1-stop' && numStops <= 1) ||
         (selectedStops === 'up-to-2-stops' && numStops <= 2);
 
-      return matchesDeparture && matchesArrival && matchesStops;
+      // Carrier filter
+      const matchesCarrier = flight.segments[0].some((segment: { airLine: { iata: string; }; }) => 
+        selectedCarriers.includes(segment.airLine.iata)
+      );
+
+      return matchesDeparture && matchesArrival && matchesStops && matchesCarrier;
     });
   }
 );
