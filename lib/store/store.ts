@@ -21,6 +21,7 @@ import airplaneReducer from './custom/searchSlices/airplaneSlice';
 import priceReducer from './custom/searchSlices/priceSlice';
 import hoursReducer from './custom/searchSlices/hoursSlice';
 import stopsReducer from './custom/searchSlices/stopsSlice';
+import flightPaymentReducer from './custom/flightSlices/flightPaymentSlice';
 
 // Home
 import homeSlice from '@/lib/store/api/home/homeSlice';
@@ -133,6 +134,7 @@ export const store = configureStore({
     price: priceReducer,
     hours: hoursReducer,
     stops: stopsReducer,
+    flightPayment: flightPaymentReducer,
   },
   // we can delete this later it's just to supress serializableCheck warnings
   middleware: (getDefaultMiddleware) =>
@@ -148,5 +150,56 @@ export const store = configureStore({
     }),
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+export interface RootState {
+  getDestinations: ReturnType<typeof getDestinationSlice>;
+  account: ReturnType<typeof accountSlice>;
+  dialog: ReturnType<typeof dialogReducer>;
+  verification: ReturnType<typeof verificationReducer>;
+  pagination: ReturnType<typeof paginationReducer>;
+  booking: ReturnType<typeof bookingReducer>;
+  paymentStep: ReturnType<typeof paymentStepReducer>;
+  dob: ReturnType<typeof dobReducer>;
+  passportNumber: ReturnType<typeof passportNumberReducer>;
+  expirationDate: ReturnType<typeof expirationDateReducer>;
+  flight: ReturnType<typeof flightReducer>;
+  datePicker: ReturnType<typeof datePickerReducer>;
+  priceAlerts: ReturnType<typeof priceAlertsReducer>;
+  baggage: ReturnType<typeof baggageReducer>;
+  sidebarSections: ReturnType<typeof sidebarSectionsReducer>;
+  travelOptions: ReturnType<typeof travelOptionsReducer>;
+  calendar: ReturnType<typeof calendarReducer>;
+  carriers: ReturnType<typeof carrierReducer>;
+  airplanes: ReturnType<typeof airplaneReducer>;
+  excludedCountries: ReturnType<typeof excludedCountriesReducer>;
+  langSlice: ReturnType<typeof LanguageSlice>;
+  paymentPackage: ReturnType<typeof paymentPackageSlice>;
+  paymentOmra: ReturnType<typeof paymentOmraSlice>;
+  volSearchSlice: ReturnType<typeof volSearchSlice>;
+  packageSearchSlice: ReturnType<typeof packageSearchSlice>;
+  hotelSearchSlice: ReturnType<typeof hotelSearchSlice>;
+  omraSearchSlice: ReturnType<typeof omraSearchSlice>;
+  authAccount: ReturnType<typeof accountSlice>;
+  accountDetails: ReturnType<typeof accountDetailsSlice>;
+  signUp: ReturnType<typeof signupSlice>;
+  signIn: ReturnType<typeof signinSlice>;
+  logOut: ReturnType<typeof logoutSlice>;
+  verifyEmail: ReturnType<typeof verifyEmailSlice>;
+  resendCode: ReturnType<typeof resendCodeSlice>;
+  checkUserStatus: ReturnType<typeof checkUserStatusSlice>;
+  remindPassword: ReturnType<typeof remindPasswordSlice>;
+  resetPassword: ReturnType<typeof resetPasswordSlice>;
+  home: ReturnType<typeof homeSlice>;
+  packages: ReturnType<typeof packagesSlice>;
+  omras: ReturnType<typeof omraSlice>;
+  omrasSlice: ReturnType<typeof omrasReducer>;
+  omreaReservationInfos: ReturnType<typeof omraReservationSlice>;
+  hotelState: ReturnType<typeof HotelStateSlice>;
+  hotels: ReturnType<typeof HotelSlice>;
+  vols: ReturnType<typeof volsReducer>;
+  price: ReturnType<typeof priceReducer>;
+  hours: ReturnType<typeof hoursReducer>;
+  stops: ReturnType<typeof stopsReducer>;
+  flightPayment: ReturnType<typeof flightPaymentReducer>;
+}
+
 export type AppDispatch = typeof store.dispatch;
