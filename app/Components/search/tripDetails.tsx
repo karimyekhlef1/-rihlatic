@@ -1,55 +1,65 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { Button } from '@/components/ui/button';
+import { useDispatch, useSelector } from "react-redux";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Card, CardContent } from '@/components/ui/card';
-import { Share2 } from 'lucide-react';
+} from "@/components/ui/dialog";
+import { Card, CardContent } from "@/components/ui/card";
+import { Share2 } from "lucide-react";
 import {
   openDialogDetail,
   closeDialogDetail,
   openDialogSummary,
   openDialogSignUp,
-} from '@/lib/store/custom/mainSlices/dialogSlice';
-import { RootState } from '@/lib/store/store';
-import TripSummary from './tripSummary';
-import FlightInfoCard from './flightInfo';
-import SignUpDialog from '@/app/commonComponents/signupComponent';
-import LayoverInfoComponent from './layoverInfoComponent';
+} from "@/lib/store/custom/mainSlices/dialogSlice";
+import { RootState } from "@/lib/store/store";
+import TripSummary from "./tripSummary";
+import FlightInfoCard from "./flightInfo";
+import SignUpDialog from "@/app/commonComponents/signupComponent";
+import LayoverInfoComponent from "./layoverInfoComponent";
 
 export default function TripDetails() {
   const dispatch = useDispatch();
   const isDialogOpen = useSelector(
     (state: RootState) => state.dialog.isDetailOpen
   );
-  const selectedFlight = useSelector((state: RootState) => state.vols.selectedFlight);
+  const selectedFlight = useSelector(
+    (state: RootState) => state.vols.selectedFlight
+  );
+  const isLoggedIn = useSelector((state: RootState) => state.signIn.success);
 
   const handleOpenDialogSummary = () => {
     dispatch(openDialogSummary());
   };
 
-  const handleOpenDialogSignUp = () => {
-    dispatch(openDialogSignUp());
+  const handleNext = () => {
+    if (!isLoggedIn) {
+      dispatch(openDialogSignUp());
+    } else {
+      // If user is logged in, proceed directly to summary (for now)
+      dispatch(openDialogSummary());
+    }
   };
 
   // Early return if no flight is selected
   if (!selectedFlight) return null;
 
   // Process flight data for display
-  const processedFlightData = selectedFlight.segments.map((segmentGroup: any[]) => {
-    const firstSegment = segmentGroup[0];
-    const lastSegment = segmentGroup[segmentGroup.length - 1];
+  const processedFlightData = selectedFlight.segments.map(
+    (segmentGroup: any[]) => {
+      const firstSegment = segmentGroup[0];
+      const lastSegment = segmentGroup[segmentGroup.length - 1];
 
-    return {
-      from: firstSegment.boardAirportName.city,
-      to: lastSegment.offAirportName.city,
-      airline: firstSegment.airLine.name,
-      additionalInfo: segmentGroup.length > 1,
-    };
-  });
+      return {
+        from: firstSegment.boardAirportName.city,
+        to: lastSegment.offAirportName.city,
+        airline: firstSegment.airLine.name,
+        additionalInfo: segmentGroup.length > 1,
+      };
+    }
+  );
 
   // Process layovers if any
   const layovers = selectedFlight.segments.flatMap((segmentGroup: any[]) => {
@@ -85,7 +95,11 @@ export default function TripDetails() {
               <CardContent className="p-2">
                 <FlightInfoCard
                   flights={processedFlightData}
-                  additionalInfo={layovers.length > 0 ? <LayoverInfoComponent layovers={layovers} /> : undefined}
+                  additionalInfo={
+                    layovers.length > 0 ? (
+                      <LayoverInfoComponent layovers={layovers} />
+                    ) : undefined
+                  }
                 />
               </CardContent>
             </Card>
@@ -94,15 +108,15 @@ export default function TripDetails() {
                 <Share2 className="h-4 w-4 mr-2" fill="currentColor" />
                 Share
               </Button>
-              <Button variant={'active'} onClick={handleOpenDialogSignUp}>
+              <Button variant={"active"} onClick={handleNext}>
                 Next
               </Button>
             </div>
           </div>
         </DialogContent>
       </Dialog>
-      <TripSummary selectedFlight={selectedFlight} />
       <SignUpDialog />
+      <TripSummary selectedFlight={selectedFlight} />
     </div>
   );
 }
