@@ -30,18 +30,23 @@ export default function PopularFacilitiesPackage({
   console.log("vol", vol);
 
   const renderBadge = (label: string, isAvailable: boolean, Icon: React.ComponentType<any>) => (
-    <div className="flex flex-row items-center">
-      <Badge 
-        variant="outline" 
-        className={`
-          ${isAvailable ? 'bg-green-200 hover:bg-green-300' : 'bg-red-200 hover:bg-red-300'} 
-          flex items-center gap-x-2 transition-colors duration-200
-        `}
-      >
-        <Icon size={16} />
-        {label}
-      </Badge>
-    </div>
+     <Badge
+            variant="outline"
+            className={`
+              ${
+                isAvailable
+                  ? "bg-green-100 text-green-700 border-green-500 hover:bg-green-200"
+                  : "bg-red-100 text-red-700 border-red-500 hover:bg-red-200"
+              } 
+              inline-flex items-center gap-x-1.5 px-2 py-1 text-xs font-medium transition-colors duration-200
+            `}
+          >
+            <Icon
+              size={14}
+              className={`shrink-0 ${isAvailable ? "text-green-600" : "text-red-600"}`}
+            />
+            {label}
+          </Badge>
   );
 
   return (

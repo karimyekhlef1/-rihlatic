@@ -31,16 +31,19 @@ export interface HotelDetails {
     supplements: null | any; // If you know the type of supplements, replace `any` with the specific type.
     reduction: null | any; // If you know the type of reduction, replace `any` with the specific type.
     roomsdata: any[]; // If you know the structure of roomsdata, replace `any` with the specific type.
+    multiple:boolean
+
   }
   
   export interface Room {
-    rate:string | number;
+    rate: number;
     room_id: string;
     room_name: string;
     adults: string;
     children: string;
     age: string;
-    boardings: Boarding;
+    boardings:Boarding[];
+    boarding:Boarding
   }
   
  export interface Boarding {
@@ -50,6 +53,10 @@ export interface HotelDetails {
       boarding_id: string;
       room_id: string;
       count: string;
+      agreement_id:string
+      room_rate:string
+      room_base_rate:string
+      room_type:string
     };
     base_rate: string;
     rate: string;

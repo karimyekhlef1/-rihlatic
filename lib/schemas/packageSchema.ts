@@ -56,9 +56,3 @@ export const roomReservationSchema = z.object({
     infants: z.array(passengerSchema).optional(),
   }),
 });
-
-// Complete Omra reservation schema
-export const omraReservationSchema = z.object({
-  omra_departure_id: z.number(),
-  rooms: z.array(roomReservationSchema),
-});

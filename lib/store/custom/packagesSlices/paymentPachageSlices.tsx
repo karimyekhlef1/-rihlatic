@@ -41,6 +41,8 @@ interface PaymentPackageState {
   steps: string[];
   RoomsData: RoomData[];
   cardToken:string
+  validationSteps:boolean[]
+
 }
 
 // Local storage key
@@ -54,7 +56,9 @@ const createInitialState = (): PaymentPackageState => ({
   currentStep: 1,
   steps: [],
   RoomsData: [],
-  cardToken : ""
+  cardToken : "",
+  validationSteps:[]
+
 });
 
 // Function to load state from localStorage
@@ -111,6 +115,8 @@ const paymentPackageSlice = createSlice({
       state.currentStep = 1; 
       state.steps = filteredRooms.map((_, index) => `Réglage de la chambre: ${index + 1}`);
       state.steps.push('Vérifier'); 
+      state.validationSteps = new Array(filteredRooms.length + 1).fill(false);
+
       
       saveStateToLocalStorage(state);
     },
@@ -172,6 +178,10 @@ const paymentPackageSlice = createSlice({
     clearStoredState(state) {      
       localStorage.removeItem(STORAGE_KEY);
       return createInitialState();
+    },
+    setValidationStep(state, action: PayloadAction<{index: number, isValid: boolean}>) {
+      state.validationSteps[action.payload.index] = action.payload.isValid;
+      saveStateToLocalStorage(state);
     }
     
   }
@@ -187,7 +197,8 @@ export const {
   updatePassengerFieldByIndex,
   clearStoredState,
   reStateRoomData,
-  setCardToken
+  setCardToken,
+  setValidationStep
 } = paymentPackageSlice.actions;
 
 export default paymentPackageSlice.reducer;

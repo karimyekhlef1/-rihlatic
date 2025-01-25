@@ -9,6 +9,8 @@ import { storePackageReservation } from "@/lib/store/api/packages/packagesSlice"
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+
 interface Room {
   room_id: number;
   passengers: Passengers;
@@ -35,6 +37,8 @@ export default function ChangePaymentSteps() {
   const dispatch = useDispatch<any>();
 
   const { currentStep } = useSelector((state: any) => state.paymentPackage);
+  const { validationSteps} = useSelector((state: any) => state.paymentPackage);
+
   const router = useRouter();
   const departure = useSelector((state: any) => state.paymentPackage.departure);
   const [filtredRoomData, setFiltredRoomData] = useState<{ rooms: Room[] }>({
@@ -44,9 +48,71 @@ export default function ChangePaymentSteps() {
   const RoomsData = useSelector((state: any) => state.paymentPackage.RoomsData);
   const rooms = useSelector((state: any) => state.paymentPackage.rooms);
   const { loading, packagesData } = useSelector((state: any) => state.packages);
+  const isVerificationStep = currentStep > rooms.length;
 
-  const handleNext = () => {
+  const handleNext = async() => {
+       const currentRoom = RoomsData[currentStep - 1];
+
+    console.log("currentRoom",currentRoom)
+    try  {
+
+    const allPassengers = [
+      ...(currentRoom.passengers.adults || []),
+      ...(currentRoom.passengers.children || []),
+      ...(currentRoom.passengers.infants || []),
+    ];
+     for (const passenger of allPassengers) {
+              if (!passenger.first_name || !passenger.last_name) {
+                toast.error("All passengers must have first and last names");
+                return;
+              }
+              if (!passenger.passport_nbr || !passenger.passport_expire_at) {
+                toast.error("All passengers must have valid passport information");
+                return;
+              }
+              if (!passenger.birth_date) {
+                toast.error("All passengers must have a birth date");
+                return;
+              }
+              if (!passenger.sex || !["male", "female"].includes(passenger.sex)) {
+                toast.error("All passengers must specify their sex");
+                return;
+              }
+              if (!passenger.email) {
+                toast.error("All passengers must provide an email address");
+                return;
+              }
+              // Validate email format
+              const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+              if (!emailRegex.test(passenger.email)) {
+                toast.error("Please enter a valid email address");
+                return;
+              }
+              if (!passenger.phone) {
+                toast.error("All passengers must provide a phone number");
+                return;
+              }
+              // Validate phone format (accepts international format)
+              const phoneRegex = /^\+?[0-9]{10,15}$/;
+              if (!phoneRegex.test(passenger.phone)) {
+                toast.error("Please enter a valid phone number");
+                return;
+              }
+            }
+    
+            // Check if room has at least one adult
+            if (!currentRoom.passengers.adults?.length) {
+              toast.error("Each room must have at least one adult passenger");
+              return;
+            }
     dispatch(nextStep());
+          
+
+  }catch{
+
+  }
+    
+    
   };
 
   const handleBack = () => {
@@ -98,6 +164,14 @@ export default function ChangePaymentSteps() {
       toast.error("An error occurred while processing your booking");
     }
   };
+
+  // console.log("validationSteps",validationSteps)
+  // console.log("currentStep",currentStep)
+  // console.log("validationSteps==>",validationSteps[currentStep-1])
+
+
+  
+  
 
   return (
     <div className="flex justify-between w-full mx-auto my-4">

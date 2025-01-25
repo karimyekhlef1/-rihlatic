@@ -14,9 +14,12 @@ import { setFilterRating ,setFilterRangePrice} from "@/lib/store/custom/hotelSli
 export default function FilterComponentHotels() {
   const dispatch = useDispatch<any>();
   const { maxMinRangePrice ,filterRangePrice, filterRating } = useSelector((state: any) => state.hotelState);
-  useEffect(()=>{
+  // useEffect(()=>{
 
-  },[maxMinRangePrice])
+  // },[])
+  console.log("maxMinRangePrice",maxMinRangePrice)
+  console.log("filterRangePrice",filterRangePrice)
+
   
   const handleStarChange = (value:number) => {
     dispatch(setFilterRating(value))
@@ -30,6 +33,7 @@ export default function FilterComponentHotels() {
     },
     [dispatch]
   );
+
   return (
     <div className="p-4">
       <Accordion
