@@ -37,7 +37,13 @@ export default function SearchResults() {
             <TravelOptions2 />
           </div>
           {[1, 2, 3, 4].map((index) => (
-            <ResultCard key={index} />
+            <ResultCard 
+              key={index} 
+              flightData={{
+                price: 0,
+                segments: []
+              }}
+            />
           ))}
         </div>
 
