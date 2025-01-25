@@ -15,12 +15,13 @@ import { CircleCheck, CircleX } from "lucide-react";
 import DepartureInfoInBookingCard from "./DepartureInfoInBookingCard";
 import { Departure } from "@/app/Types/package/packageDetails";
 import { calculateDuration } from "@/app/utils/timeUtils";
+import { AIRLINE_IMAGE_URL } from "@/app/Constant/urls";
 
 type Props = {
-    departure: Departure;
-  };
-  
-  export default function DepartureInfoInBooking({ departure }: Props) {
+  departure: Departure;
+};
+
+export default function DepartureInfoInBooking({ departure }: Props) {
   return (
     <div className="flex flex-col items-center overflow-x-clip mb-4">
       <div className="fluid-container">
@@ -28,7 +29,7 @@ type Props = {
           <div className="flex flex-col">
             <div className="flex flex-col">
               <DepartureInfoInBookingCard departure={departure} />
-               <TitleComponent
+              <TitleComponent
                 title={"Trip summary"}
                 icon={<PlaneTakeoff size={20} />}
                 label={""}
@@ -43,15 +44,21 @@ type Props = {
                             .departure_airport.city,
                           to: departure.flight.bounds[0].segments[0]
                             .arrival_airport.city,
+                          airlineLogo: `${AIRLINE_IMAGE_URL}/${
+                            departure.flight.bounds[0].segments[0]
+                              ?.operating_carrier?.iata ||
+                            departure.flight.bounds[0].segments[0]
+                              ?.operating_airline?.iata ||
+                            "default"
+                          }.png?default=airline.png`,
                           duration: (() => {
                             const dep =
-                            departure.flight.bounds[0].departure_date
+                              departure.flight.bounds[0].departure_date
                                 .split(" ")[1]
                                 .substring(0, 5);
-                            const arr =
-                            departure.flight.bounds[0].arrival_date
-                                .split(" ")[1]
-                                .substring(0, 5);
+                            const arr = departure.flight.bounds[0].arrival_date
+                              .split(" ")[1]
+                              .substring(0, 5);
                             const { hours, minutes } = calculateDuration(
                               dep,
                               arr
@@ -59,34 +66,33 @@ type Props = {
                             return `${hours}h ${minutes}m`;
                           })(),
                           departureTime:
-                          departure.flight.bounds[0].departure_date
+                            departure.flight.bounds[0].departure_date
                               .split(" ")[1]
                               .substring(0, 5),
                           departureDate: departure.departure_date,
-                          arrivalTime:
-                          departure.flight.bounds[0].arrival_date
-                              .split(" ")[1]
-                              .substring(0, 5),
+                          arrivalTime: departure.flight.bounds[0].arrival_date
+                            .split(" ")[1]
+                            .substring(0, 5),
                           arrivalDate:
-                          departure.flight.bounds[0].arrival_date?.split(
+                            departure.flight.bounds[0].arrival_date?.split(
                               " "
                             )?.[0] || "N/A",
                           departureCity:
-                          departure.flight.bounds[0].segments[0]
+                            departure.flight.bounds[0].segments[0]
                               .departure_airport.city,
                           departureAirport:
-                          departure.flight.bounds[0].segments[0]
+                            departure.flight.bounds[0].segments[0]
                               .departure_airport.name,
                           airline:
-                          departure.flight.bounds[0].segments[0]
+                            departure.flight.bounds[0].segments[0]
                               ?.operating_carrier?.name ||
-                              departure.flight.bounds[0].segments[0]
+                            departure.flight.bounds[0].segments[0]
                               ?.operating_airline?.name ||
                             "Airline information not available",
                           flightNumber:
-                          departure.flight.bounds[0].segments[0]
+                            departure.flight.bounds[0].segments[0]
                               ?.flight_number ||
-                              departure.flight.bounds[0].segments[0]
+                            departure.flight.bounds[0].segments[0]
                               ?.flight_or_train_number ||
                             "N/A",
                         }}
@@ -103,13 +109,13 @@ type Props = {
               />
 
               <div>
-              {departure?.hotel_stay?.map((item: any, index: number) => (
-                      <div key={index}>
-                        <ContentComponent
-                          dynamicContent={<HotelsComponent data={item} />}
-                        />
-                      </div>
-                    ))}
+                {departure?.hotel_stay?.map((item: any, index: number) => (
+                  <div key={index}>
+                    <ContentComponent
+                      dynamicContent={<HotelsComponent data={item} />}
+                    />
+                  </div>
+                ))}
               </div>
 
               <TitleComponent title={"Hôtel Details"} label={""} />
@@ -119,7 +125,7 @@ type Props = {
                     <div className="flex flex-col w-full sm:w-1/2">
                       <h3 className="font-semibold text-md">Inclus</h3>
                       <ul className="list-none pl-0 mt-2">
-                        {departure?.includes ?.map((item:any, index:any) => (
+                        {departure?.includes?.map((item: any, index: any) => (
                           <li
                             key={item}
                             className="flex items-center mb-1 font-semibold text-sm text-gray-500"
@@ -138,7 +144,7 @@ type Props = {
                       <h3 className="font-semibold text-md">Non inclus</h3>
                       <ul className="list-none pl-0 mt-2">
                         <div className="flex flex-col"></div>
-                        {departure?.excludes?.map((item:any, index:any) => (
+                        {departure?.excludes?.map((item: any, index: any) => (
                           <li
                             key={item}
                             className="flex items-center mb-1 font-semibold text-sm text-gray-500"
