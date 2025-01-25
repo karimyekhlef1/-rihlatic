@@ -20,21 +20,20 @@ import { useEffect, useState ,useCallback} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from '@/app/Components/home/Loading';
 import { HotelDetails, Room } from '@/app/Types/hotel/HotelDetails';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { format } from "date-fns";
-
+import { toast } from 'sonner';
 export default function Details() {
   const params = useParams();
   const searchParams = useSearchParams();
   const dispatch = useDispatch<any>();
   const { loading, hotelData } = useSelector((state: any) => state.hotels);
   const [hotelDetails, setHotelDetails] = useState<HotelDetails | undefined>(undefined);
-  const [selectedRoom, setSelectedRoom] = useState<Room | undefined>(undefined);
+  const [selectedRoom, setSelectedRoom] = useState<Room [] |undefined>(undefined);
   const selectedDestination = useSelector((state: any) => state.hotelSearchSlice.selectedDestination);
-  
+  const router = useRouter()
 const dateRange = useSelector((state: { hotelSearchSlice: { dateRange: any } }) => state.hotelSearchSlice?.dateRange);
 const rooms = useSelector<any>((state) => state.hotelSearchSlice.rooms);
-
 
 const prepareRoomData = useCallback((rooms: any) => {
   return rooms.reduce((acc: any, room: any, index: number) => ({
@@ -47,10 +46,16 @@ const prepareRoomData = useCallback((rooms: any) => {
     }
   }), {});
 }, []);
+useEffect(()=>{
+  console.log("selectedDestination",selectedDestination)
+  if (!dateRange || !selectedDestination  || !rooms ){
+    router.push('/hotels')
+  }
+})
 useEffect(() => {
     const ref = params.ref.toString();
     const supplier = searchParams.get('supplier');
-
+    if(selectedDestination){
     const requestBody = {
       supplier,
       checkin: format(dateRange.from, "yyyy-MM-dd"),
@@ -70,13 +75,38 @@ useEffect(() => {
     };
 
     getData();
+  }
+  
+  else{
+    toast.error("select destination")
+
+  }
+
+   
   }, [dispatch, params.ref, dateRange]);
 
   const handleSelectedRoom = (room: Room, isChecked: boolean) => {
-    if (isChecked) {
-      setSelectedRoom(room);
-    } else {
-      setSelectedRoom(undefined);
+    const supplier = searchParams.get('supplier');
+    if (hotelDetails?.multiple) {
+      console.log(">>selectedRoom===>",selectedRoom)
+      if (isChecked) {
+        // Use type assertion or ensure correct typing
+        setSelectedRoom(prevRooms => {
+          // If prevRooms is undefined, start a new array
+          if (!prevRooms) return [room];
+          
+          // Check if room already exists to avoid duplicates
+          const roomExists = prevRooms.some(r => r.room_id === room.room_id);
+          
+          // If room doesn't exist, add it
+          return roomExists ? prevRooms : [...prevRooms, room];
+        });
+      } else {
+        // Filter out the specific room
+        setSelectedRoom(prevRooms => 
+          prevRooms?.filter(r => r.room_id !== room.room_id)
+        );
+      }
     }
   };
 
@@ -110,6 +140,8 @@ useEffect(() => {
               />
               {hotelDetails?.rooms.map((room: Room) => (
                 <RoomsCard
+                  multiple={hotelDetails.multiple}
+                  dateRange={dateRange}
                   key={room.room_id}
                   data={room}
                   onSelect={handleSelectedRoom}
@@ -121,14 +153,14 @@ useEffect(() => {
           <div className="md:hidden lg:flex lg:flex-col items-center pt-4 sm:pt-16 gap-y-8 space-y-8 sm:space-y-0">
             <MapComponent data={hotelDetails} />
             <Provider store={store}>
-              <BookingHotelComponent selectedRoom={selectedRoom} />
+              <BookingHotelComponent multiple={hotelDetails?.multiple} selectedRoom={selectedRoom} />
             </Provider>
           </div>
         </div>
         <div className="hidden lg:hidden md:flex md:pt-8 md:gap-x-8 md:justify-center md:items-center">
           <MapComponent />
           <Provider store={store}>
-            <BookingHotelComponent selectedRoom={selectedRoom} />
+          <BookingHotelComponent multiple={hotelDetails?.multiple} selectedRoom={selectedRoom} />
           </Provider>
         </div>
       </div>

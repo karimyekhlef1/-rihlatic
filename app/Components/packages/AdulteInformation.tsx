@@ -69,6 +69,10 @@ export default function PassengerInformation({
 
     setValue(field, value);
     const isValid = await trigger(field);
+    console.log( titel, 
+      index, 
+      roomId, 
+      room_index,isValid)
 
     if (isValid) {
       dispatch(

@@ -10,6 +10,8 @@ import { Room } from '@/app/Types/package/packageDetails';
 import { Departure } from '@/app/Types/package/packageDetails';
 import { reStateRoomData } from '@/lib/store/custom/packagesSlices/paymentPachageSlices';
 import PopularFacilitiesPackage from './PopularFacilitiesPackage';
+import { withAuth } from '@/middleware/withAuth';
+import { Button } from '@/components/ui/button';
 export default function BookingPackageComponent({ data ,onSelectedDeparture}: { 
   data: Departure[]
   onSelectedDeparture:(item: Departure) => void;
@@ -75,6 +77,14 @@ export default function BookingPackageComponent({ data ,onSelectedDeparture}: {
   const handleSelectRoom = (selectedOption: { label: string; id: number }) => {
     dispatch(reStateRoomData())
     const selected = selectedDeparture?.pricing.rooms.find((item) => item.id === selectedOption.id);
+    if (selected) {
+      setSelectedRoom(selected);
+      setIsOpen(true)
+    }
+  };
+  const handleClickBook = () => {
+    dispatch(reStateRoomData())
+    const selected = selectedDeparture?.pricing.rooms[0]
     if (selected) {
       setSelectedRoom(selected);
       setIsOpen(true)
@@ -152,22 +162,26 @@ export default function BookingPackageComponent({ data ,onSelectedDeparture}: {
                 data={departureDates} 
                 title='Select a departure' 
               />
-                    {selectedDeparture ?
+                    {/* {selectedDeparture ?
               <DropDownBookingComponent 
                 onSelect={handleSelectRoom} 
                 data={roomNames} 
                 title='Kind of room' 
-              />:null}
+              />:null} */}
             </div>
-            {/* <Separator /> */}
-            {/* <div className="pt-4">
-              <Link href={'/payment'}>
-                <Button className="px-14" variant={'rihlatic'} disabled={!selectedDeparture || !selectedOption}
-                >
-                  Book Now
-                </Button>
-              </Link>
-            </div> */}
+            <Separator /> 
+            
+                 <div className="pt-4">
+                 <Button className="px-14" variant={'rihlatic'} disabled={!selectedDeparture}
+                 onClick={handleClickBook}
+            
+                 >
+                   Book Now
+                 </Button>
+     
+             </div>
+
+       
           </div>
         </CardContent>
       </Card> 

@@ -78,10 +78,13 @@ export default function Hotels() {
       setHotels(fetchedHotels);
 
       if (response.result.filters.prices) {
+
         const prices = {
-          min:response.result.filters.prices.min,
-          max:response.result.filters.prices.max
+          min: Math.min(response.result.filters.prices.max, response.result.filters.prices.min),
+          max: Math.max(response.result.filters.prices.min, response.result.filters.prices.max),
         };
+      
+        console.log("prices",response.result.filters)
         dispatch(setMaxMinRangePrice(prices));
         dispatch(setFilterRangePrice(prices));
 
