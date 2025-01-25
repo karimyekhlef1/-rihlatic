@@ -34,6 +34,7 @@ import OmraHotelsComponent from "@/app/Components/packages/OmrahotelsComponent";
 import BookingOmraComponent from "@/app/Components/packages/bookingOmraComponent";
 import OmraTripComponent from "@/app/commonComponents/OmratripComponent";
 import { calculateDuration } from "@/app/utils/timeUtils";
+import { AIRLINE_IMAGE_URL } from "@/app/Constant/urls";
 
 export default function OmraDetails() {
   const dispatch = useDispatch<any>();
@@ -231,6 +232,11 @@ export default function OmraDetails() {
                             selectedDeparture.flight.bounds[0].segments[0]
                               ?.operating_airline?.name ||
                             "Airline information not available",
+                          airlineLogo: `${AIRLINE_IMAGE_URL}/${
+                            selectedDeparture.flight.bounds[0].segments[0]?.operating_carrier?.iata ||
+                            selectedDeparture.flight.bounds[0].segments[0]?.operating_airline?.iata ||
+                            'default'
+                          }.png?default=airline.png`,
                           flightNumber:
                             selectedDeparture.flight.bounds[0].segments[0]
                               ?.flight_number ||
