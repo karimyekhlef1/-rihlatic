@@ -6,12 +6,14 @@ export const selectFilteredFlights = createSelector(
    (state: RootState) => state.hours.selectedDepartureTimes,
    (state: RootState) => state.hours.selectedArrivalTimes,
    (state: RootState) => state.stops.selectedStops,
-   (state: RootState) => state.carriers.selectedCarriers],
-  (flights, selectedDepartureTimes, selectedArrivalTimes, selectedStops, selectedCarriers) => {
+   (state: RootState) => state.carriers.selectedCarriers,
+   (state: RootState) => state.airplanes.selectedAirplaneTypes,
+   (state: RootState) => state.price.selectedRange],
+  (flights, selectedDepartureTimes, selectedArrivalTimes, selectedStops, selectedCarriers, selectedAirplaneTypes, priceRange) => {
     if (!flights) return [];
     
-    // Return empty array if no carriers are selected
-    if (selectedCarriers.length === 0) return [];
+    // Return empty array if no carriers or airplane types are selected
+    if (selectedCarriers.length === 0 || selectedAirplaneTypes.length === 0) return [];
     
     return flights.filter(flight => {
       if (!flight.segments?.[0]) return false;
@@ -39,7 +41,15 @@ export const selectFilteredFlights = createSelector(
         selectedCarriers.includes(segment.airLine.iata)
       );
 
-      return matchesDeparture && matchesArrival && matchesStops && matchesCarrier;
+      // Airplane type filter
+      const matchesAirplaneType = flight.segments[0].some((segment: { equipmentType: string; }) => 
+        selectedAirplaneTypes.includes(segment.equipmentType)
+      );
+
+      // Price filter
+      const matchesPrice = flight.price >= priceRange.min && flight.price <= priceRange.max;
+
+      return matchesDeparture && matchesArrival && matchesStops && matchesCarrier && matchesAirplaneType && matchesPrice;
     });
   }
 );
