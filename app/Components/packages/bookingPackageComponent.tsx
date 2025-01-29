@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { CircleCheck } from 'lucide-react';
-import { useDispatch } from 'react-redux';
+import { useDispatch ,useSelector} from 'react-redux';
 import { format, differenceInDays } from 'date-fns';
 import DropDownBookingComponent from './dropDownBooking';
 import RoomsDetailsBooking from './RoomsDetailsBooking';
@@ -12,13 +12,18 @@ import { reStateRoomData } from '@/lib/store/custom/packagesSlices/paymentPachag
 import PopularFacilitiesPackage from './PopularFacilitiesPackage';
 import { withAuth } from '@/middleware/withAuth';
 import { Button } from '@/components/ui/button';
+import { RootState } from '@/lib/store/store';
+import { openDialogSignUp } from "@/lib/store/custom/mainSlices/dialogSlice";
+
 export default function BookingPackageComponent({ data ,onSelectedDeparture}: { 
   data: Departure[]
   onSelectedDeparture:(item: Departure) => void;
  })
  
  {
-
+  const { success, userData, isInitialized } = useSelector(
+    (state: RootState) => state.signIn
+  );
 
   const dispatch = useDispatch<any>();
   const [selectedDeparture, setSelectedDeparture] = useState<Departure | undefined>();
@@ -83,12 +88,16 @@ export default function BookingPackageComponent({ data ,onSelectedDeparture}: {
     }
   };
   const handleClickBook = () => {
+    if (success && userData && isInitialized ){
     dispatch(reStateRoomData())
     const selected = selectedDeparture?.pricing.rooms[0]
     if (selected) {
       setSelectedRoom(selected);
       setIsOpen(true)
     }
+  }else{
+    dispatch(openDialogSignUp());
+  }
   };
   return (
     <div>

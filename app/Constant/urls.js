@@ -7,7 +7,7 @@ export const engine_get_destinations_endpoint =
   BASE_URL + "/front/destinations";
 export const engine_get_omras_endpoint = BASE_URL + "/front/omra";
 export const engine_get_hotels_endpoint =
-  BASE_URL + "/front/hotel/selected_city";
+  BASE_URL + "/front/cities";
 
 // Home
 export const home_endpoint = BASE_URL + "/home";
@@ -58,7 +58,7 @@ export const omra_cancelPenalty_endpoint =
 //hotels
 export const hotel_details = BASE_URL + "/front/hotel_details";
 export const search_hotel_endpoint = BASE_URL + "/front/hotels_search";
-
+export const hotel_prebook =  BASE_URL + "/front/hotel_prebook";
 // Flights
 export const flights_search_endpoint = BASE_URL + "/front/flights_search";
 // Airports

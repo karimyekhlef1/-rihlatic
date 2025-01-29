@@ -5,11 +5,13 @@ import hotelsService from '../../../services/hotels/hotels_services'
 interface hotelsState {
     loading: boolean;
     hotelData: any;
+    loadingPreBook:boolean
 }
 
 const initialState: hotelsState = {
     loading: false,
     hotelData: {},
+    loadingPreBook:false
 };
 export const getHotels= createAsyncThunk('hotels/slice', async (body:any, thunkApi) => {
     try {
@@ -23,6 +25,14 @@ export const getHotels= createAsyncThunk('hotels/slice', async (body:any, thunkA
 export const getHotelsDetails = createAsyncThunk('hotelDetails/slice', async (body:any, thunkApi) => {
     try {
         const response = await hotelsService.getHotelsDetails(body);
+        return response;
+    } catch (error: any) {
+        return thunkApi.rejectWithValue(error.response.data);
+    }
+});
+export const hotelPrebook = createAsyncThunk('hotelPreBook/slice', async (body:any, thunkApi) => {
+    try {
+        const response = await hotelsService.hotelPrebook(body);
         return response;
     } catch (error: any) {
         return thunkApi.rejectWithValue(error.response.data);
@@ -58,6 +68,18 @@ const HotelSlice = createSlice({
                 state.loading = false;
                 state.hotelData = {};
             })
+            .addCase(hotelPrebook.pending, (state) => {
+                state.loadingPreBook = true;
+            })
+            .addCase(hotelPrebook.fulfilled, (state, action) => {
+                state.loadingPreBook = false;
+                state.hotelData = action.payload;
+            })
+            .addCase(hotelPrebook.rejected, (state, _) => {
+                state.loadingPreBook = false;
+                state.hotelData = {};
+            })
+    
     },
 });
 

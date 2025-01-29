@@ -13,7 +13,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import roomImg from '@/public/images/roomImg.jpg';
 import { Room } from "@/app/Types/hotel/HotelDetails";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
+import { TfiUser } from "react-icons/tfi";
+import { MdChildCare } from "react-icons/md";
+import { LuBaby } from "react-icons/lu";
 interface RoomsCardProps {
   multiple: boolean;
   dateRange: any;
@@ -70,18 +72,22 @@ const RoomsCard: React.FC<RoomsCardProps> = ({ data, onSelect, selectedRoom, dat
                 {data.boardings.map((item, index) => (
                   <div key={index} className="flex flex-row space-x-2 mb-2">
                     <Button variant="outline" className="text-xs text-gray-500" size="sm">
-                      <UserRound size={10} />
+                      <TfiUser size={14} />
                       <span className="pl-1 text-[10px]">x{item.adults}</span>
                     </Button>
                     <Button variant="outline" className="text-xs text-gray-500" size="sm">
-                      <UserRound size={10} />
+                      <LuBaby size={14} />
                       <span className="pl-1 text-[10px]">x{item.children}</span>
                     </Button>
                   </div>
                 ))}
               </div>
+              
               <Badge variant={'rihlatic'} className="text-xs sm:text-sm text-green-500">
                 <ShieldX /> {`Annulation gratuite avant le ${data.boardings[0].cancellation_policy[0].date_from}`}
+              </Badge>
+              <Badge variant={'rihlatic'} className="text-xs sm:text-sm text-green-500">
+                <ShieldX /> {`Annulation gratuite avant le ${data.boardings[0].availability ? "yes ": "no"}`}
               </Badge>
             </div>
 

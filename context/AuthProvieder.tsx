@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/lib/store/store';
 import { checkAuthState } from '@/lib/store/api/signin/signinSlice';
-
+import Loading from '@/app/Components/home/Loading';
 interface AuthProviderProps {
   children: React.ReactNode;
 }
@@ -24,7 +24,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   // Optional: Show loading state while checking auth
   if (!isInitialized) {
-    return <div>Loading...</div>; // Or your loading component
+    return <Loading/>; // Or your loading component
   }
 
   return <>{children}</>;

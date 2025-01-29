@@ -15,6 +15,7 @@ import { getHotels } from '@/lib/store/api/hotels/hotelsSlice';
 import Loading from '@/app/Components/home/Loading';
 import { format } from "date-fns";
 import EmptyComponent from '@/app/commonComponents/emptyComponent';
+import HotelCardSkeleton from '@/app/Components/hotels/HotelCardSkeleton';
 interface Room {
   adults: number;
   children: number;
@@ -112,9 +113,9 @@ export default function Hotels() {
 
 
 
-  if (loading){
-    return <Loading />
-  }
+  // if (loading){
+  //   return <Loading />
+  // }
   
 
 return (
@@ -132,7 +133,11 @@ return (
         </div>
       </div>
       <div className="px-10 pt-10 gap-y-8 pb-10 w-full">
-         {
+         {loading ? <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <HotelCardSkeleton/>
+          <HotelCardSkeleton/>
+          <HotelCardSkeleton/>
+         </div>:
            filteredHotels.length === 0 ? (
              <EmptyComponent message='No hotels found' />
            ) : (

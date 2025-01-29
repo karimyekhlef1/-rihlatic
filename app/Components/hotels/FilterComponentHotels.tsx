@@ -15,8 +15,10 @@ export default function FilterComponentHotels() {
   const dispatch = useDispatch<any>();
   const { maxMinRangePrice ,filterRangePrice, filterRating } = useSelector((state: any) => state.hotelState);
   // useEffect(()=>{
+  //   dispatch(setFilterRangePrice(maxMinRangePrice));
+  // },[dispatch,loading,maxMinRangePrice])
 
-  // },[])
+
   console.log("maxMinRangePrice",maxMinRangePrice)
   console.log("filterRangePrice",filterRangePrice)
 
@@ -54,13 +56,14 @@ export default function FilterComponentHotels() {
           <AccordionTrigger className="hover:no-underline">
             Price Range
           </AccordionTrigger>
-          <AccordionContent>
-            <PriceRangeSlider
-              min={maxMinRangePrice.min}
-              max={maxMinRangePrice.max}
-              onChange={handlePriceChange}
-            />
-          </AccordionContent>
+          
+              <AccordionContent>
+              <PriceRangeSlider
+                min={maxMinRangePrice.min}
+                max={maxMinRangePrice.max}
+                onChange={handlePriceChange}
+              />
+            </AccordionContent>
         </AccordionItem>
       </Accordion>
     </div>

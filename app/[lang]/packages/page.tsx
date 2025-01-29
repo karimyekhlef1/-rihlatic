@@ -14,7 +14,7 @@ import { usefilterPackages } from "@/app/hooks/useFilterPackages"; // Import the
 import PackagesSearchComponent from "@/app/Components/home/engine/packages/packagesSearchComponent";
 import { format } from "date-fns";
 import EmptyComponent from "@/app/commonComponents/emptyComponent";
-
+import PackageCardSkeleton from "@/app/Components/packages/PackageCardSkeleton";
 export default function Packages() {
   const { loading, packagesData } = useSelector((state: any) => state.packages);
   const { dateRange, packageType, selectedDestinationId } = useSelector(
@@ -69,7 +69,7 @@ export default function Packages() {
     setFilteredPackages(filtered);
   }, [selectedCountries, selectedCategories, packages]);
 
-  if (loading) return <Loading />;
+  // if (loading) return <Loading />;
 
   const packageCategories = extractData(packages, (pkg) => `${pkg.category}`);
   const countryNames = extractData(packages, (pkg) =>
@@ -97,7 +97,11 @@ export default function Packages() {
           </div>
         </div>
         <div className="px-10 pt-10 gap-y-8 pb-10 w-full">
-          {filteredPackages.length === 0 ? (
+          {loading ?<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" >
+            <PackageCardSkeleton/>
+            <PackageCardSkeleton/>
+            <PackageCardSkeleton/>
+          </div> : filteredPackages.length === 0 ? (
             <EmptyComponent message="No packages found" />
           ) : (
             <PackagesComponent data={filteredPackages} />
