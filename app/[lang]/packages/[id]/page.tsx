@@ -33,6 +33,7 @@ import { setPackage } from "@/lib/store/custom/packagesSlices/paymentPachageSlic
 import TripComponent from "@/app/commonComponents/tripComponent";
 import { Departure } from '@/app/Types/package/packageDetails';
 import { calculateDuration } from "@/app/utils/timeUtils";
+import { AIRLINE_IMAGE_URL } from "@/app/Constant/urls";
 
 export default function Details() {
   const dispatch = useDispatch<any>();
@@ -92,6 +93,11 @@ const onSelectedDeparture=(item :Departure)=>{
                             .departure_airport.city,
                           to: currentDeparture.flight.bounds[0].segments[0]
                             .arrival_airport.city,
+                          airlineLogo: `${AIRLINE_IMAGE_URL}/${
+                            currentDeparture.flight.bounds[0].segments[0]?.operating_carrier?.iata ||
+                            currentDeparture.flight.bounds[0].segments[0]?.operating_airline?.iata ||
+                            'default'
+                          }.png?default=airline.png`,
                           duration: (() => {
                             const dep =
                             currentDeparture.flight.bounds[0].departure_date

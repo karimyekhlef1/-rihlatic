@@ -14,6 +14,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store/store";
 import Loading from "@/app/Components/home/Loading";
 import { selectFilteredFlights } from "@/lib/store/selectors/flightSelectors";
+import Image from "next/image";
+import NoResults from "@/public/images/NoResults.png";
 
 function FlightResults() {
   const { loading } = useSelector((state: RootState) => state.vols);
@@ -61,7 +63,21 @@ function FlightResults() {
               ))}
               {filteredFlights.length === 0 && (
                 <div className="text-center py-8">
-                  <p className="text-gray-500">No flights found matching your filters.</p>
+                  <div className="flex justify-center mb-4">
+                    <Image
+                      src={NoResults.src}
+                      alt="No results"
+                      width={300}
+                      height={300}
+                    />
+                  </div>
+                  <h3 className="text-gray-800 font-semibold">
+                    No flights found
+                  </h3>
+                  <p className="text-gray-500 text-xs">
+                    No flights found matching your filters.There are currently
+                    no flights for your selected filters, try searching again
+                  </p>
                 </div>
               )}
             </div>

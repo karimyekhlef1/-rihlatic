@@ -54,7 +54,6 @@ export default function ResultsSidebar() {
       <SidebarSection title="Hours">
         <Hours />
       </SidebarSection>
-
       <SidebarSection title="Stops">
         <Stops />
       </SidebarSection>

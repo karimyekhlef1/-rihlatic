@@ -24,9 +24,13 @@ const VolSearchComponent: React.FC = () => {
     (state: { volSearchSlice: { volType: string } }) =>
       state.volSearchSlice?.volType
   );
-  const volPackage = useSelector(
-    (state: { volSearchSlice: { volPackage: any } }) =>
-      state.volSearchSlice?.volPackage
+  const volMethod = useSelector(
+    (state: { volSearchSlice: { volMethod: string } }) =>
+      state.volSearchSlice?.volMethod
+  );
+  const volPassanger = useSelector(
+    (state: { volSearchSlice: { volPassanger: any } }) =>
+      state.volSearchSlice?.volPassanger
   );
   const dateRange = useSelector(
     (state: { volSearchSlice: { dateRange: DateRange } }) =>
@@ -137,16 +141,33 @@ const VolSearchComponent: React.FC = () => {
       return;
     }
 
+    const getFlightClassCode = (method: string): string => {
+      switch (method) {
+        case "Not Specified":
+          return "NN";
+        case "Economy":
+          return "M";
+        case "Premium Economy":
+          return "W";
+        case "Business":
+          return "C";
+        case "First Class":
+          return "F";
+        default:
+          return "NN";
+      }
+    };
+
     const searchParams = {
       flightType: volType === "One Way" ? "ONE_WAY" : "ROUND_TRIP",
-      flightClass: "NN", // default to non-specified
-      quantityAdults: volPackage.adults || 1,
-      quantityChild: volPackage.children || 0,
-      quantityInfant: volPackage.infants || 0,
-      quantityInfantWithSeat: 0,
-      quantityStudent: 0,
+      flightClass: getFlightClassCode(volMethod),
+      quantityAdults: volPassanger?.adults || 1,
+      quantityChild: volPassanger?.children || 0,
+      quantityInfant: volPassanger?.infants || 0,
+      quantityInfantWithSeat: volPassanger?.infantsSeat || 0,
+      quantityStudent: volPassanger?.students || 0,
       quantityYouth: 0,
-      quantitySenior: 0,
+      quantitySenior: volPassanger?.thirdAge || 0,
       departureId: destinations[0].from.toUpperCase(),
       arrivalId: destinations[0].to.toUpperCase(),
       departureDate: dateRange?.from
