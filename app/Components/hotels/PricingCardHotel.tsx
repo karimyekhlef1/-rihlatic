@@ -15,13 +15,9 @@ interface PricingCardProps {
   image: string;
   rooms: {
     name: string;
-    adults_quantity: number;
-    adults_price: number;
-    children_quantity: number;
-    children_price: number;
-    infant_quantity: number;
-    infant_price: number;
-    total: number;
+    adult: number;
+    child: number;
+    price: number;
   }[];
   total: number;
   dates: { startDate: string; endDate: string };
@@ -47,6 +43,7 @@ export default function PricingCardHotel({
   dates,
   nights,
 }: PricingCardProps) {
+  console.log("PricingCardHotel",rooms)
   return (
     <Card className="p-4 space-y-6 pt-5">
       <h2 className="text-xl font-semibold text-center">{title}</h2>
@@ -87,20 +84,17 @@ export default function PricingCardHotel({
                 </div>
                 <div className="flex items-center space-x-2">
                   <CircleCheck className="text-green-500 rounded-full p-1 bg-green-100" />
-                  <span>Adulte(s): {room.adults_quantity} x {room.adults_price} DZD</span>
+                  <span>Adulte x {room.adult} </span>
                 </div>
-                <div className="flex items-center space-x-2">
+              { room.child !== 0 && <div className="flex items-center space-x-2">
                   <CircleCheck className="text-green-500 rounded-full p-1 bg-green-100" />
-                  <span>Enfant(s): {room.children_quantity} x {room.children_price} DZD</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <CircleCheck className="text-green-500 rounded-full p-1 bg-green-100" />
-                  <span>Nourrisson(s): {room.infant_quantity} x {room.infant_price} DZD</span>
-                </div>
+                  <span>Child x {room.child}</span>
+                </div>}
+
                 <Separator />
                 <div className="pt-2 flex justify-between font-semibold">
                   <span>Total chambre {index + 1}:</span>
-                  <span>{room.total} DZD</span>
+                  <span>{room.price} DZD</span>
                 </div>
               </div>
             </AccordionContent>

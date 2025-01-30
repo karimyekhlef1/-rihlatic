@@ -120,7 +120,7 @@ export default function Hotels() {
 
 return (
   <div className="">
-    <div className="flex justify-center py-4 mt-2 bg-white">
+    <div className=" py-4 mt-2  w-full container ">
     <HotelsSearchComponent 
        onSearch={fetchHotels} />
     </div>

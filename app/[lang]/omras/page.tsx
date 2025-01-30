@@ -78,7 +78,7 @@ export default function Omras() {
 
   return (
     <>
-      <div className="flex justify-center py-8 w-full bg-white">
+      <div className=" py-4 mt-2  w-full container ">
         <OmrasSearchComponent />
       </div>
       <div className="textarabic flex md:flex-row flex-col">

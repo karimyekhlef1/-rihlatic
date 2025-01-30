@@ -9,15 +9,14 @@ import {
 } from "lucide-react";
 
 export default function PaymentProgressComponent() {
-  const steps = useSelector((state: RootState) => state.hotelPayment.steps);
-  const currentStep = useSelector(
-    (state: RootState) => state.hotelPayment.currentStep
-  );
+  const steps = useSelector((state: any) => state.hotelPayment.steps);
+    const currentStep = useSelector((state: any) => state.hotelPayment.currentStep);
+  
 
   return (
     <div className="w-full max-w-3xl mx-auto p-6">
       <div className="flex items-center justify-between flex-wrap relative">
-        {steps.map((step, index) => {
+        {steps.map((step:any, index:number) => {
           const isActive = index + 1 === currentStep;
           const isCompleted = index + 1 < currentStep;
 

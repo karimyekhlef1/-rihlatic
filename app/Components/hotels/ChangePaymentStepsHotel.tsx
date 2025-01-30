@@ -10,32 +10,51 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-
-
-
 export default function ChangePaymentStepsHotel() {
   const dispatch = useDispatch<any>();
   const { currentStep } = useSelector((state: any) => state.hotelPayment);
+  const RoomsData = useSelector((state: any) => state.hotelPayment.RoomsData);
+
   const router = useRouter();
 
-  const handleNext = async() => {
-     try{
+  const handleNext = async () => {
+    const currentRoom = RoomsData[currentStep - 1];
+
+    try {
+      const allPassengers = [
+        ...(currentRoom.passengers.adults || []),
+        ...(currentRoom.passengers.children || []),
+      ];
+      for (const passenger of allPassengers) {
+        if (!passenger.firstname) {
+          toast.error("All passengers must have first name");
+          return;
+        }
+        if (!passenger.lastname) {
+          toast.error("All passengers must have last name");
+          return;
+        }
+        if (!passenger.lastname) {
+          toast.error("All passengers must have first Civility");
+          return;
+        }
+      }
+
+      if (!currentRoom.passengers.adults?.length) {
+        toast.error("Each room must have at least one adult passenger");
+        return;
+      }
       dispatch(nextStep());
-
-     }catch{
-
-  }
-    
-    
+    } catch {}
   };
 
   const handleBack = () => {
+    const currentRoom = RoomsData[currentStep - 1];
+
     dispatch(previousStep());
   };
 
-  useEffect(() => {
-    
-  }, []);
+  useEffect(() => {}, []);
 
   // const cleanEmptyPassengerArrays = (data: Room[]): { rooms: Room[] } => {
   //   return {
@@ -56,26 +75,21 @@ export default function ChangePaymentStepsHotel() {
 
   const handleComplete = async () => {
     try {
-   
-    
-   
-    } catch (error: any) {
-     
-    }
+    } catch (error: any) {}
   };
 
   return (
     <div className="flex justify-between w-full mx-auto my-4">
-           <Button
-          variant="outline"
-          onClick={handleBack}
-          className="px-10 sm:px-14"
-          disabled={currentStep <= 1}
-        >
-          Back
-          </Button>
-     
-      {false? (
+      <Button
+        variant="outline"
+        onClick={handleBack}
+        className="px-10 sm:px-14"
+        disabled={currentStep <= 1}
+      >
+        Back
+      </Button>
+
+      {false ? (
         <Button
           variant={"active"}
           onClick={handleNext}
@@ -83,7 +97,7 @@ export default function ChangePaymentStepsHotel() {
         >
           <Loader2 className="animate-spin text-gray-200" size={24} />
         </Button>
-      ) : currentStep <= 10 ? (
+      ) : currentStep <= RoomsData.length ? (
         <Button
           variant={"active"}
           onClick={handleNext}
@@ -103,7 +117,3 @@ export default function ChangePaymentStepsHotel() {
     </div>
   );
 }
-
-
-
-

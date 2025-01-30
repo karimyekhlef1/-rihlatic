@@ -9,7 +9,7 @@ import { Card } from "@/components/ui/card";
 import { CircleCheck } from "lucide-react";
 import { hotelPrebook } from "@/lib/store/api/hotels/hotelsSlice";
 import { toast } from "react-hot-toast";
-import { Room, Policy } from "@/app/Types/hotel/HotelDetails";
+import { Room, CancellationPolicy } from "@/app/Types/hotel/HotelDetails";
 
 interface BookingDialogProps {
   isOpen: boolean;
@@ -19,7 +19,7 @@ interface BookingDialogProps {
   onComplete: () => void;
 }
 
-const CancellationTable: React.FC<{ policies: Policy[] }> = ({ policies }) => (
+const CancellationTable: React.FC<{ policies: CancellationPolicy[] }> = ({ policies }) => (
   <>
     <h4 className="text-md font-semibold mb-2">Cancellation Policy</h4>
     <table className="w-full border-collapse border border-gray-300 mb-4">
@@ -85,13 +85,13 @@ const BookingDialog: React.FC<BookingDialogProps> = ({
 
     const prebookRoom = async () => {
       try {
-        const result = await dispatch(hotelPrebook({
-          // Add your prebook parameters here
-        })).unwrap();
+        // const result = await dispatch(hotelPrebook({
+        //   // Add your prebook parameters here
+        // })).unwrap();
         
-        if (result.hotel) {
-          // Handle successful prebook
-        }
+        // if (result.hotel) {
+        //   // Handle successful prebook
+        // }
       } catch (error) {
         toast.error("Failed to prebook room");
         onClose();
