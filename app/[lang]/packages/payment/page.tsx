@@ -66,6 +66,7 @@ export default function PaymentPage() {
         <div className="w-full md:w-2/3 flex flex-col items-center">
           <PaymentTitleComponent
             location={pkg.name}
+            address={pkg.address}
             month={getMonthName(departure.departure_date)}
             startDate={departure.departure_date}
             endDate={departure.return_date}
@@ -77,16 +78,17 @@ export default function PaymentPage() {
         <div className="w-full md:w-1/3">
           <PricingCard
             title={
-              <div className=" flex flex-col items-start justify-start">
-                <div className="flex flex-row items-center">
-                  <MapPin fill="gray" color="#ffffff" />
+              <div className=" flex flex-col items-start justify-start space-y-1">
+                <div className="flex flex-row items-center ">
+                  <MapPin fill="gray" color="#ffffff" size={16}/>
                   <p className="text-sm font-semibold pl-2 text-gray-500 ">
                     {pkg.destinations[0].name}
                   </p>
                 </div>
 
-                <div className="flex flex-row items-center">
+                <div className="flex flex-row items-center ">
                   <CircleCheck
+                  size={16}
                     className="font-semibold text-xs text-[#43acff]"
                     fill="#b4deff"
                   />

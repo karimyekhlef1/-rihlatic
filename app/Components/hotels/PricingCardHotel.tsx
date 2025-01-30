@@ -35,6 +35,7 @@ const DateInfoItem = ({ icon: Icon, color, children }: {
   </div>
 );
 
+
 export default function PricingCardHotel({
   title,
   image,

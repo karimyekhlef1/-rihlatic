@@ -92,6 +92,11 @@ export default function PassengerInformationHotel({
               {titel} {index + 1}
             </div>
           </div>
+          <div>
+
+
+
+          </div>
 
           <div className="flex flex-col sm:flex-row gap-4 pb-2">
             <div className="flex flex-col w-full">

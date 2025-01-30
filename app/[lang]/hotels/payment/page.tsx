@@ -22,13 +22,16 @@ export default function PaymentPage() {
     name: room.name,
     price:room.boarding.rate
 }));
+const roomsTotal = resultPreBook?.rooms?.reduce((sum: number, room: any) => 
+  sum + room.boarding.rate , 0) || 0;
   return (
     <div className="container">
       <div className="flex flex-col sm:flex-row gap-4 py-10">
         <div className="w-full md:w-2/3 flex flex-col items-center">
           <PaymentTitleComponent
             location={hotel.infos.name}
-            month={hotel.infos.address}
+            address={hotel.infos.address}
+            // month={null}
             startDate={format(dateRange.from, "yyyy-MM-dd")}
             endDate={format(dateRange.to, "yyyy-MM-dd")}
           />
@@ -41,7 +44,7 @@ export default function PaymentPage() {
             title="Your Booking"
             image={hotel.feature_image}
             rooms={transformedRooms}
-            total={65418}
+            total={roomsTotal}
             dates={{
               startDate: format(resultPreBook.checkin, "yyyy-MM-dd"),
               endDate: format(resultPreBook.checkout, "yyyy-MM-dd"),

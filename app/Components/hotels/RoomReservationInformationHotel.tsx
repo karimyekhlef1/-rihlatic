@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import FnishBookingHotel from './FnishBookingHotel';
 import PassengerInformationHotel from './PassengerInformationHotel';
-
+import EmailForBook from './EmaiLForBook';
 export default function RoomReservationInformation() {
   const currentStep = useSelector((state: any) => state.hotelPayment.currentStep);
   const RoomsTypes = useSelector((state: any) => state.hotelPayment.RoomsTypes);
@@ -27,6 +27,7 @@ export default function RoomReservationInformation() {
   return (
     <div className="w-full">
       <ScrollArea className="">
+      <EmailForBook room_index={currentStep-1} />
         {renderRoomInfo('adults',  RoomsTypes[currentStep-1].adult)}
         {renderRoomInfo('children', RoomsTypes[currentStep-1].child)}
       </ScrollArea>

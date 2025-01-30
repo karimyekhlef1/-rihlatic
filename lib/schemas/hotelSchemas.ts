@@ -13,10 +13,13 @@ export const passengerSchema = z.object({
     .min(2, 'Last name must be at least 2 characters')
     .regex(namePattern, 'Last name can only contain letters and spaces'),
     civility: z.enum(['Mr', 'Ms', 'Mrs']),
-
-
-
 });
-
+export const RoomsContact = z.object({
+   phone: z.string()
+      .regex(phonePattern, 'Invalid phone number format'),
+    email: z.string()
+      .email('Invalid email format')
+     
+});
 
 

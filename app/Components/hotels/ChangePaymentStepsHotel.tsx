@@ -14,8 +14,27 @@ export default function ChangePaymentStepsHotel() {
   const dispatch = useDispatch<any>();
   const { currentStep } = useSelector((state: any) => state.hotelPayment);
   const RoomsData = useSelector((state: any) => state.hotelPayment.RoomsData);
-
   const router = useRouter();
+  const resultPreBook = useSelector((state: any) => state.hotelPayment.resultPreBook);
+  const hotel = useSelector((state: any) => state.hotelPayment.hotel);
+  const handelBodyDataForMYGO =()=>{
+    const BodyData ={
+      number:resultPreBook.id,
+      checkin:resultPreBook.checkin,
+      checkout:resultPreBook.checkout,
+      hotel_id:resultPreBook.hotel_id,
+      city:hotel.infos.city,
+      country:hotel.infos.destination,
+      hotelname:hotel.infos.name,
+      hotel_address:hotel.infos.address,
+      agreement:resultPreBook.rooms[0].boarding.boarding_id,
+      boarding:resultPreBook.rooms[0].boarding.name,
+      reference:"",
+      email:RoomsData[0].email,
+      phone:RoomsData[0].phone,
+      cancelation:resultPreBook,
+    }
+  }
 
   const handleNext = async () => {
     const currentRoom = RoomsData[currentStep - 1];

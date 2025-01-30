@@ -134,7 +134,16 @@ const hotelPaymentSlice = createSlice({
         storage.save(state);
       }
     },
-    
+    updateEmailAndPhone: (
+      state,
+      action: PayloadAction<{ roomIndex: number; field: "email" | "phone"; value: string }>
+    ) => {
+      const { roomIndex, field, value } = action.payload;
+      if (state.RoomsData[roomIndex]) {
+        state.RoomsData[roomIndex][field] = value;
+        storage.save(state);
+      }
+    },
     clearState: () => {
       localStorage.removeItem(STORAGE_KEY);
       return createInitialState();
@@ -150,7 +159,8 @@ export const {
   nextStep,
   previousStep,
   clearState,
-  setPreeBook
+  setPreeBook,
+  updateEmailAndPhone
 } = hotelPaymentSlice.actions;
 
 export default hotelPaymentSlice.reducer;

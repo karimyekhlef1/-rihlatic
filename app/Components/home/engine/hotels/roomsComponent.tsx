@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from "react";
-import { Users, Minus, Plus, UserRound } from "lucide-react";
+import { Users, Minus, Plus, UserRound ,Hotel} from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setHotelRooms } from "@/lib/store/engine/hotel_search_slice";
 import {
@@ -236,7 +236,7 @@ const HotelRoomsComponent = () => {
           {rooms.map((room, index) => (
             <div key={index} className="space-y-3">
               <div className="flex items-center gap-2">
-                <UserRound className="h-4 w-4 text-gray-500" />
+                <Hotel className="h-4 w-4 text-gray-500" />
                 <h4 className="font-medium text-xs">Room {index + 1}</h4>
               </div>
               <Separator className="my-2" />

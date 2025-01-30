@@ -1,6 +1,7 @@
 interface PaymentTitleProps {
   location: string;
-  month: string;
-  startDate: string;
-  endDate: string;
+  address?:string
+  month?: string;
+  startDate?: string;
+  endDate?: string;
 }
