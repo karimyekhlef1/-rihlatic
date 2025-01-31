@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import PaymentTitleComponent from "@/app/Components/payment/paymentTitle";
 import PaymentCardComponent from "@/app/Components/payment/paymentCard";

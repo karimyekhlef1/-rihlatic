@@ -78,29 +78,29 @@ export default function ChangePaymentSteps() {
                 toast.error("All passengers must specify their sex");
                 return;
               }
-              if (!passenger.email) {
-                toast.error("All passengers must provide an email address");
+              if (!allPassengers[0].email) {
+                toast.error("first passenger must provide an email address");
                 return;
               }
               // Validate email format
               const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-              if (!emailRegex.test(passenger.email)) {
-                toast.error("Please enter a valid email address");
-                return;
-              }
-              if (!passenger.phone) {
-                toast.error("All passengers must provide a phone number");
-                return;
-              }
+              // if (!emailRegex.test(passenger.email)) {
+              //   toast.error("Please enter a valid email address");
+              //   return;
+              // }
+              // if (!passenger.phone) {
+              //   toast.error("All passengers must provide a phone number");
+              //   return;
+              // }
               // Validate phone format (accepts international format)
-              const phoneRegex = /^\+?[0-9]{10,15}$/;
-              if (!phoneRegex.test(passenger.phone)) {
-                toast.error("Please enter a valid phone number");
-                return;
-              }
+              // const phoneRegex = /^\+?[0-9]{10,15}$/;
+              // if (!phoneRegex.test(passenger.phone)) {
+              //   toast.error("Please enter a valid phone number");
+              //   return;
+              // }
             }
     
-            // Check if room has at least one adult
+          //  Check if room has at least one adult
             if (!currentRoom.passengers.adults?.length) {
               toast.error("Each room must have at least one adult passenger");
               return;
@@ -175,17 +175,26 @@ export default function ChangePaymentSteps() {
 
   return (
     <div className="flex justify-between w-full mx-auto my-4">
-      {currentStep > 1 ? (
+           <Button
+          variant="outline"
+          onClick={handleBack}
+          className="px-10 sm:px-14"
+          disabled={currentStep <= 1}
+        >
+          Back
+        </Button>
+      {/* {currentStep > 1 ? (
         <Button
           variant="outline"
           onClick={handleBack}
           className="px-10 sm:px-14"
+          disabled={currentStep > 1}
         >
           Back
         </Button>
       ) : (
         <span></span>
-      )}
+      )} */}
       {loading ? (
         <Button
           variant={"active"}
