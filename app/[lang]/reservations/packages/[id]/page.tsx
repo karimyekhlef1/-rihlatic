@@ -57,27 +57,22 @@ export default function PackageReservationPage() {
     <div className="bg-[#F8F8F8] flex items-start justify-center flex-wrap gap-2">
       <div>
         <DepartureInfoInBooking departure={bookinPackagesDetails?.departure} />
-
         <div>
           {bookinPackagesDetails?.bookingDetails.map((bookingDetail: any,index:number) => (
             <div key={bookingDetail.id}  className="">
-           <div className="text-2xl text-[#ff8000]">Room {index + 1}</div>
-
+              <div className="text-2xl text-[#ff8000]">Room {index + 1}</div>
                 <div>
                   <div className="space-y-4">
-              {bookingDetail.passengers.map(
-                        (passenger: any) => (
-                          <>
+                    {bookingDetail.passengers.map(
+                      (passenger: any) => (
+                        <>
                           <PassengerCard key={passenger.id} passenger={passenger} />
                           <Separator/>
-                          </>
-
-                        )
-                      )}
-                
-                  </div>
+                        </>
+                      )
+                    )}
                 </div>
-             
+              </div>
             </div>
           ))}
         </div>
