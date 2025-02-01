@@ -27,7 +27,7 @@ const VolsLayout = ({ children }: { children: React.ReactNode }) => {
         </div>
       ) : (
         <>
-          <div className="fixed top-[64px] z-40 w-full bg-white shadow-sm">
+          <div className="absolute top-[64px] z-40 w-full bg-white shadow-sm">
             <div className="container mx-auto py-4">
               <VolSearchComponent />
             </div>

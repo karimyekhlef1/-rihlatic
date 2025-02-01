@@ -15,7 +15,7 @@ const SearchSectionComponent: React.FC = () => {
   const searchClick = (value: number) => {
     switch (value) {
       case 0:
-        return <VolSearchComponent />;
+        return <VolSearchComponent isHome={true} />;
       case 1:
         return <PackagesSearchComponent onSearch={onSearch} />;
       case 2:
@@ -23,7 +23,7 @@ const SearchSectionComponent: React.FC = () => {
       case 3:
         return <OmrasSearchComponent />;
       default:
-        return <VolSearchComponent />;
+        return <VolSearchComponent isHome={true} />;
     }
   };
 
