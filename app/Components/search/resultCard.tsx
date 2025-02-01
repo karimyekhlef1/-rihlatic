@@ -83,7 +83,10 @@ export default function ResultCard({ flightData }: ResultCardProps) {
 
               {returnSegments && returnSegments.length > 0 && (
                 <>
-                  <FlightSeparator segments={returnSegments} />
+                  <FlightSeparator 
+                    segments={returnSegments} 
+                    outboundLastSegment={outboundSegments[outboundSegments.length - 1]} 
+                  />
                   <FlightInfos segments={returnSegments} type="return" />
                 </>
               )}
