@@ -19,8 +19,14 @@ interface PriceRangeSliderProps {
 }) => {
   const [range, setRange] = useState<[number, number]>([min, max])
 
+  useEffect(()=>{
+    setRange([min,max])
+
+  },[max, min])
+
   useEffect(() => {
     onChange(range)
+
   }, [range, onChange , max, min])
 
   const handleSliderChange = (newRange: [number, number]) => {

@@ -61,7 +61,7 @@ import omraReservationSlice from './custom/commonSlices/omraReservationSlice';
 import HotelStateSlice from './custom/hotelSlices/HotelStateSlice'
 import HotelSlice from './api/hotels/hotelsSlice'
 import volsReducer from '@/lib/store/api/vols/volsSlice';
-
+import hotelPaymentSlice from '@/lib/store/custom/hotelSlices/paymentHotelSlices'
 export const store = configureStore({
   reducer: {
 
@@ -128,7 +128,7 @@ export const store = configureStore({
     //hotel
     hotelState:HotelStateSlice,
     hotels:HotelSlice,
-    
+    hotelPayment:hotelPaymentSlice,
     // vols
     vols: volsReducer,
     price: priceReducer,

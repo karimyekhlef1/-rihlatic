@@ -12,7 +12,7 @@ import { Hotel, Sparkles, Bed } from 'lucide-react';
 import RoomsCard from '@/app/Components/hotels/roomsCard';
 import HotelFooter from '@/app/Components/hotels/hotelFooter';
 import MapComponent from '@/app/Components/hotels/mapComponent';
-import BookingHotelComponent from '@/app/Components/hotels/bookHotel';
+import BookingHotelComponent from '@/app/Components/hotels/BookingHotelComponent';
 import PopularFacilities from '@/app/Components/hotels/popularFacilities';
 import OrganizeSection from '@/app/Components/home/organizeSection';
 import { getHotelsDetails } from '@/lib/store/api/hotels/hotelsSlice';
@@ -70,8 +70,10 @@ useEffect(() => {
     };
     const getData = async () => {
       const result = await dispatch(getHotelsDetails(requestBody));
-    console.log("result===>",result)
-      setHotelDetails(result.payload.result.hotel);
+      if(result.payload.result.hotel){
+        setHotelDetails(result.payload.result.hotel);
+      }
+      
     };
 
     getData();
@@ -153,14 +155,14 @@ useEffect(() => {
           <div className="md:hidden lg:flex lg:flex-col items-center pt-4 sm:pt-16 gap-y-8 space-y-8 sm:space-y-0">
             <MapComponent data={hotelDetails} />
             <Provider store={store}>
-              <BookingHotelComponent multiple={hotelDetails?.multiple} selectedRoom={selectedRoom} />
+              <BookingHotelComponent multiple={hotelDetails?.multiple} selectedRoom={selectedRoom} hotelDetails={hotelDetails}  />
             </Provider>
           </div>
         </div>
         <div className="hidden lg:hidden md:flex md:pt-8 md:gap-x-8 md:justify-center md:items-center">
           <MapComponent />
           <Provider store={store}>
-          <BookingHotelComponent multiple={hotelDetails?.multiple} selectedRoom={selectedRoom} />
+          <BookingHotelComponent multiple={hotelDetails?.multiple} selectedRoom={selectedRoom} hotelDetails={hotelDetails}/>
           </Provider>
         </div>
       </div>
