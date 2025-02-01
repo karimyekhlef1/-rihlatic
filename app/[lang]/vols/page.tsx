@@ -4,15 +4,9 @@ import ResultCard from "@/app/Components/search/resultCard";
 import ResultCardSkeleton from "@/app/Components/search/resultCardSkeleton";
 import ResultsSidebar from "@/app/Components/search/resultsSidebar";
 import TripDetails from "@/app/Components/search/tripDetails";
-import { Provider } from "react-redux";
-import { store } from "@/lib/store/store";
 import AdComponent from "@/app/commonComponents/adComponent";
-import TravelOptions from "@/app/Components/search/travelOptions";
-import AlertPrices from "@/app/Components/search/alertPrices";
-import TravelOptions2 from "@/app/Components/search/travelOptions2";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store/store";
-import Loading from "@/app/Components/home/Loading";
 import { selectFilteredFlights } from "@/lib/store/selectors/flightSelectors";
 import Image from "next/image";
 import NoResults from "@/public/images/NoResults.png";
@@ -96,8 +90,6 @@ function FlightResults() {
 
 export default function FlightsResults() {
   return (
-    <Provider store={store}>
-      <FlightResults />
-    </Provider>
+    <FlightResults />
   );
 }

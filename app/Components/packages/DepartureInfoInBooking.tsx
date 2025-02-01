@@ -107,7 +107,6 @@ export default function DepartureInfoInBooking({ departure }: Props) {
                 icon={<Bed size={20} />}
                 label={""}
               />
-
               <div>
                 {departure?.hotel_stay?.map((item: any, index: number) => (
                   <div key={index}>

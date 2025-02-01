@@ -16,9 +16,16 @@ import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DateRange } from "react-day-picker";
 import { searchFlights } from "@/lib/store/api/vols/volsSlice";
+import { useRouter } from "next/navigation";
 
-const VolSearchComponent: React.FC = () => {
+interface VolSearchType {
+  isHome?: boolean;
+}
+
+const VolSearchComponent: React.FC<VolSearchType> = ({ isHome }: VolSearchType) => {
+
   const dispatch = useDispatch<any>();
+  const router = useRouter();
 
   const volType = useSelector(
     (state: { volSearchSlice: { volType: string } }) =>
@@ -184,9 +191,12 @@ const VolSearchComponent: React.FC = () => {
       directFlightsOnly: false,
       openReturn: false,
     };
-
-    console.log("volSearchComponent - Search params:", searchParams);
+    // console.log("volSearchComponent - Search params:", searchParams);   
     dispatch(searchFlights(searchParams));
+
+    if (isHome) {
+      router.push("/vols");
+    }
   };
 
   return (
@@ -233,35 +243,37 @@ const VolSearchComponent: React.FC = () => {
             </Button>
           </div>
         ) : (
-          destinations.map((dest: any, i: number) => (
-            <div className="flex flex-col lg:flex-row w-full gap-2" key={dest.id}>
-              <SearchInputComponent
-                placeholder="City, airports or place"
-                onSearch={(value) => handleFromAirportSelect(value, i)}
-                dir="From"
-                type={1}
-              />
-              <SearchInputComponent
-                placeholder="City, airports or place"
-                onSearch={(value) => handleToAirportSelect(value, i)}
-                dir="To"
-                type={1}
-              />
-              <DatePickerComponent
-                isOnePick={true}
-                dateRange={dest.date}
-                setDateRange={(value: DateRange) => {
-                  updateDestination(i, "date", value);
-                }}
-              />
-              <div
-                className="flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 p-4 h-9 rounded"
-                onClick={() => removeDestination(i)}
-              >
-                <Trash2 className="text-red-500 h-4 w-4 cursor-pointer" />
+          <div className="w-full">
+            {destinations.map((dest: any, i: number) => (
+              <div className="flex flex-col lg:flex-row w-full gap-2 mb-2" key={dest.id}>
+                <SearchInputComponent
+                  placeholder="City, airports or place"
+                  onSearch={(value) => handleFromAirportSelect(value, i)}
+                  dir="From"
+                  type={1}
+                />
+                <SearchInputComponent
+                  placeholder="City, airports or place"
+                  onSearch={(value) => handleToAirportSelect(value, i)}
+                  dir="To"
+                  type={1}
+                />
+                <DatePickerComponent
+                  isOnePick={true}
+                  dateRange={dest.date}
+                  setDateRange={(value: DateRange) => {
+                    updateDestination(i, "date", value);
+                  }}
+                />
+                <div
+                  className="flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 p-4 h-9 rounded"
+                  onClick={() => removeDestination(i)}
+                >
+                  <Trash2 className="text-red-500 h-4 w-4 cursor-pointer" />
+                </div>
               </div>
-            </div>
-          ))
+            ))}
+          </div>
         )}
       </div>
       {volType === "Multi Destinations" && (
