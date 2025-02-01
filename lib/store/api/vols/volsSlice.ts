@@ -10,6 +10,9 @@ interface VolsState {
     selectedFlight: any | null;
     airportsData: any;
     error: string | null;
+    conditions: any | null;
+    conditionsLoading: boolean;
+    conditionsError: string | null;
 }
 
 const initialState: VolsState = {
@@ -17,7 +20,10 @@ const initialState: VolsState = {
     flightsData: [],
     selectedFlight: null,
     airportsData: {},
-    error: null
+    error: null,
+    conditions: null,
+    conditionsLoading: false,
+    conditionsError: null
 };
 
 const extractUniqueCarriers = (flights: any[]) => {
@@ -137,6 +143,34 @@ export const getAirports = createAsyncThunk('airports/search', async (searchTerm
     }
 });
 
+export const getFlightsConditions = createAsyncThunk('flights_conditions/search', async (data: any, thunkApi) => {
+    try {
+      console.log('Getting flight conditions with data:', JSON.stringify(data, null, 2));
+      const response = await volsService.getFlightsConditions(data);
+      console.log('Flight conditions raw response:', JSON.stringify(response, null, 2));
+      
+      // Validate response structure
+      if (!response?.success) {
+        throw new Error('API request failed: ' + response?.message || 'Unknown error');
+      }
+      
+      if (!response?.result?.data?.[0]) {
+        console.log('No conditions data in response');
+        return {
+          result: {
+            data: []
+          }
+        };
+      }
+      
+      return response;
+    } catch (error: any) {
+      console.error('Error getting flight conditions:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to get flight conditions';
+      return thunkApi.rejectWithValue(errorMessage);
+    }
+});
+
 const VolsSlice = createSlice({
     name: 'vols',
     initialState,
@@ -178,6 +212,24 @@ const VolsSlice = createSlice({
             })
             .addCase(getAirports.rejected, (state) => {
                 state.loading = false;
+            });
+
+        // Get Flights Conditions
+        builder
+            .addCase(getFlightsConditions.pending, (state) => {
+                state.conditionsLoading = true;
+                state.conditionsError = null;
+                state.conditions = null;
+            })
+            .addCase(getFlightsConditions.fulfilled, (state, action) => {
+                state.conditionsLoading = false;
+                state.conditions = action.payload;
+                state.conditionsError = null;
+            })
+            .addCase(getFlightsConditions.rejected, (state, action) => {
+                state.conditionsLoading = false;
+                state.conditions = null;
+                state.conditionsError = action.payload as string || 'Failed to get flight conditions';
             });
     }
 });

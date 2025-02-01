@@ -38,7 +38,7 @@ const ContentComponent: React.FC<ContentProps> = ({
   };
 
   return (
-    <div className="px-4 pt-4">
+    <div className="">
       <Card className="border-none rounded-xl pt-4 pb-4 w-full sm:max-w-[600px] md:max-w-[768px] lg:max-w-[950px]">
         <CardContent>
           {htmlContent ? (
