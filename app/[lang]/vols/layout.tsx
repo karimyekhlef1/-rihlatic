@@ -18,7 +18,7 @@ const VolsLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
-      <div className="fixed top-0 z-50 w-full bg-white">
+      <div className="top-0 z-50 w-full bg-white">
         <Navbar />
       </div>
       {initialLoading ? (
@@ -32,7 +32,7 @@ const VolsLayout = ({ children }: { children: React.ReactNode }) => {
               <VolSearchComponent />
             </div>
           </div>
-          <main className="pt-[160px] min-h-screen bg-[#F8F8F8]">
+          <main className="min-h-screen bg-[#F8F8F8]">
             <div className="container mx-auto py-6">{children}</div>
           </main>
           <Footer />
