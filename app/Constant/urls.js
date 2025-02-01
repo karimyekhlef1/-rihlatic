@@ -67,3 +67,7 @@ export const airports_endpoint =
 
 // Airline Images
 export const AIRLINE_IMAGE_URL = "https://images.kiwi.com/airlines/32x32";
+
+// Flights conditions
+export const flights_conditions_endpoint =
+  BASE_URL + "/front/amadeus/checkRules";

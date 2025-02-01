@@ -137,6 +137,15 @@ export const getAirports = createAsyncThunk('airports/search', async (searchTerm
     }
 });
 
+export const getFlightsConditions = createAsyncThunk('flights_conditions/search', async (data: any, thunkApi) => {
+    try {
+      const response = await volsService.getFlightsConditions(data);
+      return response;
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  });
+
 const VolsSlice = createSlice({
     name: 'vols',
     initialState,
@@ -177,6 +186,19 @@ const VolsSlice = createSlice({
                 state.airportsData = action.payload;
             })
             .addCase(getAirports.rejected, (state) => {
+                state.loading = false;
+            });
+
+        // Get Flights Conditions
+        builder
+            .addCase(getFlightsConditions.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getFlightsConditions.fulfilled, (state, action) => {
+                state.loading = false;
+                state.flightsData = action.payload;
+            })
+            .addCase(getFlightsConditions.rejected, (state) => {
                 state.loading = false;
             });
     }
