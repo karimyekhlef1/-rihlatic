@@ -3,10 +3,10 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import FlightInfos from "./flightInfos";
 import FlightSeparator from "./flightSeparator";
 import FlightInfoFooter from "./flightInfoFooter";
+import FlightConditionsDialog from "./flightConditionsDialog";
 import { useDispatch } from "react-redux";
 import { openDialogDetail } from "@/lib/store/custom/mainSlices/dialogSlice";
 import { setSelectedFlight } from "@/lib/store/api/vols/volsSlice";
-import { Info } from "lucide-react";
 
 interface ResultCardProps {
   flightData: {
@@ -114,10 +114,7 @@ export default function ResultCard({ flightData }: ResultCardProps) {
               </span>
             </div>
             <div className="flex items-center justify-center">
-              <button className="group text-sm text-blue-600 flex items-center underline hover:no-underline hover:text-blue-700">
-                <Info className="w-4 h-4 mr-1 fill-blue-600 text-white" />
-                <span className="font-medium text-xs">Conditions</span>
-              </button>
+              <FlightConditionsDialog flightData={flightData} />
             </div>
             <Button
               onClick={handleSelectFlight}
