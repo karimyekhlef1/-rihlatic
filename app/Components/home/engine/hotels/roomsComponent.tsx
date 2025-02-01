@@ -159,19 +159,19 @@ const HotelRoomsComponent = () => {
               variant="outline"
               size="icon"
               className={cn(
-                "h-7 w-7",
-                value === minValue && "opacity-50 cursor-not-allowed"
+                "h-7 w-7 hover:border-orange-500 ",
+                value === minValue && "opacity-50  cursor-not-allowed  "
               )}
               onClick={() => updateRoom(index, field, false)}
               disabled={value === minValue}
             >
-              <Minus className="h-3 w-3" />
+              <Minus className="h-3 w-3 " />
             </Button>
             <span className="w-4 text-center text-xs">{value}</span>
             <Button
               variant="outline"
               size="icon"
-              className="h-7 w-7"
+              className="h-7 w-7 hover:border-orange-500"
               onClick={() => updateRoom(index, field, true)}
             >
               <Plus className="h-3 w-3" />
@@ -252,6 +252,7 @@ const HotelRoomsComponent = () => {
               size="sm"
               className="bg-[#FF8000] text-white hover:bg-[#FF8000]/90 hover:text-white"
               onClick={addRoom}
+              disabled={rooms.length >= 3}
             >
               <Plus className="h-3.5 w-3.5" />
             </Button>

@@ -76,7 +76,7 @@ export default function Navbar() {
         <div className="relative flex h-16 justify-between">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
             {/* Mobile menu button */}
-            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-orange-500">
               <span className="absolute -inset-0.5" />
               <span className="sr-only">Open main menu</span>
               <Bars3Icon
@@ -117,7 +117,7 @@ export default function Navbar() {
               // Profile dropdown for logged in users
               <Menu as="div" className="relative ml-3">
                 <div>
-                  <MenuButton className="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                  <MenuButton className="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only">Open user menu</span>
                     <div className="flex gap-2 items-center">
@@ -180,7 +180,7 @@ export default function Navbar() {
                 key={index}
                 as="a"
                 href={item.route}
-                className={`block py-2 pl-3 pr-4 text-base font-medium ${item.isSelected ? "border-l-4 bg-indigo-50  border-indigo-500 text-indigo-700" : ""}`}
+                className={`block py-2 pl-3 pr-4 text-base font-medium ${item.isSelected ? "border-l-4 bg-orange-50  border-orange-500 text-orange-700" : ""}`}
               >
                 {item.name}
               </DisclosureButton>

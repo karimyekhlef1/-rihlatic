@@ -10,7 +10,10 @@ import HotelsSearchComponent from "./engine/hotels/hotelsSearchComponent";
 const SearchSectionComponent: React.FC = () => {
   const [selected, setSelected] = useState<number>(0);
 
-  const onSearch = async () => {};
+  const onSearch = async () => {
+
+    
+  };
 
   const searchClick = (value: number) => {
     switch (value) {

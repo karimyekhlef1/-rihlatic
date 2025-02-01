@@ -47,6 +47,9 @@ export default function Hotels() {
   const [error, setError] = useState<string | null>(null);
 
 
+ 
+
+
   const formatRoomsQuery = useCallback((rooms: any): Record<string, string | number | null> => {
     return rooms.reduce((acc :any, room :Room, index:number) => ({
       ...acc,
@@ -59,8 +62,6 @@ export default function Hotels() {
 
   const fetchHotels = (async () => {
     try {
-  
-
       const roomsQuery = formatRoomsQuery(rooms);
       const response = await dispatch(
         getHotels({
@@ -95,15 +96,18 @@ export default function Hotels() {
       console.error('Error fetching hotels:', err);
     }
   });
-
+  useEffect(()=>{
+    if(selectedDestination && rooms && dateRange){
+      fetchHotels()
+    }
+  },[])
 
   const filteredHotels = useMemo(() => {
     return hotels.filter(hotel => {
       const matchesPrice = 
         hotel.rate >= filterRangePrice.min &&
-        hotel.rate <= filterRangePrice.max;
-        
-      const matchesRating = 
+        hotel.rate <= filterRangePrice.max;   
+        const matchesRating = 
         !filterRating || 
         hotel.rating === filterRating;
         
@@ -111,19 +115,15 @@ export default function Hotels() {
     });
   }, [hotels, filterRangePrice, filterRating]);
 
-
-
-  // if (loading){
-  //   return <Loading />
-  // }
-  
-
 return (
   <div className="">
-    <div className=" py-4 mt-2  w-full container ">
+    <div  className='bg-white w-full'>
+    <div className=" py-4 mt-2  w-full container">
     <HotelsSearchComponent 
        onSearch={fetchHotels} />
     </div>
+    </div>
+
 
     <div className="flex md:flex-row flex-col">
       <div className="px-14 flex flex-col items-center pt-10 gap-y-8 md:pb-10">

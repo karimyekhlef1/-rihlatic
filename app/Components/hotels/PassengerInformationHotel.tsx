@@ -99,7 +99,7 @@ export default function PassengerInformationHotel({
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 pb-2">
-            <div className="flex flex-col w-full">
+          <div className="flex flex-col w-full">
               <label className="text-sm text-gray-500">Mr</label>
               <Controller
                 name="civility"
@@ -129,9 +129,6 @@ export default function PassengerInformationHotel({
                 <p className="text-red-500 text-xs mt-1">{errors.civility.message}</p>
               )}
             </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 pb-2">
             <div className="flex flex-col w-full">
               <label className="text-sm text-gray-500">First Name</label>
               <Controller

@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { FiMinus, FiPlus } from "react-icons/fi";
+
+import { Users, Minus, Plus, UserRound ,Hotel} from "lucide-react";
 
 type NumberOfPeopleProps = {
   label: string;
@@ -27,25 +28,30 @@ const NumberOfPeople: React.FC<NumberOfPeopleProps> = ({
       {icon}
       <span className="text-gray-700">{label}</span>
     </div>
+ 
+
+
+
     <div className="flex items-center space-x-2">
-      <Button 
-        variant="outline" 
-        size="sm" 
-        onClick={onDecrement} 
-        disabled={value == min}
-        className="w-8 h-8 p-0"
-      >
-        -
-      </Button>
+      <Button
+                 variant="outline" 
+                 size="sm" 
+                 onClick={onDecrement} 
+                 disabled={value == min}
+                 className="w-8 h-8 p-0 hover:border-orange-500"
+         
+                >
+                  <Minus className="h-3 w-3 " />
+                </Button>
       <span className="text-lg font-semibold w-8 text-center">{value}</span>
       <Button 
         variant="outline" 
         size="sm" 
         onClick={onIncrement} 
         disabled={value == max}
-        className="w-8 h-8 p-0"
+        className="w-8 h-8 p-0 hover:border-orange-500"
       >
-        +
+        <Plus className="h-3 w-3" />
       </Button>
     </div>
   </div>

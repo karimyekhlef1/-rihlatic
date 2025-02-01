@@ -23,6 +23,8 @@ import { getPackagesReservationDetails } from "@/lib/store/api/packages/packages
 import { cancelPackagePenalty } from "@/lib/store/api/packages/packagesSlice";
 import Link from "next/link";
 import ReservationsTableSkeleton from "../packages/ReservationsTableSkeleton";
+
+
 interface User {
   id: number;
   name: string;
@@ -75,7 +77,7 @@ interface Reservation {
   payment_status:string
 }
 
-export default function PackagesReservationTable() {
+export default function HotelReservationTabel() {
   const dispatch = useDispatch<AppDispatch>();
   const [selectedStatus, setSelectedStatus] = useState<string>("");
   const [expandedPassengers, setExpandedPassengers] = useState<number | null>(
@@ -180,7 +182,7 @@ export default function PackagesReservationTable() {
     return <ReservationsTableSkeleton/>
   }
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto ">
       <Card>
         <CardContent>
           <Table className="min-w-full">

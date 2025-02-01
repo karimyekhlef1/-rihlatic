@@ -78,8 +78,11 @@ export default function Packages() {
 
   return (
     <div className="">
+    <div  className='bg-white w-full'>
+
       <div className=" py-4 mt-2  w-full container  ">
         <PackagesSearchComponent onSearch={handleSearch} />
+      </div>
       </div>
 
       <div className="flex md:flex-row flex-col">
