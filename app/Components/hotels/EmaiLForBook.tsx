@@ -22,7 +22,7 @@ export default function EmailForBook({ room_index, readOnly = false }: EmailForB
   const dispatch = useDispatch();
   
   const roomsData = useSelector((state: any) => state.hotelPayment.RoomsData[room_index]);
-  const { email, phone } = roomsData || { email: '', phone: '' };
+  const { email, phone } = roomsData 
 
   const {
     register,
@@ -68,6 +68,8 @@ export default function EmailForBook({ room_index, readOnly = false }: EmailForB
           defaultValue={email}
           onChange={(e) => handleInputChange("email", e.target.value)}
           disabled={readOnly}
+          className={errors.email?'border-red-500 border-2':''}
+
         />
         {errors.email && (
           <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
@@ -82,6 +84,8 @@ export default function EmailForBook({ room_index, readOnly = false }: EmailForB
           defaultValue={phone}
           onChange={(e) => handleInputChange("phone", e.target.value)}
           disabled={readOnly}
+          className={errors.phone?'border-red-500 border-2':''}
+
         />
         {errors.phone && (
           <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>

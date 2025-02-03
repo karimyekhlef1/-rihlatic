@@ -8,7 +8,7 @@ export default function FlightPaymentProgress() {
     (state: RootState) => state.flightPayment.currentStep
   );
 
-  const steps = ["Traveler Information", "Payment", "Confirmation"];
+  const steps = ["Rechercher", "Informations relatives au passager", "Confirmation"];
   const icons = [Plane, CreditCard, ShieldCheck];
 
   return (

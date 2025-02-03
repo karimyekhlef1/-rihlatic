@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 
 // Navigation links with routes
 const links = [
-  { name: 'Flights', route: '/reservations/flights' },
+  { name: 'Vols', route: '/reservations/vols' },
   { name: 'Packages', route: '/reservations/packages' },
   { name: 'Hotels', route: '/reservations/hotels' },
   { name: 'Omra', route: '/reservations/omra' },

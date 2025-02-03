@@ -69,5 +69,6 @@ export const airports_endpoint =
 export const AIRLINE_IMAGE_URL = "https://images.kiwi.com/airlines/32x32";
 
 // Flights conditions
-export const flights_conditions_endpoint =
-  BASE_URL + "/front/amadeus/checkRules";
+export const stor_flights =
+  BASE_URL + "/front/amadeus/create-pnr";
+export const vol_bookings_endpoint=BASE_URL + "/front/amadeus/bookings";

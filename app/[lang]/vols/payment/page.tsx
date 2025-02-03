@@ -1,6 +1,6 @@
 "use client";
 
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { RootState } from "@/lib/store/store";
 import FlightPaymentProgress from "@/app/Components/flight/FlightPaymentProgress";
 import FlightPricingCard from "@/app/Components/flight/FlightPricingCard";
@@ -9,18 +9,18 @@ import FlightReservationInformation from "@/app/Components/flight/FlightReservat
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-
+import ResultCard from "@/app/Components/search/resultCard";
+import ChangePaymentStepsVol from "@/app/Components/flight/ChangePaymentStepsVol";
 export default function FlightPaymentPage() {
+
   const router = useRouter();
   const { currentStep, selectedFlight, travelers } = useSelector(
     (state: RootState) => state.flightPayment
   );
 
-  // Get price details from the selected flight
   const price = selectedFlight?.price || 0;
   const tax_price = selectedFlight?.tax_price || 0;
 
-  // Redirect if no flight is selected
   useEffect(() => {
     if (!selectedFlight) {
       router.push("/vols");
@@ -34,14 +34,17 @@ export default function FlightPaymentPage() {
   return (
     <div className="container mx-auto py-8">
       <FlightPaymentProgress />
-
+      
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+
         {/* Main Content */}
         <div className="lg:col-span-2">
-          {currentStep === 1 && (
+      <ResultCard  flightData={selectedFlight} hidenSelct={true} />
+
+          {currentStep === 2 && (
             <FlightReservationInformation flight={{ ...selectedFlight }} />
           )}
-          {currentStep === 2 && (
+          {currentStep === 3 && (
             <FlightSummary flight={selectedFlight} travelers={travelers} />
           )}
           {currentStep === 3 && (
@@ -55,7 +58,9 @@ export default function FlightPaymentPage() {
               </p>
             </div>
           )}
+          <ChangePaymentStepsVol />
         </div>
+        
 
         {/* Sidebar */}
         <div className="lg:col-span-1">

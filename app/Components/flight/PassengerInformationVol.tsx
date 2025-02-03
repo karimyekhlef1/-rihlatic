@@ -5,8 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { format, parse } from 'date-fns';
-import { updatePassengerFieldByIndex } from '@/lib/store/custom/packagesSlices/paymentPachageSlices';
 import {
   Select,
   SelectContent,
@@ -18,75 +16,86 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
-import { passengerSchema } from '@/lib/schemas/packageSchema';
+import { updateTraveler } from '@/lib/store/custom/flightSlices/flightPaymentSlice';
+import { RootState } from "@/lib/store/store";
+import { travellerSchema } from '@/lib/schemas/volSchemas';
+type FormData = z.infer<typeof travellerSchema>;
 
-// Define the validation schema
-
-type FormData = z.infer<typeof passengerSchema>;
-
-type PassengerType = 'adults' | 'children' | 'infants';
-type PassengerInformationProps = {
-  titel: PassengerType;
+interface PassengerInformationVolProps {
+  type: string;
   index: number;
-  roomId: number;
-  room_index: number;
-  readOnly?: boolean;
-};
+  globalIndex: number;
+}
+const PASSENGER_TYPE_MAP = {
+  adults: 'ADT',
+  children: 'CHD',
+  infants: 'INF',
+  infantsSeat: 'INS',
+  students: 'STD',
+  thirdAge: 'YTH'
+} as const;
+type PassengerType = keyof typeof PASSENGER_TYPE_MAP;
+// Type for the values of PASSENGER_TYPE_MAP
+type PassengerCode = typeof PASSENGER_TYPE_MAP[PassengerType];
 
-export default function PassengerInformation({ 
-  titel, 
-  index, 
-  roomId, 
-  room_index,
-  readOnly = false 
-}: PassengerInformationProps) {
+export default function PassengerInformationVol({
+  type,
+  index,
+  globalIndex
+}: PassengerInformationVolProps) {
+
+  useEffect(() => {
+    // Type guard to check if the type is a valid PassengerType
+    const isValidPassengerType = (type: string): type is PassengerType => {
+      return type in PASSENGER_TYPE_MAP;
+    };
+
+    if (isValidPassengerType(type)) {
+      const passengerCode = PASSENGER_TYPE_MAP[type];
+      dispatch(updateTraveler({
+        index: globalIndex.toString(),
+        data: { type: passengerCode , nationality : "Algeria", passport_scan:null }
+      }));
+    } else {
+      console.warn(`Invalid passenger type: ${type}`);
+    }
+  }, [type, globalIndex]);
+
+
+
+
   const dispatch = useDispatch();
-  const passenger = useSelector((state: any) => 
-    state.paymentPackage.RoomsData[room_index]?.passengers[titel][index]
-  );
+  const traveler = useSelector((state: RootState) => state.flightPayment.travelers[globalIndex]);
 
   const {
     register,
-    handleSubmit,
     formState: { errors },
     setValue,
     trigger
   } = useForm<FormData>({
-    resolver: zodResolver(passengerSchema),
-    defaultValues: passenger || {},
+    resolver: zodResolver(travellerSchema),
+    defaultValues: traveler ? {
+        ...traveler,
+        // Convert null to undefined for passport_scan
+        passport_scan: traveler.passport_scan || undefined
+      } : {},
     mode: "onChange"
   });
 
-  useEffect(() => {
-    if (passenger) {
-      Object.entries(passenger).forEach(([key, value]) => {
-        setValue(key as keyof FormData, value as string);
-      });
-    }
-  }, [passenger, setValue]);
 
-  const handleInputChange = async (field: keyof FormData, value: string) => {
-    if (readOnly) return;
+  // Watch form values for automatic updates
+  
 
-    setValue(field, value);
+  // Update Redux store when form values change
+  const handleTravelerUpdate =async (field: keyof FormData, value: string) => {
+    setValue(field as keyof FormData, value);
     const isValid = await trigger(field);
-    console.log( titel, 
-      index, 
-      roomId, 
-      room_index,isValid)
-
-    if (isValid) {
-      dispatch(
-        updatePassengerFieldByIndex({
-          room_id: roomId,
-          room_index,
-          type: titel,
-          index,
-          field,
-          value,
-        })
-      );
+    if(isValid){
+    dispatch(updateTraveler({
+         index: globalIndex.toString(),
+         data: { [field]: value } }));
     }
+
   };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,7 +115,7 @@ export default function PassengerInformation({
     const reader = new FileReader();
     reader.onload = async (e) => {
       const base64 = e.target?.result as string;
-      await handleInputChange('passport_scan', base64);
+      handleTravelerUpdate('passport_scan', base64);
     };
     reader.readAsDataURL(file);
   };
@@ -117,54 +126,17 @@ export default function PassengerInformation({
         <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
           <div className="flex flex-col space-y-2 mt-4 mb-6">
             <div className="text-lg font-semibold capitalize">
-              {titel} {index + 1}
+              {type} {index + 1}
             </div>
           </div>
-
-          {titel === "adults" && index === 0 && (
-            <div className="flex flex-col sm:flex-row gap-4 pb-2">
-              <div className="flex flex-col w-full">
-                <label className="text-sm text-gray-500">Email</label>
-                <Input
-                  {...register("email")}
-                  type="email"
-                  placeholder="E-mail of passenger"
-                  onChange={(e) => handleInputChange("email", e.target.value)}
-                  disabled={readOnly}
-                  className={errors.email?'border-red-500 border-2':''}
-
-                />
-                {errors.email && (
-                  <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
-                )}
-              </div>
-              <div className="flex flex-col w-full">
-                <label className="text-sm text-gray-500">Phone Number</label>
-                <Input
-                  {...register("phone")}
-                  type="tel"
-                  placeholder="Phone number"
-                  onChange={(e) => handleInputChange("phone", e.target.value)}
-                  disabled={readOnly}
-                  className={errors.phone?'border-red-500 border-2':''}
-
-                />
-                {errors.phone && (
-                  <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>
-                )}
-              </div>
-            </div>
-          )}
-
           <Separator />
-
+          
           <div className="relative">
             <Input
               type="file"
               accept="image/*,application/pdf"
               className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
               onChange={handleFileUpload}
-              disabled={readOnly}
             />
             <div className="flex items-center border rounded-md bg-background px-3 py-2 text-gray-700">
               <Button
@@ -187,10 +159,10 @@ export default function PassengerInformation({
               <Input
                 {...register("first_name")}
                 placeholder="First name"
-                onChange={(e) => handleInputChange("first_name", e.target.value)}
-                disabled={readOnly}
+                onChange={(e) => handleTravelerUpdate("first_name", e.target.value)}
                 className={errors.first_name?'border-red-500 border-2':''}
-
+                
+                // value={formValues.first_name || ''}
               />
               {errors.first_name && (
                 <p className="text-red-500 text-xs mt-1">{errors.first_name.message}</p>
@@ -201,10 +173,10 @@ export default function PassengerInformation({
               <Input
                 {...register("last_name")}
                 placeholder="Last name"
-                onChange={(e) => handleInputChange("last_name", e.target.value)}
-                disabled={readOnly}
+                onChange={(e) => handleTravelerUpdate("last_name", e.target.value)}
+               
                 className={errors.last_name?'border-red-500 border-2':''}
-
+                //value={formValues.last_name || ''}
               />
               {errors.last_name && (
                 <p className="text-red-500 text-xs mt-1">{errors.last_name.message}</p>
@@ -216,10 +188,9 @@ export default function PassengerInformation({
             <div className="flex flex-col">
               <label className="text-sm text-gray-500">Gender</label>
               <Select
-                disabled={readOnly}
-                onValueChange={(value: "male" | "female") => handleInputChange("sex", value)}
-                defaultValue={passenger?.sex || ""}
-
+                onValueChange={(value) => handleTravelerUpdate("gender", value)}
+               
+                //value={formValues.gender}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select gender" />
@@ -229,8 +200,8 @@ export default function PassengerInformation({
                   <SelectItem value="female">Female</SelectItem>
                 </SelectContent>
               </Select>
-              {errors.sex && (
-                <p className="text-red-500 text-xs mt-1">{errors.sex.message}</p>
+              {errors.gender && (
+                <p className="text-red-500 text-xs mt-1">{errors.gender?.message}</p>
               )}
             </div>
 
@@ -240,9 +211,9 @@ export default function PassengerInformation({
                 {...register("birth_date")}
                 type="date"
                 placeholder="Select birth date"
-                onChange={(e) => handleInputChange("birth_date", e.target.value)}
-                disabled={readOnly}
-                className={errors.birth_date?'border-red-500 border-2':''}
+                onChange={(e) => handleTravelerUpdate("birth_date", e.target.value)}
+               // value={formValues.birth_date || ''}
+               className={errors.birth_date?'border-red-500 border-2':''}
 
               />
               {errors.birth_date && (
@@ -257,9 +228,9 @@ export default function PassengerInformation({
               <Input
                 {...register("passport_nbr")}
                 placeholder="Passport Number"
-                onChange={(e) => handleInputChange("passport_nbr", e.target.value)}
-                disabled={readOnly}
-                className={errors.passport_nbr?'border-red-500 border-2':''}
+                onChange={(e) => handleTravelerUpdate("passport_nbr", e.target.value)}
+               // value={formValues.passport_nbr || ''}
+               className={errors.passport_nbr?'border-red-500 border-2':''}
 
               />
               {errors.passport_nbr && (
@@ -272,10 +243,9 @@ export default function PassengerInformation({
                 {...register("passport_expire_at")}
                 type="date"
                 placeholder="Select passport expire date"
-                onChange={(e) => handleInputChange("passport_expire_at", e.target.value)}
-                disabled={readOnly}
+                onChange={(e) => handleTravelerUpdate("passport_expire_at", e.target.value)}
                 className={errors.passport_expire_at?'border-red-500 border-2':''}
-
+                // value={formValues.passport_expire_at || ''}
               />
               {errors.passport_expire_at && (
                 <p className="text-red-500 text-xs mt-1">{errors.passport_expire_at.message}</p>

@@ -171,6 +171,26 @@ export const getFlightsConditions = createAsyncThunk('flights_conditions/search'
     }
 });
 
+export const storeReservationFlight = createAsyncThunk('flights_reservation', async (data: any, thunkApi) => {
+    try {
+        console.log("storeReservation==>",data)
+        const response = await volsService.storReservationFlights(data);
+        return response;
+    } catch (error: any) {
+    }
+});
+export const getVolsReservationDetails = createAsyncThunk(
+    "VolReservationDetails/slice",
+    async (params: any, thunkApi) => {
+      try {
+        const response = await volsService.getVolsReservation(params);
+        return response;
+      } catch (error: any) {
+        return thunkApi.rejectWithValue(error.response.data);
+      }
+    }
+  );
+
 const VolsSlice = createSlice({
     name: 'vols',
     initialState,
@@ -230,7 +250,30 @@ const VolsSlice = createSlice({
                 state.conditionsLoading = false;
                 state.conditions = null;
                 state.conditionsError = action.payload as string || 'Failed to get flight conditions';
+            })
+            //stor resarvation
+            .addCase(storeReservationFlight.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(storeReservationFlight.fulfilled, (state, action) => {
+                state.loading = false;
+                state.airportsData = action.payload;
+            })
+            .addCase(storeReservationFlight.rejected, (state) => {
+                state.loading = false;
+            })
+            //list 
+            .addCase(getVolsReservationDetails.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getVolsReservationDetails.fulfilled, (state, action) => {
+                state.loading = false;
+                state.airportsData = action.payload;
+            })
+            .addCase(getVolsReservationDetails.rejected, (state) => {
+                state.loading = false;
             });
+
     }
 });
 

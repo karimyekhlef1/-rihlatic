@@ -17,7 +17,9 @@ import { Button } from "@/components/ui/button";
 import { DateRange } from "react-day-picker";
 import { searchFlights } from "@/lib/store/api/vols/volsSlice";
 import { useRouter } from "next/navigation";
-
+import { setDataOfSearch } from "@/lib/store/custom/flightSlices/flightPaymentSlice";
+import { clearState } from "@/lib/store/custom/flightSlices/flightPaymentSlice";
+import { RootState } from "@/lib/store/store";
 interface VolSearchType {
   isHome?: boolean;
 }
@@ -26,7 +28,7 @@ const VolSearchComponent: React.FC<VolSearchType> = ({ isHome }: VolSearchType) 
 
   const dispatch = useDispatch<any>();
   const router = useRouter();
-
+  const DataOfSearch = useSelector((state:any) => state.volSearchSlice);
   const volType = useSelector(
     (state: { volSearchSlice: { volType: string } }) =>
       state.volSearchSlice?.volType
@@ -191,7 +193,9 @@ const VolSearchComponent: React.FC<VolSearchType> = ({ isHome }: VolSearchType) 
       directFlightsOnly: false,
       openReturn: false,
     };
-    // console.log("volSearchComponent - Search params:", searchParams);   
+
+    dispatch(clearState()) 
+    dispatch(setDataOfSearch( {...searchParams ,volPassanger  }))
     dispatch(searchFlights(searchParams));
 
     if (isHome) {

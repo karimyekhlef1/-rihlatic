@@ -40,7 +40,7 @@ export default function TripDetails() {
       // Store selected flight in flight payment state and route to payment page
       dispatch(setSelectedFlight(selectedFlight));
       dispatch(closeDialogDetail());
-      router.push("/vols/payment");
+      router.push("vols/payment");
     }
   };
 

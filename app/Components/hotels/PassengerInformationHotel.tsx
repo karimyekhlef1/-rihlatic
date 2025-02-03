@@ -143,6 +143,8 @@ export default function PassengerInformationHotel({
                       field.onChange(e);
                       handleFieldChange('firstname', e.target.value);
                     }}
+                 className={errors.firstname?'border-red-500 border-2':''}
+
                   />
                 )}
               />
@@ -164,6 +166,8 @@ export default function PassengerInformationHotel({
                       field.onChange(e);
                       handleFieldChange('lastname', e.target.value);
                     }}
+                 className={errors.lastname?'border-red-500 border-2':''}
+
                   />
                 )}
               />

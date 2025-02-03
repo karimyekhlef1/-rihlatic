@@ -10,13 +10,21 @@ import { RootState } from "@/lib/store/store";
 import { selectFilteredFlights } from "@/lib/store/selectors/flightSelectors";
 import Image from "next/image";
 import NoResults from "@/public/images/NoResults.png";
-
+import VolSearchComponent from "@/app/Components/home/engine/vol/volSearchComponent";
 function FlightResults() {
   const { loading } = useSelector((state: RootState) => state.vols);
   const filteredFlights = useSelector(selectFilteredFlights);
-
+  const { dataOfSearch } = useSelector(
+    (state: RootState) => state.flightPayment
+  );
+  console.log("dataOfSearch",dataOfSearch)
   return (
-    <>
+    <div className="">
+      <div  className='bg-white w-full'>
+    <div className="  py-4 mt-2 w-full container">
+    <VolSearchComponent  />
+    </div>
+    </div>
       <div className="flex flex-col sm:flex-row items-start justify-center p-2 sm:p-8 sm:space-x-8">
         {/* Mobile layout for filters and travel options */}
         <div className="flex w-full mb-4 sm:hidden">
@@ -84,7 +92,7 @@ function FlightResults() {
         </div>
       </div>
       <TripDetails />
-    </>
+    </div>
   );
 }
 

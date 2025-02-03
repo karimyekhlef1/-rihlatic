@@ -9,13 +9,14 @@ import { openDialogDetail } from "@/lib/store/custom/mainSlices/dialogSlice";
 import { setSelectedFlight } from "@/lib/store/api/vols/volsSlice";
 
 interface ResultCardProps {
+  hidenSelct?:boolean
   flightData: {
     price: number;
     segments: any[][];
   };
 }
 
-export default function ResultCard({ flightData }: ResultCardProps) {
+export default function ResultCard({hidenSelct=false, flightData }: ResultCardProps) {
   const dispatch = useDispatch();
 
   const handleSelectFlight = () => {
@@ -106,7 +107,7 @@ export default function ResultCard({ flightData }: ResultCardProps) {
           </CardFooter>
         </Card>
 
-        <Card className="w-full sm:w-[200px] rounded-xl sm:rounded-l-none flex flex-col border-t-0 sm:border-t sm:border-l-0">
+      { !hidenSelct &&  <Card className="w-full sm:w-[200px] rounded-xl sm:rounded-l-none flex flex-col border-t-0 sm:border-t sm:border-l-0">
           <CardContent className="p-4 flex-grow flex flex-col justify-between gap-3">
             <div className="flex-grow flex items-center justify-center">
               <span className="text-xl font-bold tracking-wide">
@@ -123,7 +124,7 @@ export default function ResultCard({ flightData }: ResultCardProps) {
               Select
             </Button>
           </CardContent>
-        </Card>
+        </Card>}
       </div>
     </div>
   );
