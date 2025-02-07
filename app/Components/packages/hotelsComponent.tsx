@@ -10,7 +10,7 @@ export default function HotelsComponent({ data }: any) {
 
   // console.log("HotelsComponent",data)
   return (
-    <div className="flex flex-col gap-3 sm:gap-0  sm:flex-row justify-between items-center w-full">
+    <div className="flex flex-col gap-3 sm:gap-0  sm:flex-row justify-between items-center w-full ">
       <div className="flex items-center space-x-4">
         <Image
          width={100}
@@ -31,7 +31,7 @@ export default function HotelsComponent({ data }: any) {
       </div>
 
       <div className="text-center">
-        <p className="font-semibold text-gray-600">{data.hotel.label}</p>
+        {/* <p className="font-semibold text-gray-600">{data.hotel.label}</p> */}
         <StarRating rating={Number(data.hotel.value)} />
 
       </div>

@@ -64,7 +64,7 @@ export default function ImageSlider({ data, page }: any) {
         }
         adress={
           page === "package"
-            ? data?.destinations?.[0]?.country?.full_name
+            ? `${data?.destinations?.[0]?.country?.name},${data?.destinations?.[0]?.name},${data?.destinations?.[0]?.country?.full_name}`
             : page === "hotel"
               ? `${data?.infos?.destination}  ${data?.infos?.city}`
               : ""
