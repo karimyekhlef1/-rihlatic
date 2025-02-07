@@ -87,6 +87,8 @@ const onSelectedDeparture=(item :Departure)=>{
                 dynamicContent={
                   <Provider store={store}>
                     {currentDeparture?.flight?.bounds?.[0] && (
+                    <div>
+
                       <TripSummaryComponent
                         flightInfo={{
                           from: currentDeparture.flight.bounds[0].segments[0]
@@ -146,6 +148,70 @@ const onSelectedDeparture=(item :Departure)=>{
                             "N/A",
                         }}
                       />
+
+          <TripSummaryComponent
+                      flightInfo={{
+                        from: currentDeparture.flight.bounds[1].segments[0]
+                          .departure_airport.city,
+                        to: currentDeparture.flight.bounds[1].segments[0]
+                          .arrival_airport.city,
+                        airlineLogo: `${AIRLINE_IMAGE_URL}/${
+                          currentDeparture.flight.bounds[1].segments[0]?.operating_carrier?.iata ||
+                          currentDeparture.flight.bounds[1].segments[0]?.operating_airline?.iata ||
+                          'default'
+                        }.png?default=airline.png`,
+                        duration: (() => {
+                          const dep =
+                          currentDeparture.flight.bounds[1].departure_date
+                              .split(" ")[1]
+                              .substring(0, 5);
+                          const arr =
+                          currentDeparture.flight.bounds[1].arrival_date
+                              .split(" ")[1]
+                              .substring(0, 5);
+                          const { hours, minutes } = calculateDuration(
+                            dep,
+                            arr
+                          );
+                          return `${hours}h ${minutes}m`;
+                        })(),
+                        departureTime:
+                        currentDeparture.flight.bounds[1].departure_date
+                            .split(" ")[1]
+                            .substring(0, 5),
+                        departureDate: currentDeparture.departure_date,
+                        arrivalTime:
+                        currentDeparture.flight.bounds[1].arrival_date
+                            .split(" ")[1]
+                            .substring(0, 5),
+                        arrivalDate:
+                        currentDeparture.flight.bounds[1].arrival_date?.split(
+                            " "
+                          )?.[0] || "N/A",
+                        departureCity:
+                        currentDeparture.flight.bounds[1].segments[0]
+                            .departure_airport.city,
+                        departureAirport:
+                        currentDeparture.flight.bounds[1].segments[0]
+                            .departure_airport.name,
+                        airline:
+                        currentDeparture.flight.bounds[1].segments[0]
+                            ?.operating_carrier?.name ||
+                            currentDeparture.flight.bounds[1].segments[0]
+                            ?.operating_airline?.name ||
+                          "Airline information not available",
+                        flightNumber:
+                        currentDeparture.flight.bounds[1].segments[0]
+                            ?.flight_number ||
+                            currentDeparture.flight.bounds[1].segments[0]
+                            ?.flight_or_train_number ||
+                          "N/A",
+                      }}
+                    />
+
+                    </div>
+
+                      
                     )}
                   </Provider>
                 }
@@ -162,7 +228,7 @@ const onSelectedDeparture=(item :Departure)=>{
               {/* {currentDeparture?.hotel_stay[0].name} */}
                     
                     {currentDeparture?.hotel_stay?.map((item: any, index: number) => (
-                      <div key={index}>
+                      <div key={index} className=" my-1">
                         <ContentComponent
                           dynamicContent={<HotelsComponent data={item} />}
                         />
